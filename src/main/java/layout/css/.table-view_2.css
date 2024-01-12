@@ -1,0 +1,11 @@
+
+.table-view .column-header-background .label{
+    -fx-background-color: transparent;
+    -fx-text-fill: black;
+    -fx-text-weight:strong;
+    -fx-border-style:solid inside;
+    -fx-border-width:2;
+    -fx-border-radius:10;
+    -fx-padding:7;
+    -fx-font-size:12;
+ }
