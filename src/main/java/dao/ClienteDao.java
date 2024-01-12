@@ -4,9 +4,15 @@
  */
 package dao;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import connectionDB.ConnectionPostgreSQL;
 import model.Cliente;
+import model.Custo;
 
 /**
  *
@@ -14,22 +20,43 @@ import model.Cliente;
  */
 public class ClienteDao {
     
-    public void salvar(Cliente cliente){
+	private ConnectionPostgreSQL con = null;
+    private Statement smt = null;
+    private ResultSet rs = null;
+    
+     public void salvar(Cliente cliente){
         try {
+            con  = new ConnectionPostgreSQL();
+            String query ="INSERT INTO cliente (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, null, ?, ?, ?, ?)";
+            PreparedStatement ps = con.connection().prepareStatement(query);
+
+            ps.setFloat(1, cliente.getCustoUnitario());
+            ps.setFloat(2, cliente.getCustoTotal());
             
-            String query ="";
+            ps.executeUpdate();
+            ps.close();
             
         } catch (Exception e) {
              e.printStackTrace();
         }
     }
     
-    public List<Cliente> listCliente(){
+    public List<Cliente> listFornecedor(){
         try {
-            
-             String query ="";
-            
-            List<String> objeto = new ArrayList<>();
+            con  = new ConnectionPostgreSQL();
+            String query ="select * from cliente";
+            List<Custo> lista = new ArrayList<>();
+            PreparedStatement ps = con.connection().prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+            	Custo item = new Custo();
+            	item.setCustoUnitario(rs.getFloat("nome"));
+            	item.setCustoTotal(rs.getFloat("subproduto"));
+            	
+                lista.add(item);
+            }
+
+            return lista;
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -39,8 +66,14 @@ public class ClienteDao {
     
     public void update(Cliente cliente){
         try {
+            con  = new ConnectionPostgreSQL();
+            String query = "update cliente set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
+            PreparedStatement ps = con.connection().prepareStatement(query);
+            ps.setFloat(1, cliente.getCustoUnitario());
+            ps.setFloat(2, cliente.getCustoTotal());
             
-            String query ="";
+            rs.close();
+            ps.close();
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,21 +82,43 @@ public class ClienteDao {
     
     public void remove(String nome){
         try {
-            
-            String query ="";
-            
+            con  = new ConnectionPostgreSQL();
+            String query = "DELETE FROM cliente WHERE nome=?";
+            PreparedStatement ps = con.connection().prepareStatement(query);
+            ps.setString(1, nome);
+            ps.executeUpdate();
+            rs.close();
+            ps.close();
+        
         } catch (Exception e) {
              e.printStackTrace();
         }
     }
     
-    public List<Cliente> buscar(String nome){
+    public Cliente buscar(String nome){
+
         try {
+
+            String query =  "SELECT * FROM cliente WHERE nome =?";
+            PreparedStatement ps = con.connection().prepareStatement(query);
+            ps.setString(1, nome);
+
+            rs = ps.executeQuery();
+            Cliente cliente = null;
+            if (rs.next()) {
+
+            	cliente = new Cliente();
+
+            	cliente.setCustoUnitario(rs.getFloat("custounitario"));
+            	cliente.setCustoTotal(rs.getFloat("custototal"));
             
-            String query ="";
-            
-            List<String> objeto = new ArrayList<>();
-            
+
+            }
+
+            rs.close();
+            ps.close();
+            return cliente;
+
         } catch (Exception e) {
             e.printStackTrace();
         }
