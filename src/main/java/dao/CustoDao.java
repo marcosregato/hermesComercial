@@ -26,7 +26,7 @@ public class CustoDao {
      public void salvar(Custo custo){
         try {
             con  = new ConnectionPostgreSQL();
-            String query ="INSERT INTO custo (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, null, ?, ?, ?, ?)";
+            String query ="INSERT INTO custo (id, custounitario, custototal) VALUES (NULL, ?, ?)";
             PreparedStatement ps = con.connection().prepareStatement(query);
 
             ps.setFloat(1, custo.getCustoUnitario());
@@ -66,7 +66,7 @@ public class CustoDao {
     public void update(Custo custo){
         try {
             con  = new ConnectionPostgreSQL();
-            String query = "update custo set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
+            String query = "update custo set custounitario = ?,custototal = ?";
             PreparedStatement ps = con.connection().prepareStatement(query);
             ps.setFloat(1, custo.getCustoUnitario());
             ps.setFloat(2, custo.getCustoTotal());
