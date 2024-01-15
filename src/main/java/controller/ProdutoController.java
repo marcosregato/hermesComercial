@@ -87,8 +87,8 @@ public class ProdutoController {
                 return;
             }
 
-
             dao.salvar(produto);
+
         } catch (Exception e) {
             e.printStackTrace();
         

@@ -22,12 +22,7 @@ public class ClienteController {
     
     public void salvar(Cliente cliente){
         try {
-            con = new ConnectionPostgreSQL().connection();
-            smt = con.createStatement();
-            String sql = "insert into cargo (id, nome) values(String.valueOf(cargo.getId()) , cargo.getNome() + ";
 
-            smt.executeUpdate(sql);
-            con.close();
 
             dao.salvar(cliente);
             

@@ -30,9 +30,11 @@ public class ClienteDao {
             String query ="INSERT INTO cliente (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, null, ?, ?, ?, ?)";
             PreparedStatement ps = con.connection().prepareStatement(query);
 
-            ps.setFloat(1, cliente.getCustoUnitario());
-            ps.setFloat(2, cliente.getCustoTotal());
-            
+            ps.setInt(1, cliente.getCodigoCliente());
+            ps.setString(2, cliente.getNome());
+            ps.setString(3, cliente.getCnpj());
+            ps.setString(4, cliente.getCpf());
+
             ps.executeUpdate();
             ps.close();
             
@@ -41,18 +43,20 @@ public class ClienteDao {
         }
     }
     
-    public List<Cliente> listFornecedor(){
+    public List<Cliente> listCliente(){
         try {
             con  = new ConnectionPostgreSQL();
             String query ="select * from cliente";
-            List<Custo> lista = new ArrayList<>();
+            List<Cliente> lista = new ArrayList<>();
             PreparedStatement ps = con.connection().prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
-            	Custo item = new Custo();
-            	item.setCustoUnitario(rs.getFloat("nome"));
-            	item.setCustoTotal(rs.getFloat("subproduto"));
-            	
+            	Cliente item = new Cliente();
+            	item.setCodigoCliente(rs.getInt("codigocliente"));
+            	item.setNome(rs.getString("nome"));
+                item.setCnpj(rs.getString("cnpj"));
+                item.setCpf(rs.getString("cpf"));
+
                 lista.add(item);
             }
 
@@ -69,8 +73,10 @@ public class ClienteDao {
             con  = new ConnectionPostgreSQL();
             String query = "update cliente set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
             PreparedStatement ps = con.connection().prepareStatement(query);
-            ps.setFloat(1, cliente.getCustoUnitario());
-            ps.setFloat(2, cliente.getCustoTotal());
+            ps.setInt(1, cliente.getCodigoCliente());
+            ps.setString(2, cliente.getNome());
+            ps.setString(3, cliente.getCnpj());
+            ps.setString(4, cliente.getCpf());
             
             rs.close();
             ps.close();
@@ -108,10 +114,10 @@ public class ClienteDao {
             if (rs.next()) {
 
             	cliente = new Cliente();
-
-            	cliente.setCustoUnitario(rs.getFloat("custounitario"));
-            	cliente.setCustoTotal(rs.getFloat("custototal"));
-            
+                cliente.setCodigoCliente(rs.getInt("codigocliente"));
+                cliente.setNome(rs.getString("nome"));
+                cliente.setCnpj(rs.getString("cnpj"));
+                cliente.setCpf(rs.getString("cpf"));
 
             }
 
@@ -124,6 +130,5 @@ public class ClienteDao {
         }
         return null;
     }
-    
-    
+
 }

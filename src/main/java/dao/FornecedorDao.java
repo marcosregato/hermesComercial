@@ -27,14 +27,11 @@ public class FornecedorDao {
      public void salvar(Fornecedor fornecedor){
         try {
             con  = new ConnectionPostgreSQL();
-            String query ="INSERT INTO fornecedor (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, ?, ?, ?, ?, ?)";
+            String query ="INSERT INTO fornecedor (id, nome, tipofornecedor) VALUES (NULL, ?, ?)";
             PreparedStatement ps = con.connection().prepareStatement(query);
 
             ps.setString(1, fornecedor.getNome());
-            ps.setString(2, fornecedor.getSubProduto());
-            ps.setString(3, fornecedor.getCodigo());
-            ps.setString(4, produto.getDataCompra());
-            ps.setString(4, produto.getCodigoNcm());
+            ps.setString(2, fornecedor.getTipoFornecedor());
 
             ps.executeUpdate();
             ps.close();
@@ -54,10 +51,7 @@ public class FornecedorDao {
             while (rs.next()) {
             	Fornecedor item = new Fornecedor();
             	item.setNome(rs.getString("nome"));
-            	item.setSubProduto(rs.getString("subproduto"));
-            	item.setCodigo(rs.getString("codigo"));
-            	item.setDataCompra(rs.getString("datacompra"));
-            	item.setCodigoNcm(rs.getString("codigoncm"));
+            	item.setTipoFornecedor(rs.getString("tipofornecedor"));
 
                 lista.add(item);
             }
@@ -73,13 +67,11 @@ public class FornecedorDao {
     public void update(Fornecedor fornecedor){
         try {
             con  = new ConnectionPostgreSQL();
-            String query = "update fornecedor set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
+            String query = "update fornecedor set nome = ?,tipofornecedor = ? ";
             PreparedStatement ps = con.connection().prepareStatement(query);
             ps.setString(1, fornecedor.getNome());
-            ps.setString(2, fornecedor.getSubProduto());
-            ps.setString(3, fornecedor.getCodigo());
-            ps.setString(4, fornecedor.getDataCompra());
-            ps.setString(5, fornecedor.getCodigoNcm());
+            ps.setString(2, fornecedor.getTipoFornecedor());
+
             rs.close();
             ps.close();
             
@@ -118,10 +110,7 @@ public class FornecedorDao {
             	fornecedor = new Fornecedor();
 
             	fornecedor.setNome(rs.getString("nome"));
-            	fornecedor.setSubProduto(rs.getString("subproduto"));
-            	fornecedor.setCodigo(rs.getString("codigo"));
-            	fornecedor.setDataCompra(rs.getString("datacompra"));
-            	fornecedor.setCodigoNcm(rs.getString("codigoncm"));
+            	fornecedor.setTipoFornecedor(rs.getString("tipofornecedor"));
 
             }
 
