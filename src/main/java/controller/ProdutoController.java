@@ -1,16 +1,20 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package controller;
+
+import java.util.Collection;
+import java.util.List;
 
 import dao.ProdutoDao;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import model.Produto;
 import util.Alerta;
-import util.ValidarCampo;
 
 /**
  *
@@ -21,8 +25,6 @@ public class ProdutoController {
 
     @FXML
     private Button btBuscar;
-
-
 
     @FXML
     private TableColumn<Produto, String> colDesconto;
@@ -95,13 +97,14 @@ public class ProdutoController {
         }
     }
     
-    public void listar(){
+    public List<Produto> listar(){
         try {
-            dao.listProduto();
+           return dao.listProduto();
         } catch (Exception e) {
             e.printStackTrace();
         
         }
+        return null;
     }
     
     public void remove(String nome){

@@ -12,7 +12,6 @@ import java.util.List;
 
 import connectionDB.ConnectionPostgreSQL;
 import model.Fornecedor;
-import model.Produto;
 
 /**
  *
