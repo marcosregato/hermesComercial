@@ -14,9 +14,9 @@ import java.sql.SQLException;
  */
 public class ConnectionPostgreSQL {
     
-    private final String url = "jdbc:postgresql://localhost/dvdrental";
+    private final String url = "jdbc:postgresql://localhost/hermesComercial";
     private final String user = "postgres";
-    private final String password = "<add your password>";
+    private final String password = "postgres";
 
     /**
      * Connect to the PostgreSQL database
