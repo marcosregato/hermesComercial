@@ -21,6 +21,12 @@ public class Produto {
     private String dataCompra;
     private String codigoNcm;
 
+    private float valorUnitario;
+
+    private float valorTotal;
+
+    private float valorVenda;
+
     /**
      * @return the id
      */
@@ -104,6 +110,13 @@ public class Produto {
     public void setCodigoNcm(String codigoNcm) {
         this.codigoNcm = codigoNcm;
     }
-    
-    
+
+
+    public float getValorUnitario() {
+        return valorUnitario;
+    }
+
+    public void setValorUnitario(float valorUnitario) {
+        this.valorUnitario = valorUnitario;
+    }
 }

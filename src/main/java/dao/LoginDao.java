@@ -1,6 +1,7 @@
 package dao;
 
 import connectionDB.ConnectionPostgreSQL;
+import model.Cliente;
 import model.Usuario;
 
 import java.sql.PreparedStatement;
@@ -18,21 +19,31 @@ public class LoginDao {
     private Statement smt = null;
     private ResultSet rs = null;
 
-    public List<Usuario> acessarUsuario(String login, String senha){
+    public String acessarUsuario(String login, String senha){
         try {
             con  = new ConnectionPostgreSQL();
-            String query ="select l.login, l.senha from loginusuario l inner join usuario p on l.idusuario = p.id where l.login ='"+login+"' and l.senha ='"+senha+"'";
-            List<Usuario> usuario = new ArrayList<>();
+
+            String query ="select p.tipo from usuario u inner join" +
+                    "acesso a on a.fk_usuario = u.id inner join" +
+                    "permissao p on a.fk_permissao = p.id where u.login = ? and u.senha = ?";
+
             PreparedStatement ps = con.connection().prepareStatement(query);
+            ps.setString(1, login);
+            ps.setString(2, senha);
+
             rs = ps.executeQuery();
-            while (rs.next()) {
-                Usuario lg = new Usuario();
-                lg.setLogin(rs.getString("login"));
-                lg.setSenha(rs.getString("senha"));
-                usuario.add(lg);
+            Usuario usuario = null;
+            if (rs.next()) {
+
+                usuario = new Usuario();
+                usuario.setTipoAcesso(rs.getString("tipo"));
+
+
             }
 
-            return usuario;
+            rs.close();
+            ps.close();
+            return String.valueOf(usuario);
 
         } catch (Exception e) {
            // logger.info( e.getClass().getName() + " : " + e.getMessage() );
