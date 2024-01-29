@@ -12,7 +12,7 @@
    <children>
       <Pane layoutY="-1.0" prefHeight="406.0" prefWidth="304.0" style="-fx-background-color: #000;">
          <children>
-            <TextField fx:id="txtLogin" layoutX="147.0" layoutY="278.0" stylesheets="@css/styleCentro_1.css" />
+            <TextField fx:id="txtLogin" layoutX="121.0" layoutY="276.0" stylesheets="@css/styleCentro_1.css" />
             <Text fill="#fcf9f9" layoutX="208.0" layoutY="262.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGIN" />
             <Button layoutX="199.0" layoutY="332.0" mnemonicParsing="false" text="ENTRA" />
          </children>
