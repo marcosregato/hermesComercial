@@ -36,9 +36,13 @@ public class LoginController {
 
             String login = validarCampo.campoVazio(txtLogin.getText());
             String senha = validarCampo.campoVazio(txtSenha.getText());
-            List<Usuario> usuario = dao.acessarUsuario(login,senha);
+            Usuario usuario = new Usuario();
 
-            if(usuario.isEmpty()) {
+            if(usuario != null) {
+               new  PrincipalController(dao.acessarUsuario(usuario.getLogin(login),
+                       usuario.getSenha(senha)));
+
+            }else{
                 alerta.showAlert(Alert.AlertType.ERROR,
                         alerta.createRegistrationFormPane().getScene().getWindow(),
                         "Form Error!", "Login ou Senha está incorreta");

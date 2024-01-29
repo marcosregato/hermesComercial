@@ -7,6 +7,8 @@ public class Usuario {
     private String login;
     private String senha;
 
+    private String tipoAcesso;
+
     public Long getId() {
         return id;
     }
@@ -15,19 +17,27 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getLogin() {
-        return login;
+    public String getLogin(String login) {
+        return this.login;
     }
 
     public void setLogin(String login) {
         this.login = login;
     }
 
-    public String getSenha() {
-        return senha;
+    public String getSenha(String senha) {
+        return this.senha;
     }
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public String getTipoAcesso() {
+        return tipoAcesso;
+    }
+
+    public void setTipoAcesso(String tipoAcesso) {
+        this.tipoAcesso = tipoAcesso;
     }
 }

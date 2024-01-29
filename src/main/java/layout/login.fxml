@@ -10,6 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <children>
+<<<<<<< HEAD
       <Pane layoutY="-1.0" prefHeight="406.0" prefWidth="304.0" style="-fx-background-color: #000;">
          <children>
             <TextField fx:id="txtLogin" layoutX="121.0" layoutY="276.0" stylesheets="@css/styleCentro_1.css" />
@@ -17,17 +18,27 @@
             <Button layoutX="199.0" layoutY="332.0" mnemonicParsing="false" text="ENTRA" />
          </children>
       </Pane>
+=======
+      <ImageView fitHeight="400.0" fitWidth="283.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/riscado_1.png" />
+         </image>
+      </ImageView>
+>>>>>>> 6ffd47b3b7842e1bf49068114be2635f33653d58
       <Pane layoutX="304.0" prefHeight="400.0" prefWidth="296.0" style="-fx-background-color: #fff;">
          <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="-80.0" layoutY="70.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@img/logo.png" />
-               </image>
-            </ImageView>
             <TextField fx:id="txtSerha" layoutX="5.0" layoutY="279.0" stylesheets="@css/styleCentro_1.css" />
             <Text layoutX="20.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SENHA" />
-            <Button layoutX="39.0" layoutY="332.0" mnemonicParsing="false" text="FECHAR" />
+            <Button layoutX="52.0" layoutY="320.0" mnemonicParsing="false" text="FECHAR" />
          </children>
       </Pane>
+      <Text fill="#fcf9f9" layoutX="-56.0" layoutY="-90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGIN" />
+      <TextField fx:id="txtLogin" layoutX="151.0" layoutY="278.0" stylesheets="@css/styleCentro_1.css" />
+      <Button layoutX="215.0" layoutY="324.0" mnemonicParsing="false" text="ENTRA" />
+      <ImageView fitHeight="167.0" fitWidth="194.0" layoutX="215.0" layoutY="85.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@img/logo.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>
