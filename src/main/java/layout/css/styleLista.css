@@ -1,8 +1,20 @@
-#painelCentro{
-    -fx-background-color:#ffffff;
-    -fx-background-size: 1200 900;
-    -fx-background-radius: 30;
-    -fx-border-radius: 30;
-    -fx-border-width:5;
-    -fx-border-color: #000000;	
+.painelCentro{
+    -fx-background-radius: 140 0 0 140;
+	-fx-background-color:#ffffff;
+    -fx-font-family: Garamond;
+}
+
+.campoTexto{
+
+    -fx-border-color: #000000; 
+    -fx-border-width: 2px;
+    -fx-border-radius: 50px;
+    -fx-background-radius: 50px;
+
+}
+
+.text{
+
+    -fx-font-family: "Garamond";
+
 }
