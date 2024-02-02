@@ -2,6 +2,9 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -20,7 +23,7 @@
       </ImageView>
       <Pane layoutX="81.0" prefHeight="802.0" prefWidth="1061.0" stylesheets="@css/styleLista.css">
          <children>
-            <TableView layoutX="83.0" layoutY="221.0" prefHeight="483.0" prefWidth="957.0">
+            <TableView layoutX="83.0" layoutY="221.0" prefHeight="483.0" prefWidth="957.0" stylesheets="@css/styleLista.css">
               <columns>
                 <TableColumn prefWidth="75.0" text="C1" />
                 <TableColumn prefWidth="75.0" text="C2" />
@@ -28,12 +31,45 @@
                   <TableColumn prefWidth="75.0" text="Ação" />
               </columns>
             </TableView>
-            <TextField fx:id="txtPesquisar" layoutX="180.0" layoutY="165.0" prefHeight="24.0" prefWidth="688.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
-            <Button layoutX="884.0" layoutY="165.0" mnemonicParsing="false" text="Pesquisar" />
-            <Text layoutX="93.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" wrappingWidth="66.85205078125" />
-            <Text layoutX="86.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuário" wrappingWidth="80.79736328125" />
-            <Text layoutX="786.0" layoutY="52.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUARIO LOGADO" />
+            <TextField fx:id="txtPesquisar" layoutX="160.0" layoutY="173.0" prefHeight="24.0" prefWidth="688.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
+            <Button layoutX="874.0" layoutY="167.0" mnemonicParsing="false" text="Pesquisar" />
+            <Text layoutX="93.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" wrappingWidth="66.85205078125" />
+            <Text layoutX="21.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuário" wrappingWidth="80.79736328125" />
+            <Text layoutX="899.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUARIO LOGADO" />
             <Button layoutX="924.0" layoutY="735.0" mnemonicParsing="false" text="Salvar" />
+            <ImageView fitHeight="51.0" fitWidth="55.0" layoutX="843.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/user.png" />
+               </image>
+            </ImageView>
+            <MenuBar layoutX="21.0" layoutY="76.0" stylesheets="@css/styleLista.css">
+              <menus>
+                <Menu mnemonicParsing="false" text="Usuário">
+                  <items>
+                        <MenuItem fx:id="colCliente" mnemonicParsing="false" text="Cliente" />
+                    <MenuItem fx:id="colFuncionario" mnemonicParsing="false" text="Funcionário" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Financeiro">
+                  <items>
+                    <MenuItem fx:id="colDespesa" mnemonicParsing="false" text="Despesa" />
+                        <MenuItem fx:id="colFluxoCaixa" mnemonicParsing="false" text="Fluxo de Caixa" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Estoque">
+                  <items>
+                    <MenuItem fx:id="colProduto" mnemonicParsing="false" text="Produto" />
+                  </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="Configuração">
+                    <items>
+                      <MenuItem fx:id="colPermissao" mnemonicParsing="false" text="Permissão do Usuário" />
+                        <MenuItem fx:id="colBancoDados" mnemonicParsing="false" text="Banco de Dados" />
+                        <MenuItem fx:id="colAlerta" mnemonicParsing="false" text="Alerta" />
+                    </items>
+                  </Menu>
+              </menus>
+            </MenuBar>
          </children>
          <styleClass>
             <String fx:value="painelCentro" />

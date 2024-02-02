@@ -21,9 +21,16 @@
             <Text layoutX="41.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRO DEUSUARIO" />
             <Button layoutX="639.0" layoutY="680.0" mnemonicParsing="false" text="Salvar" />
             <Button layoutX="806.0" layoutY="680.0" mnemonicParsing="false" text="Cancelar" />
-            <Text layoutX="661.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUÁRIO LOGADO" />
-            <TextField layoutX="109.0" layoutY="234.0" prefHeight="28.0" prefWidth="328.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
+            <Text layoutX="790.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUÁRIO LOGADO" />
+            <TextField fx:id="txtNome" layoutX="118.0" layoutY="233.0" prefHeight="28.0" prefWidth="328.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
             <Text layoutX="64.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
+            <Text layoutX="64.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Endereço :" />
+            <TextField layoutX="152.0" layoutY="296.0" prefHeight="24.0" prefWidth="295.0" styleClass="campoTexto" />
+            <ImageView fitHeight="46.0" fitWidth="47.0" layoutX="733.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@img/user.png" />
+               </image>
+            </ImageView>
          </children>
          <styleClass>
             <String fx:value="painelCentro" />
