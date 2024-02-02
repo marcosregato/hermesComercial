@@ -1,7 +1,11 @@
+.root{
+    -fx-font-family: "Courier New";
+}
+
 .painelCentro{
     -fx-background-radius: 140 0 0 140;
 	-fx-background-color:#ffffff;
-    -fx-font-family: Garamond;
+  
 }
 
 .campoTexto{
@@ -16,5 +20,22 @@
 .text{
 
     -fx-font-family: "Garamond";
+
+}
+
+.button{
+    -fx-font: 16px "Serif";
+    -fx-padding: 10;
+    -fx-background-color: #CCFF99;
+    -fx-background-radius: 50px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 0);
+
+}
+
+.button:hover{
+    -fx-font: 16px "Serif";
+    -fx-padding: 10;
+    -fx-background-color: #ff9999;
+  
 
 }
