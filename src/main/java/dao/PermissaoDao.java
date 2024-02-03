@@ -14,7 +14,7 @@ public class PermissaoDao {
     private Statement smt = null;
     private ResultSet rs = null;
 	
-	public String getPermissaoUsuario(String usuario) {
+	/*public String getPermissaoUsuario(String usuario) {
 
         try {
 
@@ -40,7 +40,7 @@ public class PermissaoDao {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 	
 
 }

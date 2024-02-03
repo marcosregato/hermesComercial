@@ -29,8 +29,8 @@ public class CustoDao {
             String query ="INSERT INTO custo (id, custounitario, custototal) VALUES (NULL, ?, ?)";
             PreparedStatement ps = con.connection().prepareStatement(query);
 
-            ps.setFloat(1, custo.getCustoUnitario());
-            ps.setFloat(2, custo.getCustoTotal());
+           // ps.setFloat(1, custo.getCustoUnitario());
+            //ps.setFloat(2, custo.getCustoTotal());
             
             ps.executeUpdate();
             ps.close();
@@ -49,8 +49,8 @@ public class CustoDao {
             rs = ps.executeQuery();
             while (rs.next()) {
             	Custo item = new Custo();
-            	item.setCustoUnitario(rs.getFloat("nome"));
-            	item.setCustoTotal(rs.getFloat("subproduto"));
+            //	item.setCustoUnitario(rs.getFloat("nome"));
+            //	item.setCustoTotal(rs.getFloat("subproduto"));
             	
                 lista.add(item);
             }
@@ -68,8 +68,8 @@ public class CustoDao {
             con  = new ConnectionPostgreSQL();
             String query = "update custo set custounitario = ?,custototal = ?";
             PreparedStatement ps = con.connection().prepareStatement(query);
-            ps.setFloat(1, custo.getCustoUnitario());
-            ps.setFloat(2, custo.getCustoTotal());
+            //ps.setFloat(1, custo.getCustoUnitario());
+            //ps.setFloat(2, custo.getCustoTotal());
             
             rs.close();
             ps.close();
@@ -108,8 +108,8 @@ public class CustoDao {
 
             	custo = new Custo();
 
-            	custo.setCustoUnitario(rs.getFloat("custounitario"));
-            	custo.setCustoTotal(rs.getFloat("custototal"));
+            	//custo.setCustoUnitario(rs.getFloat("custounitario"));
+            	//custo.setCustoTotal(rs.getFloat("custototal"));
             
 
             }
