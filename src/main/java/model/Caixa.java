@@ -3,7 +3,7 @@ package model;
 public class Caixa {
 	
 	private Long id;
-    private float valor;
+    private float valorCaixa;
     
 	public Long getId() {
 		return id;
@@ -12,11 +12,11 @@ public class Caixa {
 		this.id = id;
 	}
 
-	public float getValor() {
-		return valor;
+	public float getValorCaixa() {
+		return valorCaixa;
 	}
 
-	public void setValor(float valor) {
-		this.valor = valor;
+	public void setValorCaixa(float valorCaixa) {
+		this.valorCaixa = valorCaixa;
 	}
 }
