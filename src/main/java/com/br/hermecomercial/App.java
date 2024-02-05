@@ -10,7 +10,7 @@ import javafx.stage.Stage;
 /**
  * JavaFX App
  */
-public class App extends Application {
+/*public class App extends Application {
 
     @Override
     public void start(Stage stage) {
@@ -27,4 +27,4 @@ public class App extends Application {
         launch();
     }
 
-}
+}*/

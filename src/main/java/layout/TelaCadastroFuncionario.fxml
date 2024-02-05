@@ -20,16 +20,22 @@
             <Image url="@img/riscado_1.png" />
          </image>
       </ImageView>
-      <Pane layoutX="117.0" layoutY="-10.0" prefHeight="760.0" prefWidth="935.0" stylesheets="@css/styleLista.css">
+      <Pane layoutX="85.0" layoutY="1.0" prefHeight="749.0" prefWidth="964.0" stylesheets="@css/styleLista.css">
          <children>
+            <Pane layoutX="12.0" layoutY="138.0" prefHeight="511.0" prefWidth="941.0" styleClass="bordaPainel">
+               <children>
+                  <Text layoutX="424.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E- mail Empresa :" />
+                  <Text layoutX="421.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cidade :" />
+               </children>
+            </Pane>
             <Text layoutX="41.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRO DEUSUARIO" />
             <Button layoutX="639.0" layoutY="680.0" mnemonicParsing="false" text="Salvar" />
             <Button layoutX="806.0" layoutY="680.0" mnemonicParsing="false" text="Cancelar" />
             <Text layoutX="790.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUÁRIO LOGADO" />
-            <TextField fx:id="txtNome" layoutX="89.0" layoutY="219.0" prefHeight="28.0" prefWidth="328.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
+            <TextField fx:id="txtNome" layoutX="97.0" layoutY="219.0" prefHeight="28.0" prefWidth="328.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
             <Text layoutX="42.0" layoutY="236.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
-            <Text layoutX="41.0" layoutY="312.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Endereço :" />
-            <TextField fx:id="txtEndereco" layoutX="118.0" layoutY="295.0" prefHeight="24.0" prefWidth="295.0" styleClass="campoTexto" />
+            <Text layoutX="39.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Endereço :" />
+            <TextField fx:id="txtEndereco" layoutX="119.0" layoutY="261.0" prefHeight="24.0" prefWidth="295.0" styleClass="campoTexto" />
             <ImageView fitHeight="46.0" fitWidth="47.0" layoutX="733.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/user.png" />
@@ -63,16 +69,14 @@
                   </Menu>
                </menus>
             </MenuBar>
-            <Text layoutX="478.0" layoutY="314.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cidade :" />
-            <TextField fx:id="txtCidade" layoutX="552.0" layoutY="297.0" prefHeight="27.0" prefWidth="169.0" styleClass="campoTexto" />
-            <Text layoutX="41.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail Pessoal :" />
-            <Text layoutX="489.0" layoutY="383.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E- mail Empresa :" />
-            <Text layoutX="42.0" layoutY="442.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sexo :" />
-            <Text layoutX="449.0" layoutY="236.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bairro :" />
-            <TextField fx:id="txtEmailPessoal" layoutX="171.0" layoutY="368.0" prefHeight="27.0" prefWidth="264.0" styleClass="campoTexto" />
-            <TextField fx:id="txtEmailEmpresa" layoutX="636.0" layoutY="368.0" prefHeight="27.0" prefWidth="192.0" styleClass="campoTexto" />
-            <TextField fx:id="txtBairro" layoutX="518.0" layoutY="219.0" prefHeight="27.0" prefWidth="186.0" styleClass="campoTexto" />
-            <ComboBox fx:id="comboSexo" layoutX="96.0" layoutY="426.0" prefWidth="150.0" />
+            <TextField fx:id="txtCidade" layoutX="490.0" layoutY="264.0" prefHeight="27.0" prefWidth="169.0" styleClass="campoTexto" />
+            <Text layoutX="41.0" layoutY="315.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-mail Pessoal :" />
+            <Text layoutX="42.0" layoutY="355.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sexo :" />
+            <Text layoutX="436.0" layoutY="236.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bairro :" />
+            <TextField fx:id="txtEmailPessoal" layoutX="153.0" layoutY="299.0" prefHeight="27.0" prefWidth="264.0" styleClass="campoTexto" />
+            <TextField fx:id="txtEmailEmpresa" layoutX="554.0" layoutY="302.0" prefHeight="27.0" prefWidth="192.0" styleClass="campoTexto" />
+            <TextField fx:id="txtBairro" layoutX="494.0" layoutY="219.0" prefHeight="27.0" prefWidth="186.0" styleClass="campoTexto" />
+            <ComboBox fx:id="comboSexo" layoutX="96.0" layoutY="340.0" prefWidth="150.0" />
          </children>
          <styleClass>
             <String fx:value="painelCentro" />

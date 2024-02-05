@@ -2,6 +2,7 @@
 
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -19,16 +20,24 @@
             <Image url="@img/riscado_1.png" />
          </image>
       </ImageView>
-      <Pane layoutX="117.0" layoutY="-10.0" prefHeight="760.0" prefWidth="935.0" stylesheets="@css/styleLista.css">
+      <Pane layoutX="85.0" layoutY="1.0" prefHeight="749.0" prefWidth="964.0" stylesheets="@css/styleLista.css">
          <children>
-            <Text layoutX="41.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRO DEUSUARIO" />
-            <Button layoutX="639.0" layoutY="680.0" mnemonicParsing="false" text="Salvar" />
-            <Button layoutX="806.0" layoutY="680.0" mnemonicParsing="false" text="Cancelar" />
+            <Pane layoutX="7.0" layoutY="138.0" prefHeight="511.0" prefWidth="941.0" styleClass="bordaPainel">
+               <children>
+                  <Text layoutX="38.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data :" />
+                  <ComboBox fx:id="comboPagamento" layoutX="134.0" layoutY="78.0" prefWidth="150.0" />
+                  <TextField fx:id="txtData" layoutX="101.0" layoutY="130.0" prefHeight="27.0" prefWidth="169.0" styleClass="campoTexto" />
+                  <TextField fx:id="txtValor" layoutX="378.0" layoutY="131.0" prefHeight="27.0" prefWidth="186.0" styleClass="campoTexto" />
+                  <Text layoutX="307.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valor :" />
+                  <TextField fx:id="txtNome" layoutX="380.0" layoutY="78.0" prefHeight="28.0" prefWidth="407.0" styleClass="campoTexto" />
+                  <Text layoutX="314.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
+               </children>
+            </Pane>
+            <Text layoutX="41.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRO FLUXO DE CAIXA" />
+            <Button fx:id="btSalvar" layoutX="639.0" layoutY="680.0" mnemonicParsing="false" text="Salvar" />
+            <Button fx:id="btCancelar" layoutX="806.0" layoutY="680.0" mnemonicParsing="false" text="Cancelar" />
             <Text layoutX="790.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUÁRIO LOGADO" />
-            <TextField fx:id="txtNome" layoutX="118.0" layoutY="233.0" prefHeight="28.0" prefWidth="328.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
-            <Text layoutX="64.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
-            <Text layoutX="64.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Endereço :" />
-            <TextField layoutX="152.0" layoutY="296.0" prefHeight="24.0" prefWidth="295.0" styleClass="campoTexto" />
+            <Text layoutX="42.0" layoutY="236.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pagamento :" />
             <ImageView fitHeight="46.0" fitWidth="47.0" layoutX="733.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/user.png" />
