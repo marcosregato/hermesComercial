@@ -35,8 +35,8 @@ public class ProdutoDao {
             String query ="INSERT INTO produto (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, ?, ?, ?, ?, ?)";
             PreparedStatement ps = con.connection().prepareStatement(query);
 
-            ps.setString(1, produto.getNome());
-            ps.setString(2, produto.getSubProduto());
+            ps.setString(1, produto.getTipo());
+            ps.setString(2, produto.getSubTipo());
             ps.setString(3, produto.getCodigo());
             ps.setString(4, produto.getDataCompra());
             ps.setString(4, produto.getCodigoNcm());
@@ -58,8 +58,8 @@ public class ProdutoDao {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Produto produto = new Produto();
-                produto.setNome(rs.getString("nome"));
-                produto.setSubProduto(rs.getString("subproduto"));
+                produto.setTipo(rs.getString("Tipo"));
+                produto.setSubTipo(rs.getString("subpTipo"));
                 produto.setCodigo(rs.getString("codigo"));
                 produto.setDataCompra(rs.getString("datacompra"));
                 produto.setCodigoNcm(rs.getString("codigoncm"));
@@ -80,8 +80,8 @@ public class ProdutoDao {
             con  = new ConnectionPostgreSQL();
             String query = "update produto set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
             PreparedStatement ps = con.connection().prepareStatement(query);
-            ps.setString(1, produto.getNome());
-            ps.setString(2, produto.getSubProduto());
+            ps.setString(1, produto.getTipo());
+            ps.setString(2, produto.getSubTipo());
             ps.setString(3, produto.getCodigo());
             ps.setString(4, produto.getDataCompra());
             ps.setString(5, produto.getCodigoNcm());
@@ -122,8 +122,8 @@ public class ProdutoDao {
 
                 produto = new Produto();
 
-                produto.setNome(rs.getString("nome"));
-                produto.setSubProduto(rs.getString("subproduto"));
+                produto.setTipo(rs.getString("Tipo"));
+                produto.setSubTipo(rs.getString("subTipo"));
                 produto.setCodigo(rs.getString("codigo"));
                 produto.setDataCompra(rs.getString("datacompra"));
                 produto.setCodigoNcm(rs.getString("codigoncm"));

@@ -6,13 +6,8 @@ import java.util.List;
 
 import dao.ProdutoDao;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.*;
+import javafx.scene.text.Text;
 import model.Produto;
 import util.Alerta;
 
@@ -24,37 +19,58 @@ public class ProdutoController {
 
 
     @FXML
-    private Button btBuscar;
+    private MenuItem colAlerta;
 
     @FXML
-    private TableColumn<Produto, String> colDesconto;
+    private MenuItem colBancoDados;
 
     @FXML
-    private TableColumn<Produto, String> colNome;
+    private MenuItem colCliente;
 
     @FXML
-    private TableColumn<Produto, String> colQuantidade;
+    private MenuItem colDespesa;
 
     @FXML
-    private TableColumn<Produto,String> colTipo;
+    private MenuItem colFluxoCaixa;
 
     @FXML
-    private TableColumn<Produto, String> colValor;
+    private MenuItem colFuncionario;
 
     @FXML
-    private ComboBox<?> comboFornecedor;
+    private MenuItem colPermissao;
 
     @FXML
-    private Pane painel;
+    private MenuItem colProduto;
 
     @FXML
-    private Pane painel2;
+    private TextField txtCodigo;
 
     @FXML
-    private TableView<?> tabelaProduto;
+    private TextField txtDataCompra;
+
+    @FXML
+    private TextArea txtDescricao;
+
+    @FXML
+    private TextField txtEmailEmpresa;
 
     @FXML
     private TextField txtNome;
+
+    @FXML
+    private TextField txtSetor;
+
+    @FXML
+    private TextField txtSubTipo;
+
+    @FXML
+    private TextField txtTipo;
+
+    @FXML
+    private TextField txtValorTotal;
+
+    @FXML
+    private Text txtValorVenda;
     
     ProdutoDao dao;
     Alerta alerta;
@@ -64,12 +80,12 @@ public class ProdutoController {
         try {
             alerta = new Alerta();
 
-            if(produto.getNome().isEmpty()) {
+            if(produto.getTipo().isEmpty()) {
                 alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o nome do produto");
                 return;
             }
 
-            if(produto.getSubProduto().isEmpty()) {
+            if(produto.getSubTipo().isEmpty()) {
                 alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o sub produto");
                 return;
             }

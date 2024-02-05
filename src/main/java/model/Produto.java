@@ -15,8 +15,8 @@ import javax.persistence.Table;
 public class Produto {
 
     private Long id;
-    private String nome;
-    private String subProduto;
+    private String tipo;
+    private String subTipo;
     private String codigo;
     private String dataCompra;
     private String codigoNcm;
@@ -44,29 +44,29 @@ public class Produto {
     /**
      * @return the produto
      */
-    public String getNome() {
-        return nome;
+    public String getTipo() {
+        return tipo;
     }
 
     /**
-     * @param nome the produto to set
+     * @param tipo the produto to set
      */
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     /**
      * @return the subProduto
      */
-    public String getSubProduto() {
-        return subProduto;
+    public String getSubTipo() {
+        return subTipo;
     }
 
     /**
      * @param subProduto the subProduto to set
      */
-    public void setSubProduto(String subProduto) {
-        this.subProduto = subProduto;
+    public void setSubTipo(String subProduto) {
+        this.subTipo = subTipo;
     }
 
     /**

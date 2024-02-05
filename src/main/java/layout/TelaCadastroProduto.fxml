@@ -5,6 +5,7 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -21,14 +22,10 @@
       </ImageView>
       <Pane layoutX="117.0" layoutY="-10.0" prefHeight="760.0" prefWidth="935.0" stylesheets="@css/styleLista.css">
          <children>
-            <Text layoutX="41.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRO DEUSUARIO" />
+            <Text layoutX="41.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRO DE PRODUTO" />
             <Button layoutX="639.0" layoutY="680.0" mnemonicParsing="false" text="Salvar" />
             <Button layoutX="806.0" layoutY="680.0" mnemonicParsing="false" text="Cancelar" />
             <Text layoutX="790.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUÁRIO LOGADO" />
-            <TextField fx:id="txtNome" layoutX="118.0" layoutY="233.0" prefHeight="28.0" prefWidth="328.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
-            <Text layoutX="64.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
-            <Text layoutX="64.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Endereço :" />
-            <TextField layoutX="152.0" layoutY="296.0" prefHeight="24.0" prefWidth="295.0" styleClass="campoTexto" />
             <ImageView fitHeight="46.0" fitWidth="47.0" layoutX="733.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/user.png" />
@@ -62,6 +59,28 @@
                   </Menu>
                </menus>
             </MenuBar>
+            <Text layoutX="53.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valor Unitário :" />
+            <TextField layoutX="189.0" layoutY="380.0" styleClass="campoTexto" />
+            <TextField fx:id="txtValorVenda" layoutX="680.0" layoutY="386.0" styleClass="campoTexto" />
+            <TextField fx:id="txtSetor" layoutX="669.0" layoutY="444.0" styleClass="campoTexto" />
+            <TextField fx:id="txtValorTotal" layoutX="437.0" layoutY="386.0" styleClass="campoTexto" />
+            <Text layoutX="327.0" layoutY="403.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valor Total :" />
+            <Text fx:id="txtValorVenda" layoutX="575.0" layoutY="403.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valor Venda :" />
+            <Text layoutX="66.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
+            <TextField fx:id="txtNome" layoutX="139.0" layoutY="254.0" prefHeight="28.0" prefWidth="328.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
+            <Text layoutX="497.0" layoutY="271.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo :" />
+            <TextField fx:id="txtTipo" layoutX="555.0" layoutY="254.0" prefHeight="27.0" prefWidth="186.0" styleClass="campoTexto" />
+            <Text layoutX="56.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SubTipo :" />
+            <TextField fx:id="txtSubTipo" layoutX="145.0" layoutY="298.0" prefHeight="24.0" prefWidth="295.0" styleClass="campoTexto" />
+            <Text layoutX="467.0" layoutY="318.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Código :" />
+            <TextField fx:id="txtCodigo" layoutX="555.0" layoutY="301.0" prefHeight="27.0" prefWidth="169.0" styleClass="campoTexto" />
+            <Text layoutX="53.0" layoutY="360.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Data Compra :" />
+            <TextField fx:id="txtDataCompra" layoutX="155.0" layoutY="344.0" prefHeight="27.0" prefWidth="264.0" styleClass="campoTexto" />
+            <Text layoutX="433.0" layoutY="360.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Código Ncm :" />
+            <TextField fx:id="txtEmailEmpresa" layoutX="543.0" layoutY="343.0" prefHeight="27.0" prefWidth="192.0" styleClass="campoTexto" />
+            <Text layoutX="42.0" layoutY="454.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Descrição :" />
+            <TextArea fx:id="txtDescricao" layoutX="137.0" layoutY="432.0" prefHeight="124.0" prefWidth="396.0" />
+            <Text layoutX="575.0" layoutY="461.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Setor :" />
          </children>
          <styleClass>
             <String fx:value="painelCentro" />
