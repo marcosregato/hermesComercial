@@ -14,8 +14,7 @@ import java.sql.Statement;
 
 public class ClienteController {
 
-    private Connection con = null;
-    private Statement smt = null;
+
 
     
     ClienteDao dao;

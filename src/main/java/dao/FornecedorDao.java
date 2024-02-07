@@ -40,7 +40,7 @@ public class FornecedorDao {
         }
     }
     
-    public List<Fornecedor> listFornecedor(){
+    public List<Fornecedor> listar(){
         try {
             con  = new ConnectionPostgreSQL();
             String query ="select * from fornecedor";

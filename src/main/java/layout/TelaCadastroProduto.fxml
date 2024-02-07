@@ -43,8 +43,8 @@
                   <TextField fx:id="txtSetor" layoutX="746.0" layoutY="81.0" styleClass="campoTexto" />
                </children>
             </Pane>
-            <Text layoutX="790.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUÁRIO LOGADO" />
-            <ImageView fitHeight="46.0" fitWidth="47.0" layoutX="733.0" layoutY="15.0" pickOnBounds="true" preserveRatio="true">
+            <Text layoutX="941.0" layoutY="41.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUÁRIO LOGADO" />
+            <ImageView fitHeight="46.0" fitWidth="47.0" layoutX="875.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/user.png" />
                </image>

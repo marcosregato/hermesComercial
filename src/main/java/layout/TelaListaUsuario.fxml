@@ -23,20 +23,22 @@
       </ImageView>
       <Pane layoutX="81.0" prefHeight="802.0" prefWidth="1061.0" stylesheets="@css/styleLista.css">
          <children>
-            <TableView layoutX="83.0" layoutY="221.0" prefHeight="483.0" prefWidth="957.0" stylesheets="@css/styleLista.css">
+            <Pane layoutX="14.0" layoutY="153.0" prefHeight="563.0" prefWidth="1031.0" styleClass="bordaPainel" />
+            <TableView layoutX="37.0" layoutY="238.0" prefHeight="466.0" prefWidth="1003.0" stylesheets="@css/styleLista.css">
               <columns>
-                <TableColumn prefWidth="75.0" text="C1" />
-                <TableColumn prefWidth="75.0" text="C2" />
+                <TableColumn fx:id="colNome" prefWidth="75.0" text="Nome" />
+                <TableColumn fx:id="colEndereco" prefWidth="75.0" text="Endereço" />
+                  <TableColumn fx:id="colTipoUsuario" editable="false" prefWidth="117.0" sortable="false" text="Tipo de Usuário" />
+                  <TableColumn fx:id="colTelefone" prefWidth="241.0" text="Telefone" />
                   <TableColumn prefWidth="75.0" text="Column X" />
-                  <TableColumn prefWidth="75.0" text="Ação" />
               </columns>
             </TableView>
             <TextField fx:id="txtPesquisar" layoutX="160.0" layoutY="173.0" prefHeight="24.0" prefWidth="688.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
-            <Button layoutX="874.0" layoutY="167.0" mnemonicParsing="false" text="Pesquisar" />
+            <Button fx:id="btPesquisar" layoutX="874.0" layoutY="167.0" mnemonicParsing="false" text="Pesquisar" />
             <Text layoutX="93.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" wrappingWidth="66.85205078125" />
             <Text layoutX="21.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuário" wrappingWidth="80.79736328125" />
             <Text layoutX="899.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUARIO LOGADO" />
-            <Button layoutX="924.0" layoutY="735.0" mnemonicParsing="false" text="Salvar" />
+            <Button fx:id="btNovo" layoutX="924.0" layoutY="735.0" mnemonicParsing="false" text="Novo" />
             <ImageView fitHeight="51.0" fitWidth="55.0" layoutX="843.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/user.png" />

@@ -48,5 +48,23 @@ public class CadastroDespesaController {
     	
     }
 
+    public void buscar() {
+        try {
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+    }
+
+    public void lista() {
+        try {
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+    }
+
 
 }
