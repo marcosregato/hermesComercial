@@ -23,7 +23,11 @@
       </ImageView>
       <Pane layoutX="81.0" prefHeight="802.0" prefWidth="1061.0" stylesheets="@css/styleLista.css">
          <children>
-            <Pane layoutX="14.0" layoutY="153.0" prefHeight="563.0" prefWidth="1031.0" styleClass="bordaPainel" />
+            <Pane layoutX="14.0" layoutY="117.0" prefHeight="599.0" prefWidth="1031.0" styleClass="bordaPainel">
+               <children>
+                  <Text layoutX="15.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUÁRIO" wrappingWidth="80.79736328125" />
+               </children>
+            </Pane>
             <TableView layoutX="37.0" layoutY="238.0" prefHeight="466.0" prefWidth="1003.0" stylesheets="@css/styleLista.css">
               <columns>
                 <TableColumn fx:id="colNome" prefWidth="75.0" text="Nome" />
@@ -36,10 +40,9 @@
             <TextField fx:id="txtPesquisar" layoutX="160.0" layoutY="173.0" prefHeight="24.0" prefWidth="688.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
             <Button fx:id="btPesquisar" layoutX="874.0" layoutY="167.0" mnemonicParsing="false" text="Pesquisar" />
             <Text layoutX="93.0" layoutY="192.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" wrappingWidth="66.85205078125" />
-            <Text layoutX="21.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Usuário" wrappingWidth="80.79736328125" />
-            <Text layoutX="899.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUARIO LOGADO" />
+            <Text layoutX="926.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUARIO LOGADO" />
             <Button fx:id="btNovo" layoutX="924.0" layoutY="735.0" mnemonicParsing="false" text="Novo" />
-            <ImageView fitHeight="51.0" fitWidth="55.0" layoutX="843.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="51.0" fitWidth="55.0" layoutX="864.0" layoutY="10.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/user.png" />
                </image>

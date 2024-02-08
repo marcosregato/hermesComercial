@@ -23,9 +23,9 @@
       <Pane layoutX="86.0" layoutY="-6.0" prefHeight="827.0" prefWidth="1069.0" stylesheets="@css/styleLista.css">
          <children>
             <Text layoutX="41.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRO DE PRODUTO" />
-            <Button layoutX="639.0" layoutY="680.0" mnemonicParsing="false" text="Salvar" />
-            <Button layoutX="806.0" layoutY="680.0" mnemonicParsing="false" text="Cancelar" />
-            <Pane layoutX="10.0" layoutY="143.0" prefHeight="496.0" prefWidth="1024.0" styleClass="bordaPainel">
+            <Button layoutX="868.0" layoutY="746.0" mnemonicParsing="false" text="Salvar" />
+            <Button layoutX="957.0" layoutY="746.0" mnemonicParsing="false" text="Cancelar" />
+            <Pane layoutX="10.0" layoutY="143.0" prefHeight="580.0" prefWidth="1040.0" styleClass="bordaPainel">
                <children>
                   <Text layoutX="27.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
                   <Text layoutX="427.0" layoutY="94.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo :" />
