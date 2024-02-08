@@ -1,5 +1,6 @@
 package controller;
 
+import dao.UsuarioDao;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -25,8 +26,17 @@ public class UsuarioController {
     @FXML
     private Button btNovo;
 
+    UsuarioDao dao = new UsuarioDao();
+
     public void salvar(){
+
         try {
+            Usuario usuario = new Usuario();
+          //  usuario.getNome(txtNome.getText());
+
+            dao.salvar(usuario);
+
+
 
         }catch (Exception e){
 

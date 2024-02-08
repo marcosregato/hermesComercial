@@ -4,10 +4,13 @@ public class Usuario {
 
     private Long id;
 
-    private String login;
-    private String senha;
+    private String nome;
+    private String endereco;
+    private String cnjp;
+    private String cpf;
+    private String email;
+    private String tipousuario;
 
-    private String tipoAcesso;
 
     public Long getId() {
         return id;
@@ -17,27 +20,51 @@ public class Usuario {
         this.id = id;
     }
 
-    public String getLogin(String login) {
-        return this.login;
+    public String getNome() {
+        return nome;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public String getSenha(String senha) {
-        return this.senha;
+    public String getEndereco() {
+        return endereco;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setEndereco(String endereco) {
+        this.endereco = endereco;
     }
 
-    public String getTipoAcesso() {
-        return tipoAcesso;
+    public String getCnjp() {
+        return cnjp;
     }
 
-    public void setTipoAcesso(String tipoAcesso) {
-        this.tipoAcesso = tipoAcesso;
+    public void setCnjp(String cnjp) {
+        this.cnjp = cnjp;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTipousuario() {
+        return tipousuario;
+    }
+
+    public void setTipousuario(String tipousuario) {
+        this.tipousuario = tipousuario;
     }
 }
