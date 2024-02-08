@@ -4,12 +4,9 @@
  */
 package controller;
 
-import connectionDB.ConnectionPostgreSQL;
+
 import dao.ClienteDao;
 import model.Cliente;
-
-import java.sql.Connection;
-import java.sql.Statement;
 
 
 public class ClienteController {

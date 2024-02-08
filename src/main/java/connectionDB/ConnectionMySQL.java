@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class ConnectionMySQL {
 
-    private final String url = "jdbc:mysql://localhost/hermesComercial";
-    private final String user = "postgres";
-    private final String password = "postgres";
+    private final String url = "jdbc:mysql://localhost/hermescomercial";
+    private final String user = "root";
+    private final String password = "admin123";
 
     /**
      * Connect to the PostgreSQL database
