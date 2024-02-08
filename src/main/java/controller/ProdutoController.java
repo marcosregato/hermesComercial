@@ -71,6 +71,12 @@ public class ProdutoController {
 
     @FXML
     private Text txtValorVenda;
+
+    @FXML
+    private Button btCancelar;
+
+    @FXML
+    private Button btSalvar;
     
     ProdutoDao dao;
     Alerta alerta;

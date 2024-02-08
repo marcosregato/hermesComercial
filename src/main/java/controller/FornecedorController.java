@@ -64,7 +64,7 @@ public class FornecedorController {
     
     public void listar(){
         try {
-            dao.listFornecedor();
+            dao.listar();
         } catch (Exception e) {
             e.printStackTrace();
         

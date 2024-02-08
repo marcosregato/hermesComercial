@@ -53,5 +53,23 @@ public class CadastroFluxoCaixa {
 		}
     	
     }
+
+    public void buscar() {
+        try {
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+    }
+
+    public void listar() {
+        try {
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+
+    }
     
 }
