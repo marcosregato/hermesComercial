@@ -24,10 +24,11 @@ public class ValidarCampo {
 
 	public String campoVazio(String valor){
 		if((valor.isEmpty()) && (valor.length() > 0)){
-			toolTip.setStyle("-fx-background-color: linear-gradient(#FF6B6B , #FFA6A6 );"
-					+ " -fx-font-weight: bold;");
+			//toolTip.setStyle("-fx-background-color: linear-gradient(#FF6B6B , #FFA6A6 );"
+			//		+ " -fx-font-weight: bold;");
+			return valor;
 		}
-		return valor;
+		return null;
 
 	}
 

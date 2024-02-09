@@ -1,12 +1,16 @@
 
 package controller;
 
-import java.util.Collection;
+import java.util.ArrayList;
 import java.util.List;
 
 import dao.ProdutoDao;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import model.Produto;
 import util.Alerta;
@@ -80,37 +84,19 @@ public class ProdutoController {
     
     ProdutoDao dao;
     Alerta alerta;
-
     
-    public void salvar(Produto produto){
+    
+    public void salvar(){
         try {
-            alerta = new Alerta();
-
-            if(produto.getTipo().isEmpty()) {
-                alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o nome do produto");
-                return;
-            }
-
-            if(produto.getSubTipo().isEmpty()) {
-                alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o sub produto");
-                return;
-            }
-
-            if(produto.getCodigo().isEmpty()) {
-                alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o nome do codigo");
-                return;
-            }
-
-            if(produto.getDataCompra().isEmpty()) {
-                alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o codigo do produto");
-                return;
-            }
-
-            if(produto.getCodigoNcm().isEmpty()) {
-                alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o código NCM");
-                return;
-            }
-
+        	Produto produto = new Produto();
+        	
+        	produto.setNome(txtNome.getText());
+        	produto.setTipo(txtTipo.getText());
+        	produto.setSubTipo(txtSubTipo.getText());
+        	produto.setSetor(txtSetor.getText());
+            
+        	
+        	
             dao.salvar(produto);
 
         } catch (Exception e) {
@@ -119,14 +105,17 @@ public class ProdutoController {
         }
     }
     
-    public List<Produto> listar(){
+    public void listar(){
         try {
-           return dao.listProduto();
+        	
+        	List<Produto> lista = new ArrayList<>();
+        	
+           lista = dao.listar();
         } catch (Exception e) {
             e.printStackTrace();
         
         }
-        return null;
+       
     }
     
     public void remove(String nome){
@@ -155,11 +144,16 @@ public class ProdutoController {
     
     public void buscar(String nome){
         try {
+        	
+        	List<Produto> lista = new ArrayList<Produto>();
             if(nome.isEmpty()) {
                 alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o nome do produto");
                 return;
             }
-            dao.buscar(nome);
+            
+            lista = dao.buscar(nome);
+            
+            
         } catch (Exception e) {
             e.printStackTrace();
         

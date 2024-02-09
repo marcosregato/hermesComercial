@@ -12,7 +12,7 @@ public class AlertaEstoque {
 	 * */
 	public void limiteProduto(int limite) {
 		try {
-			for(int i=0; i < dao.listaQuantidadeEstoque().size();i++) {
+			for(int i=0; i < dao.listar().size();i++) {
 //				if(limite < dao.listaQuantidadeEstoque().get(i)) {
 					
 //				}

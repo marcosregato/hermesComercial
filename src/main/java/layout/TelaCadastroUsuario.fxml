@@ -35,14 +35,14 @@
                </children>
             </Pane>
             <Text layoutX="41.0" layoutY="181.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CADASTRO DE USUARIO" />
-            <Button layoutX="841.0" layoutY="759.0" mnemonicParsing="false" text="Salvar" />
-            <Button layoutX="946.0" layoutY="759.0" mnemonicParsing="false" text="Cancelar" />
+            <Button fx:id="btSalvar" layoutX="841.0" layoutY="759.0" mnemonicParsing="false" text="Salvar" />
+            <Button fx:id="btCancelar" layoutX="946.0" layoutY="759.0" mnemonicParsing="false" text="Cancelar" />
             <Text layoutX="933.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="USUÁRIO LOGADO" />
             <TextField fx:id="txtNome" layoutX="118.0" layoutY="233.0" prefHeight="28.0" prefWidth="328.0" styleClass="campoTexto" stylesheets="@css/styleLista.css" />
             <Text layoutX="468.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de usuário" />
             <Text layoutX="64.0" layoutY="252.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
             <Text layoutX="64.0" layoutY="313.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Endereço :" />
-            <TextField layoutX="152.0" layoutY="296.0" prefHeight="24.0" prefWidth="295.0" styleClass="campoTexto" />
+            <TextField fx:id="txtEndereco" layoutX="152.0" layoutY="296.0" prefHeight="24.0" prefWidth="295.0" styleClass="campoTexto" />
             <ImageView fitHeight="46.0" fitWidth="47.0" layoutX="864.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@img/user.png" />

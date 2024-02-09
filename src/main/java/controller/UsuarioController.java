@@ -1,68 +1,116 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dao.UsuarioDao;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import model.Usuario;
+import util.ValidarCampo;
 
 public class UsuarioController {
 
     @FXML
-    private TableColumn<String, Usuario> colTelefone;
+    private Button btCancelar;
 
     @FXML
-    private TableColumn<String, Usuario> colTipoUsuario;
+    private Button btSalvar;
+    
+    @FXML
+    private ComboBox<Usuario> comboPJ_PF;
 
     @FXML
-    private TableColumn<String, Usuario> colNome;
+    private ComboBox<Usuario> comboTipoUsuario;
 
     @FXML
-    private TableColumn<String, Usuario> colEndereco;
+    private TextField txtEmail;
 
     @FXML
-    private Button btPesquisar;
+    private TextField txtEndereco;
 
     @FXML
-    private Button btNovo;
+    private TextField txtNome;
+
+    @FXML
+    private TextField txtPJ_PF;
+
+    @FXML
+    private TextField txtTelefone;
+
 
     UsuarioDao dao = new UsuarioDao();
+    ValidarCampo validarCampo = new ValidarCampo();
 
     public void salvar(){
 
         try {
             Usuario usuario = new Usuario();
-          //  usuario.getNome(txtNome.getText());
-
+            usuario.setNome(txtNome.getText());
+            usuario.setEndereco(txtEndereco.getText());
+            
+            //TODO Validar CPF e validar CNPJ
+            usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
+            usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
+            
+            usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
+            usuario.setEmail(txtEmail.getText());
+            
             dao.salvar(usuario);
 
-
-
         }catch (Exception e){
+        	
+        	System.out.println(e.getMessage());
 
         }
     }
 
-    public void delete(){
+    public void remove(String nome){
         try {
-
+        	dao.remove(nome);
+        	
         }catch (Exception e){
+        	
+        	System.out.println(e.getMessage());
 
         }
     }
 
-    public void update(){
+    public void update(Usuario usuario){
+    	
         try {
+        	
+        	Usuario user = new Usuario();
+            usuario.setNome(txtNome.getText());
+            usuario.setEndereco(txtEndereco.getText());
+            
+            //TODO Validar CPF e validar CNPJ
+            usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
+            usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
+            
+            usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
+            usuario.setEmail(txtEmail.getText());
+            
+            dao.update(usuario);
 
         }catch (Exception e){
+        	System.out.println(e.getMessage());
 
         }
     }
 
-    public void buscar(){
+    public void buscar(String nome){
         try {
+        	List<Usuario> lista = new ArrayList<>();
+        	
+        	if(validarCampo.campoVazio(nome) != "") {
+        		lista = dao.buscar(nome);
+        	}
 
         }catch (Exception e){
+        	System.out.println(e.getMessage());
 
         }
     }
@@ -71,6 +119,7 @@ public class UsuarioController {
         try {
 
         }catch (Exception e){
+        	System.out.println(e.getMessage());
 
         }
     }

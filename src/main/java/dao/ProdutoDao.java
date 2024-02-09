@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import Repository.RepositoryProduto;
 import connectionDB.ConnectionPostgreSQL;
 import model.Produto;
 import model.Usuario;
@@ -23,34 +24,75 @@ import java.sql.Connection;
  *
  * @author marcos
  */
-public class ProdutoDao {
+public class ProdutoDao implements RepositoryProduto{
 
     private ConnectionPostgreSQL con = null;
     private Statement smt = null;
     private ResultSet rs = null;
-    
-     public void salvar(Produto produto){
-        try {
-            con  = new ConnectionPostgreSQL();
-            String query ="INSERT INTO produto (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, ?, ?, ?, ?, ?)";
-            PreparedStatement ps = con.connection().prepareStatement(query);
+	@Override
+	public void salvar(Produto produto) {
+		 try {
+	            con  = new ConnectionPostgreSQL();
+	            String query ="INSERT INTO produto (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, ?, ?, ?, ?, ?)";
+	            PreparedStatement ps = con.connection().prepareStatement(query);
 
+	            ps.setString(1, produto.getTipo());
+	            ps.setString(2, produto.getSubTipo());
+	            ps.setString(3, produto.getCodigo());
+	            ps.setString(4, produto.getDataCompra());
+	            ps.setString(4, produto.getCodigoNcm());
+
+	            ps.executeUpdate();
+	            ps.close();
+	            
+	        } catch (Exception e) {
+	             e.printStackTrace();
+	        }
+		
+	}
+
+	@Override
+	public void remove(String nome) {
+		
+		try {
+            con  = new ConnectionPostgreSQL();
+            String query = "DELETE FROM produto WHERE nome=?";
+            PreparedStatement ps = con.connection().prepareStatement(query);
+            ps.setString(1, nome);
+            ps.executeUpdate();
+            rs.close();
+            ps.close();
+        
+        } catch (Exception e) {
+             e.printStackTrace();
+        }
+		
+	}
+
+	@Override
+	public void update(Produto produto) {
+		
+		try {
+            con  = new ConnectionPostgreSQL();
+            String query = "update produto set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
+            PreparedStatement ps = con.connection().prepareStatement(query);
             ps.setString(1, produto.getTipo());
             ps.setString(2, produto.getSubTipo());
             ps.setString(3, produto.getCodigo());
             ps.setString(4, produto.getDataCompra());
-            ps.setString(4, produto.getCodigoNcm());
-
-            ps.executeUpdate();
+            ps.setString(5, produto.getCodigoNcm());
+            rs.close();
             ps.close();
             
         } catch (Exception e) {
-             e.printStackTrace();
+            e.printStackTrace();
         }
-    }
-    
-    public List<Produto> listProduto(){
-        try {
+		
+	}
+
+	@Override
+	public List<Produto> listar() {
+		try {
             con  = new ConnectionPostgreSQL();
             String query ="select * from produto";
             List<Produto> listProduto = new ArrayList<>();
@@ -72,72 +114,14 @@ public class ProdutoDao {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
-    }
-    
-    public void update(Produto produto){
-        try {
-            con  = new ConnectionPostgreSQL();
-            String query = "update produto set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
-            PreparedStatement ps = con.connection().prepareStatement(query);
-            ps.setString(1, produto.getTipo());
-            ps.setString(2, produto.getSubTipo());
-            ps.setString(3, produto.getCodigo());
-            ps.setString(4, produto.getDataCompra());
-            ps.setString(5, produto.getCodigoNcm());
-            rs.close();
-            ps.close();
-            
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void remove(String nome){
-        try {
-            con  = new ConnectionPostgreSQL();
-            String query = "DELETE FROM produto WHERE nome=?";
-            PreparedStatement ps = con.connection().prepareStatement(query);
-            ps.setString(1, nome);
-            ps.executeUpdate();
-            rs.close();
-            ps.close();
-        
-        } catch (Exception e) {
-             e.printStackTrace();
-        }
-    }
-    
-    public Produto buscar(String nome){
+		return null;
+	}
 
-        try {
-
-            String query =  "SELECT * FROM produto WHERE nome =?";
-            PreparedStatement ps = con.connection().prepareStatement(query);
-            ps.setString(1, nome);
-
-            rs = ps.executeQuery();
-            Produto produto = null;
-            if (rs.next()) {
-
-                produto = new Produto();
-
-                produto.setTipo(rs.getString("Tipo"));
-                produto.setSubTipo(rs.getString("subTipo"));
-                produto.setCodigo(rs.getString("codigo"));
-                produto.setDataCompra(rs.getString("datacompra"));
-                produto.setCodigoNcm(rs.getString("codigoncm"));
-
-            }
-
-            rs.close();
-            ps.close();
-            return produto;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+	@Override
+	public List<Produto> buscar(String nome) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
     
 }

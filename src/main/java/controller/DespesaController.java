@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import model.Custo;
+import model.Despesa;
 
 public class DespesaController {
 
@@ -24,37 +25,42 @@ public class DespesaController {
     private TextField txtData;
 
     DespesaDao dao = new DespesaDao();
+    Despesa despesa;
+    
 
     public void salvar( ){
         try {
-            dao.salvar();
+        	despesa = new Despesa();
+        	
+        	
+            dao.salvar(despesa);
         } catch (Exception e) {
             e.printStackTrace();
 
         }
     }
 
-    public void delete( ){
+    public void remove( ){
         try {
-            dao.delete();
+            dao.remove(txtNome.getText());
         } catch (Exception e) {
             e.printStackTrace();
 
         }
     }
 
-    public void update( ){
+    public void update(Despesa despesa ){
         try {
-            dao.update();
+            dao.update(despesa);
         } catch (Exception e) {
             e.printStackTrace();
 
         }
     }
 
-    public void buscar( ){
+    public void buscar(String nome ){
         try {
-            dao.buscar();
+            dao.buscar(nome);
         } catch (Exception e) {
             e.printStackTrace();
 

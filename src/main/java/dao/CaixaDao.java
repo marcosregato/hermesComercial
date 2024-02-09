@@ -4,14 +4,11 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import connectionDB.ConnectionMySQL;
-import connectionDB.ConnectionPostgreSQL;
 
 public class CaixaDao {
 	
 
-	private Connectioncon = null;
 	private ConnectionMySQL con = null;
-
     private Statement smt = null;
     private ResultSet rs = null;
     
@@ -21,6 +18,7 @@ public class CaixaDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
     }
     
@@ -29,6 +27,7 @@ public class CaixaDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
     }
     
@@ -37,6 +36,7 @@ public class CaixaDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
     }
     
@@ -45,6 +45,7 @@ public class CaixaDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
     }
     
@@ -53,11 +54,7 @@ public class CaixaDao {
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			System.out.println(e.getMessage());
 		}
     }
-    
-    
-	
-	
-
 }

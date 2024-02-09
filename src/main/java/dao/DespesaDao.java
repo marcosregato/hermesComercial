@@ -1,54 +1,60 @@
 package dao;
 
-import connectionDB.ConnectionMySQL;
-import connectionDB.ConnectionPostgreSQL;
-
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.List;
 
-public class DespesaDao {
+import Repository.RepositoryDespesa;
+import connectionDB.ConnectionMySQL;
+import model.Despesa;
 
-    private ConnectionMySQL con = null;
-    private Statement smt = null;
-    private ResultSet rs = null;
+public class DespesaDao implements RepositoryDespesa{
 
-    public void salvar(){
-        try {
+	private ConnectionMySQL con = null;
+	private Statement smt = null;
+	private ResultSet rs = null;
 
-        }catch (Exception e){
 
-        }
-    }
+	public void salvar(Despesa despesa) {
+		try {
 
-    public void delete(){
-        try {
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 
-        }catch (Exception e){
+	}
+	public void remove(String nome) {
+		try {
 
-        }
-    }
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 
-    public void update(){
-        try {
+	}
+	public void update(Despesa despesa) {
+		try {
 
-        }catch (Exception e){
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 
-        }
-    }
+	}
+	public List<Despesa> listar() {
+		try {
 
-    public void buscar(){
-        try {
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	public List<Despesa> buscar(String nome) {
+		try {
 
-        }catch (Exception e){
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 
-        }
-    }
 
-    public void listar(){
-        try {
-
-        }catch (Exception e){
-
-        }
-    }
 }

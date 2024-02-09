@@ -5,11 +5,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import model.Usuario;
+import model.Login;
 import util.Alerta;
 import util.ValidarCampo;
-
-import java.util.List;
 
 public class LoginController {
 
@@ -32,21 +30,21 @@ public class LoginController {
     ValidarCampo validarCampo = new ValidarCampo();
     public void fazerLogin(){
         try {
-            dao = new LoginDao();
+          /*  dao = new LoginDao();
 
-            String login = validarCampo.campoVazio(txtLogin.getText());
+            String nome = validarCampo.campoVazio(txtLogin.getText());
             String senha = validarCampo.campoVazio(txtSenha.getText());
-            Usuario usuario = new Usuario();
+            Login login = new Login();
 
-            if(usuario != null) {
-               new  PrincipalController(dao.acessarUsuario(usuario.getLogin(login),
-                       usuario.getSenha(senha)));
+            if((nome != null) && (senha !=null)) {
+               new  PrincipalController(dao.acessarUsuario(login.setLogin(nome),
+            		   login.setSenha(senha)));
 
             }else{
                 alerta.showAlert(Alert.AlertType.ERROR,
                         alerta.createRegistrationFormPane().getScene().getWindow(),
                         "Form Error!", "Login ou Senha está incorreta");
-            }
+            }*/
 
         }catch (Exception e ){
             e.printStackTrace();

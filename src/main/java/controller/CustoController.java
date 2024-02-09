@@ -19,7 +19,7 @@ public class CustoController {
         try {
             dao.salvar(custo);
         } catch (Exception e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         
         }
     }
@@ -27,10 +27,10 @@ public class CustoController {
     public void listar(){
         try {
             
-            dao.listCusto();
+            dao.listar();
             
         } catch (Exception e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         
         }
     }
@@ -39,7 +39,7 @@ public class CustoController {
         try {
             dao.remove(nome);
         } catch (Exception e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         
         }
     }
@@ -48,7 +48,7 @@ public class CustoController {
         try {
             dao.update(custo);
         } catch (Exception e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         
         }
     }
@@ -57,7 +57,7 @@ public class CustoController {
         try {
             dao.buscar(nome);
         } catch (Exception e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
         
         }
     }
