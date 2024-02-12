@@ -1,6 +1,6 @@
 package business.financeiro;
 
-public class DinheiroCaixa {
+public class DinheiroCaixaBusiness {
 	
 	
 
