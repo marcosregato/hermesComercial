@@ -15,8 +15,8 @@ public class EstoqueDao implements RepositoryEstoque{
 	private ConnectionPostgreSQL con = null;
 	private Statement smt = null;
 	private ResultSet rs = null;
-	
-	
+
+
 	@Override
 	public void salvar(Estoque estoque) {
 		// TODO Auto-generated method stub
@@ -27,6 +27,7 @@ public class EstoqueDao implements RepositoryEstoque{
 		}
 
 	}
+
 	@Override
 	public void delete(String nome) {
 		// TODO Auto-generated method stub
@@ -37,6 +38,7 @@ public class EstoqueDao implements RepositoryEstoque{
 		}
 
 	}
+
 	@Override
 	public void update(Estoque produto) {
 		// TODO Auto-generated method stub
@@ -47,6 +49,7 @@ public class EstoqueDao implements RepositoryEstoque{
 		}
 
 	}
+
 	@Override
 	public List<Estoque> listar() {
 		try {
@@ -73,6 +76,7 @@ public class EstoqueDao implements RepositoryEstoque{
 		return null;
 
 	}
+
 	@Override
 	public List<Estoque> buscar() {
 		// TODO Auto-generated method stub
@@ -83,6 +87,16 @@ public class EstoqueDao implements RepositoryEstoque{
 		}
 		return null;
 	}
+
+
+	public String getDataCompra(){
+		try {
+
+		}catch (Exception e ){
+			System.out.println(e.getMessage());
+		}
+		return null;
+		}
 
 
 

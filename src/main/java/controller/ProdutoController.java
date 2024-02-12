@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.ProdutoDao;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -81,6 +83,9 @@ public class ProdutoController {
 
     @FXML
     private Button btSalvar;
+
+    @FXML
+    private Button btPesquisar;
     
     ProdutoDao dao;
     Alerta alerta;
@@ -88,16 +93,26 @@ public class ProdutoController {
     
     public void salvar(){
         try {
-        	Produto produto = new Produto();
-        	
-        	produto.setNome(txtNome.getText());
-        	produto.setTipo(txtTipo.getText());
-        	produto.setSubTipo(txtSubTipo.getText());
-        	produto.setSetor(txtSetor.getText());
-            
-        	
-        	
-            dao.salvar(produto);
+
+            btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
+                @Override
+                public void handle(ActionEvent event) {
+                    Produto produto = new Produto();
+
+                    produto.setNome(txtNome.getText());
+                    produto.setTipo(txtTipo.getText());
+                    produto.setSubTipo(txtSubTipo.getText());
+                    produto.setSetor(txtSetor.getText());
+                    produto.setCodigoNcm(txtCodigo.getText());
+                    produto.setDataCompra(txtDataCompra.getText());
+                    produto.setSetor(txtSetor.getText());
+                            //produto.setValorUnitario(txtValor);
+
+                    dao.salvar(produto);
+
+                }
+            });
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,10 +122,10 @@ public class ProdutoController {
     
     public void listar(){
         try {
-        	
-        	List<Produto> lista = new ArrayList<>();
-        	
-           lista = dao.listar();
+
+            List<Produto> lista = new ArrayList<>();
+
+            lista = dao.listar();
         } catch (Exception e) {
             e.printStackTrace();
         
@@ -118,40 +133,69 @@ public class ProdutoController {
        
     }
     
-    public void remove(String nome){
+    public void remove(){
         try {
 
-            if(nome.isEmpty()) {
-                alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o nome do produto");
-                return;
-            }
+//            if(nome.isEmpty()) {
+//                alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o nome do produto");
+//                return;
+//            }
 
-            dao.remove(nome);
+            dao.remove(txtNome.getText());
         } catch (Exception e) {
             e.printStackTrace();
         
         }
     }
     
-    public void update(Produto produto){
+    public void update(){
         try {
-            dao.update(produto);
+
+            btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
+                @Override
+                public void handle(ActionEvent event) {
+                    Produto produto = new Produto();
+
+                    produto.setNome(txtNome.getText());
+                    produto.setTipo(txtTipo.getText());
+                    produto.setSubTipo(txtSubTipo.getText());
+                    produto.setSetor(txtSetor.getText());
+                    produto.setCodigoNcm(txtCodigo.getText());
+                    produto.setDataCompra(txtDataCompra.getText());
+                    produto.setSetor(txtSetor.getText());
+                    //produto.setValorUnitario(txtValor);
+
+                    dao.update(produto);
+
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         
         }
     }
     
-    public void buscar(String nome){
+    public void buscar(){
         try {
-        	
-        	List<Produto> lista = new ArrayList<Produto>();
-            if(nome.isEmpty()) {
-                alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o nome do produto");
-                return;
-            }
+
+
+            btPesquisar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
+                @Override
+                public void handle(ActionEvent event) {
+                    List<Produto> lista = new ArrayList<Produto>();
+
+                    lista = dao.buscar(txtNome.getText());
+
+                }
+            });
+
+
+//            if(txtNome.getText().isEmpty()) {
+//                alerta.showAlert(Alert.AlertType.ERROR, alerta.createRegistrationFormPane().getScene().getWindow(), "Form Error!", "Digite o nome do produto");
+//                return;
+//            }
             
-            lista = dao.buscar(nome);
+           // lista = dao.buscar(txtNome.getText());
             
             
         } catch (Exception e) {

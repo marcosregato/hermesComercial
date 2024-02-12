@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.UsuarioDao;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -47,18 +49,24 @@ public class UsuarioController {
     public void salvar(){
 
         try {
-            Usuario usuario = new Usuario();
-            usuario.setNome(txtNome.getText());
-            usuario.setEndereco(txtEndereco.getText());
-            
-            //TODO Validar CPF e validar CNPJ
-            usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
-            usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
-            
-            usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
-            usuario.setEmail(txtEmail.getText());
-            
-            dao.salvar(usuario);
+            btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Usuario usuario = new Usuario();
+                    usuario.setNome(txtNome.getText());
+                    usuario.setEndereco(txtEndereco.getText());
+                    //TODO Validar CPF e validar CNPJ
+                    usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
+                    usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
+
+                    usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
+                    usuario.setEmail(txtEmail.getText());
+
+                    dao.salvar(usuario);
+
+                }
+            });
+
 
         }catch (Exception e){
         	
@@ -78,22 +86,29 @@ public class UsuarioController {
         }
     }
 
-    public void update(Usuario usuario){
+    public void update(){
     	
         try {
-        	
-        	Usuario user = new Usuario();
-            usuario.setNome(txtNome.getText());
-            usuario.setEndereco(txtEndereco.getText());
-            
-            //TODO Validar CPF e validar CNPJ
-            usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
-            usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
-            
-            usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
-            usuario.setEmail(txtEmail.getText());
-            
-            dao.update(usuario);
+
+            btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Usuario usuario = new Usuario();
+                    usuario.setNome(txtNome.getText());
+                    usuario.setEndereco(txtEndereco.getText());
+                    //TODO Validar CPF e validar CNPJ
+                    usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
+                    usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
+
+                    usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
+                    usuario.setEmail(txtEmail.getText());
+
+                    dao.update(usuario);
+
+                }
+            });
+
+
 
         }catch (Exception e){
         	System.out.println(e.getMessage());
@@ -101,12 +116,12 @@ public class UsuarioController {
         }
     }
 
-    public void buscar(String nome){
+    public void buscar(){
         try {
         	List<Usuario> lista = new ArrayList<>();
         	
-        	if(validarCampo.campoVazio(nome) != "") {
-        		lista = dao.buscar(nome);
+        	if(validarCampo.campoVazio(txtNome.getText()) != "") {
+        		lista = dao.buscar(txtNome.getText());
         	}
 
         }catch (Exception e){
@@ -117,7 +132,7 @@ public class UsuarioController {
 
     public void listar(){
         try {
-
+            dao.lista();
         }catch (Exception e){
         	System.out.println(e.getMessage());
 
