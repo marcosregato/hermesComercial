@@ -1,12 +1,9 @@
 package business.aterta;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.Date;
-import java.util.Locale;
 
 import dao.EstoqueDao;
 
