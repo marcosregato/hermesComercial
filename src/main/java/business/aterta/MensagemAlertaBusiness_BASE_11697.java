@@ -2,9 +2,6 @@ package business.aterta;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.Locale;
 
@@ -22,15 +19,17 @@ public class MensagemAlertaBusiness {
 	public void produtoEncalhado() {
 
 		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd",Locale.);
 
-			String date = simpleDateFormat.format(new Date());
-			Date dataAtual = simpleDateFormat.parse(date);
-
-			Date dataDoBanco = simpleDateFormat.parse(dao.getDataCompra());
-
-			long days = ChronoUnit.DAYS.between((Temporal) dataDoBanco, (Temporal) dataAtual);
-
+			// parse string to date
+//			Date dateBefore = formatter.parse("2019-12-05");
+//			Date dateAfter = formatter.parse("2020-01-05");
+			
+			
+			LocalDate dateAfter = LocalDate.now();
+			System.out.println(dateAfter);
+			
+			//long days = ChronoUnit.DAYS.between(dateBefore, dateAfter);
 		} catch (Exception e) {
 			// TODO: handle exception
 		}

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Repository.RepositoryCusto;
+import connectionDB.ConnectionMySQL;
 import connectionDB.ConnectionPostgreSQL;
 import model.Custo;
 
@@ -20,7 +21,7 @@ import model.Custo;
  */
 public class CustoDao implements RepositoryCusto{
 
-	private ConnectionPostgreSQL con = null;
+	private ConnectionMySQL con = null;
 	private Statement smt = null;
 	private ResultSet rs = null;
 	
@@ -28,7 +29,7 @@ public class CustoDao implements RepositoryCusto{
 	@Override
 	public void salvar(Custo custo) {
 		try {
-			con  = new ConnectionPostgreSQL();
+			con  = new ConnectionMySQL();
 			String query ="INSERT INTO custo (id, custounitario, custototal) VALUES (NULL, ?, ?)";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 
@@ -46,7 +47,7 @@ public class CustoDao implements RepositoryCusto{
 	@Override
 	public void remove(String nome) {
 		try {
-			con  = new ConnectionPostgreSQL();
+			con  = new ConnectionMySQL();
 			String query = "DELETE FROM custo WHERE nome=?";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 			ps.setString(1, nome);
@@ -62,7 +63,7 @@ public class CustoDao implements RepositoryCusto{
 	@Override
 	public void update(Custo custo) {
 		try {
-			con  = new ConnectionPostgreSQL();
+			con  = new ConnectionMySQL();
 			String query = "update custo set custounitario = ?,custototal = ?";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 			//ps.setFloat(1, custo.getCustoUnitario());
@@ -79,7 +80,7 @@ public class CustoDao implements RepositoryCusto{
 	@Override
 	public List<Custo> listar() {
 		try {
-			con  = new ConnectionPostgreSQL();
+			con  = new ConnectionMySQL();
 			String query ="select * from fornecedor";
 			List<Custo> lista = new ArrayList<>();
 			PreparedStatement ps = con.connection().prepareStatement(query);

@@ -1,12 +1,14 @@
 package business.aterta;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+<<<<<<< HEAD
+=======
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
 import java.util.Date;
 import java.util.Locale;
+>>>>>>> 3cc664b2af729e79049f37d798ee18c3921aac71
 
 import dao.EstoqueDao;
 
@@ -34,14 +36,6 @@ public class MensagemAlertaBusiness {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-
-
-	}
-	
-	
-	public static void main(String[] asd) {
-		MensagemAlertaBusiness msd = new MensagemAlertaBusiness();
-		msd.produtoEncalhado();
 	}
 
 }

@@ -34,14 +34,6 @@ public class MensagemAlertaBusiness {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-
-
-	}
-	
-	
-	public static void main(String[] asd) {
-		MensagemAlertaBusiness msd = new MensagemAlertaBusiness();
-		msd.produtoEncalhado();
 	}
 
 }
