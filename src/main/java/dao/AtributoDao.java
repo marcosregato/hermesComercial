@@ -1,11 +1,8 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-package controller;
+package dao;
 
+import Repository.RepositoryAtributo;
 import connectionDB.ConnectionMySQL;
-import dao.CustoDao;
+import connectionDB.ConnectionPostgreSQL;
 import model.Atributo;
 import model.Custo;
 
@@ -15,17 +12,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author marcos
- */
-public class CustoController {
+public class AtributoDao implements RepositoryAtributo {
 
     private ConnectionMySQL con = null;
     private Statement smt = null;
     private ResultSet rs = null;
-    
-    public void salvar(Custo custo){
+
+
+    @Override
+    public void salvar(Atributo atributo) {
         try {
 
             con  = new ConnectionMySQL();
@@ -38,13 +33,50 @@ public class CustoController {
             ps.executeUpdate();
             ps.close();
 
-        } catch (Exception e) {
-        	System.out.println(e.getMessage());
-        
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
     }
-    
-    public List<Atributo> listar(){
+
+    @Override
+    public void remove(String nome) {
+        try {
+
+            con  = new ConnectionMySQL();
+            String query = "DELETE FROM custo WHERE nome=?";
+            PreparedStatement ps = con.connection().prepareStatement(query);
+            ps.setString(1, nome);
+            ps.executeUpdate();
+            rs.close();
+            ps.close();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public void update(Atributo atributo) {
+        try {
+
+            con  = new ConnectionMySQL();
+            String query = "update custo set custounitario = ?,custototal = ?";
+            PreparedStatement ps = con.connection().prepareStatement(query);
+            //ps.setFloat(1, custo.getCustoUnitario());
+            //ps.setFloat(2, custo.getCustoTotal());
+
+            rs.close();
+            ps.close();
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
+    }
+
+    @Override
+    public List<Atributo> listar() {
         try {
 
             con  = new ConnectionMySQL();
@@ -61,65 +93,26 @@ public class CustoController {
             }
 
             return lista;
-            
 
-        } catch (Exception e) {
-        	System.out.println(e.getMessage());
-        
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
-
         return null;
     }
-    
-    public void remove(String nome){
+
+    @Override
+    public List<Atributo> buscar(String nome) {
         try {
 
-            con  = new ConnectionMySQL();
-            String query = "DELETE FROM custo WHERE nome=?";
-            PreparedStatement ps = con.connection().prepareStatement(query);
-            ps.setString(1, nome);
-            ps.executeUpdate();
-            rs.close();
-            ps.close();
-
-
-        } catch (Exception e) {
-        	System.out.println(e.getMessage());
-        
-        }
-    }
-    
-    public void update(Custo custo){
-        try {
-
-            con  = new ConnectionMySQL();
-            String query = "update custo set custounitario = ?,custototal = ?";
-            PreparedStatement ps = con.connection().prepareStatement(query);
-            //ps.setFloat(1, custo.getCustoUnitario());
-            //ps.setFloat(2, custo.getCustoTotal());
-
-            rs.close();
-            ps.close();
-
-
-        } catch (Exception e) {
-        	System.out.println(e.getMessage());
-        
-        }
-    }
-    
-    public List<Custo> buscar(String nome){
-        try {
-
-            /*            String query =  "SELECT * FROM custo WHERE nome =?";
+/*            String query =  "SELECT * FROM custo WHERE nome =?";
             PreparedStatement ps = con.connection().prepareStatement(query);
             ps.setString(1, nome);
 
             rs = ps.executeQuery();
-            Custo custo = null;
+            Atributo atributo = null;
             if (rs.next()) {
 
-                custo = new Custo();
+                atributo = new Atributo();
 
                 //custo.setCustoUnitario(rs.getFloat("custounitario"));
                 //custo.setCustoTotal(rs.getFloat("custototal"));
@@ -133,13 +126,9 @@ public class CustoController {
 
  */
 
-
-        } catch (Exception e) {
-        	System.out.println(e.getMessage());
-        
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
-
         return null;
     }
-    
 }

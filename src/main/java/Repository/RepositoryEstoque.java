@@ -8,7 +8,7 @@ public interface RepositoryEstoque {
 	
 	public void salvar(Estoque estoque);
 
-	public void delete(String nome);
+	public void remove(String nome);
 
 	public void update(Estoque produto);
 

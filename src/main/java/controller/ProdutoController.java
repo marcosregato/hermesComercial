@@ -5,15 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dao.ProdutoDao;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
+import javafx.scene.control.*;
 import model.Produto;
 import util.Alerta;
 
@@ -25,68 +18,30 @@ public class ProdutoController {
 
 
     @FXML
-    private MenuItem colAlerta;
+    private TextField txtNome;
 
     @FXML
-    private MenuItem colBancoDados;
-
-    @FXML
-    private MenuItem colCliente;
-
-    @FXML
-    private MenuItem colDespesa;
-
-    @FXML
-    private MenuItem colFluxoCaixa;
-
-    @FXML
-    private MenuItem colFuncionario;
-
-    @FXML
-    private MenuItem colPermissao;
-
-    @FXML
-    private MenuItem colProduto;
+    private ComboBox<String> comboFornecedor;
 
     @FXML
     private TextField txtCodigo;
 
     @FXML
+    private TextField txtSubCategoria;
+
+    @FXML
+    private Button btEditarProduto;
+
+    @FXML
     private TextField txtDataCompra;
 
     @FXML
-    private TextArea txtDescricao;
-
-    @FXML
-    private TextField txtEmailEmpresa;
-
-    @FXML
-    private TextField txtNome;
-
-    @FXML
-    private TextField txtSetor;
-
-    @FXML
-    private TextField txtSubTipo;
-
-    @FXML
-    private TextField txtTipo;
-
-    @FXML
-    private TextField txtValorTotal;
-
-    @FXML
-    private Text txtValorVenda;
-
-    @FXML
-    private Button btCancelar;
+    private Button btExcluirProduto;
 
     @FXML
     private Button btSalvar;
 
-    @FXML
-    private Button btPesquisar;
-    
+
     ProdutoDao dao;
     Alerta alerta;
     
@@ -94,24 +49,24 @@ public class ProdutoController {
     public void salvar(){
         try {
 
-            btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
+           /*   btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
                 @Override
                 public void handle(ActionEvent event) {
                     Produto produto = new Produto();
 
-                    produto.setNome(txtNome.getText());
+                  produto.setNome(txtNome.getText());
                     produto.setTipo(txtTipo.getText());
                     produto.setSubTipo(txtSubTipo.getText());
                     produto.setSetor(txtSetor.getText());
                     produto.setCodigoNcm(txtCodigo.getText());
                     produto.setDataCompra(txtDataCompra.getText());
                     produto.setSetor(txtSetor.getText());
-                            //produto.setValorUnitario(txtValor);
+                            produto.setValorUnitario(txtValor);
 
                     dao.salvar(produto);
 
                 }
-            });
+            });*/
 
 
         } catch (Exception e) {
@@ -151,12 +106,12 @@ public class ProdutoController {
     public void update(){
         try {
 
-            btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
+            /*  btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
                 @Override
                 public void handle(ActionEvent event) {
                     Produto produto = new Produto();
 
-                    produto.setNome(txtNome.getText());
+                  produto.setNome(txtNome.getText());
                     produto.setTipo(txtTipo.getText());
                     produto.setSubTipo(txtSubTipo.getText());
                     produto.setSetor(txtSetor.getText());
@@ -168,7 +123,7 @@ public class ProdutoController {
                     dao.update(produto);
 
                 }
-            });
+            });*/
         } catch (Exception e) {
             e.printStackTrace();
         
@@ -179,15 +134,15 @@ public class ProdutoController {
         try {
 
 
-            btPesquisar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
-                @Override
-                public void handle(ActionEvent event) {
-                    List<Produto> lista = new ArrayList<Produto>();
-
-                    lista = dao.buscar(txtNome.getText());
-
-                }
-            });
+//            btPesquisar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>(){
+//                @Override
+//                public void handle(ActionEvent event) {
+//                    List<Produto> lista = new ArrayList<Produto>();
+//
+//                    lista = dao.buscar(txtNome.getText());
+//
+//                }
+//            });
 
 
 //            if(txtNome.getText().isEmpty()) {

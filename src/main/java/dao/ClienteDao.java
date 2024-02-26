@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import connectionDB.ConnectionMySQL;
 import connectionDB.ConnectionPostgreSQL;
 import model.Cliente;
 import model.Custo;
@@ -20,13 +21,13 @@ import model.Custo;
  */
 public class ClienteDao {
     
-	private ConnectionPostgreSQL con = null;
+	private ConnectionMySQL con = null;
     private Statement smt = null;
     private ResultSet rs = null;
     
      public void salvar(Cliente cliente){
         try {
-            con  = new ConnectionPostgreSQL();
+            con  = new ConnectionMySQL();
             String query ="INSERT INTO cliente (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, null, ?, ?, ?, ?)";
             PreparedStatement ps = con.connection().prepareStatement(query);
 
@@ -45,7 +46,7 @@ public class ClienteDao {
     
     public List<Cliente> listCliente(){
         try {
-            con  = new ConnectionPostgreSQL();
+            con  = new ConnectionMySQL();
             String query ="select * from cliente";
             List<Cliente> lista = new ArrayList<>();
             PreparedStatement ps = con.connection().prepareStatement(query);
@@ -70,7 +71,7 @@ public class ClienteDao {
     
     public void update(Cliente cliente){
         try {
-            con  = new ConnectionPostgreSQL();
+            con  = new ConnectionMySQL();
             String query = "update cliente set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
             PreparedStatement ps = con.connection().prepareStatement(query);
             ps.setInt(1, cliente.getCodigoCliente());
@@ -88,7 +89,7 @@ public class ClienteDao {
     
     public void remove(String nome){
         try {
-            con  = new ConnectionPostgreSQL();
+            con  = new ConnectionMySQL();
             String query = "DELETE FROM cliente WHERE nome=?";
             PreparedStatement ps = con.connection().prepareStatement(query);
             ps.setString(1, nome);

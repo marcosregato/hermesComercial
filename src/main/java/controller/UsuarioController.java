@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import model.Usuario;
 import util.ValidarCampo;
@@ -16,16 +17,37 @@ import util.ValidarCampo;
 public class UsuarioController {
 
     @FXML
-    private Button btCancelar;
+    private Button btExcluir;
+
+    @FXML
+    private Button btPesquisar;
 
     @FXML
     private Button btSalvar;
-    
-    @FXML
-    private ComboBox<Usuario> comboPJ_PF;
 
     @FXML
-    private ComboBox<Usuario> comboTipoUsuario;
+    private ComboBox<String> comboEstado;
+
+    @FXML
+    private ComboBox<String> comboTipoUsuario;
+
+    @FXML
+    private TableView<String> tabelaUsuario;
+
+    @FXML
+    private TextField txtBairro;
+
+    @FXML
+    private TextField txtCEP;
+
+    @FXML
+    private TextField txtCNPJ_CPF;
+
+    @FXML
+    private TextField txtCidade;
+
+    @FXML
+    private Button txtEditar;
 
     @FXML
     private TextField txtEmail;
@@ -37,7 +59,7 @@ public class UsuarioController {
     private TextField txtNome;
 
     @FXML
-    private TextField txtPJ_PF;
+    private TextField txtPesqNome;
 
     @FXML
     private TextField txtTelefone;
@@ -56,8 +78,8 @@ public class UsuarioController {
                     usuario.setNome(txtNome.getText());
                     usuario.setEndereco(txtEndereco.getText());
                     //TODO Validar CPF e validar CNPJ
-                    usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
-                    usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
+                  //  usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
+                   // usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
 
                     usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
                     usuario.setEmail(txtEmail.getText());
@@ -97,8 +119,8 @@ public class UsuarioController {
                     usuario.setNome(txtNome.getText());
                     usuario.setEndereco(txtEndereco.getText());
                     //TODO Validar CPF e validar CNPJ
-                    usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
-                    usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
+                 //   usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
+                 //   usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
 
                     usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
                     usuario.setEmail(txtEmail.getText());
