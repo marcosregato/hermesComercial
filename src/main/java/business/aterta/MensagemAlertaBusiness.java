@@ -1,9 +1,6 @@
 package business.aterta;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.Locale;
 
 import dao.EstoqueDao;
 
