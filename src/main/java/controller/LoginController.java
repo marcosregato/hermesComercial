@@ -30,21 +30,21 @@ public class LoginController {
     ValidarCampo validarCampo = new ValidarCampo();
     public void fazerLogin(){
         try {
-          /*  dao = new LoginDao();
+        	dao = new LoginDao();
 
             String nome = validarCampo.campoVazio(txtLogin.getText());
             String senha = validarCampo.campoVazio(txtSenha.getText());
             Login login = new Login();
 
-            if((nome != null) && (senha !=null)) {
-               new  PrincipalController(dao.acessarUsuario(login.setLogin(nome),
-            		   login.setSenha(senha)));
+            if((txtLogin.getText() != null) || (txtSenha.getText() !=null)) {
+               new  PrincipalController(dao.acessarUsuario(txtLogin.getText(),
+            		   txtSenha.getText()));
 
             }else{
                 alerta.showAlert(Alert.AlertType.ERROR,
                         alerta.createRegistrationFormPane().getScene().getWindow(),
                         "Form Error!", "Login ou Senha está incorreta");
-            }*/
+            }
 
         }catch (Exception e ){
             e.printStackTrace();

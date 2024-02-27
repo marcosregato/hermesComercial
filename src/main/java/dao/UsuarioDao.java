@@ -8,7 +8,6 @@ import java.util.List;
 
 import Repository.RepositoryUsuario;
 import connectionDB.ConnectionMySQL;
-import model.Cliente;
 import model.Usuario;
 
 public class UsuarioDao implements RepositoryUsuario {
@@ -23,12 +22,15 @@ public class UsuarioDao implements RepositoryUsuario {
 		try {
 
 			con  = new ConnectionMySQL();
-			String query ="INSERT INTO cliente (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, null, ?, ?, ?, ?)";
+			String query ="INSERT INTO cliente (id, nome, endereco, cnjp, cpf, email,tipo) VALUES (?,?, ?, ?, ?, ?, ?)";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 
 			ps.setString(1, usuario.getNome());
 			ps.setString(2, usuario.getEndereco());
+			ps.setString(3, usuario.getCnpj());
 			ps.setString(4, usuario.getCpf());
+			ps.setString(5, usuario.getEmail());
+			ps.setString(6, usuario.getTipousuario());
 
 			ps.executeUpdate();
 			ps.close();
@@ -64,10 +66,14 @@ public class UsuarioDao implements RepositoryUsuario {
 	public void update(Usuario usuario) {
 		try {
 			con  = new ConnectionMySQL();
-			String query = "update cliente set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
+			String query = "update cliente set nome = ?,endereco = ? ,cnjp = ?, cpf = ?, email =?,tipo =?";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 			ps.setString(1, usuario.getNome());
-			ps.setString(3, usuario.getCpf());
+			ps.setString(2, usuario.getEndereco());
+			ps.setString(3, usuario.getCnpj());
+			ps.setString(4, usuario.getCpf());
+			ps.setString(5, usuario.getEmail());
+			ps.setString(6, usuario.getTipousuario());
 
 			rs.close();
 			ps.close();
@@ -94,7 +100,7 @@ public class UsuarioDao implements RepositoryUsuario {
 				usuario = new Usuario();
 				usuario.setNome(rs.getString("nome"));
 				usuario.setEndereco(rs.getString("endereco"));
-				usuario.setCnjp(rs.getString("cnpj"));
+				usuario.setCnpj(rs.getString("cnpj"));
 				usuario.setCpf(rs.getString("cpf"));
 				usuario.setEmail(rs.getString("email"));
 				usuario.setTipousuario(rs.getString("tipo"));
@@ -131,7 +137,7 @@ public class UsuarioDao implements RepositoryUsuario {
 				usuario = new Usuario();
 				usuario.setNome(rs.getString("nome"));
 				usuario.setEndereco(rs.getString("endereco"));
-				usuario.setCnjp(rs.getString("cnpj"));
+				usuario.setCnpj(rs.getString("cnpj"));
 				usuario.setCpf(rs.getString("cpf"));
 				usuario.setEmail(rs.getString("email"));
 				usuario.setTipousuario(rs.getString("tipo"));

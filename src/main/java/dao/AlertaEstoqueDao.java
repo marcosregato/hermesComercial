@@ -9,7 +9,6 @@ import java.util.List;
 import Repository.RepositoryAlertaEstoque;
 import connectionDB.ConnectionMySQL;
 import model.AlertaEstoque;
-import model.Atributo;
 
 public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 

@@ -3,6 +3,7 @@ package Repository;
 import java.util.List;
 
 import model.Estoque;
+import model.Produto;
 
 public interface RepositoryEstoque {
 	
@@ -14,6 +15,6 @@ public interface RepositoryEstoque {
 
 	public List<Estoque> listar();
 
-	public List<Estoque> buscar();
+	public List<Estoque> buscar(String nome);
 
 }

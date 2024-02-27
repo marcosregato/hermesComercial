@@ -13,9 +13,6 @@ import java.util.List;
 import Repository.RepositoryProduto;
 import connectionDB.ConnectionPostgreSQL;
 import model.Produto;
-import model.Usuario;
-
-import java.sql.Connection;
 
 
 
@@ -33,7 +30,7 @@ public class ProdutoDao implements RepositoryProduto{
 	public void salvar(Produto produto) {
 		 try {
 	            con  = new ConnectionPostgreSQL();
-	            String query ="INSERT INTO produto (id, nome, subproduto, codigo, datacompra, codigoncm) VALUES (NULL, ?, ?, ?, ?, ?)";
+	            String query ="INSERT INTO produto (id, nome, tipo, subTipo, codigo, codigoncm) VALUES (NULL, ?, ?, ?, ?, ?)";
 	            PreparedStatement ps = con.connection().prepareStatement(query);
 
 	            ps.setString(1, produto.getTipo());
@@ -74,12 +71,12 @@ public class ProdutoDao implements RepositoryProduto{
 		
 		try {
             con  = new ConnectionPostgreSQL();
-            String query = "update produto set nome = ?,subproduto = ? ,codigo = ?, datacompra = ?, codigoncm =?";
+            String query = "update produto set nome = ?,tipo = ? ,subTipo = ?, codigo = ?, codigoncm =?";
             PreparedStatement ps = con.connection().prepareStatement(query);
-            ps.setString(1, produto.getTipo());
-            ps.setString(2, produto.getSubTipo());
-            ps.setString(3, produto.getCodigo());
-            ps.setString(4, produto.getDataCompra());
+            ps.setString(1, produto.getNome());
+            ps.setString(2, produto.getTipo());
+            ps.setString(3, produto.getSubTipo());
+            ps.setString(4, produto.getCodigo());
             ps.setString(5, produto.getCodigoNcm());
             rs.close();
             ps.close();
@@ -100,10 +97,10 @@ public class ProdutoDao implements RepositoryProduto{
             rs = ps.executeQuery();
             while (rs.next()) {
                 Produto produto = new Produto();
-                produto.setTipo(rs.getString("Tipo"));
+                produto.setNome(rs.getString("nome"));
+                produto.setTipo(rs.getString("tipo"));
                 produto.setSubTipo(rs.getString("subpTipo"));
                 produto.setCodigo(rs.getString("codigo"));
-                produto.setDataCompra(rs.getString("datacompra"));
                 produto.setCodigoNcm(rs.getString("codigoncm"));
 
                 listProduto.add(produto);

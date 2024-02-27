@@ -79,9 +79,13 @@ public class EstoqueController {
 
     public void buscar(){
         try {
+        	
+        	if(ComboCodigoProduto.getValue() != null) {
+        		dao = new EstoqueDao();
+                dao.buscar(ComboCodigoProduto.getValue());
+        	}
 
-            dao = new EstoqueDao();
-            dao.buscar();
+            
 
 
         } catch (Exception e) {

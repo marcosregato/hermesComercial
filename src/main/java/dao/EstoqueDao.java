@@ -8,8 +8,8 @@ import java.util.List;
 
 import Repository.RepositoryEstoque;
 import connectionDB.ConnectionMySQL;
-import connectionDB.ConnectionPostgreSQL;
 import model.Estoque;
+import model.Produto;
 
 public class EstoqueDao implements RepositoryEstoque{
 
@@ -23,11 +23,12 @@ public class EstoqueDao implements RepositoryEstoque{
 		// TODO Auto-generated method stub
 		try {
 			con  = new ConnectionMySQL();
-			String query ="INSERT INTO fornecedor (id, nome, tipofornecedor) VALUES (NULL, ?, ?)";
+			String query ="INSERT INTO estoque (id, quantidade, maximo,minimo) VALUES (NULL, ?, ?, ?)";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 
-			//ps.setString(1, fornecedor.getNome());
-			//ps.setString(2, fornecedor.getTipoFornecedor());
+			ps.setString(1, estoque.getQuantidade());
+			ps.setInt(2, estoque.getMaximo());
+			ps.setInt(3, estoque.getMinimo());
 
 			ps.executeUpdate();
 			ps.close();
@@ -44,7 +45,7 @@ public class EstoqueDao implements RepositoryEstoque{
 		try {
 
 			con  = new ConnectionMySQL();
-			String query = "DELETE FROM custo WHERE nome=?";
+			String query = "DELETE FROM estoque WHERE nome=?";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 			ps.setString(1, nome);
 			ps.executeUpdate();
@@ -58,15 +59,16 @@ public class EstoqueDao implements RepositoryEstoque{
 	}
 
 	@Override
-	public void update(Estoque produto) {
+	public void update(Estoque estoque) {
 		// TODO Auto-generated method stub
 		try {
 
 			con  = new ConnectionMySQL();
-			String query = "update custo set custounitario = ?,custototal = ?";
+			String query = "update estoque set quantidade = ?,maximo = ?, minimo = ?";
 			PreparedStatement ps = con.connection().prepareStatement(query);
-			//ps.setFloat(1, custo.getCustoUnitario());
-			//ps.setFloat(2, custo.getCustoTotal());
+			ps.setString(1, estoque.getQuantidade());
+			ps.setInt(2, estoque.getMaximo());
+			ps.setInt(3, estoque.getMinimo());
 
 			rs.close();
 			ps.close();
@@ -82,13 +84,15 @@ public class EstoqueDao implements RepositoryEstoque{
 		try {
 
 			con  = new ConnectionMySQL();
-			String query ="select * from cliente";
+			String query ="select * from estoqur";
 			List<Estoque> lista = new ArrayList<>();
 			PreparedStatement ps = con.connection().prepareStatement(query);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Estoque item = new Estoque();
 				item.setQuantidade(rs.getString("quantidade"));
+				item.setMaximo(rs.getInt("maximo"));
+				item.setMinimo(rs.getInt("minimo"));
 
 
 				lista.add(item);
@@ -103,51 +107,46 @@ public class EstoqueDao implements RepositoryEstoque{
 		return null;
 
 	}
+	
+
 
 	@Override
-	public List<Estoque> buscar() {
+	public List<Estoque> buscar(String nome) {
 		// TODO Auto-generated method stub
-		try {
+		/*try {
 
-			/*            String query =  "SELECT * FROM custo WHERE nome =?";
+			String query = "SELECT * FROM produto "
+					+ "inner join estoque e on p.id = e.fk_produto WHERE p.codigo = ?";
             PreparedStatement ps = con.connection().prepareStatement(query);
             ps.setString(1, nome);
 
             rs = ps.executeQuery();
-            Atributo atributo = null;
+            Produto produto = null;
             if (rs.next()) {
 
-                atributo = new Atributo();
+            	produto = new Produto();
 
-                //custo.setCustoUnitario(rs.getFloat("custounitario"));
-                //custo.setCustoTotal(rs.getFloat("custototal"));
+            	produto.setNome(rs.getString("nome"));
+            	//produto.setCustoTotal(rs.getFloat("custototal"));
 
 
             }
 
             rs.close();
             ps.close();
-            return atributo;
+            return produto;
 
- */
+ 
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 
-		}
+		}*/
 		return null;
 	}
 
 
-	public String getDataCompra(){
-		try {
-
-		}catch (Exception e ){
-			System.out.println(e.getMessage());
-		}
-		return null;
-		}
-
+	
 
 
 }

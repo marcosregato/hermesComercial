@@ -6,7 +6,7 @@ public class Usuario {
 
     private String nome;
     private String endereco;
-    private String cnjp;
+    private String cnpj;
     private String cpf;
     private String email;
     private String tipousuario;
@@ -36,12 +36,12 @@ public class Usuario {
         this.endereco = endereco;
     }
 
-    public String getCnjp() {
-        return cnjp;
+    public String getCnpj() {
+        return cnpj;
     }
 
-    public void setCnjp(String cnjp) {
-        this.cnjp = cnjp;
+    public void setCnpj(String cnpj) {
+        this.cnpj = cnpj;
     }
 
     public String getCpf() {
