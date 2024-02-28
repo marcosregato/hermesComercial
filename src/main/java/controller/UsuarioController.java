@@ -16,150 +16,166 @@ import util.ValidarCampo;
 
 public class UsuarioController {
 
-    @FXML
-    private Button btExcluir;
+	@FXML
+	private Button btExcluir;
 
-    @FXML
-    private Button btPesquisar;
+	@FXML
+	private Button btPesquisar;
 
-    @FXML
-    private Button btSalvar;
+	@FXML
+	private Button btSalvar;
 
-    @FXML
-    private ComboBox<String> comboEstado;
+	@FXML
+	private ComboBox<String> comboEstado;
 
-    @FXML
-    private ComboBox<String> comboTipoUsuario;
+	@FXML
+	private ComboBox<String> comboTipoUsuario;
 
-    @FXML
-    private TableView<String> tabelaUsuario;
+	@FXML
+	private TableView<String> tabelaUsuario;
 
-    @FXML
-    private TextField txtBairro;
+	@FXML
+	private TextField txtBairro;
 
-    @FXML
-    private TextField txtCEP;
+	@FXML
+	private TextField txtCEP;
 
-    @FXML
-    private TextField txtCNPJ_CPF;
+	@FXML
+	private TextField txtCNPJ_CPF;
 
-    @FXML
-    private TextField txtCidade;
+	@FXML
+	private TextField txtCidade;
 
-    @FXML
-    private Button txtEditar;
+	@FXML
+	private Button txtEditar;
 
-    @FXML
-    private TextField txtEmail;
+	@FXML
+	private TextField txtEmail;
 
-    @FXML
-    private TextField txtEndereco;
+	@FXML
+	private TextField txtEndereco;
 
-    @FXML
-    private TextField txtNome;
+	@FXML
+	private TextField txtNome;
 
-    @FXML
-    private TextField txtPesqNome;
+	@FXML
+	private TextField txtPesqNome;
 
-    @FXML
-    private TextField txtTelefone;
-
-
-    UsuarioDao dao = new UsuarioDao();
-    ValidarCampo validarCampo = new ValidarCampo();
-
-    public void salvar(){
-
-        try {
-            btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    Usuario usuario = new Usuario();
-                    usuario.setNome(txtNome.getText());
-                    usuario.setEndereco(txtEndereco.getText());
-                    //TODO Validar CPF e validar CNPJ
-                  //  usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
-                   // usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
-
-                    usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
-                    usuario.setEmail(txtEmail.getText());
-
-                    dao.salvar(usuario);
-
-                }
-            });
+	@FXML
+	private TextField txtTelefone;
 
 
-        }catch (Exception e){
-        	
-        	System.out.println(e.getMessage());
+	UsuarioDao dao = new UsuarioDao();
+	ValidarCampo validarCampo = new ValidarCampo();
 
-        }
-    }
+	public void salvar(){
 
-    public void remove(String nome){
-        try {
-        	dao.remove(nome);
-        	
-        }catch (Exception e){
-        	
-        	System.out.println(e.getMessage());
+		try {
+			btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					Usuario usuario = new Usuario();
+					usuario.setNome(txtNome.getText());
+					usuario.setEndereco(txtEndereco.getText());
 
-        }
-    }
+					if(comboTipoUsuario.getValue().equals("Fornecedor")) {
+						usuario.setTipousuario(comboTipoUsuario.getValue());
+						usuario.setCnpj(txtCNPJ_CPF.getText());
+					}else if (comboTipoUsuario.getValue().equals("Usuário")) {
+						usuario.setTipousuario(comboTipoUsuario.getValue());
+						usuario.setCpf(txtCNPJ_CPF.getText());
+					}else {
+						//TODO criar a mensagem
+						System.out.println(">>>> ERRO NO TIPO DE USUARIO <<<<<");
+					}
+					usuario.setEndereco(txtEndereco.getText());
+					usuario.setBairro(txtBairro.getText());
+					usuario.setCidade(txtCidade.getText());
+					usuario.setEstado(comboEstado.getValue());
+					usuario.setEmail(txtEmail.getText());
 
-    public void update(){
-    	
-        try {
+					dao.salvar(usuario);
 
-            btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    Usuario usuario = new Usuario();
-                    usuario.setNome(txtNome.getText());
-                    usuario.setEndereco(txtEndereco.getText());
-                    //TODO Validar CPF e validar CNPJ
-                 //   usuario.setCnjp(String.valueOf(comboPJ_PF.getValue()));
-                 //   usuario.setCpf(String.valueOf(comboPJ_PF.getValue()));
-
-                    usuario.setTipousuario(String.valueOf(comboTipoUsuario.getValue()));
-                    usuario.setEmail(txtEmail.getText());
-
-                    dao.update(usuario);
-
-                }
-            });
+				}
+			});
 
 
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
 
-        }catch (Exception e){
-        	System.out.println(e.getMessage());
+	public void remove(String nome){
+		try {
+			if(nome.isEmpty()) {
+				dao.remove(nome);
+			}
+			//TODO criar a mensagem
 
-        }
-    }
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
 
-    public void buscar(){
-        try {
-        	List<Usuario> lista = new ArrayList<>();
-        	
-        	if(validarCampo.campoVazio(txtNome.getText()) != "") {
-        		lista = dao.buscar(txtNome.getText());
-        	}
+	public void update(){
 
-        }catch (Exception e){
-        	System.out.println(e.getMessage());
+		try {
 
-        }
-    }
+			btSalvar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+				@Override
+				public void handle(ActionEvent event) {
+					Usuario usuario = new Usuario();
+					usuario.setNome(txtNome.getText());
+					usuario.setEndereco(txtEndereco.getText());
 
-    public void listar(){
-        try {
-            dao.lista();
-        }catch (Exception e){
-        	System.out.println(e.getMessage());
+					if(comboTipoUsuario.getValue().equals("Fornecedor")) {
+						usuario.setTipousuario(comboTipoUsuario.getValue());
+						usuario.setCnpj(txtCNPJ_CPF.getText());
+					}else if (comboTipoUsuario.getValue().equals("Usuário")) {
+						usuario.setTipousuario(comboTipoUsuario.getValue());
+						usuario.setCpf(txtCNPJ_CPF.getText());
+					}else {
+						//TODO criar a mensagem
+						System.out.println(">>>> ERRO NO TIPO DE USUARIO <<<<<");
+					}
+					usuario.setEndereco(txtEndereco.getText());
+					usuario.setBairro(txtBairro.getText());
+					usuario.setCidade(txtCidade.getText());
+					usuario.setEstado(comboEstado.getValue());
+					usuario.setEmail(txtEmail.getText());
 
-        }
-    }
+					dao.update(usuario);
+
+				}
+			});
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+
+	//TODO fazer listagem na tabela
+	public void buscar(){
+		try {
+			List<Usuario> lista = new ArrayList<>();
+
+			if(validarCampo.campoVazio(txtNome.getText()) != "") {
+				lista = dao.buscar(txtNome.getText());
+			}
+
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+		}
+	}
+
+	public void listar(){
+		try {
+			dao.lista();
+		}catch (Exception e){
+			System.out.println(e.getMessage());
+
+		}
+	}
 
 
 }

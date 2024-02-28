@@ -37,8 +37,7 @@ public class LoginController {
             Login login = new Login();
 
             if((txtLogin.getText() != null) || (txtSenha.getText() !=null)) {
-               new  PrincipalController(dao.acessarUsuario(txtLogin.getText(),
-            		   txtSenha.getText()));
+               new  PrincipalController(txtLogin.getText(),txtSenha.getText());
 
             }else{
                 alerta.showAlert(Alert.AlertType.ERROR,

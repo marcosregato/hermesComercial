@@ -32,38 +32,30 @@ public class EstoqueController {
     public void salvar(){
         try {
             estoque = new Estoque();
+            estoque.setQuantidade(txtEstQuantidade.getText());
+            estoque.setMaximo(Integer.valueOf(txtEstMaxima.getText()));
+            estoque.setMinimo(Integer.valueOf(txtEstMinimo.getText()));
 
-            dao = new EstoqueDao();
-            dao.salvar(estoque);
-
+            if(estoque !=null) {
+            	dao = new EstoqueDao();
+                dao.salvar(estoque);
+            }
+            
+            //TODO colocar mensagem
+            
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
 
         }
-    }
-
-    public void listar(){
-        try {
-
-            dao =new EstoqueDao();
-            dao.listar();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-
     }
 
     public void remove(){
         try {
 
             dao =new EstoqueDao();
-           // dao.delete(txt);
-
 
         } catch (Exception e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
 
         }
     }
@@ -72,8 +64,18 @@ public class EstoqueController {
         try {
 
         } catch (Exception e) {
-            e.printStackTrace();
+        	System.out.println(e.getMessage());
+        }
+    }
+    
+    public void listar(){
+        try {
+        	
+            dao =new EstoqueDao();
+            dao.listar();
 
+        } catch (Exception e) {
+        	System.out.println(e.getMessage());
         }
     }
 
@@ -85,12 +87,8 @@ public class EstoqueController {
                 dao.buscar(ComboCodigoProduto.getValue());
         	}
 
-            
-
-
         } catch (Exception e) {
-            e.printStackTrace();
-
+        	System.out.println(e.getMessage());
         }
     }
 

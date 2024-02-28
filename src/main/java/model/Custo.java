@@ -10,8 +10,17 @@ package model;
  */
 public class Custo {
     
-    private Long id;
     private Long fk_fornecedor;
+    
+	
+	public Long getFk_fornecedor() {
+		return fk_fornecedor;
+	}
+	public void setFk_fornecedor(Long fk_fornecedor) {
+		this.fk_fornecedor = fk_fornecedor;
+	}
+    
+    
 
 
 

@@ -11,98 +11,53 @@ package model;
 public class Produto {
 
 	private String nome;
-    private String tipo;
-    private String subTipo;
+    private String categoria;
+    private String subCategoria;
     private String codigo;
-    private String setor;
+    private String marca;
     private String dataCompra;
-    private String codigoNcm;
-    private float valorUnitario;
-    private float valorTotal;
-    private float valorVenda;
     
-
+    
 	public String getNome() {
 		return nome;
 	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public String getTipo() {
-		return tipo;
+	public String getCategoria() {
+		return categoria;
 	}
-
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
-
-	public String getSubTipo() {
-		return subTipo;
+	public String getSubCategoria() {
+		return subCategoria;
 	}
-
-	public void setSubTipo(String subTipo) {
-		this.subTipo = subTipo;
+	public void setSubCategoria(String subCategoria) {
+		this.subCategoria = subCategoria;
 	}
-
 	public String getCodigo() {
 		return codigo;
 	}
-
 	public void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
-
+	public String getMarca() {
+		return marca;
+	}
+	public void setMarca(String marca) {
+		this.marca = marca;
+	}
 	public String getDataCompra() {
 		return dataCompra;
 	}
-
 	public void setDataCompra(String dataCompra) {
 		this.dataCompra = dataCompra;
 	}
 
-	public String getCodigoNcm() {
-		return codigoNcm;
-	}
-
-	public void setCodigoNcm(String codigoNcm) {
-		this.codigoNcm = codigoNcm;
-	}
-
-	public float getValorUnitario() {
-		return valorUnitario;
-	}
-
-	public void setValorUnitario(float valorUnitario) {
-		this.valorUnitario = valorUnitario;
-	}
-
-	public float getValorTotal() {
-		return valorTotal;
-	}
-
-	public void setValorTotal(float valorTotal) {
-		this.valorTotal = valorTotal;
-	}
-
-	public float getValorVenda() {
-		return valorVenda;
-	}
-
-	public void setValorVenda(float valorVenda) {
-		this.valorVenda = valorVenda;
-	}
-
-	public String getSetor() {
-		return setor;
-	}
-
-	public void setSetor(String setor) {
-		this.setor = setor;
-	}
-
     
     
-
+	
+	
+	
 }
