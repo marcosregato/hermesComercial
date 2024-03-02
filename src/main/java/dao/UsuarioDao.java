@@ -2,18 +2,17 @@ package dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import Repository.RepositoryUsuario;
 import connectionDB.ConnectionMySQL;
 import model.Usuario;
 
 public class UsuarioDao implements RepositoryUsuario {
 
-	private ConnectionMySQL con = null;
-	private Statement smt = null;
+	//private ConnectionMySQL con = null;
+	//private Statement smt = null;
 	private ResultSet rs = null;
 
 
@@ -21,8 +20,8 @@ public class UsuarioDao implements RepositoryUsuario {
 	public void salvar(Usuario usuario) {
 		try {
 
-			con  = new ConnectionMySQL();
-			String query ="INSERT INTO cliente (id, nome, endereco, cnjp, cpf, email,tipo) VALUES (?,?, ?, ?, ?, ?, ?)";
+			ConnectionMySQL con = new ConnectionMySQL();
+			String query ="INSERT INTO cliente (nome, endereco, cnjp, cpf, email,tipo) VALUES (?,?, ?, ?, ?, ?)";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 
 			ps.setString(1, usuario.getNome());
@@ -46,7 +45,7 @@ public class UsuarioDao implements RepositoryUsuario {
 	public void remove(String nome) {
 		try {
 
-			con  = new ConnectionMySQL();
+			ConnectionMySQL con   = new ConnectionMySQL();
 			String query = "delete from login l " +
 					"inner join acesso a on l.id = a.fk_login " +
 					"inner join usuario u on u.id = a.fK_usuario where u.nome = ?";
@@ -65,7 +64,7 @@ public class UsuarioDao implements RepositoryUsuario {
 	@Override
 	public void update(Usuario usuario) {
 		try {
-			con  = new ConnectionMySQL();
+			ConnectionMySQL con  = new ConnectionMySQL();
 			String query = "update cliente set nome = ?,endereco = ? ,cnjp = ?, cpf = ?, email =?,tipo =?";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 			ps.setString(1, usuario.getNome());
@@ -120,6 +119,8 @@ public class UsuarioDao implements RepositoryUsuario {
 	}
 
 	public List<Usuario> buscar(String nome) {
+		List<Usuario> lista = new ArrayList<>();
+		Usuario usuario = null;
 		try {
 
 			String query = "select u.nome, u.endereco , u.cnjp ,u.cpf ,u.email ,u.tipo from login l " +
@@ -128,13 +129,9 @@ public class UsuarioDao implements RepositoryUsuario {
 			PreparedStatement ps = con.connection().prepareStatement(query);
 			ps.setString(1, nome);
 
-			List<Usuario> lista = new ArrayList<>();
-
 			rs = ps.executeQuery();
-			Usuario usuario = null;
-			if (rs.next()) {
 
-				usuario = new Usuario();
+
 				usuario.setNome(rs.getString("nome"));
 				usuario.setEndereco(rs.getString("endereco"));
 				usuario.setCnpj(rs.getString("cnpj"));
@@ -142,19 +139,13 @@ public class UsuarioDao implements RepositoryUsuario {
 				usuario.setEmail(rs.getString("email"));
 				usuario.setTipousuario(rs.getString("tipo"));
 
-				lista.add(usuario);
-
-			}
-
-			rs.close();
+			lista.add(usuario);
 			ps.close();
-			return lista;
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		return null;
+		return lista;
 	}
-
 
 }

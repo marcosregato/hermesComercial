@@ -8,7 +8,6 @@ import java.util.List;
 
 import Repository.RepositoryDespesa;
 import connectionDB.ConnectionMySQL;
-import model.Atributo;
 import model.Despesa;
 
 public class DespesaDao implements RepositoryDespesa{
@@ -21,9 +20,8 @@ public class DespesaDao implements RepositoryDespesa{
 	public void salvar(Despesa despesa) {
 		try {
 
-
 			con  = new ConnectionMySQL();
-			String query ="INSERT INTO fornecedor (id, nome, tipofornecedor) VALUES (NULL, ?, ?)";
+			String query ="INSERT INTO fornecedor (nome, tipofornecedor) VALUES ( ?, ?)";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 
 			//ps.setString(1, fornecedor.getNome());
@@ -94,35 +92,29 @@ public class DespesaDao implements RepositoryDespesa{
 		return null;
 	}
 	public List<Despesa> buscar(String nome) {
+		List<Despesa> lista = new ArrayList<>();
+		Despesa despesa = null;
 		try {
 
-			/*            String query =  "SELECT * FROM custo WHERE nome =?";
+			String query =  "SELECT * FROM custo WHERE nome =?";
             PreparedStatement ps = con.connection().prepareStatement(query);
             ps.setString(1, nome);
-
             rs = ps.executeQuery();
-            Atributo atributo = null;
-            if (rs.next()) {
 
-                atributo = new Atributo();
+
+			despesa = new Despesa();
 
                 //custo.setCustoUnitario(rs.getFloat("custounitario"));
                 //custo.setCustoTotal(rs.getFloat("custototal"));
 
-
-            }
-
+			lista.add(despesa);
             rs.close();
             ps.close();
-            return atributo;
-
- */
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		return null;
+		return lista;
 	}
-
 
 }

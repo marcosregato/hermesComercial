@@ -23,7 +23,7 @@ public class EstoqueDao implements RepositoryEstoque{
 		// TODO Auto-generated method stub
 		try {
 			con  = new ConnectionMySQL();
-			String query ="INSERT INTO estoque (id, quantidade, maximo,minimo) VALUES (NULL, ?, ?, ?)";
+			String query ="INSERT INTO estoque (quantidade, maximo,minimo) VALUES (?, ?, ?)";
 			PreparedStatement ps = con.connection().prepareStatement(query);
 
 			ps.setString(1, estoque.getQuantidade());
@@ -34,7 +34,7 @@ public class EstoqueDao implements RepositoryEstoque{
 			ps.close();
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
 
 	}
@@ -53,7 +53,7 @@ public class EstoqueDao implements RepositoryEstoque{
 			ps.close();
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
 
 	}
@@ -74,7 +74,7 @@ public class EstoqueDao implements RepositoryEstoque{
 			ps.close();
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
 
 	}
@@ -94,59 +94,41 @@ public class EstoqueDao implements RepositoryEstoque{
 				item.setMaximo(rs.getInt("maximo"));
 				item.setMinimo(rs.getInt("minimo"));
 
-
 				lista.add(item);
 			}
 
 			return lista;
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
-
 		return null;
-
 	}
-	
-
 
 	@Override
 	public List<Estoque> buscar(String nome) {
-		// TODO Auto-generated method stub
-		/*try {
+
+		List<Estoque> lista = new ArrayList<>();
+		Estoque estoque = null;
+		try {
 
 			String query = "SELECT * FROM produto "
 					+ "inner join estoque e on p.id = e.fk_produto WHERE p.codigo = ?";
             PreparedStatement ps = con.connection().prepareStatement(query);
             ps.setString(1, nome);
-
             rs = ps.executeQuery();
-            Produto produto = null;
-            if (rs.next()) {
 
-            	produto = new Produto();
+				estoque = new Estoque();
+				estoque.setQuantidade(rs.getString("quantidade"));
+				estoque.setMaximo(rs.getInt("maximo"));
+				estoque.setMinimo(rs.getInt("minimo"));
 
-            	produto.setNome(rs.getString("nome"));
-            	//produto.setCustoTotal(rs.getFloat("custototal"));
-
-
-            }
-
+				lista.add(estoque);
             rs.close();
             ps.close();
-            return produto;
-
- 
-
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
-
-		}*/
-		return null;
+			System.err.println(e.getMessage());
+		}
+		return lista;
 	}
-
-
-	
-
-
 }

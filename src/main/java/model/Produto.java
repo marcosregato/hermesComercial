@@ -4,11 +4,13 @@
  */
 package model;
 
+import java.util.List;
+
 /**
  *
  * @author marcos
  */
-public class Produto {
+public class Produto  {
 
 	private String nome;
     private String categoria;

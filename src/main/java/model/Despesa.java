@@ -3,7 +3,6 @@ package model;
 public class Despesa {
 
     private long id;
-
     private String tipo;
     private Float valor;
 

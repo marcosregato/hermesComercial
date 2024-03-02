@@ -1,16 +1,11 @@
 package model;
 
 public class Caixa {
-	
-	private Long id;
+
     private float valorCaixa;
-    
-	public Long getId() {
-		return id;
-	}
-	public void setId(Long id) {
-		this.id = id;
-	}
+	private float valor;
+	private String tipo;
+
 
 	public float getValorCaixa() {
 		return valorCaixa;
@@ -18,5 +13,21 @@ public class Caixa {
 
 	public void setValorCaixa(float valorCaixa) {
 		this.valorCaixa = valorCaixa;
+	}
+
+	public float getValor() {
+		return valor;
+	}
+
+	public void setValor(float valor) {
+		this.valor = valor;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 }
