@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.Pane?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="817.0" prefWidth="1148.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <TabPane layoutX="14.0" layoutY="12.0" prefHeight="793.0" prefWidth="1120.0" style="-fx-border-color: #ADFF2F;" tabClosingPolicy="UNAVAILABLE">
+         <tabs>
+            <Tab fx:id="tabProduto" text="Produto">
+                <fx:include source="tabProduto.fxml"/>
+            </Tab>
+            <Tab fx:id="tabAtributo" text="Atributação">
+                <fx:include source="tabAtributo.fxml"/>
+            </Tab>
+            <Tab fx:id="tabEstoque" text="Estoque">
+                <fx:include source="tabEstoque.fxml"/>
+            </Tab>
+         </tabs>
+      </TabPane>
+   </children>
+</Pane>
