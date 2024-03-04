@@ -86,6 +86,7 @@ public class UsuarioDao implements RepositoryUsuario {
 	public List<Usuario> lista() {
 		try {
 
+			ConnectionMySQL con  = new ConnectionMySQL();
 			String query = "select u.nome, u.endereco , u.cnjp ,u.cpf ,u.email ,u.tipo from login l " +
 					"inner join acesso a on l.id = a.fk_login " +
 					"inner join usuario u on u.id = a.fK_usuario ";
@@ -122,6 +123,7 @@ public class UsuarioDao implements RepositoryUsuario {
 		List<Usuario> lista = new ArrayList<>();
 		Usuario usuario = null;
 		try {
+			ConnectionMySQL con  = new ConnectionMySQL();
 
 			String query = "select u.nome, u.endereco , u.cnjp ,u.cpf ,u.email ,u.tipo from login l " +
 					"inner join acesso a on l.id = a.fk_login " +

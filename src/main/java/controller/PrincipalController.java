@@ -1,6 +1,9 @@
 package controller;
 
+import java.util.List;
+
 import dao.LoginDao;
+import model.Usuario;
 
 public class PrincipalController {
 	
@@ -19,9 +22,10 @@ public class PrincipalController {
         this.senha = senha;
 
     }
-    public String infoUsuario(){
+    public List<Usuario> infoUsuario(){
        try {
-		return dao.acessarUsuario(login, senha);
+    	   List<Usuario> lista = dao.acessarUsuario(login, senha);
+		return lista;
 	} catch (Exception e) {
 		// TODO: handle exception
 		System.out.println(e.getMessage());

@@ -61,7 +61,7 @@ public class LoginDao {
 	}
 	
 	
-	public String acessarUsuario(String login, String senha){
+	public List<Usuario> acessarUsuario(String login, String senha){
 		try {
 			con  = new ConnectionMySQL();
 

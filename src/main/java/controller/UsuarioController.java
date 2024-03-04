@@ -1,72 +1,95 @@
 package controller;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 import dao.UsuarioDao;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import model.Usuario;
 import util.ValidarCampo;
 
-public class UsuarioController {
+public class UsuarioController implements Initializable{
+	
+	
 
-	@FXML
-	private Button btExcluir;
+	   
 
-	@FXML
-	private Button btPesquisar;
+	    @FXML
+	    private TextField PesNome;
 
-	@FXML
-	private Button btSalvar;
+	    @FXML
+	    private Button brPesquisar;
 
-	@FXML
-	private ComboBox<String> comboEstado;
+	    @FXML
+	    private Button btEditar;
 
-	@FXML
-	private ComboBox<String> comboTipoUsuario;
+	    @FXML
+	    private Button btExcluir;
 
-	@FXML
-	private TableView<String> tabelaUsuario;
+	    @FXML
+	    private Button btSalvar;
+	    
+	    @FXML
+	    private TableColumn<Usuario, String> ColTIpo;
 
-	@FXML
-	private TextField txtBairro;
+	    @FXML
+	    private TableColumn<Usuario, String> colCNPJ_CPF;
 
-	@FXML
-	private TextField txtCEP;
+	    @FXML
+	    private TableColumn<Usuario, String> colNome;
 
-	@FXML
-	private TextField txtCNPJ_CPF;
+	    @FXML
+	    private ComboBox<String> comboEstado;
 
-	@FXML
-	private TextField txtCidade;
+	    @FXML
+	    private ComboBox<String> comboTipo;
 
-	@FXML
-	private Button txtEditar;
+	    @FXML
+	    private TableView<String> tabelaUsuario;
 
-	@FXML
-	private TextField txtEmail;
+	    @FXML
+	    private TextField txtBairro;
 
-	@FXML
-	private TextField txtEndereco;
+	    @FXML
+	    private TextField txtCep;
 
-	@FXML
-	private TextField txtNome;
+	    @FXML
+	    private TextField txtCidade;
 
-	@FXML
-	private TextField txtPesqNome;
+	    @FXML
+	    private TextField txtCnpjCpf;
 
-	@FXML
-	private TextField txtTelefone;
+	    @FXML
+	    private TextField txtEmail;
+
+	    @FXML
+	    private TextField txtEndereco;
+
+	    @FXML
+	    private TextField txtNome;
+
+	    @FXML
+	    private TextField txtTelefone;
 
 
 	UsuarioDao dao = new UsuarioDao();
 	ValidarCampo validarCampo = new ValidarCampo();
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		tabelaUsuario.setItems(FXCollections.observableArrayList("Usuário","Funcionário","Cliente"));
+	}
 
 	public void salvar(){
 
@@ -78,12 +101,12 @@ public class UsuarioController {
 					usuario.setNome(txtNome.getText());
 					usuario.setEndereco(txtEndereco.getText());
 
-					if(comboTipoUsuario.getValue().equals("Fornecedor")) {
-						usuario.setTipousuario(comboTipoUsuario.getValue());
-						usuario.setCnpj(txtCNPJ_CPF.getText());
-					}else if (comboTipoUsuario.getValue().equals("Usuário")) {
-						usuario.setTipousuario(comboTipoUsuario.getValue());
-						usuario.setCpf(txtCNPJ_CPF.getText());
+					if(comboTipo.getValue().equals("Fornecedor")) {
+						usuario.setTipousuario(comboTipo.getValue());
+						usuario.setCnpj(txtCnpjCpf.getText());
+					}else if (comboTipo.getValue().equals("Usuário")) {
+						usuario.setTipousuario(comboTipo.getValue());
+						usuario.setCpf(txtCnpjCpf.getText());
 					}else {
 						//TODO criar a mensagem
 						System.out.println(">>>> ERRO NO TIPO DE USUARIO <<<<<");
@@ -128,23 +151,30 @@ public class UsuarioController {
 					usuario.setNome(txtNome.getText());
 					usuario.setEndereco(txtEndereco.getText());
 
-					if(comboTipoUsuario.getValue().equals("Fornecedor")) {
-						usuario.setTipousuario(comboTipoUsuario.getValue());
-						usuario.setCnpj(txtCNPJ_CPF.getText());
-					}else if (comboTipoUsuario.getValue().equals("Usuário")) {
-						usuario.setTipousuario(comboTipoUsuario.getValue());
-						usuario.setCpf(txtCNPJ_CPF.getText());
+					if(comboTipo.getValue().equals("Fornecedor")) {
+						usuario.setTipousuario(comboTipo.getValue());
+						usuario.setCnpj(txtCnpjCpf.getText());
+						usuario.setEndereco(txtEndereco.getText());
+						usuario.setBairro(txtBairro.getText());
+						usuario.setCidade(txtCidade.getText());
+						usuario.setEstado(comboEstado.getValue());
+						usuario.setEmail(txtEmail.getText());
+
+						dao.update(usuario);
+					}else if (comboTipo.getValue().equals("Usuário")) {
+						usuario.setTipousuario(comboTipo.getValue());
+						usuario.setCpf(txtCnpjCpf.getText());
+						usuario.setEndereco(txtEndereco.getText());
+						usuario.setBairro(txtBairro.getText());
+						usuario.setCidade(txtCidade.getText());
+						usuario.setEstado(comboEstado.getValue());
+						usuario.setEmail(txtEmail.getText());
+
+						dao.update(usuario);
 					}else {
 						//TODO criar a mensagem
 						System.out.println(">>>> ERRO NO TIPO DE USUARIO <<<<<");
 					}
-					usuario.setEndereco(txtEndereco.getText());
-					usuario.setBairro(txtBairro.getText());
-					usuario.setCidade(txtCidade.getText());
-					usuario.setEstado(comboEstado.getValue());
-					usuario.setEmail(txtEmail.getText());
-
-					dao.update(usuario);
 
 				}
 			});
@@ -168,14 +198,9 @@ public class UsuarioController {
 		}
 	}
 
-	public void listar(){
-		try {
-			dao.lista();
-		}catch (Exception e){
-			System.out.println(e.getMessage());
+	
 
-		}
-	}
+	
 
 
 }
