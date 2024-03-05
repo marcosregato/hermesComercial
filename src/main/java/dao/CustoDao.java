@@ -22,7 +22,7 @@ import model.Custo;
 public class CustoDao implements RepositoryCusto{
 
 	private ConnectionMySQL con = null;
-	private Statement smt = null;
+	private final Statement smt = null;
 	private ResultSet rs = null;
 	
 	

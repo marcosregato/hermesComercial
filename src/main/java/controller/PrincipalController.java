@@ -8,8 +8,8 @@ import model.Usuario;
 public class PrincipalController {
 	
 	
-    private String login;
-    private String senha;
+    private final String login;
+    private final String senha;
     LoginController loginController;
     
     private String tipoDeAcesso;

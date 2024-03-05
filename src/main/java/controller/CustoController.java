@@ -22,7 +22,7 @@ import java.util.List;
 public class CustoController {
 
     private ConnectionMySQL con = null;
-    private Statement smt = null;
+    private final Statement smt = null;
     private ResultSet rs = null;
     
     public void salvar(Custo custo){

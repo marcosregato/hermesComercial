@@ -6,14 +6,14 @@ import model.Custo;
 
 public interface RepositoryCusto {
 	
-	public void salvar(Custo custo);
+	void salvar(Custo custo);
 
-	public void remove(String nome);
+	void remove(String nome);
 
-	public void update(Custo custo);
+	void update(Custo custo);
 
-	public List<Custo> listar();
+	List<Custo> listar();
 
-	public List<Custo> buscar(String nome);
+	List<Custo> buscar(String nome);
 
 }

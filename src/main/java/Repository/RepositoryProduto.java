@@ -6,14 +6,14 @@ import model.Produto;
 
 public interface RepositoryProduto {
 	
-	public void salvar(Produto produto);
+	void salvar(Produto produto);
 	
-	public void remove(String nome);
+	void remove(String nome);
 	
-	public void update(Produto produto);
+	void update(Produto produto);
 	
-	public List<Produto> listar();
+	List<Produto> listar();
 	
-	public List<Produto> buscar(String nome);
+	List<Produto> buscar(String nome);
 
 }

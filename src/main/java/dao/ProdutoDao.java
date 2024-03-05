@@ -21,7 +21,7 @@ import model.Produto;
  */
 public class ProdutoDao implements RepositoryProduto{
 
-	private Statement smt = null;
+	private final Statement smt = null;
 	private ResultSet rs = null;
 	@Override
 	public void salvar(Produto produto) {

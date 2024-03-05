@@ -7,15 +7,15 @@ import model.Usuario;
 public interface RepositoryUsuario {
 	
 	
-	public void salvar(Usuario usuario);
+	void salvar(Usuario usuario);
 	
-	public void remove(String nome);
+	void remove(String nome);
 	
-	public void update(Usuario usuario);
+	void update(Usuario usuario);
 	
-	public List<Usuario> lista();
+	List<Usuario> lista();
 	
-	public List<Usuario> buscar(String nome);
+	List<Usuario> buscar(String nome);
 	
 	
 	

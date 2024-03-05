@@ -85,7 +85,6 @@ public class UsuarioDao implements RepositoryUsuario {
 	@Override
 	public List<Usuario> lista() {
 		try {
-
 			ConnectionMySQL con  = new ConnectionMySQL();
 			String query = "select u.nome, u.endereco , u.cnjp ,u.cpf ,u.email ,u.tipo from login l " +
 					"inner join acesso a on l.id = a.fk_login " +
@@ -124,7 +123,6 @@ public class UsuarioDao implements RepositoryUsuario {
 		Usuario usuario = null;
 		try {
 			ConnectionMySQL con  = new ConnectionMySQL();
-
 			String query = "select u.nome, u.endereco , u.cnjp ,u.cpf ,u.email ,u.tipo from login l " +
 					"inner join acesso a on l.id = a.fk_login " +
 					"inner join usuario u on u.id = a.fK_usuario where u.nome = ?";

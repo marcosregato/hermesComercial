@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface RepositoryAtributo {
 
-    public void salvar(Atributo atributo);
+    void salvar(Atributo atributo);
 
-    public void remove(String nome);
+    void remove(String nome);
 
-    public void update(Atributo atributo);
+    void update(Atributo atributo);
 
-    public List<Atributo> listar();
+    List<Atributo> listar();
 
-    public List<Atributo> buscar(String nome);
+    List<Atributo> buscar(String nome);
 }

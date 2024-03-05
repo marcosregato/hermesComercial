@@ -6,14 +6,14 @@ import model.Despesa;
 
 public interface RepositoryDespesa {
 	
-	public void salvar(Despesa despesa);
+	void salvar(Despesa despesa);
 
-	public void remove(String nome);
+	void remove(String nome);
 
-	public void update(Despesa despesa);
+	void update(Despesa despesa);
 
-	public List<Despesa> listar();
+	List<Despesa> listar();
 
-	public List<Despesa> buscar(String nome);
+	List<Despesa> buscar(String nome);
 
 }

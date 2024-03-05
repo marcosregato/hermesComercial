@@ -7,14 +7,14 @@ import model.Produto;
 
 public interface RepositoryEstoque {
 	
-	public void salvar(Estoque estoque);
+	void salvar(Estoque estoque);
 
-	public void remove(String nome);
+	void remove(String nome);
 
-	public void update(Estoque produto);
+	void update(Estoque produto);
 
-	public List<Estoque> listar();
+	List<Estoque> listar();
 
-	public List<Estoque> buscar(String nome);
+	List<Estoque> buscar(String nome);
 
 }

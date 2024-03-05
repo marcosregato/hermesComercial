@@ -1,6 +1,8 @@
 package controller;
 
 import dao.LoginDao;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -36,14 +38,22 @@ public class LoginController {
             String senha = validarCampo.campoVazio(txtSenha.getText());
             Login login = new Login();
 
-            if((txtLogin.getText() != null) || (txtSenha.getText() !=null)) {
-               new  PrincipalController(txtLogin.getText(),txtSenha.getText());
+            btEntrar.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if((txtLogin.getText() != null) || (txtSenha.getText() !=null)) {
+                        new  PrincipalController(txtLogin.getText(),txtSenha.getText());
 
-            }else{
-                alerta.showAlert(Alert.AlertType.ERROR,
-                        alerta.createRegistrationFormPane().getScene().getWindow(),
-                        "Form Error!", "Login ou Senha está incorreta");
-            }
+                    }else{
+                        alerta.showAlert(Alert.AlertType.ERROR,
+                                alerta.createRegistrationFormPane().getScene().getWindow(),
+                                "Form Error!", "Login ou Senha está incorreta");
+                    }
+                }
+            });
+
+
+
 
         }catch (Exception e ){
             e.printStackTrace();
