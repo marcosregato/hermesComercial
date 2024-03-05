@@ -21,27 +21,26 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
 
 
-        String pathFileLogin ="C:\\Users\\marcos\\Documents\\NetBeansProjects\\hermesComercial\\src\\main\\java\\com\\br\\hermescomercial\\login.fxml";
-        //String pathFileLogin ="\\src\\main\\java\\com\\br\\hermescomercial\\login.fxml";
+        //String pathFileLogin ="C:\\Users\\marcos\\Documents\\NetBeansProjects\\hermesComercial\\src\\main\\java\\com\\br\\hermescomercial\\login.fxml";
+        String pathFileLogin ="./src/main/java/com/br/hermescomercial/login.fxml";
         /*AnchorPane root = (AnchorPane) FXMLLoader.load(HelloApplication.class.getResource(pathFileLogin));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setTitle("Bluerift Timeline");
         stage.show();*/
 
-        /*FXMLLoader loader = new FXMLLoader(this.getClass().getResource(pathFileLogin));
+        FXMLLoader loader = new FXMLLoader(this.getClass().getResource(pathFileLogin));
         Parent root = loader.load();
         stage.setScene(new Scene(root));
-        stage.show();*/
+        stage.show();
 
-        URL fxmlResource = HelloApplication.class.getResource(pathFileLogin);
+        /*URL fxmlResource = HelloApplication.class.getResource(pathFileLogin);
         FXMLLoader loader = new FXMLLoader(fxmlResource);
         StackPane pane = loader.load();
 
-        // Assign the loaded view to the stage and show it
         Scene scene = new Scene(pane);
         stage.setScene(scene);
-        stage.show();
+        stage.show();*/
 
 
 
