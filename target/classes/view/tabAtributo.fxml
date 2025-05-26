@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.AtributoContreller"
+            prefHeight="400.0" prefWidth="600.0">
+
+    <children>
+        <Pane layoutX="12.0" layoutY="14.0" prefHeight="50.0" prefWidth="1094.0">
+            <children>
+                <ComboBox fx:id="comboCodigo" layoutX="95.0" layoutY="11.0" prefHeight="24.0" prefWidth="186.0" />
+                <Text layoutX="27.0" layoutY="26.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Código :" />
+                <Button fx:id="btPesqCod" layoutX="297.0" layoutY="11.0" mnemonicParsing="false" text="PESQUISAR" />
+            </children>
+        </Pane>
+        <Pane layoutX="14.0" layoutY="90.0" prefHeight="561.0" prefWidth="1090.0" style="-fx-border-color: #ADFF2F; -fx-border-radius: 10;">
+            <children>
+                <Text layoutX="677.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Produto :" />
+                <Text layoutX="751.0" layoutY="49.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="231.7294921875" />
+                <Text layoutX="239.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fornecedor :" />
+                <Text layoutX="338.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                <Text layoutX="30.0" layoutY="44.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Código :" />
+                <Text layoutX="96.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="125.7294921875" />
+                <Pane layoutX="15.0" layoutY="104.0" prefHeight="99.0" prefWidth="490.0" style="-fx-border-color: #ADFF2F; -fx-border-radius: 10;">
+                    <children>
+                        <Text layoutX="17.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Imposto Federal" />
+                        <Text layoutX="182.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Imposto Estatual" />
+                        <Text layoutX="336.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Imposto Municipal" />
+                        <TextField fx:id="txtImpostoFederal" layoutX="13.0" layoutY="53.0" prefHeight="24.0" prefWidth="119.0" />
+                        <TextField fx:id="txtImpostoEstadual" layoutX="177.0" layoutY="51.0" prefHeight="24.0" prefWidth="119.0" />
+                        <TextField fx:id="txtImpostoMunicipal" layoutX="331.0" layoutY="52.0" prefHeight="24.0" prefWidth="119.0" />
+                        <Text layoutX="15.0" layoutY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Imposto" />
+                    </children>
+                </Pane>
+                <Pane layoutX="15.0" layoutY="226.0" prefHeight="315.0" prefWidth="1062.0" style="-fx-border-color: #ADFF2F; -fx-border-radius: 10;">
+                    <children>
+                        <Text layoutX="16.0" layoutY="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Preço" />
+                        <TextField fx:id="txtPrecoCusto" layoutX="132.0" layoutY="34.0" />
+                        <Text layoutX="14.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Preço de Custo :" />
+                        <TextField fx:id="txtPrecoPrazo" layoutX="435.0" layoutY="35.0" />
+                        <Text layoutX="315.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Preço de Prazo :" />
+                        <TextField fx:id="txtPrecoVista" layoutX="727.0" layoutY="35.0" />
+                        <Text layoutX="621.0" layoutY="50.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Preço a Vista :" />
+                        <TextField fx:id="txtPrecoDesconto" layoutX="167.0" layoutY="74.0" />
+                        <Text layoutX="12.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Preço com Desconto :" />
+                    </children>
+                </Pane>
+            </children>
+        </Pane>
+        <Button fx:id="btSalvar" layoutX="948.0" layoutY="681.0" mnemonicParsing="false" text="SALVAR" />
+    </children>
+
+</AnchorPane>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="813.0" prefWidth="1233.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="14.0" layoutY="14.0" prefHeight="156.0" prefWidth="1207.0" style="-fx-border-color: #ADFF2F; -fx-border-radius: 10;">
+         <children>
+            <Text layoutX="20.0" layoutY="48.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Produto :" />
+            <ComboBox fx:id="comboProduto" layoutX="91.0" layoutY="33.0" prefHeight="24.0" prefWidth="516.0" />
+            <Button fx:id="btAddCompra" layoutX="566.0" layoutY="75.0" mnemonicParsing="false" text="ADD COMPRA" />
+            <Text layoutX="20.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Estoque : " />
+            <TextField fx:id="exibirQtdEstoque" layoutX="91.0" layoutY="74.0" prefHeight="24.0" prefWidth="65.0" />
+            <Text layoutX="167.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Qtd de Venda :" />
+            <TextField fx:id="exibirQdtVenda" layoutX="275.0" layoutY="75.0" prefHeight="24.0" prefWidth="74.0" />
+            <Text layoutX="361.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Valor da Venda :" />
+            <TextField fx:id="exibirValorCompra" layoutX="479.0" layoutY="74.0" prefHeight="24.0" prefWidth="74.0" />
+         </children>
+      </Pane>
+      <Pane layoutX="14.0" layoutY="186.0" prefHeight="608.0" prefWidth="1207.0" style="-fx-border-color: #ADFF2F; -fx-border-radius: 10;">
+         <children>
+            <TableView fx:id="tabelaVenda" layoutX="10.0" layoutY="18.0" prefHeight="459.0" prefWidth="1187.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Produto" />
+                <TableColumn prefWidth="235.0" text="QUANTIDADE DE VENDA" />
+                  <TableColumn minWidth="0.0" prefWidth="322.0" text="VALOR" />
+                  <TableColumn minWidth="0.0" prefWidth="252.0" text="TOTAL" />
+              </columns>
+            </TableView>
+            <Button fx:id="btFinalizarVenda" layoutX="1021.0" layoutY="554.0" mnemonicParsing="false" text="FINALIZAR COMPRA" />
+         </children>
+      </Pane>
+   </children>
+</Pane>

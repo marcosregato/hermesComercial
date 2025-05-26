@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="813.0" prefWidth="1233.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane layoutX="14.0" layoutY="14.0" prefHeight="341.0" prefWidth="1207.0" style="-fx-border-color: #ADFF2F; -fx-border-radius: 10;">
+         <children>
+            <Text layoutX="22.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
+            <TextField fx:id="txtNome" layoutX="79.0" layoutY="36.0" prefHeight="24.0" prefWidth="537.0" />
+            <Text layoutX="628.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CNPJ/CPF :" />
+            <TextField fx:id="txtCNPJ_CPF" layoutX="704.0" layoutY="36.0" prefHeight="24.0" prefWidth="239.0" />
+            <Text layoutX="956.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo :" />
+            <ComboBox layoutX="1003.0" layoutY="36.0" prefWidth="150.0" />
+            <Button fx:id="btSalvar" layoutX="848.0" layoutY="285.0" mnemonicParsing="false" text="SALVAR" />
+            <Button fx:id="txtEditar" layoutX="925.0" layoutY="285.0" mnemonicParsing="false" text="EDITAR" />
+            <Button fx:id="btExcluir" layoutX="1003.0" layoutY="285.0" mnemonicParsing="false" text="EXCLUIR" />
+            <Text layoutX="20.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Endereço :" />
+            <TextField fx:id="txtEndereco" layoutX="98.0" layoutY="74.0" prefHeight="24.0" prefWidth="516.0" />
+            <Text layoutX="629.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Bairro  :" />
+            <TextField fx:id="txtBairro" layoutX="705.0" layoutY="76.0" prefHeight="24.0" prefWidth="239.0" />
+            <Text layoutX="20.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Cidade :" />
+            <TextField fx:id="txtCidade" layoutX="96.0" layoutY="109.0" prefHeight="24.0" prefWidth="239.0" />
+            <Text layoutX="348.0" layoutY="124.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Estado :" />
+            <ComboBox fx:id="comboEstado" layoutX="411.0" layoutY="109.0" prefWidth="150.0" />
+            <Text layoutX="575.0" layoutY="125.0" strokeType="OUTSIDE" strokeWidth="0.0" text="CEP :" />
+            <TextField fx:id="txtCEP" layoutX="620.0" layoutY="111.0" prefHeight="24.0" prefWidth="239.0" />
+            <Text layoutX="18.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="E-Mail :" />
+            <TextField fx:id="txtEmail" layoutX="94.0" layoutY="152.0" prefHeight="24.0" prefWidth="389.0" />
+            <Text layoutX="497.0" layoutY="166.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Telefone :" />
+            <TextField fx:id="txtTelefone" layoutX="573.0" layoutY="151.0" prefHeight="24.0" prefWidth="256.0" />
+         </children>
+      </Pane>
+      <Pane layoutX="14.0" layoutY="367.0" prefHeight="427.0" prefWidth="1207.0" style="-fx-border-color: #ADFF2F; -fx-border-radius: 10;">
+         <children>
+            <TableView fx:id="tabelaUsuario" layoutX="10.0" layoutY="82.0" prefHeight="334.0" prefWidth="1187.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="C1" />
+                <TableColumn prefWidth="75.0" text="C2" />
+              </columns>
+            </TableView>
+            <Text layoutX="27.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
+            <TextField fx:id="txtPesqNome" layoutX="81.0" layoutY="29.0" prefHeight="24.0" prefWidth="498.0" />
+            <ComboBox fx:id="comboTipoUsuario" layoutX="715.0" layoutY="30.0" prefHeight="24.0" prefWidth="184.0" />
+            <Text layoutX="593.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de Usuário :" />
+            <Button fx:id="btPesquisar" layoutX="929.0" layoutY="30.0" mnemonicParsing="false" text="PESQUISAR" />
+         </children>
+      </Pane>
+   </children>
+</Pane>
