@@ -25,6 +25,7 @@ public class HelloApplication extends Application {
             Scene menupScene = new Scene(root);
             stage.setScene(menupScene);
             stage.show();
+            System.out.println("OLA MUNDO");
 
         
     	}catch (Exception e) {
