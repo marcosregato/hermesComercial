@@ -1,13 +1,17 @@
 package com.br.hermescomercial.util;
 
+import org.apache.log4j.Logger;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.Properties;
 
 public class ConfigProperties {
 	
 	private String value;
+    static Logger logger = Logger.getLogger(ConfigProperties.class.getName());
 	
 	public ConfigProperties(String valor) {
 		this.value = valor;
@@ -18,9 +22,10 @@ public class ConfigProperties {
             inputStream = new FileInputStream(path + "/config.properties");
             properties = new Properties();
             properties.load(inputStream);
-        } catch (Exception exception) {
-            exception.printStackTrace();
+        } catch (Exception e) {
+            logger.info(e.getMessage());
         }
+        assert properties != null;
         properties.getProperty(this.value).trim();
 	}
 	
@@ -29,13 +34,16 @@ public class ConfigProperties {
         InputStream inputStream = null;
         String path = System.getProperty("user.dir");
         try {
+
             inputStream = new FileInputStream(path + "/config.properties");
             properties = new Properties();
             properties.load(inputStream);
-        } catch (Exception exception) {
-            exception.printStackTrace();
+            return properties.getProperty(value).trim();
+
+        } catch (Exception e) {
+            logger.info(e.getMessage());
         }
-        return properties.getProperty(value).trim();
+        return Collections.emptyList().toString();
     }
 
 }

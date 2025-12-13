@@ -18,13 +18,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Usuario;
 import com.br.hermescomercial.util.ValidarCampo;
+import org.apache.log4j.Logger;
 
 public class UsuarioController implements Initializable{
 	
-	
-
-	   
-
 	    @FXML
 	    private TextField PesNome;
 
@@ -85,6 +82,7 @@ public class UsuarioController implements Initializable{
 
 	UsuarioDao dao = new UsuarioDao();
 	ValidarCampo validarCampo = new ValidarCampo();
+    Logger logger = Logger.getLogger(getClass().getName());
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -108,8 +106,7 @@ public class UsuarioController implements Initializable{
 						usuario.setTipousuario(comboTipo.getValue());
 						usuario.setCpf(txtCnpjCpf.getText());
 					}else {
-						//TODO criar a mensagem
-						System.out.println(">>>> ERRO NO TIPO DE USUARIO <<<<<");
+						logger.info(">>>> ERRO NO TIPO DE USUARIO <<<<<");
 					}
 					usuario.setEndereco(txtEndereco.getText());
 					usuario.setBairro(txtBairro.getText());
@@ -124,7 +121,7 @@ public class UsuarioController implements Initializable{
 
 
 		}catch (Exception e){
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 	}
 
@@ -133,10 +130,9 @@ public class UsuarioController implements Initializable{
 			if(nome.isEmpty()) {
 				dao.remove(nome);
 			}
-			//TODO criar a mensagem
 
 		}catch (Exception e){
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 	}
 
@@ -172,19 +168,17 @@ public class UsuarioController implements Initializable{
 
 						dao.update(usuario);
 					}else {
-						//TODO criar a mensagem
-						System.out.println(">>>> ERRO NO TIPO DE USUARIO <<<<<");
+						logger.info(">>>> ERRO NO TIPO DE USUARIO <<<<<");
 					}
 
 				}
 			});
 
 		}catch (Exception e){
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 	}
 
-	//TODO fazer listagem na tabela
 	public void buscar(){
 		try {
 			List<Usuario> lista = new ArrayList<>();
@@ -194,13 +188,8 @@ public class UsuarioController implements Initializable{
 			}
 
 		}catch (Exception e){
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 	}
-
-	
-
-	
-
 
 }

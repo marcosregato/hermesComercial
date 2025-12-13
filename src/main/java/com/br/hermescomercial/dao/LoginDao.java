@@ -4,34 +4,35 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.br.hermescomercial.connectionDB.ConnectionMySQL;
-import com.br.hermescomercial.connectionDB.ConnectionSQLite;
+import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Usuario;
+import org.apache.log4j.Logger;
 
 public class LoginDao {
 
-	//Logger logger = Logger.getLogger(LoginDao.class);
+    Logger logger = Logger.getLogger(getClass().getName());
 
 
-	private ConnectionSQLite con = null;
+	private ConnectionBD con = null;
 	private final Statement smt = null;
 	private ResultSet rs = null;
 
 	public List<Usuario> infoUsuario(String login, String senha){
 		try {
-			con  = new ConnectionSQLite();
+			con  = new ConnectionBD();
 
 			String query ="SELECT u.nome ,u.endereco ,u.cnjp ,u.cpf ,u.email ,u.tipo  FROM login l" +
 					"inner join acesso a on l.id = a.fK_login" +
 					"inner JOIN usuario u on u.id = a.fK_usuario where l.login = ? and l.senha = ? ";
 
-			PreparedStatement ps = con.getConnection().prepareStatement(query);
+			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			ps.setString(1, login);
 			ps.setString(2, senha);
 			
-			List<Usuario> lista = new ArrayList<Usuario>();
+			List<Usuario> lista = new ArrayList<>();
 
 			rs = ps.executeQuery();
 			Usuario usuario = null;
@@ -44,8 +45,6 @@ public class LoginDao {
 				usuario.setCpf(rs.getString("cpf"));
 				usuario.setEmail(rs.getString("email"));
 				usuario.setTipousuario(rs.getString("tipo"));
-
-
 			}
 
 			lista.add(usuario);
@@ -54,27 +53,26 @@ public class LoginDao {
 			return lista;
 
 		} catch (Exception e) {
-			// logger.info( e.getClass().getName() + " : " + e.getMessage() );
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 		//con.close();
-		return null;
+		return Collections.emptyList();
 	}
 	
 	
 	public List<Usuario> acessarUsuario(String login, String senha){
 		try {
-			con  = new ConnectionSQLite();
+			con  = new ConnectionBD();
 
 			String query ="SELECT u.tipo  FROM login l" +
 					"inner join acesso a on l.id = a.fK_login" +
 					"inner JOIN usuario u on u.id = a.fK_usuario where l.login = ? and l.senha = ? ";
 
-			PreparedStatement ps = con.getConnection().prepareStatement(query);
+			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			ps.setString(1, login);
 			ps.setString(2, senha);
 			
-			List<Usuario> lista = new ArrayList<Usuario>();
+			List<Usuario> lista = new ArrayList<>();
 
 			rs = ps.executeQuery();
 			Usuario usuario = null;
@@ -88,7 +86,6 @@ public class LoginDao {
 				usuario.setEmail(rs.getString("email"));
 				usuario.setTipousuario(rs.getString("tipo"));
 
-
 			}
 
 			lista.add(usuario);
@@ -97,10 +94,9 @@ public class LoginDao {
 			return lista;
 
 		} catch (Exception e) {
-			// logger.info( e.getClass().getName() + " : " + e.getMessage() );
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 		//con.close();
-		return null;
+		return Collections.emptyList();
 	}
 }

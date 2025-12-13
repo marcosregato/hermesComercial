@@ -8,12 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.br.hermescomercial.connectionDB.ConnectionMySQL;
-import com.br.hermescomercial.connectionDB.ConnectionSQLite;
+import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Atributo;
 import com.br.hermescomercial.model.Custo;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -21,16 +22,18 @@ import com.br.hermescomercial.model.Custo;
  */
 public class CustoController {
 
-    private ConnectionSQLite con = null;
+    private ConnectionBD con = null;
     private final Statement smt = null;
     private ResultSet rs = null;
+
+    Logger logger = Logger.getLogger(getClass().getName());
     
     public void salvar(Custo custo){
         try {
 
-            con  = new ConnectionSQLite();
+            con  = new ConnectionBD();
             String query ="INSERT INTO fornecedor (id, nome, tipofornecedor) VALUES (NULL, ?, ?)";
-            PreparedStatement ps = con.getConnection().prepareStatement(query);
+            PreparedStatement ps = con.getConnection("").prepareStatement(query);
 
             //ps.setString(1, fornecedor.getNome());
             //ps.setString(2, fornecedor.getTipoFornecedor());
@@ -39,7 +42,7 @@ public class CustoController {
             ps.close();
 
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         
         }
     }
@@ -47,10 +50,10 @@ public class CustoController {
     public List<Atributo> listar(){
         try {
 
-            con  = new ConnectionSQLite();
+            con  = new ConnectionBD();
             String query ="select * from fornecedor";
             List<Atributo> lista = new ArrayList<>();
-            PreparedStatement ps = con.getConnection().prepareStatement(query);
+            PreparedStatement ps = con.getConnection("").prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Atributo item = new Atributo();
@@ -64,19 +67,19 @@ public class CustoController {
             
 
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         
         }
 
-        return null;
+        return Collections.emptyList();
     }
     
     public void remove(String nome){
         try {
 
-            con  = new ConnectionSQLite();
+            con  = new ConnectionBD();
             String query = "DELETE FROM custo WHERE nome=?";
-            PreparedStatement ps = con.getConnection().prepareStatement(query);
+            PreparedStatement ps = con.getConnection("").prepareStatement(query);
             ps.setString(1, nome);
             ps.executeUpdate();
             rs.close();
@@ -84,7 +87,7 @@ public class CustoController {
 
 
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         
         }
     }
@@ -92,9 +95,9 @@ public class CustoController {
     public void update(Custo custo){
         try {
 
-            con  = new ConnectionSQLite();
+            con  = new ConnectionBD();
             String query = "update custo set custounitario = ?,custototal = ?";
-            PreparedStatement ps = con.getConnection().prepareStatement(query);
+            PreparedStatement ps = con.getConnection("").prepareStatement(query);
             //ps.setFloat(1, custo.getCustoUnitario());
             //ps.setFloat(2, custo.getCustoTotal());
 
@@ -103,7 +106,7 @@ public class CustoController {
 
 
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         
         }
     }
@@ -135,11 +138,11 @@ public class CustoController {
 
 
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         
         }
 
-        return null;
+        return Collections.emptyList();
     }
     
 }
