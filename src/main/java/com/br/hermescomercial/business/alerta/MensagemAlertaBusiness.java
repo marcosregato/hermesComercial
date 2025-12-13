@@ -23,7 +23,7 @@ public class MensagemAlertaBusiness {
 
 			String date = simpleDateFormat.format(new Date());
 			Date dataAtual = simpleDateFormat.parse(date);
-
+System.out.println("teste");
 			//Date dataDoBanco = simpleDateFormat.parse(dao.getDataCompra());
 
 		//	long days = ChronoUnit.DAYS.between((Temporal) dataDoBanco, (Temporal) dataAtual);
