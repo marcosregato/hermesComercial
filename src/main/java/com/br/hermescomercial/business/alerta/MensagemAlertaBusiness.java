@@ -6,6 +6,7 @@ import java.time.temporal.Temporal;
 import java.util.Date;
 
 import com.br.hermescomercial.dao.EstoqueDao;
+import com.br.hermescomercial.util.ConvertDado;
 
 public class MensagemAlertaBusiness {
 
@@ -16,29 +17,29 @@ public class MensagemAlertaBusiness {
 	 * comparar a data da estuque com a data atual
 	 * 
 	 * */
-	public void produtoEncalhado() {
+	public String produtoEncalhado(String data) {
 
 		try {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
 			String date = simpleDateFormat.format(new Date());
 			Date dataAtual = simpleDateFormat.parse(date);
-System.out.println("teste");
-			//Date dataDoBanco = simpleDateFormat.parse(dao.getDataCompra());
 
-		//	long days = ChronoUnit.DAYS.between((Temporal) dataDoBanco, (Temporal) dataAtual);
+			Date dataDoBanco = simpleDateFormat.parse(dao.getDataCompraEstoque());
+
+            ConvertDado convertDado = new ConvertDado();
+            if(dataDoBanco.after(convertDado.convertData(data))){
+                return dao.getDataCompraEstoque();
+            }
+
+			long days = ChronoUnit.DAYS.between((Temporal) dataDoBanco, (Temporal) dataAtual);
 
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
+        return null;
 
 
-	}
-	
-	
-	public static void main(String[] asd) {
-		MensagemAlertaBusiness msd = new MensagemAlertaBusiness();
-		msd.produtoEncalhado();
 	}
 
 }

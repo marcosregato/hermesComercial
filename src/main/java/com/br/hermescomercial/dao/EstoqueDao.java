@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.br.hermescomercial.Repository.RepositoryEstoque;
+import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.connectionDB.ConnectionSQLite;
 import com.br.hermescomercial.model.Estoque;
 
@@ -15,6 +16,9 @@ public class EstoqueDao implements RepositoryEstoque{
 	private ConnectionSQLite con = null;
 	private final Statement smt = null;
 	private ResultSet rs = null;
+
+    ConnectionBD connectionBD = new ConnectionBD("");
+
 
 
 	@Override
@@ -130,4 +134,14 @@ public class EstoqueDao implements RepositoryEstoque{
 		}
 		return lista;
 	}
+
+    public String getDataCompraEstoque() {
+        try {
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        return null;
+    }
 }

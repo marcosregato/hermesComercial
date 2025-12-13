@@ -18,6 +18,7 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
     	
     	try {
+
            // String pathFileLogin = "view/login.fxml";
 
             URL pathFileLogin = Paths.get("src/main/resources/view/login.fxml").toUri().toURL();
