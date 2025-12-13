@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import org.apache.log4j.Logger;
 
 public class LoginController {
 
@@ -24,7 +25,8 @@ public class LoginController {
     
     Alerta alerta;
     ValidarCampo validarCampo = new ValidarCampo();
-    
+
+    Logger logger = Logger.getLogger(getClass().getName());
     PrincipalController principalController = new PrincipalController();
     
     

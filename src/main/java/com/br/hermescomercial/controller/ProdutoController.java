@@ -13,6 +13,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Produto;
 import com.br.hermescomercial.util.Alerta;
+import org.apache.log4j.Logger;
 
 /**
  *
@@ -54,7 +55,7 @@ public class ProdutoController {
 
 	ProdutoDao dao;
 	Alerta alerta;
-
+    Logger logger = Logger.getLogger(getClass().getName());
 
 	public void salvar(){
 		try {
@@ -77,7 +78,7 @@ public class ProdutoController {
 			});
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 
 		}
 	}
@@ -98,7 +99,7 @@ public class ProdutoController {
 
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 
 		}
 	}
@@ -121,7 +122,7 @@ public class ProdutoController {
 				}
 			});
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 
 		}
 	}
@@ -134,7 +135,7 @@ public class ProdutoController {
 
 			lista = dao.listar();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 
 		}
 
@@ -164,7 +165,7 @@ public class ProdutoController {
 
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			logger.info(e.getMessage());
 
 		}
 	}

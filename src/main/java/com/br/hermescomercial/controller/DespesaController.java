@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Despesa;
+import org.apache.log4j.Logger;
 
 public class DespesaController {
 
@@ -25,7 +26,7 @@ public class DespesaController {
 
     DespesaDao dao = new DespesaDao();
     Despesa despesa;
-    
+    Logger logger = Logger.getLogger(getClass().getName());
 
     public void salvar( ){
         try {
@@ -34,7 +35,7 @@ public class DespesaController {
         	
             dao.salvar(despesa);
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.info(e.getMessage());
 
         }
     }
@@ -43,7 +44,7 @@ public class DespesaController {
         try {
             dao.remove(txtNome.getText());
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.info(e.getMessage());
 
         }
     }
@@ -52,7 +53,7 @@ public class DespesaController {
         try {
             dao.update(despesa);
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.info(e.getMessage());
 
         }
     }
@@ -61,12 +62,10 @@ public class DespesaController {
         try {
             dao.buscar(nome);
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.info(e.getMessage());
 
         }
     }
-
-
 
     public void listar(){
         try {
@@ -74,11 +73,9 @@ public class DespesaController {
             dao.listar();
 
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.info(e.getMessage());
 
         }
     }
-
-
 
 }

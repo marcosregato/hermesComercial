@@ -8,6 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Usuario;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class VendaController {
     @FXML
     private TableView<String> tabelaVenda;
 
+    Logger logger = Logger.getLogger(getClass().getName());
 
     public void salvar(){
 
@@ -56,7 +58,7 @@ public class VendaController {
 
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
@@ -68,7 +70,7 @@ public class VendaController {
             //TODO criar a mensagem
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
@@ -84,17 +86,16 @@ public class VendaController {
             });
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
-    //TODO fazer listagem na tabela
     public void buscar(){
         try {
 
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
         }
     }
 
@@ -102,7 +103,7 @@ public class VendaController {
         try {
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
 
         }
     }

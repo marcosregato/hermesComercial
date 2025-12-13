@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Estoque;
+import org.apache.log4j.Logger;
 
 public class EstoqueController {
 
@@ -28,6 +29,7 @@ public class EstoqueController {
 
     EstoqueDao dao;
     Estoque estoque;
+    Logger logger = Logger.getLogger(getClass().getName());
 
     public void salvar(){
         try {
@@ -41,10 +43,8 @@ public class EstoqueController {
                 dao.salvar(estoque);
             }
             
-            //TODO colocar mensagem
-            
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            logger.info(e.getMessage());
 
         }
     }
@@ -55,7 +55,7 @@ public class EstoqueController {
             dao =new EstoqueDao();
 
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+        	logger.info(e.getMessage());
 
         }
     }
@@ -64,7 +64,7 @@ public class EstoqueController {
         try {
 
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+        	logger.info(e.getMessage());
         }
     }
     
@@ -75,7 +75,7 @@ public class EstoqueController {
             dao.listar();
 
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+        	logger.info(e.getMessage());
         }
     }
 
@@ -88,7 +88,7 @@ public class EstoqueController {
         	}
 
         } catch (Exception e) {
-        	System.out.println(e.getMessage());
+        	logger.info(e.getMessage());
         }
     }
 

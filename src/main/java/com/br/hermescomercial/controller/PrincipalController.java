@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.br.hermescomercial.dao.LoginDao;
 import com.br.hermescomercial.model.Usuario;
+import org.apache.log4j.Logger;
 
 public class PrincipalController {
 	
@@ -11,7 +12,8 @@ public class PrincipalController {
     private String login;
     private String senha;
     LoginController loginController;
-    
+
+    Logger logger = Logger.getLogger(getClass().getName());
     private String tipoDeAcesso;
     
     LoginDao dao = new LoginDao();
@@ -29,8 +31,7 @@ public class PrincipalController {
     	   List<Usuario> lista = dao.acessarUsuario(login, senha);
 		return lista;
 	} catch (Exception e) {
-		// TODO: handle exception
-		System.out.println(e.getMessage());
+		logger.info(e.getMessage());
 	}
        return null;
     }

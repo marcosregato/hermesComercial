@@ -11,8 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.br.hermescomercial.Repository.RepositoryProduto;
-import com.br.hermescomercial.connectionDB.ConnectionPostgreSQL;
+import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Produto;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -21,14 +22,17 @@ import com.br.hermescomercial.model.Produto;
  */
 public class ProdutoDao implements RepositoryProduto{
 
+    private ConnectionBD con = null;
 	private final Statement smt = null;
 	private ResultSet rs = null;
+    Logger logger = Logger.getLogger(getClass().getName());
+    
 	@Override
 	public void salvar(Produto produto) {
 		try {
-			ConnectionPostgreSQL con  = new ConnectionPostgreSQL();
+            con  = new ConnectionBD();
 			String query ="INSERT INTO produto (nome, categoria, subCategoria, codigo, marca,dataCompra) VALUES (?, ?, ?, ?, ?, ?)";
-			PreparedStatement ps = con.connection().prepareStatement(query);
+			PreparedStatement ps =  con.getConnection("").prepareStatement(query);
 
 			ps.setString(1, produto.getNome());
 			ps.setString(2, produto.getCategoria());
@@ -41,7 +45,7 @@ public class ProdutoDao implements RepositoryProduto{
 			ps.close();
 
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 
 	}
@@ -50,15 +54,15 @@ public class ProdutoDao implements RepositoryProduto{
 	public void remove(String nome) {
 
 		try {
-			ConnectionPostgreSQL con  = new ConnectionPostgreSQL();
+            con  = new ConnectionBD();
 			String query = "DELETE FROM produto WHERE nome=?";
-			PreparedStatement ps = con.connection().prepareStatement(query);
+			PreparedStatement ps =  con.getConnection("").prepareStatement(query);
 			ps.setString(1, nome);
 			ps.executeUpdate();
 			ps.close();
 
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 
 	}
@@ -67,9 +71,9 @@ public class ProdutoDao implements RepositoryProduto{
 	public void update(Produto produto) {
 
 		try {
-			ConnectionPostgreSQL con  = new ConnectionPostgreSQL();
+            con  = new ConnectionBD();
 			String query = "update produto set nome = ?,categoria = ? ,subCategoria = ?, codigo = ?, marca =?,dataCompra =? ";
-			PreparedStatement ps = con.connection().prepareStatement(query);
+			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			ps.setString(1, produto.getNome());
 			ps.setString(2, produto.getCategoria());
 			ps.setString(3, produto.getSubCategoria());
@@ -79,7 +83,7 @@ public class ProdutoDao implements RepositoryProduto{
 			ps.close();
 
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 	}
 
@@ -87,10 +91,10 @@ public class ProdutoDao implements RepositoryProduto{
 	public List<Produto> listar() {
 		List<Produto> listProduto = new ArrayList<>();
 		try {
-			ConnectionPostgreSQL con  = new ConnectionPostgreSQL();
+            con  = new ConnectionBD();
 			String query ="select nome,categoria,subCategoria,codigo,marca,dataCompra from produto";
 
-			PreparedStatement ps = con.connection().prepareStatement(query);
+			PreparedStatement ps =  con.getConnection("").prepareStatement(query);
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Produto produto = new Produto();
@@ -105,7 +109,7 @@ public class ProdutoDao implements RepositoryProduto{
 			}
 
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 		return listProduto;
 	}
@@ -114,9 +118,9 @@ public class ProdutoDao implements RepositoryProduto{
 	public List<Produto> buscar(String nome) {
 		List<Produto> lista = new ArrayList<>();
 		try {
-			ConnectionPostgreSQL con  = new ConnectionPostgreSQL();
+            con  = new ConnectionBD();
 			String query = "select nome,categoria,subCategoria,codigo,marca,dataCompra from produto where u.nome = ?";
-			PreparedStatement buscar  = con.connection().prepareStatement(query);
+			PreparedStatement buscar  = con.getConnection("").prepareStatement(query);
 			buscar.setString(1, nome);
 
 			ResultSet resultadoBusca  = buscar.executeQuery();
@@ -134,12 +138,9 @@ public class ProdutoDao implements RepositoryProduto{
 			buscar.close();
 
 		} catch (Exception e) {
-			System.err.println(e.getMessage());
+			logger.info(e.getMessage());
 		}
 		return lista;
 	}
-
-
-
 
 }

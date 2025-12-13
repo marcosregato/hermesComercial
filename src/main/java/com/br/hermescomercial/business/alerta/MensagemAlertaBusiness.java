@@ -7,11 +7,13 @@ import java.util.Date;
 
 import com.br.hermescomercial.dao.EstoqueDao;
 import com.br.hermescomercial.util.ConvertDado;
+import org.apache.log4j.Logger;
 
 public class MensagemAlertaBusiness {
 
 
 	EstoqueDao dao;
+    Logger logger = Logger.getLogger(getClass().getName());
 
 	/**
 	 * comparar a data da estuque com a data atual
@@ -35,7 +37,7 @@ public class MensagemAlertaBusiness {
 			long days = ChronoUnit.DAYS.between((Temporal) dataDoBanco, (Temporal) dataAtual);
 
 		} catch (Exception e) {
-			// TODO: handle exception
+            logger.info(e.getMessage());
 		}
         return null;
 
