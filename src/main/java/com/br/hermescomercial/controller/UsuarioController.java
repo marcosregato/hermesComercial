@@ -183,9 +183,9 @@ public class UsuarioController implements Initializable{
 		try {
 			List<Usuario> lista = new ArrayList<>();
 
-			if(validarCampo.campoVazio(txtNome.getText()) != "") {
+			/*if(validarCampo.campoVazio(txtNome.getText()) != "") {
 				lista = dao.buscar(txtNome.getText());
-			}
+			}*/
 
 		}catch (Exception e){
 			logger.info(e.getMessage());

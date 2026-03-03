@@ -26,7 +26,7 @@ public class PrincipalController {
     }
     
   
-    public List<Usuario> infoUsuario(){
+    public List<Usuario> infoUsuario(String login, String senha){
        try {
     	   List<Usuario> lista = dao.acessarUsuario(login, senha);
 		return lista;

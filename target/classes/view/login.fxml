@@ -16,15 +16,15 @@
          <children>
             <TextField fx:id="txtLogin" layoutX="121.0" layoutY="276.0" stylesheets="@../css/styleCentro_1.css" />
             <Text fill="#fcf9f9" layoutX="208.0" layoutY="262.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGIN" />
-            <Button layoutX="199.0" layoutY="332.0" mnemonicParsing="false" text="ENTRA" />
+            <Button fx:id="btEntrar" onAction="#handleBtEntra" layoutX="199.0" layoutY="332.0" mnemonicParsing="false" text="ENTRA" />
          </children>
       </Pane>
 
       <Pane layoutX="304.0" prefHeight="400.0" prefWidth="296.0" style="-fx-background-color: #fff;">
          <children>
-            <TextField fx:id="txtSerha" layoutX="5.0" layoutY="279.0" stylesheets="@../css/styleCentro_1.css" />
+            <TextField fx:id="txtSenha" layoutX="5.0" layoutY="279.0" stylesheets="@../css/styleCentro_1.css" />
             <Text layoutX="20.0" layoutY="260.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SENHA" />
-            <Button layoutX="52.0" layoutY="320.0" mnemonicParsing="false" text="FECHAR" />
+            <Button fx:id="btFechar" onAction="#handleBtFechar" layoutX="52.0" layoutY="320.0" mnemonicParsing="false" text="FECHAR" />
          </children>
       </Pane>
       <Text fill="#fcf9f9" layoutX="-56.0" layoutY="-90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LOGIN" />
