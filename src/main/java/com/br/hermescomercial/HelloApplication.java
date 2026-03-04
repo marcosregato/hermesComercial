@@ -12,28 +12,46 @@ import java.nio.file.Paths;
 
 public class HelloApplication extends Application {
 
-    //https://openjfx.io/openjfx-docs/#install-javafx
+    static Stage stage;
+    static Scene telaLogin;
+    static Scene telarootPrincipal;
 
     @Override
-    public void start(Stage stage) throws IOException {
-    	
-    	try {
+    public void start(Stage primaryStage) throws IOException {
 
-           // String pathFileLogin = "view/login.fxml";
+        try {
+            stage = primaryStage;
+            // String pathFileLogin = "view/login.fxml";
 
             URL pathFileLogin = Paths.get("src/main/resources/view/login.fxml").toUri().toURL();
-            Parent root = FXMLLoader.load(pathFileLogin);
-            Scene menupScene = new Scene(root);
-            stage.setScene(menupScene);
-            stage.show();
-            
+            Parent rootLogin = FXMLLoader.load(pathFileLogin);
+          telaLogin = new Scene(rootLogin);
+  //          stage.setScene(telaLogin);
 
-        
-    	}catch (Exception e) {
-			// TODO: handle exception
-    		e.printStackTrace();
-		}
+
+            URL pathFileLayoutPrincipal = Paths.get("src/main/resources/view/Layout_principal.fxml").toUri().toURL();
+            Parent rootPrincipal = FXMLLoader.load(pathFileLayoutPrincipal);
+            telarootPrincipal = new Scene(rootPrincipal);
+//            stage.setScene(telarootPrincipal);
+ //           stage.show();
+
+
+        } catch (Exception e) {
+            // TODO: handle exception
+            e.printStackTrace();
+        }
     }
+
+    public static void chamaStage(String tela){
+        switch (tela){
+            case "main":
+                stage.setScene(telaLogin);
+                break;
+            case "telaPrincipal":
+                stage.setScene(telarootPrincipal);
+//                break;
+            }
+        }
 
     public static void main(String[] args) {
         launch(args);

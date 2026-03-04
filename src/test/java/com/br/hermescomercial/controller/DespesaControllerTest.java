@@ -1,0 +1,37 @@
+package com.br.hermescomercial.controller;
+
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class DespesaControllerTest {
+
+    @Test
+    void initialize() {
+        // TODO: Implement test
+    }
+
+    @Test
+    void salvarDespesa() {
+        // TODO: Implement test
+    }
+
+    @Test
+    void deletarDespesa() {
+        // TODO: Implement test
+    }
+
+    @Test
+    void alterarDespesa() {
+        // TODO: Implement test
+    }
+
+    @Test
+    void listarDespesa() {
+        // TODO: Implement test
+    }
+
+    @Test
+    void buscarDespesa() {
+        // TODO: Implement test
+    }
+}

@@ -10,14 +10,15 @@ import java.util.List;
 import com.br.hermescomercial.Repository.RepositoryDespesa;
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Despesa;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class DespesaDao implements RepositoryDespesa{
 
 	private ConnectionBD con = null;
 	private final Statement smt = null;
 	private ResultSet rs = null;
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final Logger logger = LogManager.getLogger(DespesaDao.class);
 
 
 	public void salvar(Despesa despesa) {
@@ -34,7 +35,7 @@ public class DespesaDao implements RepositoryDespesa{
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -46,11 +47,10 @@ public class DespesaDao implements RepositoryDespesa{
 			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			ps.setString(1, nome);
 			ps.executeUpdate();
-			rs.close();
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -63,11 +63,10 @@ public class DespesaDao implements RepositoryDespesa{
 			//ps.setFloat(1, custo.getCustoUnitario());
 			//ps.setFloat(2, custo.getCustoTotal());
 
-			rs.close();
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -90,7 +89,7 @@ public class DespesaDao implements RepositoryDespesa{
 			return lista;
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		return Collections.emptyList();
 	}
@@ -110,11 +109,10 @@ public class DespesaDao implements RepositoryDespesa{
                 //custo.setCustoTotal(rs.getFloat("custototal"));
 
 			lista.add(despesa);
-            rs.close();
             ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		return lista;
 	}

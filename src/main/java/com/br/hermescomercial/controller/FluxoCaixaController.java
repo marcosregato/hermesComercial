@@ -1,10 +1,12 @@
 package com.br.hermescomercial.controller;
 
+import com.br.hermescomercial.util.ValidarCampo;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class FluxoCaixaController {
 
@@ -26,7 +28,7 @@ public class FluxoCaixaController {
 	@FXML
 	private Button btSalvar;
 
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(FluxoCaixaController.class);
 
 	public void salvar() {
 		try {

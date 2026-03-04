@@ -5,7 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import com.br.hermescomercial.util.ConfigProperties;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ConnectionBD {
 	
@@ -20,7 +21,7 @@ public class ConnectionBD {
     private static String USER_MYSQL = ConfigProperties.getProperty("USERL_MYSQL");
     private static String SENHA_MYSQL = ConfigProperties.getProperty("PASSWORD_MYSQL");
 
-    Logger logger = Logger.getLogger(ConnectionBD.class.getName());
+    private static final Logger logger = LogManager.getLogger(ConnectionBD.class);
 
     public Connection getConnection(String nomeBanco){
         try {
@@ -41,7 +42,7 @@ public class ConnectionBD {
             }
 
         } catch (SQLException | ClassNotFoundException e) {
-            logger.info("Erro na conexao com banco");
+            logger.error("Erro na conexao com banco", e);
             logger.info("Saindo...");
             System.exit(1);
         }

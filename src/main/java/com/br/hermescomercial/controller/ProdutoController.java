@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.br.hermescomercial.dao.ProdutoDao;
+import com.br.hermescomercial.util.ValidarCampo;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -13,7 +14,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Produto;
 import com.br.hermescomercial.util.Alerta;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 /**
  *
@@ -55,7 +58,7 @@ public class ProdutoController {
 
 	ProdutoDao dao;
 	Alerta alerta;
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ProdutoController.class);
 
 	public void salvar(){
 		try {

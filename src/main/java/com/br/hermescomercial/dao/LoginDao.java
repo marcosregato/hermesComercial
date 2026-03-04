@@ -9,11 +9,12 @@ import java.util.List;
 
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Usuario;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class LoginDao {
 
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final Logger logger = LogManager.getLogger(LoginDao.class);
 
 
 	private ConnectionBD con = null;
@@ -53,7 +54,7 @@ public class LoginDao {
 			return lista;
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		//con.close();
 		return Collections.emptyList();
@@ -94,7 +95,7 @@ public class LoginDao {
 			return lista;
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		//con.close();
 		return Collections.emptyList();
