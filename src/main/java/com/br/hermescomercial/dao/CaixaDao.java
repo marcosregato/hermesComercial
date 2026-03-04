@@ -8,15 +8,17 @@ import java.util.List;
 
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Caixa;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 public class CaixaDao {
 	
 	private ConnectionBD con = null;
     private ResultSet rs = null;
-    Logger logger = Logger.getLogger(getClass().getName());
-    
+    private static final Logger logger = LogManager.getLogger(CaixaDao.class);
+
+
     public void salvar() {
     	try {
 
@@ -31,7 +33,7 @@ public class CaixaDao {
 			ps.close();
 			
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
     }
     
@@ -47,7 +49,7 @@ public class CaixaDao {
 			ps.close();
 			
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+            logger.error(e.getMessage(), e);
 		}
     }
     
@@ -64,7 +66,7 @@ public class CaixaDao {
 			ps.close();
 			
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
     }
     
@@ -87,7 +89,7 @@ public class CaixaDao {
 			return lista;
 			
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		return Collections.emptyList();
     }
@@ -115,7 +117,7 @@ public class CaixaDao {
 			return caixa;
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}*/
 
 		return Collections.emptyList();

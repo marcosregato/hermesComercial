@@ -14,7 +14,8 @@ import java.util.List;
 import com.br.hermescomercial.Repository.RepositoryCusto;
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Custo;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -25,7 +26,7 @@ public class CustoDao implements RepositoryCusto{
 	private ConnectionBD con = null;
 	private final Statement smt = null;
 	private ResultSet rs = null;
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final Logger logger = LogManager.getLogger(CustoDao.class);
 	
 	
 	@Override
@@ -42,7 +43,7 @@ public class CustoDao implements RepositoryCusto{
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -54,11 +55,10 @@ public class CustoDao implements RepositoryCusto{
 			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			ps.setString(1, nome);
 			ps.executeUpdate();
-			rs.close();
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -71,11 +71,10 @@ public class CustoDao implements RepositoryCusto{
 			//ps.setFloat(1, custo.getCustoUnitario());
 			//ps.setFloat(2, custo.getCustoTotal());
 
-			rs.close();
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -98,7 +97,7 @@ public class CustoDao implements RepositoryCusto{
 			return lista;
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		return Collections.emptyList();
 	}
@@ -127,7 +126,7 @@ public class CustoDao implements RepositoryCusto{
 			return custo;
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}*/
 		return Collections.emptyList();
 	}

@@ -10,13 +10,14 @@ import java.util.List;
 import com.br.hermescomercial.Repository.RepositoryEstoque;
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Estoque;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class EstoqueDao implements RepositoryEstoque{
 
 	private ConnectionBD con = null;
 	private ResultSet rs = null;
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final Logger logger = LogManager.getLogger(EstoqueDao.class);
 
 	@Override
 	public void salvar(Estoque estoque) {
@@ -33,7 +34,7 @@ public class EstoqueDao implements RepositoryEstoque{
 			ps.close();
 
 		} catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -47,11 +48,10 @@ public class EstoqueDao implements RepositoryEstoque{
 			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			ps.setString(1, nome);
 			ps.executeUpdate();
-			rs.close();
 			ps.close();
 
 		} catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -66,11 +66,10 @@ public class EstoqueDao implements RepositoryEstoque{
 			ps.setInt(2, estoque.getMaximo());
 			ps.setInt(3, estoque.getMinimo());
 
-			rs.close();
 			ps.close();
 
 		} catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -96,7 +95,7 @@ public class EstoqueDao implements RepositoryEstoque{
 			return lista;
 
 		} catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage(), e);
 		}
 		return Collections.emptyList();
 	}
@@ -120,10 +119,9 @@ public class EstoqueDao implements RepositoryEstoque{
 				estoque.setMinimo(rs.getInt("minimo"));
 
 				lista.add(estoque);
-            rs.close();
             ps.close();
 		} catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage(), e);
 		}
 		return lista;
 	}
@@ -132,7 +130,7 @@ public class EstoqueDao implements RepositoryEstoque{
         try {
 
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error(e.getMessage(), e);
         }
 
         return null;

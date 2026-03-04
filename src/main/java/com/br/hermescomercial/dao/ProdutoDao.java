@@ -13,7 +13,8 @@ import java.util.List;
 import com.br.hermescomercial.Repository.RepositoryProduto;
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Produto;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -25,7 +26,7 @@ public class ProdutoDao implements RepositoryProduto{
     private ConnectionBD con = null;
 	private final Statement smt = null;
 	private ResultSet rs = null;
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final Logger logger = LogManager.getLogger(ProdutoDao.class);
     
 	@Override
 	public void salvar(Produto produto) {
@@ -45,7 +46,7 @@ public class ProdutoDao implements RepositoryProduto{
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -62,7 +63,7 @@ public class ProdutoDao implements RepositoryProduto{
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -83,7 +84,7 @@ public class ProdutoDao implements RepositoryProduto{
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -109,7 +110,7 @@ public class ProdutoDao implements RepositoryProduto{
 			}
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		return listProduto;
 	}
@@ -138,7 +139,7 @@ public class ProdutoDao implements RepositoryProduto{
 			buscar.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		return lista;
 	}

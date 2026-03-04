@@ -2,26 +2,30 @@ package com.br.hermescomercial.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.br.hermescomercial.connectionDB.ConnectionBD;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.br.hermescomercial.Repository.RepositoryAlertaEstoque;
+import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.AlertaEstoque;
 
 public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 
 	private ConnectionBD con = null;
 	private ResultSet rs = null;
+	
+	  private static final Logger logger = LogManager.getLogger(AlertaEstoqueDao.class);
 
-    Logger logger = Logger.getLogger(getClass().getName());
 
 	@Override
 	public void salvar(AlertaEstoque alertaEstoque) {
 		try {
-            con  = new ConnectionBD();
+			con  = new ConnectionBD();
 			String query ="INSERT INTO fornecedor (id, nome, tipofornecedor) VALUES (NULL, ?, ?)";
 			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 
@@ -32,7 +36,7 @@ public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error("Error saving alert", e);
 		}
 
 	}
@@ -46,11 +50,10 @@ public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			ps.setString(1, nome);
 			ps.executeUpdate();
-			rs.close();
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error("Error removing alert", e);
 		}
 
 	}
@@ -65,11 +68,10 @@ public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 			//ps.setFloat(1, custo.getCustoUnitario());
 			//ps.setFloat(2, custo.getCustoTotal());
 
-			rs.close();
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error("Error updating alert", e);
 		}
 
 	}
@@ -94,9 +96,9 @@ public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 			return lista;
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error("Error listing alerts", e);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 
 	@Override
@@ -126,9 +128,9 @@ public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 
 			
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error("Error searching alert", e);
 		}
-		return null;
+		return Collections.emptyList();
 	}
 	
 	

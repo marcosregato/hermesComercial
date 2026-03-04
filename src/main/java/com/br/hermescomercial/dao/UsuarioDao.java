@@ -9,14 +9,15 @@ import java.util.List;
 import com.br.hermescomercial.Repository.RepositoryUsuario;
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Usuario;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class UsuarioDao implements RepositoryUsuario {
 
 	//private Statement smt = null;
 	private ResultSet rs = null;
     private ConnectionBD con = null;
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final Logger logger = LogManager.getLogger(UsuarioDao.class);
 
 
 	@Override
@@ -38,7 +39,7 @@ public class UsuarioDao implements RepositoryUsuario {
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 
 	}
@@ -54,11 +55,10 @@ public class UsuarioDao implements RepositoryUsuario {
 			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			ps.setString(1, nome);
 			ps.executeUpdate();
-			rs.close();
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -75,10 +75,9 @@ public class UsuarioDao implements RepositoryUsuario {
 			ps.setString(5, usuario.getEmail());
 			ps.setString(6, usuario.getTipousuario());
 
-			rs.close();
 			ps.close();
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 	}
 
@@ -112,7 +111,7 @@ public class UsuarioDao implements RepositoryUsuario {
 			ps.close();
 			return lista;
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}	
 		return Collections.emptyList();
 	}
@@ -142,7 +141,7 @@ public class UsuarioDao implements RepositoryUsuario {
 			ps.close();
 
 		} catch (Exception e) {
-			logger.info(e.getMessage());
+			logger.error(e.getMessage(), e);
 		}
 		return lista;
 	}
