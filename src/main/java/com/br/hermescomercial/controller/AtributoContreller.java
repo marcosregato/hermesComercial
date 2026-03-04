@@ -1,9 +1,14 @@
 package com.br.hermescomercial.controller;
 
+import com.br.hermescomercial.dao.AtributoDao;
+import com.br.hermescomercial.model.Atributo;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
+import org.apache.logging.log4j.LogManager;
+
+import java.util.List;
 
 
 public class AtributoContreller {
@@ -38,10 +43,40 @@ public class AtributoContreller {
     @FXML
     private Button btSalvar;
 
+    AtributoDao dao;
 
-    public void salvar(){
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(AtributoContreller.class);
+
+    public Boolean salvar(Atributo atributo){
+        try {
+            if(atributo != null){
+                dao.salvar(atributo);
+                return true;
+            }
+            return false;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Atributo> listar(){
         try {
 
+            return dao.listar();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
+        return null;
+
+    }
+
+    public void remove(String nome){
+        try {
+            dao.remove(nome);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,20 +84,9 @@ public class AtributoContreller {
         }
     }
 
-    public void listar(){
+    public void update(Atributo atributo){
         try {
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-
-    }
-
-    public void remove(){
-        try {
-
+            dao.update(atributo);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -70,19 +94,9 @@ public class AtributoContreller {
         }
     }
 
-    public void update(){
+    public void buscar(String nome){
         try {
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-    }
-
-    public void buscar(){
-        try {
-
-
+            dao.buscar(nome);
 
         } catch (Exception e) {
             e.printStackTrace();

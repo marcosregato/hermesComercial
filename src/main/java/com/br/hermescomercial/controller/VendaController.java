@@ -1,5 +1,6 @@
 package com.br.hermescomercial.controller;
 
+import com.br.hermescomercial.util.ValidarCampo;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -8,10 +9,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Usuario;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class VendaController {
 
@@ -42,7 +42,7 @@ public class VendaController {
     @FXML
     private TableView<String> tabelaVenda;
 
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(VendaController.class);
 
     public void salvar(){
 

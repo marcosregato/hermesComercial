@@ -14,8 +14,9 @@ import java.util.List;
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Atributo;
 import com.br.hermescomercial.model.Custo;
-import org.apache.log4j.Logger;
-
+import com.br.hermescomercial.util.ValidarCampo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 /**
  *
  * @author marcos
@@ -26,7 +27,7 @@ public class CustoController {
     private final Statement smt = null;
     private ResultSet rs = null;
 
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(CustoController.class);
     
     public void salvar(Custo custo){
         try {

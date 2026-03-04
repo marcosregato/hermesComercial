@@ -7,13 +7,14 @@ import java.util.Date;
 
 import com.br.hermescomercial.dao.EstoqueDao;
 import com.br.hermescomercial.util.ConvertDado;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MensagemAlertaBusiness {
 
 
 	EstoqueDao dao;
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(MensagemAlertaBusiness.class);
 
 	/**
 	 * comparar a data da estuque com a data atual

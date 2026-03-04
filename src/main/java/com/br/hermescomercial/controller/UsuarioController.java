@@ -18,7 +18,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Usuario;
 import com.br.hermescomercial.util.ValidarCampo;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 
 public class UsuarioController implements Initializable{
 	
@@ -82,7 +84,7 @@ public class UsuarioController implements Initializable{
 
 	UsuarioDao dao = new UsuarioDao();
 	ValidarCampo validarCampo = new ValidarCampo();
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(UsuarioController.class);
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {

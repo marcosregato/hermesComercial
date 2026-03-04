@@ -1,6 +1,7 @@
 package com.br.hermescomercial.util;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -11,7 +12,7 @@ import java.util.Properties;
 public class ConfigProperties {
 	
 	private String value;
-    static Logger logger = Logger.getLogger(ConfigProperties.class.getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ConfigProperties.class);
 	
 	public ConfigProperties(String valor) {
 		this.value = valor;

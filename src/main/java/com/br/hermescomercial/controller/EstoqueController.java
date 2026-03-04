@@ -1,12 +1,14 @@
 package com.br.hermescomercial.controller;
 
 import com.br.hermescomercial.dao.EstoqueDao;
+import com.br.hermescomercial.util.ValidarCampo;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Estoque;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class EstoqueController {
 
@@ -29,7 +31,7 @@ public class EstoqueController {
 
     EstoqueDao dao;
     Estoque estoque;
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(EstoqueController.class);
 
     public void salvar(){
         try {

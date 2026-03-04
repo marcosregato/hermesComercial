@@ -1,13 +1,15 @@
 package com.br.hermescomercial.util;
 
-import org.apache.log4j.Logger;
+import com.br.hermescomercial.controller.FluxoCaixaController;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ConvertDado {
 
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ConvertDado.class);
     /**
      * Converte data em String para Date
      * @return

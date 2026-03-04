@@ -9,8 +9,10 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
 
+import com.br.hermescomercial.controller.LoginController;
 import javafx.scene.control.Tooltip;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  *
@@ -22,7 +24,7 @@ public class ValidarCampo {
 	// https://lincolnminto.wordpress.com/2015/03/09/validacao-de-campos-javafx-validation-fields-javafx/
 
 	Tooltip toolTip = new Tooltip("This field is requested.");
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ValidarCampo.class);
 
 	public String campoVazio(String valorCPF){
 		if(!valorCPF.isEmpty()){

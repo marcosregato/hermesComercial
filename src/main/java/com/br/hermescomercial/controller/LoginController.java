@@ -7,7 +7,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class LoginController {
 
@@ -26,7 +27,7 @@ public class LoginController {
     Alerta alerta;
     ValidarCampo validarCampo = new ValidarCampo();
 
-    Logger logger = Logger.getLogger(getClass().getName());
+    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(LoginController.class);
     PrincipalController principalController = new PrincipalController();
     
     
@@ -46,16 +47,22 @@ public class LoginController {
     
     @FXML
     public void handleBtEntra() {
+        try{
     	String nome = validarCampo.campoVazio(txtLogin.getText());
         String senha = validarCampo.campoVazio(txtSenha.getText());
         if((nome != null) || (senha !=null)) {
         	principalController.setUsuarioLogado(nome, senha);
             //return principalController.infoUsuario();
+            //PrincipalController.S
+
 
         }else{
             alerta.showAlert(Alert.AlertType.ERROR,
             		alerta.createRegistrationFormPane().getScene().getWindow(),
                     "Form Error!", "Login ou Senha está incorreta");
+        }
+        }catch (Exception e ){
+            logger.error("Error saving alert", e);
         }
     }
     
