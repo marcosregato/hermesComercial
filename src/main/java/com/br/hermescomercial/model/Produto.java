@@ -4,8 +4,6 @@
  */
 package com.br.hermescomercial.model;
 
-import java.util.List;
-
 /**
  *
  * @author marcos

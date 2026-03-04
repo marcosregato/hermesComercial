@@ -37,7 +37,6 @@ public class HelloApplication extends Application {
 
 
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
     }

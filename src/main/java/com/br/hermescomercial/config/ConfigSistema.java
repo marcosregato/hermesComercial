@@ -3,9 +3,9 @@ package com.br.hermescomercial.config;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class ConfigDb {
+public class ConfigSistema {
 
-    private static final Logger logger = LogManager.getLogger(ConfigDb.class);
+    private static final Logger logger = LogManager.getLogger(ConfigSistema.class);
     
     public String getDataBase(){
         try {

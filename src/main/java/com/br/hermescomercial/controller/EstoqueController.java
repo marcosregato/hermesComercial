@@ -1,14 +1,12 @@
 package com.br.hermescomercial.controller;
 
 import com.br.hermescomercial.dao.EstoqueDao;
-import com.br.hermescomercial.util.ValidarCampo;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Estoque;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 public class EstoqueController {
 

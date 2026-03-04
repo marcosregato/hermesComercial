@@ -8,6 +8,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
 
+import java.util.Collections;
 import java.util.List;
 
 
@@ -70,7 +71,7 @@ public class AtributoContreller {
             e.printStackTrace();
 
         }
-        return null;
+        return Collections.emptyList();
 
     }
 

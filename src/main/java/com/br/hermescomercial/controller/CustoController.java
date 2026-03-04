@@ -14,9 +14,7 @@ import java.util.List;
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Atributo;
 import com.br.hermescomercial.model.Custo;
-import com.br.hermescomercial.util.ValidarCampo;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 /**
  *
  * @author marcos
