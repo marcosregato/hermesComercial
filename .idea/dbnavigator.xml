@@ -31,7 +31,7 @@
   <component name="DBNavigator.Project.DatabaseBrowserManager">
     <autoscroll-to-editor value="false" />
     <autoscroll-from-editor value="true" />
-    <show-object-properties value="true" />
+    <show-object-properties value="false" />
     <loaded-nodes />
   </component>
   <component name="DBNavigator.Project.DatabaseConsoleManager">
@@ -39,16 +39,14 @@
       <console name="Connection" type="STANDARD" schema="main" session="Main"><![CDATA[select * from usuario;]]></console>
     </connection>
     <connection id="f1656b60-eb0f-4517-8450-0bd32b3b9574">
-      <console name="hermescomercialdb" type="STANDARD" schema="hermescomercialdb" session="Main" />
+      <console name="hermescomercialdb" type="STANDARD" schema="hermescomercialdb" session="Main"><![CDATA[select * from usuario;]]></console>
     </connection>
   </component>
   <component name="DBNavigator.Project.DatabaseEditorStateManager">
     <last-used-providers />
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
-    <open-files>
-      <object connection-id="f1656b60-eb0f-4517-8450-0bd32b3b9574" object-ref="consoles/hermescomercialdb" />
-    </open-files>
+    <open-files />
   </component>
   <component name="DBNavigator.Project.DatabasePrerequisiteManager">
     <prerequisites />
@@ -197,7 +195,7 @@
           <description value="" />
           <database-type value="POSTGRES" />
           <config-type value="BASIC" />
-          <database-version value="9999.0" />
+          <database-version value="16.13" />
           <driver-source value="BUNDLED" />
           <driver-library value="" />
           <driver value="" />
@@ -221,7 +219,7 @@
           <azure-token-tenant-id value="" />
           <azure-token-client-id value="" />
           <azure-token-client-certificate-file value="" />
-          <session-user value="" />
+          <session-user value="postgres" />
         </database>
         <properties>
           <auto-commit value="false" />

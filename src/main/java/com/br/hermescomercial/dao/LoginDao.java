@@ -1,103 +1,49 @@
 package com.br.hermescomercial.dao;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Usuario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+
 public class LoginDao {
 
     private static final Logger logger = LogManager.getLogger(LoginDao.class);
 
+    public Usuario acessarUsuario(String login, String senha) {
+        ConnectionBD con = new ConnectionBD();
+        Usuario usuario = null;
+        
+        String query = "SELECT u.id, u.nome, u.endereco, u.bairro, u.cidade, u.estado, u.cep, u.cnpj, u.cpf, u.email, u.tipoUsuario " +
+                       "FROM login l " +
+                       "INNER JOIN usuario u ON l.fk_usuario = u.id " +
+                       "WHERE l.login = ? AND l.senha = ?";
 
-	private ConnectionBD con = null;
-	private final Statement smt = null;
-	private ResultSet rs = null;
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
+            ps.setString(1, login);
+            ps.setString(2, senha);
 
-	public List<Usuario> infoUsuario(String login, String senha){
-		try {
-			con  = new ConnectionBD();
-
-			String query ="SELECT u.nome ,u.endereco ,u.cnjp ,u.cpf ,u.email ,u.tipo  FROM login l" +
-					"inner join acesso a on l.id = a.fK_login" +
-					"inner JOIN usuario u on u.id = a.fK_usuario where l.login = ? and l.senha = ? ";
-
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-			ps.setString(1, login);
-			ps.setString(2, senha);
-			
-			List<Usuario> lista = new ArrayList<>();
-
-			rs = ps.executeQuery();
-			Usuario usuario = null;
-			if (rs.next()) {
-
-				usuario = new Usuario();
-				usuario.setNome(rs.getString("nome"));
-				usuario.setEndereco(rs.getString("endereco"));
-				usuario.setCnpj(rs.getString("cnpj"));
-				usuario.setCpf(rs.getString("cpf"));
-				usuario.setEmail(rs.getString("email"));
-				usuario.setTipousuario(rs.getString("tipo"));
-			}
-
-			lista.add(usuario);
-			rs.close();
-			ps.close();
-			return lista;
-
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-		//con.close();
-		return Collections.emptyList();
-	}
-	
-	
-	public List<Usuario> acessarUsuario(String login, String senha){
-		try {
-			con  = new ConnectionBD();
-
-			String query ="SELECT u.tipo  FROM login l" +
-					"inner join acesso a on l.id = a.fK_login" +
-					"inner JOIN usuario u on u.id = a.fK_usuario where l.login = ? and l.senha = ? ";
-
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-			ps.setString(1, login);
-			ps.setString(2, senha);
-			
-			List<Usuario> lista = new ArrayList<>();
-
-			rs = ps.executeQuery();
-			Usuario usuario = null;
-			if (rs.next()) {
-
-				usuario = new Usuario();
-				usuario.setNome(rs.getString("nome"));
-				usuario.setEndereco(rs.getString("endereco"));
-				usuario.setCnpj(rs.getString("cnpj"));
-				usuario.setCpf(rs.getString("cpf"));
-				usuario.setEmail(rs.getString("email"));
-				usuario.setTipousuario(rs.getString("tipo"));
-
-			}
-
-			lista.add(usuario);
-			rs.close();
-			ps.close();
-			return lista;
-
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-		//con.close();
-		return Collections.emptyList();
-	}
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    usuario = new Usuario();
+                    usuario.setId(rs.getLong("id"));
+                    usuario.setNome(rs.getString("nome"));
+                    usuario.setEndereco(rs.getString("endereco"));
+                    usuario.setBairro(rs.getString("bairro"));
+                    usuario.setCidade(rs.getString("cidade"));
+                    usuario.setEstado(rs.getString("estado"));
+                    usuario.setCep(rs.getString("cep"));
+                    usuario.setCnpj(rs.getString("cnpj"));
+                    usuario.setCpf(rs.getString("cpf"));
+                    usuario.setEmail(rs.getString("email"));
+                    usuario.setTipousuario(rs.getString("tipoUsuario"));
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Erro ao acessar usuário", e);
+        }
+        return usuario;
+    }
 }

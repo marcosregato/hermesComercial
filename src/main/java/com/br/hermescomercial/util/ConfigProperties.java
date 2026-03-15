@@ -1,48 +1,33 @@
 package com.br.hermescomercial.util;
 
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Collections;
 import java.util.Properties;
 
 public class ConfigProperties {
-	
-	private String value;
-    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(ConfigProperties.class);
-	
-	public ConfigProperties(String valor) {
-		this.value = valor;
-		Properties properties = null;
-        InputStream inputStream = null;
-        String path = System.getProperty("user.dir");
-        try {
-            inputStream = new FileInputStream(path + "/config.properties");
-            properties = new Properties();
+
+    private static final Logger logger = LogManager.getLogger(ConfigProperties.class);
+    private static final Properties properties = new Properties();
+
+    static {
+        String path = System.getProperty("user.dir") + "/config.properties";
+        try (InputStream inputStream = new FileInputStream(path)) {
             properties.load(inputStream);
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error("Error loading config.properties file from path: " + path, e);
         }
-        assert properties != null;
-        properties.getProperty(this.value).trim();
-	}
-	
-	public static String getProperty(String value) {
-        Properties properties = null;
-        InputStream inputStream = null;
-        String path = System.getProperty("user.dir");
-        try {
-
-            inputStream = new FileInputStream(path + "/config.properties");
-            properties = new Properties();
-            properties.load(inputStream);
-            return properties.getProperty(value).trim();
-
-        } catch (Exception e) {
-            logger.info(e.getMessage());
-        }
-        return Collections.emptyList().toString();
     }
 
+    public static String getProperty(String key) {
+        String value = properties.getProperty(key);
+        if (value != null) {
+            return value.trim();
+        } else {
+            logger.warn("Property '" + key + "' not found in config.properties");
+            return null; // Return null to indicate the property was not found
+        }
+    }
 }

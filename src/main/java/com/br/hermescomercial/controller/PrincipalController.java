@@ -1,5 +1,6 @@
 package com.br.hermescomercial.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import com.br.hermescomercial.dao.LoginDao;
@@ -26,10 +27,10 @@ public class PrincipalController {
     }
     
   
-    public List<Usuario> infoUsuario(String login, String senha){
+    public Usuario infoUsuario(String login, String senha){
        try {
-    	   List<Usuario> lista = dao.acessarUsuario(login, senha);
-		return lista;
+    	   Usuario usuario = dao.acessarUsuario(login, senha);
+		return usuario;
 	} catch (Exception e) {
 		logger.info(e.getMessage());
 	}

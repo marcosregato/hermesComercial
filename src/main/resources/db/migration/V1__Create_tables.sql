@@ -50,7 +50,6 @@ CREATE TABLE despesa (
     valor FLOAT
 );
 
--- tabela fornecedor (necessária para o FK)
 CREATE TABLE fornecedor (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome VARCHAR(100)
