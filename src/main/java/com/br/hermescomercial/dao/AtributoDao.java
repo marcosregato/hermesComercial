@@ -56,8 +56,9 @@ public class AtributoDao implements RepositoryAtributo {
             con = new ConnectionBD();
             String query = "UPDATE atributo SET nome = ? WHERE id = ?";
             PreparedStatement ps = con.getConnection("").prepareStatement(query);
-           // ps.setString(1, atributo.getNome());
-           // ps.setInt(2, atributo.getId());
+            ps.setFloat(1, atributo.getImpostoEstadual());
+            ps.setFloat(2, atributo.getImpostoMunicipal());
+            ps.setFloat(3, atributo.getImpostoFederal());
 
             ps.executeUpdate();
             ps.close();
@@ -77,9 +78,9 @@ public class AtributoDao implements RepositoryAtributo {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Atributo item = new Atributo();
-            //    item.setId(rs.getInt("id"));
-            //    item.setNome(rs.getString("nome"));
-
+                item.setImpostoEstadual(rs.getInt("nome"));
+                item.setImpostoFederal(rs.getInt("nome"));
+                item.setImpostoMunicipal(rs.getInt("nome"));
                 lista.add(item);
             }
             rs.close();
@@ -103,10 +104,11 @@ public class AtributoDao implements RepositoryAtributo {
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                Atributo atributo = new Atributo();
-              //  atributo.setId(rs.getInt("id"));
-              //  atributo.setNome(rs.getString("nome"));
-                lista.add(atributo);
+                Atributo item = new Atributo();
+                item.setImpostoEstadual(rs.getInt("nome"));
+                item.setImpostoFederal(rs.getInt("nome"));
+                item.setImpostoMunicipal(rs.getInt("nome"));
+                lista.add(item);
             }
 
             rs.close();

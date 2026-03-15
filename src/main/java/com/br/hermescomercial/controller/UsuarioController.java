@@ -19,7 +19,6 @@ import javafx.scene.control.TextField;
 import com.br.hermescomercial.model.Usuario;
 import com.br.hermescomercial.util.ValidarCampo;
 import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 
 public class UsuarioController implements Initializable{

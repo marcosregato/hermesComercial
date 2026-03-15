@@ -19,7 +19,6 @@ public class UsuarioDao implements RepositoryUsuario {
     private ConnectionBD con = null;
     private static final Logger logger = LogManager.getLogger(UsuarioDao.class);
 
-
 	@Override
 	public void salvar(Usuario usuario) {
 		try {
@@ -128,7 +127,6 @@ public class UsuarioDao implements RepositoryUsuario {
 			ps.setString(1, nome);
 
 			rs = ps.executeQuery();
-
 
 				usuario.setNome(rs.getString("nome"));
 				usuario.setEndereco(rs.getString("endereco"));

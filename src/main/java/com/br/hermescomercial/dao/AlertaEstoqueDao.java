@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.br.hermescomercial.model.Atributo;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -86,8 +87,8 @@ public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				AlertaEstoque item = new AlertaEstoque();
-				//	item.setCustoUnitario(rs.getFloat("nome"));
-				//	item.setCustoTotal(rs.getFloat("subproduto"));
+					item.setValor(rs.getString("nome"));
+					item.setTempoEstoque(rs.getString("subproduto"));
 
 				lista.add(item);
 			}
@@ -103,29 +104,24 @@ public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 	@Override
 	public List<AlertaEstoque> buscar(String nome) {
 		try {
-			  /*            String query =  "SELECT * FROM custo WHERE nome =?";
-            PreparedStatement ps = con.connection().prepareStatement(query);
+			String query =  "SELECT * FROM custo WHERE nome =?";
+            PreparedStatement ps =con.getConnection("").prepareStatement(query);
+            List<AlertaEstoque> lista = new ArrayList<>();
             ps.setString(1, nome);
 
             rs = ps.executeQuery();
-            AlertaEstoque alerta = null;
             if (rs.next()) {
-
-                alerta = new AlertaEstoque();
-
-                //custo.setCustoUnitario(rs.getFloat("custounitario"));
-                //custo.setCustoTotal(rs.getFloat("custototal"));
-
-
+                AlertaEstoque alerta =new AlertaEstoque();
+                alerta.setTempoEstoque(rs.getString(""));
+                alerta.setValor(rs.getString("valor"));
+                lista.add(alerta);
             }
 
             rs.close();
             ps.close();
-            return atributo;
+            return lista;
 
- */
 
-			
 		} catch (Exception e) {
 			logger.error("Error searching alert", e);
 		}
@@ -137,8 +133,5 @@ public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 		String dia = null;
 		return dia;
 	}
-
-
-
 
 }

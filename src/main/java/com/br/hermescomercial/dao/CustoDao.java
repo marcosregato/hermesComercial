@@ -87,11 +87,11 @@ public class CustoDao implements RepositoryCusto{
 			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			rs = ps.executeQuery();
 			while (rs.next()) {
-				Custo item = new Custo();
-				//	item.setCustoUnitario(rs.getFloat("nome"));
-				//	item.setCustoTotal(rs.getFloat("subproduto"));
+				Custo custo = new Custo();
+					//custo.setrs.getFloat("nome"));
+					//custo.setCustoTotal(rs.getFloat("subproduto"));
 
-				lista.add(item);
+				lista.add(custo);
 			}
 
 			return lista;
@@ -103,31 +103,29 @@ public class CustoDao implements RepositoryCusto{
 	}
 	@Override
 	public List<Custo> buscar(String nome) {
-		/*try {
+		try {
 
 			String query =  "SELECT * FROM custo WHERE nome =?";
-			PreparedStatement ps = con.connection("").prepareStatement(query);
+			PreparedStatement ps = con.getConnection("").prepareStatement(query);
 			ps.setString(1, nome);
-
+            List<Custo> lista = new ArrayList<>();
 			rs = ps.executeQuery();
-			Custo custo = null;
+
 			if (rs.next()) {
 
-				custo = new Custo();
-
+				Custo item = new Custo();
 				//custo.setCustoUnitario(rs.getFloat("custounitario"));
 				//custo.setCustoTotal(rs.getFloat("custototal"));
-
-
+                lista.add(item);
 			}
 
 			rs.close();
 			ps.close();
-			return custo;
+			return lista;
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-		}*/
+		}
 		return Collections.emptyList();
 	}
 

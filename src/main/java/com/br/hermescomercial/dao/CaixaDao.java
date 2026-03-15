@@ -80,9 +80,9 @@ public class CaixaDao {
 			rs = ps.executeQuery();
 			while (rs.next()) {
 				Caixa item = new Caixa();
-				//	item.setCustoUnitario(rs.getFloat("nome"));
-				//	item.setCustoTotal(rs.getFloat("subproduto"));
-
+				item.setTipo(rs.getString("nome"));
+				item.setTipo(rs.getString("subproduto"));
+                item.setValorCaixa(rs.getInt("subproduto"));
 				lista.add(item);
 			}
 
@@ -95,30 +95,30 @@ public class CaixaDao {
     }
     
     public List<Caixa> buscar() {
-    	/*try {
+    	try {
 
 			String query =  "SELECT * FROM custo WHERE nome =?";
 			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-			//ps.setString(1, nome);
-
+            List<Caixa> lista = new ArrayList<>();
 			rs = ps.executeQuery();
-			Caixa caixa = null;
+
 			if (rs.next()) {
 
-				caixa = new Caixa();
+                Caixa item = new Caixa();
 
-				//custo.setCustoUnitario(rs.getFloat("custounitario"));
-				//custo.setCustoTotal(rs.getFloat("custototal"));
+				//item.setCustoUnitario(rs.getFloat("custounitario"));
+				//item.setCustoTotal(rs.getFloat("custototal"));
+                lista.add(item);
 
 			}
 
 			rs.close();
 			ps.close();
-			return caixa;
+			return lista;
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
-		}*/
+		}
 
 		return Collections.emptyList();
     }
