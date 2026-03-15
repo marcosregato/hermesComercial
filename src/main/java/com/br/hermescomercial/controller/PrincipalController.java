@@ -1,8 +1,5 @@
 package com.br.hermescomercial.controller;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.br.hermescomercial.dao.LoginDao;
 import com.br.hermescomercial.model.Usuario;
 import org.apache.logging.log4j.LogManager;
