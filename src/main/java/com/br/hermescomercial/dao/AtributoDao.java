@@ -2,6 +2,7 @@ package com.br.hermescomercial.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -14,109 +15,84 @@ import org.apache.logging.log4j.Logger;
 
 public class AtributoDao implements RepositoryAtributo {
 
-    private ConnectionBD con = null;
-    private ResultSet rs = null;
+    private ConnectionBD con = new ConnectionBD();
     private static final Logger logger = LogManager.getLogger(AtributoDao.class);
+
+    private Atributo mapResultSetToAtributo(ResultSet rs) throws SQLException {
+        Atributo atributo = new Atributo();
+        atributo.setImpostoEstadual(rs.getFloat("imposto_estadual"));
+        atributo.setImpostoMunicipal(rs.getFloat("imposto_municipal"));
+        atributo.setImpostoFederal(rs.getFloat("imposto_federal"));
+        return atributo;
+    }
 
     @Override
     public void salvar(Atributo atributo) {
-        try {
-            con = new ConnectionBD();
-            String query = "INSERT INTO atributo (nome) VALUES (?)";
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
-
-            //ps.setString(1, atributo.getNome());
-
+        String query = "INSERT INTO atributo (imposto_estadual, imposto_municipal, imposto_federal) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+            ps.setFloat(1, atributo.getImpostoEstadual());
+            ps.setFloat(2, atributo.getImpostoMunicipal());
+            ps.setFloat(3, atributo.getImpostoFederal());
             ps.executeUpdate();
-            ps.close();
-
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao salvar pessoa: " + e.getMessage());
         }
     }
 
     @Override
     public void remove(String nome) {
-        try {
-            con = new ConnectionBD();
-            String query = "DELETE FROM atributo WHERE nome=?";
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
+        String query = "DELETE FROM atributo WHERE nome=?";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
             ps.setString(1, nome);
             ps.executeUpdate();
-            ps.close();
-
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao remove pessoa: " + e.getMessage());
         }
     }
 
     @Override
     public void update(Atributo atributo) {
-        try {
-            con = new ConnectionBD();
-            String query = "UPDATE atributo SET nome = ? WHERE id = ?";
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
+        String query = "UPDATE atributo SET imposto_estadual = ?, imposto_municipal = ?, imposto_federal = ?";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
             ps.setFloat(1, atributo.getImpostoEstadual());
             ps.setFloat(2, atributo.getImpostoMunicipal());
             ps.setFloat(3, atributo.getImpostoFederal());
-
             ps.executeUpdate();
-            ps.close();
-
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao update pessoa: " + e.getMessage());
         }
     }
 
     @Override
     public List<Atributo> listar() {
-        try {
-            con = new ConnectionBD();
-            String query = "SELECT * FROM atributo";
-            List<Atributo> lista = new ArrayList<>();
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
-            rs = ps.executeQuery();
+        String query = "SELECT * FROM atributo";
+        List<Atributo> lista = new ArrayList<>();
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Atributo item = new Atributo();
-                item.setImpostoEstadual(rs.getInt("nome"));
-                item.setImpostoFederal(rs.getInt("nome"));
-                item.setImpostoMunicipal(rs.getInt("nome"));
-                lista.add(item);
+                lista.add(mapResultSetToAtributo(rs));
             }
-            rs.close();
-            ps.close();
             return lista;
-
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao listar pessoa: " + e.getMessage());
         }
         return Collections.emptyList();
     }
 
     @Override
     public List<Atributo> buscar(String nome) {
-        try {
-            con = new ConnectionBD();
-            String query = "SELECT * FROM atributo WHERE nome LIKE ?";
-            List<Atributo> lista = new ArrayList<>();
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
+        String query = "SELECT * FROM atributo WHERE nome LIKE ?";
+        List<Atributo> lista = new ArrayList<>();
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
             ps.setString(1, "%" + nome + "%");
-
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Atributo item = new Atributo();
-                item.setImpostoEstadual(rs.getInt("nome"));
-                item.setImpostoFederal(rs.getInt("nome"));
-                item.setImpostoMunicipal(rs.getInt("nome"));
-                lista.add(item);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(mapResultSetToAtributo(rs));
+                }
             }
-
-            rs.close();
-            ps.close();
             return lista;
-
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao buscar pessoa: " + e.getMessage());
         }
         return Collections.emptyList();
     }

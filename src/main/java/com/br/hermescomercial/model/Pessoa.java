@@ -2,7 +2,8 @@ package com.br.hermescomercial.model;
 
 public class Pessoa {
 
-   private String nome;
+    private long id;
+    private String nome;
     private String endereco;
     private String bairro;
     private String cidade;
@@ -14,6 +15,14 @@ public class Pessoa {
     private String tipoPessoa;
 
     public Pessoa() {
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getNome() {
@@ -94,5 +103,9 @@ public class Pessoa {
 
     public void setTipoPessoa(String tipoPessoa) {
         this.tipoPessoa = tipoPessoa;
+    }
+
+    public void setTipoUsuario(String tipoUsuario) {
+        this.tipoPessoa = tipoUsuario;
     }
 }

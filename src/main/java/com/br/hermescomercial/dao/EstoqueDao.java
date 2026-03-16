@@ -14,124 +14,99 @@ import org.apache.logging.log4j.Logger;
 
 public class EstoqueDao implements RepositoryEstoque{
 
-	private ConnectionBD con = null;
-	private ResultSet rs = null;
+	private ConnectionBD con = new ConnectionBD();
     private static final Logger logger = LogManager.getLogger(EstoqueDao.class);
 
 	@Override
 	public void salvar(Estoque estoque) {
-		try {
-			con  = new ConnectionBD();
-			String query ="INSERT INTO estoque (quantidade, maximo,minimo) VALUES (?, ?, ?)";
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-
+        String query ="INSERT INTO estoque (quantidade, maximo, minimo) VALUES (?, ?, ?)";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
 			ps.setString(1, estoque.getQuantidade());
 			ps.setInt(2, estoque.getMaximo());
 			ps.setInt(3, estoque.getMinimo());
-
 			ps.executeUpdate();
-			ps.close();
-
 		} catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao salvar pessoa: " + e.getMessage());
 		}
-
 	}
 
 	@Override
 	public void remove(String nome) {
-		try {
-
-            con  = new ConnectionBD();
-			String query = "DELETE FROM estoque WHERE nome=?";
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-			ps.setString(1, nome);
+        String query = "DELETE e FROM estoque e INNER JOIN produto p ON p.id = e.fk_produto WHERE p.nome = ?";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+            ps.setString(1, nome);
 			ps.executeUpdate();
-			ps.close();
-
 		} catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao salvar pessoa: " + e.getMessage());
 		}
-
 	}
 
 	@Override
 	public void update(Estoque estoque) {
-		try {
-
-            con  = new ConnectionBD();
-			String query = "update estoque set quantidade = ?,maximo = ?, minimo = ?";
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
+        String query = "UPDATE estoque SET quantidade = ?, maximo = ?, minimo = ? WHERE id = ?";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+			ps.setString(1, estoque.getQuantidade());
 			ps.setInt(2, estoque.getMaximo());
 			ps.setInt(3, estoque.getMinimo());
-
-			ps.close();
-
+			ps.setLong(4, estoque.getId());
+			ps.executeUpdate();
 		} catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao salvar pessoa: " + e.getMessage());
 		}
-
 	}
 
 	@Override
 	public List<Estoque> listar() {
-		try {
-
-            con  = new ConnectionBD();
-			String query ="select * from estoqur";
-			List<Estoque> lista = new ArrayList<>();
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-			rs = ps.executeQuery();
+        String query ="SELECT * FROM estoque";
+        List<Estoque> lista = new ArrayList<>();
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
 			while (rs.next()) {
 				Estoque item = new Estoque();
 				item.setQuantidade(rs.getString("quantidade"));
 				item.setMaximo(rs.getInt("maximo"));
 				item.setMinimo(rs.getInt("minimo"));
-
 				lista.add(item);
 			}
-
 			return lista;
-
 		} catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao salvar pessoa: " + e.getMessage());
 		}
 		return Collections.emptyList();
 	}
 
 	@Override
 	public List<Estoque> buscar(String nome) {
-        con  = new ConnectionBD();
 		List<Estoque> lista = new ArrayList<>();
-		Estoque estoque = null;
-		try {
-
-			String query = "SELECT * FROM produto "
-					+ "inner join estoque e on p.id = e.fk_produto WHERE p.codigo = ?";
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
+        String query = "SELECT e.* FROM produto p "
+                + "INNER JOIN estoque e ON p.id = e.fk_produto WHERE p.codigo = ?";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
             ps.setString(1, nome);
-            rs = ps.executeQuery();
-
-				estoque = new Estoque();
-				estoque.setQuantidade(rs.getString("quantidade"));
-				estoque.setMaximo(rs.getInt("maximo"));
-				estoque.setMinimo(rs.getInt("minimo"));
-
-				lista.add(estoque);
-            ps.close();
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Estoque estoque = new Estoque();
+                    estoque.setQuantidade(rs.getString("quantidade"));
+                    estoque.setMaximo(rs.getInt("maximo"));
+                    estoque.setMinimo(rs.getInt("minimo"));
+                    lista.add(estoque);
+                }
+            }
 		} catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao salvar pessoa: " + e.getMessage());
 		}
 		return lista;
 	}
 
     public String getDataCompraEstoque() {
-        try {
-
+        String query = "SELECT data_compra FROM estoque ORDER BY data_compra DESC LIMIT 1";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            if (rs.next()) {
+                return rs.getString("data_compra");
+            }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            logger.error("Erro ao salvar pessoa: " + e.getMessage());
         }
-
         return null;
     }
 }

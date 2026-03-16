@@ -19,7 +19,9 @@ CREATE TABLE produto (
     subCategoria VARCHAR(50),
     codigo VARCHAR(50),
     marca VARCHAR(50),
-    dataCompra DATE
+    dataCompra DATE,
+    id_grupo_imposto INT,
+    FOREIGN KEY (id_grupo_imposto) REFERENCES grupo_impostos(id)
 );
 
 CREATE TABLE estoque (
@@ -41,7 +43,24 @@ CREATE TABLE login (
 
 CREATE TABLE imposto (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    valorImposto FLOAT
+    id_grupo_imposto INT,
+    origem_mercadoria FLOAT,
+    cst_icms VARCHAR,
+    csosn VARCHAR,
+    aliquota_icms FLOAT,
+    aliquota_cofins FLOAT,
+    aliquota_ipi FLOAT,
+    cfop FLOAT,
+    reducao_base FLOAT,
+    FOREIGN KEY (id_grupo_imposto) REFERENCES grupo_impostos(id)
+);
+
+CREATE TABLE grupo_impostos(
+    id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nome_grupo VARCHAR,
+    descricao VARCHAR,
+    ativo BOOLEAN,
+    data_criacao VARCHAR
 );
 
 CREATE TABLE despesa (
