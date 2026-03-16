@@ -1,4 +1,4 @@
-INSERT INTO usuario (nome, endereco, bairro, cidade, estado, cep, cnpj, cpf, email, tipoUsuario) VALUES
+INSERT INTO pessoa (nome, endereco, bairro, cidade, estado, cep, cnpj, cpf, email, tipoUsuario) VALUES
 ('João Silva', 'Rua A, 123', 'Centro', 'São Paulo', 'SP', '01000-000', NULL, '111.111.111-11', 'joao.silva@email.com', 'cliente'),
 ('Maria Santos', 'Av. B, 456', 'Jardins', 'São Paulo', 'SP', '01414-000', NULL, '222.222.222-22', 'maria.santos@email.com', 'cliente'),
 ('Pedro Oliveira', 'Rua C, 789', 'Vila Madalena', 'São Paulo', 'SP', '05445-000', NULL, '333.333.333-33', 'pedro.oliveira@email.com', 'cliente'),
@@ -10,7 +10,7 @@ INSERT INTO usuario (nome, endereco, bairro, cidade, estado, cep, cnpj, cpf, ema
 ('Funcionario 1', 'Rua I, 616', 'Centro', 'Belo Horizonte', 'MG', '30110-000', NULL, '666.666.666-66', 'func1@email.com', 'funcionario'),
 ('Funcionario 2', 'Av. J, 717', 'Savassi', 'Belo Horizonte', 'MG', '30140-000', NULL, '777.777.777-77', 'func2@email.com', 'funcionario');
 
-INSERT INTO login (fk_usuario, login, senha) VALUES
+INSERT INTO login (fk_pessoa, login, senha) VALUES
 (1, 'joao', '123'),
 (2, 'maria', '123'),
 (3, 'pedro', '123'),

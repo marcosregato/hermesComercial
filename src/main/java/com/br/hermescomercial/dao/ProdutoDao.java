@@ -6,6 +6,7 @@ package com.br.hermescomercial.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,19 +22,28 @@ import org.apache.logging.log4j.Logger;
  *
  * @author marcos
  */
-public class ProdutoDao implements RepositoryProduto{
+public class ProdutoDao implements RepositoryProduto {
 
-    private ConnectionBD con = null;
-	private final Statement smt = null;
-	private ResultSet rs = null;
+    private ConnectionBD con = new ConnectionBD();
     private static final Logger logger = LogManager.getLogger(ProdutoDao.class);
-    
+
+    private Produto mapResultSetToProduto(ResultSet rs) throws SQLException {
+        Produto produto = new Produto();
+        produto.setNome(rs.getString("nome"));
+        produto.setCategoria(rs.getString("categoria"));
+        produto.setCodigo(rs.getString("codigo"));
+        produto.setMarca(rs.getString("marca"));
+        produto.setSubCategoria(rs.getString("subCategoria"));
+        produto.setDataCompra(rs.getString("dataCompra"));
+        return produto;
+    }
+
+
 	@Override
 	public void salvar(Produto produto) {
-		try {
-            con  = new ConnectionBD();
-			String query ="INSERT INTO produto (nome, categoria, subCategoria, codigo, marca,dataCompra) VALUES (?, ?, ?, ?, ?, ?)";
-			PreparedStatement ps =  con.getConnection("").prepareStatement(query);
+        String query ="INSERT INTO produto (nome, categoria, subCategoria, codigo, marca,dataCompra) VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+
 
 			ps.setString(1, produto.getNome());
 			ps.setString(2, produto.getCategoria());
@@ -43,7 +53,6 @@ public class ProdutoDao implements RepositoryProduto{
 			ps.setString(6, produto.getDataCompra());
 
 			ps.executeUpdate();
-			ps.close();
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -53,14 +62,11 @@ public class ProdutoDao implements RepositoryProduto{
 
 	@Override
 	public void remove(String nome) {
+        String query = "DELETE FROM produto WHERE nome=?";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
 
-		try {
-            con  = new ConnectionBD();
-			String query = "DELETE FROM produto WHERE nome=?";
-			PreparedStatement ps =  con.getConnection("").prepareStatement(query);
 			ps.setString(1, nome);
 			ps.executeUpdate();
-			ps.close();
 
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
@@ -70,78 +76,51 @@ public class ProdutoDao implements RepositoryProduto{
 
 	@Override
 	public void update(Produto produto) {
-
-		try {
-            con  = new ConnectionBD();
-			String query = "update produto set nome = ?,categoria = ? ,subCategoria = ?, codigo = ?, marca =?,dataCompra =? ";
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-			ps.setString(1, produto.getNome());
-			ps.setString(2, produto.getCategoria());
-			ps.setString(3, produto.getSubCategoria());
-			ps.setString(4, produto.getCodigo());
-			ps.setString(5, produto.getMarca());
-			ps.setString(6, produto.getDataCompra());
-			ps.close();
-
+        String query = "UPDATE produto SET categoria = ?, subCategoria = ?, codigo = ?, marca = ?, dataCompra = ? WHERE nome = ?";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+			ps.setString(1, produto.getCategoria());
+			ps.setString(2, produto.getSubCategoria());
+			ps.setString(3, produto.getCodigo());
+			ps.setString(4, produto.getMarca());
+			ps.setString(5, produto.getDataCompra());
+			ps.setString(6, produto.getNome());
+			ps.executeUpdate();
 		} catch (Exception e) {
 			logger.error(e.getMessage(), e);
 		}
 	}
 
-	@Override
-	public List<Produto> listar() {
-		List<Produto> listProduto = new ArrayList<>();
-		try {
-            con  = new ConnectionBD();
-			String query ="select nome,categoria,subCategoria,codigo,marca,dataCompra from produto";
+    @Override
+    public List<Produto> buscar(String nome) {
+        String sql = "SELECT * FROM produto WHERE nome LIKE ?";
+        List<Produto> lista = new ArrayList<>();
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(sql)) {
+            ps.setString(1, "%" + nome + "%");
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Produto produto = mapResultSetToProduto(rs);
+                    lista.add(produto);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Erro ao buscar pessoa: " + e.getMessage());
+        }
+        return lista;
+    }
 
-			PreparedStatement ps =  con.getConnection("").prepareStatement(query);
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				Produto produto = new Produto();
-				produto.setNome(rs.getString("nome"));
-				produto.setCategoria(rs.getString("categoria"));
-				produto.setSubCategoria(rs.getString("subCategoria"));
-				produto.setCodigo(rs.getString("codigo"));
-				produto.setMarca(rs.getString("marca"));
-				produto.setDataCompra(rs.getString("dataCompra"));
-
-				listProduto.add(produto);
-			}
-
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-		return listProduto;
-	}
-
-	@Override
-	public List<Produto> buscar(String nome) {
-		List<Produto> lista = new ArrayList<>();
-		try {
-            con  = new ConnectionBD();
-			String query = "select nome,categoria,subCategoria,codigo,marca,dataCompra from produto where u.nome = ?";
-			PreparedStatement buscar  = con.getConnection("").prepareStatement(query);
-			buscar.setString(1, nome);
-
-			ResultSet resultadoBusca  = buscar.executeQuery();
-
-			resultadoBusca.next();
-			Produto produto = new Produto();
-			produto.setNome(resultadoBusca.getString("nome"));
-			produto.setCategoria(resultadoBusca.getString("categoria"));
-			produto.setSubCategoria(resultadoBusca.getString("subCategoria"));
-			produto.setCodigo(resultadoBusca.getString("codigo"));
-			produto.setMarca(resultadoBusca.getString("marca"));
-			produto.setDataCompra(resultadoBusca.getString("dataCompra"));
-			lista.add(produto);
-			resultadoBusca.close();
-			buscar.close();
-
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-		return lista;
-	}
+    @Override
+    public List<Produto> listar() {
+        String sql = "SELECT * FROM produto";
+        List<Produto> lista = new ArrayList<>();
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(mapResultSetToProduto(rs));
+            }
+        } catch (Exception e) {
+            logger.error("Erro ao listar produtos: " + e.getMessage());
+        }
+        return lista;
+    }
 
 }

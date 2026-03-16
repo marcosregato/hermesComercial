@@ -1,6 +1,6 @@
 package com.br.hermescomercial.controller;
 
-import com.br.hermescomercial.model.Usuario;
+import com.br.hermescomercial.model.Pessoa;
 import com.br.hermescomercial.util.Alerta;
 import com.br.hermescomercial.util.ValidarCampo;
 import javafx.fxml.FXML;
@@ -36,7 +36,7 @@ public class LoginController {
     @FXML
     public void handleBtEntra() {
 
-            Usuario usuario = principalController.infoUsuario(txtLogin.getText(), txtSenha.getText());
+            Pessoa usuario = principalController.infoUsuario(txtLogin.getText(), txtSenha.getText());
             if (usuario != null) {
                 System.out.println("Usuário logado com sucesso!");
                 try {

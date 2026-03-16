@@ -1,4 +1,4 @@
-package com.br.hermescomercial.controller;
+package com.br.hermescomercial.controller.venda;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -16,7 +16,7 @@ public class PdvController {
     @FXML
     private TableView<String> tableProduto;
 
-    public void finalizarComnpra(){
+    public void finalizarCompra(){
 
 
     }

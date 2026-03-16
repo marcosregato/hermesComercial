@@ -1,4 +1,4 @@
-CREATE TABLE usuario (
+CREATE TABLE pessoa (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome VARCHAR(50),
     endereco VARCHAR(100),
@@ -33,10 +33,10 @@ CREATE TABLE estoque (
 
 CREATE TABLE login (
     id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    fk_usuario INTEGER,
+    fk_pessoa INTEGER,
     login VARCHAR(50),
     senha VARCHAR(50),
-    FOREIGN KEY (fk_usuario) REFERENCES usuario(id)
+    FOREIGN KEY (fk_pessoa) REFERENCES usuario(id)
 );
 
 CREATE TABLE imposto (

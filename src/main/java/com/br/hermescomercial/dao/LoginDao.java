@@ -1,7 +1,7 @@
 package com.br.hermescomercial.dao;
 
 import com.br.hermescomercial.connectionDB.ConnectionBD;
-import com.br.hermescomercial.model.Usuario;
+import com.br.hermescomercial.model.Pessoa;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,13 +12,13 @@ public class LoginDao {
 
     private static final Logger logger = LogManager.getLogger(LoginDao.class);
 
-    public Usuario acessarUsuario(String login, String senha) {
+    public Pessoa acessarUsuario(String login, String senha) {
         ConnectionBD con = new ConnectionBD();
-        Usuario usuario = null;
+        Pessoa pessoa = null;
         
-        String query = "SELECT u.id, u.nome, u.endereco, u.bairro, u.cidade, u.estado, u.cep, u.cnpj, u.cpf, u.email, u.tipoUsuario " +
+        String query = "SELECT u.id, p.nome, p.endereco, p.bairro, p.cidade, p.estado, p.cep, p.cnpj, p.cpf, p.email, u.tipoUsuario " +
                        "FROM login l " +
-                       "INNER JOIN usuario u ON l.fk_usuario = u.id " +
+                       "INNER JOIN pessoa p ON l.fk_usuario = p.id " +
                        "WHERE l.login = ? AND l.senha = ?";
 
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
@@ -27,23 +27,22 @@ public class LoginDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    usuario = new Usuario();
-                    usuario.setId(rs.getLong("id"));
-                    usuario.setNome(rs.getString("nome"));
-                    usuario.setEndereco(rs.getString("endereco"));
-                    usuario.setBairro(rs.getString("bairro"));
-                    usuario.setCidade(rs.getString("cidade"));
-                    usuario.setEstado(rs.getString("estado"));
-                    usuario.setCep(rs.getString("cep"));
-                    usuario.setCnpj(rs.getString("cnpj"));
-                    usuario.setCpf(rs.getString("cpf"));
-                    usuario.setEmail(rs.getString("email"));
-                    usuario.setTipousuario(rs.getString("tipoUsuario"));
+                    pessoa = new Pessoa();
+                    pessoa.setNome(rs.getString("nome"));
+                    pessoa.setEndereco(rs.getString("endereco"));
+                    pessoa.setBairro(rs.getString("bairro"));
+                    pessoa.setCidade(rs.getString("cidade"));
+                    pessoa.setEstado(rs.getString("estado"));
+                    pessoa.setCep(rs.getString("cep"));
+                    pessoa.setCnpj(rs.getString("cnpj"));
+                    pessoa.setCpf(rs.getString("cpf"));
+                    pessoa.setEmail(rs.getString("email"));
+                    pessoa.setTipoUsuario(rs.getString("tipoUsuario"));
                 }
             }
         } catch (Exception e) {
             logger.error("Erro ao acessar usuário", e);
         }
-        return usuario;
+        return pessoa;
     }
 }
