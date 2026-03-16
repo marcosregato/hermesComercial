@@ -36,8 +36,8 @@ public class LoginController {
     @FXML
     public void handleBtEntra() {
 
-            Pessoa usuario = principalController.infoUsuario(txtLogin.getText(), txtSenha.getText());
-            if (usuario != null) {
+            Pessoa pessoa = principalController.infoPessoa(txtLogin.getText(), txtSenha.getText());
+            if (pessoa != null) {
                 System.out.println("Usuário logado com sucesso!");
                 try {
                     // Carrega o FXML da tela principal

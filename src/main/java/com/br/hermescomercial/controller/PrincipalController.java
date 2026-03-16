@@ -25,9 +25,9 @@ public class PrincipalController {
     }
     
   
-    public Pessoa infoUsuario(String login, String senha) {
+    public Pessoa infoPessoa(String login, String senha) {
         try {
-            return dao.acessarUsuario(login, senha);
+            return dao.acessarPessoa(login, senha);
         } catch (Exception e) {
             logger.error("Erro ao buscar informações do usuário: " + e.getMessage());
         }

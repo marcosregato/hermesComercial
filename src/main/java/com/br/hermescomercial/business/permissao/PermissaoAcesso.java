@@ -1,9 +1,7 @@
 package com.br.hermescomercial.business.permissao;
 
 import com.br.hermescomercial.dao.PessoaDao;
-import com.br.hermescomercial.dao.UsuarioDao;
 import com.br.hermescomercial.model.Pessoa;
-import com.br.hermescomercial.model.Usuario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

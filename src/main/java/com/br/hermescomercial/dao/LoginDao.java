@@ -13,11 +13,11 @@ public class LoginDao {
     private ConnectionBD con = new ConnectionBD();
     private static final Logger logger = LogManager.getLogger(LoginDao.class);
 
-    public Pessoa acessarUsuario(String login, String senha) {
+    public Pessoa acessarPessoa(String login, String senha) {
        
         Pessoa pessoa = null;
 
-        String query = "SELECT l.id, p.nome, p.endereco, p.bairro, p.cidade, p.estado, p.cep, p.cnpj, p.cpf, p.email, l.tipoUsuario " +
+        String query = "SELECT p.nome, p.endereco, p.bairro, p.cidade, p.estado, p.cep, p.cnpj, p.cpf, p.email, p.tipoUsuario " +
                        "FROM login l " +
                        "INNER JOIN pessoa p ON l.fk_usuario = p.id " +
                        "WHERE l.login = ? AND l.senha = ?";

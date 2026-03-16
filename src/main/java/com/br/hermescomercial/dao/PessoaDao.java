@@ -31,7 +31,7 @@ public class PessoaDao {
 
     public void salvar(Pessoa pessoa) {
         String sql = "INSERT INTO pessoa (nome, endereco, bairro, city, estado, cep, cnpj, cpf, email, tipoPessoa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(sql)) {
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql)) {
             ps.setString(1, pessoa.getNome());
             ps.setString(2, pessoa.getEndereco());
             ps.setString(3, pessoa.getBairro());

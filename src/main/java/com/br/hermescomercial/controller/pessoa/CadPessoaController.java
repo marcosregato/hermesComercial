@@ -140,8 +140,8 @@ public class CadPessoaController implements Initializable {
                     comboEstado.setValue(p.getEstado());
                     txtCep.setText(p.getCep());
                     txtEmail.setText(p.getEmail());
-                    comboTipo.setValue(p.getTipoUsuario());
-                    txtCnpjCpf.setText("Fornecedor".equals(p.getTipoUsuario()) ? p.getCnpj() : p.getCpf());
+                    comboTipo.setValue(p.getTipoPessoa());
+                    txtCnpjCpf.setText("Fornecedor".equals(p.getTipoPessoa()) ? p.getCnpj() : p.getCpf());
                 }
             }
         } catch (Exception e) {
