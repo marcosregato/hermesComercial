@@ -14,7 +14,6 @@ import org.apache.logging.log4j.Logger;
 
 public class UsuarioDao implements RepositoryUsuario {
 
-	//private Statement smt = null;
 	private ResultSet rs = null;
     private ConnectionBD con = null;
     private static final Logger logger = LogManager.getLogger(UsuarioDao.class);
