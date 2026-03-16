@@ -19,7 +19,7 @@ public class LoginDao {
 
         String query = "SELECT p.nome, p.endereco, p.bairro, p.cidade, p.estado, p.cep, p.cnpj, p.cpf, p.email, p.tipoUsuario " +
                        "FROM login l " +
-                       "INNER JOIN pessoa p ON l.fk_usuario = p.id " +
+                       "INNER JOIN pessoa p ON l.fk_pessoa = p.id " +
                        "WHERE l.login = ? AND l.senha = ?";
 
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {

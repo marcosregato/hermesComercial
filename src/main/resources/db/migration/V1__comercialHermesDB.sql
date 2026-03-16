@@ -38,7 +38,7 @@ CREATE TABLE login (
     fk_pessoa INTEGER,
     login VARCHAR(50),
     senha VARCHAR(50),
-    FOREIGN KEY (fk_pessoa) REFERENCES usuario(id)
+    FOREIGN KEY (fk_pessoa) REFERENCES pessoa(id)
 );
 
 CREATE TABLE imposto (
