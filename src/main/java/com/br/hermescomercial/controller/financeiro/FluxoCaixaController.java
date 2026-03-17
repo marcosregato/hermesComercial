@@ -1,4 +1,4 @@
-package com.br.hermescomercial.controller;
+package com.br.hermescomercial.controller.financeiro;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;

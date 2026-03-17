@@ -1,8 +1,7 @@
 package com.br.hermescomercial.controller;
 
-import java.util.List;
-
 import com.br.hermescomercial.dao.LoginDao;
+import com.br.hermescomercial.model.Pessoa;
 import com.br.hermescomercial.model.Usuario;
 import org.apache.logging.log4j.LogManager;
 
@@ -26,13 +25,12 @@ public class PrincipalController {
     }
     
   
-    public List<Usuario> infoUsuario(String login, String senha){
-       try {
-    	   List<Usuario> lista = dao.acessarUsuario(login, senha);
-		return lista;
-	} catch (Exception e) {
-		logger.info(e.getMessage());
-	}
-       return null;
+    public Pessoa infoPessoa(String login, String senha) {
+        try {
+            return dao.acessarPessoa(login, senha);
+        } catch (Exception e) {
+            logger.error("Erro ao buscar informações do usuário: " + e.getMessage());
+        }
+        return null;
     }
 }

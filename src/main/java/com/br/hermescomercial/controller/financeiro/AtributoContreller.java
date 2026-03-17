@@ -1,4 +1,4 @@
-package com.br.hermescomercial.controller;
+package com.br.hermescomercial.controller.financeiro;
 
 import com.br.hermescomercial.dao.AtributoDao;
 import com.br.hermescomercial.model.Atributo;

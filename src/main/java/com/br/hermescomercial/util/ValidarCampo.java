@@ -35,20 +35,21 @@ public class ValidarCampo {
 	}
 
 	public String campoData(String valor){
+		if (valor == null || valor.isEmpty()) {
+			return null;
+		}
 		try {
-			if((valor.isEmpty()) && (valor.length() > 0)){
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-				LocalDate data = LocalDate.parse(valor, formatter);    
-				return String.valueOf(data);
-			}
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			LocalDate data = LocalDate.parse(valor, formatter);
+			return String.valueOf(data);
 		} catch (DateTimeParseException e) {
-
-		} 
-		return null;
+			return null;
+		}
 	}
 
 	// https://www.devmedia.com.br/validando-o-cnpj-em-uma-aplicacao-java/22374
-	public static boolean isCNPJ(String CNPJ) {
+	public boolean isCNPJ(String CNPJ) {
+		CNPJ = removeCaracteresEspeciais(CNPJ);
 		if (CNPJ.equals("00000000000000") || CNPJ.equals("11111111111111") ||
 				CNPJ.equals("22222222222222") || CNPJ.equals("33333333333333") ||
 				CNPJ.equals("44444444444444") || CNPJ.equals("55555555555555") ||

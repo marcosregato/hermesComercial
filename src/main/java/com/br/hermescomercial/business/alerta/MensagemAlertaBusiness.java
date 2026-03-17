@@ -1,48 +1,53 @@
 package com.br.hermescomercial.business.alerta;
 
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
-import java.util.Date;
 
 import com.br.hermescomercial.dao.EstoqueDao;
-import com.br.hermescomercial.util.ConvertDado;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 public class MensagemAlertaBusiness {
 
-
-	EstoqueDao dao;
-    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(MensagemAlertaBusiness.class);
+	private EstoqueDao dao = new EstoqueDao();
+    private static final Logger logger = LogManager.getLogger(MensagemAlertaBusiness.class);
 
 	/**
-	 * comparar a data da estuque com a data atual
+	 * comparar a data da estoque com a data atual
 	 * 
+	 * @param data A data limite ou de comparação
+	 * @return A data da compra se o produto for considerado encalhado
 	 * */
 	public String produtoEncalhado(String data) {
 
 		try {
-			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			
+			LocalDate dataAtual = LocalDate.now();
+			String dataCompraStr = dao.getDataCompraEstoque();
+			
+			if (dataCompraStr == null) {
+				return null;
+			}
 
-			String date = simpleDateFormat.format(new Date());
-			Date dataAtual = simpleDateFormat.parse(date);
+			LocalDate dataDoBanco = LocalDate.parse(dataCompraStr, formatter);
+			LocalDate dataLimite = LocalDate.parse(data, formatter);
 
-			Date dataDoBanco = simpleDateFormat.parse(dao.getDataCompraEstoque());
-
-            ConvertDado convertDado = new ConvertDado();
-            if(dataDoBanco.after(convertDado.convertData(data))){
-                return dao.getDataCompraEstoque();
+            if(dataDoBanco.isBefore(dataLimite)){
+                return dataCompraStr;
             }
 
-			long days = ChronoUnit.DAYS.between((Temporal) dataDoBanco, (Temporal) dataAtual);
+			long days = ChronoUnit.DAYS.between(dataDoBanco, dataAtual);
+			
+			if (days > 30) { // Exemplo de regra para considerar encalhado
+				return dataCompraStr;
+			}
 
 		} catch (Exception e) {
-            logger.info(e.getMessage());
+            logger.error("Erro ao processar alerta de produto encalhado: " + e.getMessage(), e);
 		}
         return null;
-
-
 	}
 
 }

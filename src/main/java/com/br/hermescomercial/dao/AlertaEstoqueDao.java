@@ -2,6 +2,7 @@ package com.br.hermescomercial.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,130 +16,87 @@ import com.br.hermescomercial.model.AlertaEstoque;
 
 public class AlertaEstoqueDao implements RepositoryAlertaEstoque{
 
-	private ConnectionBD con = null;
-	private ResultSet rs = null;
-	
-	  private static final Logger logger = LogManager.getLogger(AlertaEstoqueDao.class);
+    private ConnectionBD con = new ConnectionBD();
+    private static final Logger logger = LogManager.getLogger(AlertaEstoqueDao.class);
 
+    private AlertaEstoque mapResultSetToAlertaEstoque(ResultSet rs) throws SQLException {
+        AlertaEstoque alertaEstoque = new AlertaEstoque();
+        alertaEstoque.setTempoEstoque(rs.getString("tempo_estoque"));
+        alertaEstoque.setValor(rs.getString("valor"));
+        return alertaEstoque;
+    }
 
-	@Override
-	public void salvar(AlertaEstoque alertaEstoque) {
-		try {
-			con  = new ConnectionBD();
-			String query ="INSERT INTO fornecedor (id, nome, tipofornecedor) VALUES (NULL, ?, ?)";
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
+    @Override
+    public void salvar(AlertaEstoque alertaEstoque) {
+        String query = "INSERT INTO alerta_estoque (tempo_estoque, valor) VALUES (?, ?)";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+            ps.setString(1, alertaEstoque.getTempoEstoque());
+            ps.setString(2, alertaEstoque.getValor());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            logger.error("Erro ao salvar alerta de estoque: " + e.getMessage());
+        }
+    }
 
-			//ps.setString(1, fornecedor.getNome());
-			//ps.setString(2, fornecedor.getTipoFornecedor());
-
-			ps.executeUpdate();
-			ps.close();
-
-		} catch (Exception e) {
-			logger.error("Error saving alert", e);
-		}
-
-	}
-
-	@Override
-	public void remove(String nome) {
-		try {
-
-			con  = new ConnectionBD();
-			String query = "DELETE FROM custo WHERE nome=?";
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-			ps.setString(1, nome);
-			ps.executeUpdate();
-			ps.close();
-
-		} catch (Exception e) {
-			logger.error("Error removing alert", e);
-		}
-
-	}
-
-	@Override
-	public void update(AlertaEstoque alertaEstoque) {
-		try {
-
-			con  = new ConnectionBD();
-			String query = "update custo set custounitario = ?,custototal = ?";
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-			//ps.setFloat(1, custo.getCustoUnitario());
-			//ps.setFloat(2, custo.getCustoTotal());
-
-			ps.close();
-
-		} catch (Exception e) {
-			logger.error("Error updating alert", e);
-		}
-
-	}
-
-	@Override
-	public List<AlertaEstoque> listar() {
-		try {
-
-			con  = new ConnectionBD();
-			String query ="select * from fornecedor";
-			List<AlertaEstoque> lista = new ArrayList<>();
-			PreparedStatement ps = con.getConnection("").prepareStatement(query);
-			rs = ps.executeQuery();
-			while (rs.next()) {
-				AlertaEstoque item = new AlertaEstoque();
-				//	item.setCustoUnitario(rs.getFloat("nome"));
-				//	item.setCustoTotal(rs.getFloat("subproduto"));
-
-				lista.add(item);
-			}
-
-			return lista;
-
-		} catch (Exception e) {
-			logger.error("Error listing alerts", e);
-		}
-		return Collections.emptyList();
-	}
-
-	@Override
-	public List<AlertaEstoque> buscar(String nome) {
-		try {
-			  /*            String query =  "SELECT * FROM custo WHERE nome =?";
-            PreparedStatement ps = con.connection().prepareStatement(query);
+    @Override
+    public void remove(String nome) {
+        String query = "DELETE FROM alerta_estoque WHERE tempo_estoque=?";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
             ps.setString(1, nome);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            logger.error("Erro ao remover alerta de estoque: " + e.getMessage());
+        }
+    }
 
-            rs = ps.executeQuery();
-            AlertaEstoque alerta = null;
-            if (rs.next()) {
+    @Override
+    public void update(AlertaEstoque alertaEstoque) {
+        String query = "UPDATE alerta_estoque SET tempo_estoque = ?, valor = ? WHERE id = ?";
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+            ps.setString(1, alertaEstoque.getTempoEstoque());
+            ps.setString(2, alertaEstoque.getValor());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            logger.error("Erro ao atualizar alerta de estoque: " + e.getMessage());
+        }
+    }
 
-                alerta = new AlertaEstoque();
-
-                //custo.setCustoUnitario(rs.getFloat("custounitario"));
-                //custo.setCustoTotal(rs.getFloat("custototal"));
-
-
+    @Override
+    public List<AlertaEstoque> listar() {
+        String query = "SELECT * FROM alerta_estoque";
+        List<AlertaEstoque> lista = new ArrayList<>();
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                lista.add(mapResultSetToAlertaEstoque(rs));
             }
+            return lista;
+        } catch (Exception e) {
+            logger.error("Erro ao listar alertas de estoque: " + e.getMessage());
+        }
+        return Collections.emptyList();
+    }
 
-            rs.close();
-            ps.close();
-            return atributo;
-
- */
-
-			
-		} catch (Exception e) {
-			logger.error("Error searching alert", e);
-		}
-		return Collections.emptyList();
-	}
-	
-	
-	public String getValidadeEstoque() {
-		String dia = null;
-		return dia;
-	}
-
-
-
-
+    @Override
+    public List<AlertaEstoque> buscar(String nome) {
+        String query = "SELECT * FROM alerta_estoque WHERE tempo_estoque = ?";
+        List<AlertaEstoque> lista = new ArrayList<>();
+        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+            ps.setString(1, nome);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    lista.add(mapResultSetToAlertaEstoque(rs));
+                }
+            }
+            return lista;
+        } catch (Exception e) {
+            logger.error("Erro ao buscar alerta de estoque: " + e.getMessage());
+        }
+        return Collections.emptyList();
+    }
+    
+    public String getValidadeEstoque() {
+        String dia = null;
+        return dia;
+    }
 }

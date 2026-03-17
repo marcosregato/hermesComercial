@@ -8,49 +8,29 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.Paths;
 
 public class HelloApplication extends Application {
 
-    static Stage stage;
-    static Scene telaLogin;
-    static Scene telarootPrincipal;
-
     @Override
     public void start(Stage primaryStage) throws IOException {
-
         try {
-            stage = primaryStage;
-            // String pathFileLogin = "view/login.fxml";
+            // Carrega a tela de login como a cena inicial
+            URL fxmlUrl = getClass().getResource("/view/login.fxml");
+            if (fxmlUrl == null) {
+                System.err.println("Não foi possível encontrar o arquivo FXML: /view/login.fxml");
+                return;
+            }
+            Parent root = FXMLLoader.load(fxmlUrl);
+            Scene scene = new Scene(root);
 
-            URL pathFileLogin = Paths.get("src/main/resources/view/login.fxml").toUri().toURL();
-            Parent rootLogin = FXMLLoader.load(pathFileLogin);
-          telaLogin = new Scene(rootLogin);
-  //          stage.setScene(telaLogin);
+            primaryStage.setTitle("Hermes Comercial - Login");
+            primaryStage.setScene(scene);
+            primaryStage.show();
 
-
-            URL pathFileLayoutPrincipal = Paths.get("src/main/resources/view/Layout_principal.fxml").toUri().toURL();
-            Parent rootPrincipal = FXMLLoader.load(pathFileLayoutPrincipal);
-            telarootPrincipal = new Scene(rootPrincipal);
-//            stage.setScene(telarootPrincipal);
- //           stage.show();
-
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public static void chamaStage(String tela){
-        switch (tela){
-            case "main":
-                stage.setScene(telaLogin);
-                break;
-            case "telaPrincipal":
-                stage.setScene(telarootPrincipal);
-//                break;
-            }
-        }
 
     public static void main(String[] args) {
         launch(args);
