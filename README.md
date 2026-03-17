@@ -2,10 +2,29 @@
 
 Este é um sistema de gestão comercial construído com JavaFX e Maven. Ele usa um banco de dados PostgreSQL e Flyway para migrações de banco de dados.
 
+## Versionamento
+
+Este projeto usa o [Versionamento Semântico](https://semver.org/lang/pt-BR/). A versão é gerenciada no arquivo `pom.xml` e pode ser atualizada usando o plugin `build-helper-maven-plugin`.
+
+Para atualizar a versão do projeto, você pode usar os seguintes comandos Maven:
+
+*   Para atualizar a versão de patch (ex: de 1.0.0 para 1.0.1):
+    ```sh
+    mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.minorVersion}.\${parsedVersion.nextIncrementalVersion}
+    ```
+*   Para atualizar a versão menor (ex: de 1.0.1 para 1.1.0):
+    ```sh
+    mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.majorVersion}.\${parsedVersion.nextMinorVersion}.0
+    ```
+*   Para atualizar a versão principal (ex: de 1.1.0 para 2.0.0):
+    ```sh
+    mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.nextMajorVersion}.0.0
+    ```
+
 ## Tecnologias Utilizadas
 
-*   Java 11
-*   JavaFX
+*   Java 17
+*   JavaFX 17.0.2
 *   Maven
 *   PostgreSQL
 *   Flyway

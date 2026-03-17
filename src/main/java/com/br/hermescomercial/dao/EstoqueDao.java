@@ -2,6 +2,7 @@ package com.br.hermescomercial.dao;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,41 +18,51 @@ public class EstoqueDao implements RepositoryEstoque{
 	private ConnectionBD con = new ConnectionBD();
     private static final Logger logger = LogManager.getLogger(EstoqueDao.class);
 
+
+    private Estoque mapResultSetToEstoque(ResultSet rs) throws SQLException {
+        Estoque estoque = new Estoque();
+        estoque.setId(rs.getLong("id"));
+        estoque.setQuantidade(rs.getString("quantidade"));
+        estoque.setMaximo(rs.getInt("maximo"));
+        estoque.setMinimo(rs.getInt("minimo"));
+        return estoque;
+    }
+
 	@Override
 	public void salvar(Estoque estoque) {
         String query ="INSERT INTO estoque (quantidade, maximo, minimo) VALUES (?, ?, ?)";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
 			ps.setString(1, estoque.getQuantidade());
 			ps.setInt(2, estoque.getMaximo());
 			ps.setInt(3, estoque.getMinimo());
 			ps.executeUpdate();
 		} catch (Exception e) {
-            logger.error("Erro ao salvar pessoa: " + e.getMessage());
+            logger.error("Erro ao salvar estoque: " + e.getMessage());
 		}
 	}
 
 	@Override
 	public void remove(String nome) {
-        String query = "DELETE e FROM estoque e INNER JOIN produto p ON p.id = e.fk_produto WHERE p.nome = ?";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+        String query = "DELETE FROM estoque WHERE id IN (SELECT e.id FROM estoque e INNER JOIN produto p ON p.id = e.fk_produto WHERE p.nome = ?)";
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
             ps.setString(1, nome);
 			ps.executeUpdate();
 		} catch (Exception e) {
-            logger.error("Erro ao salvar pessoa: " + e.getMessage());
+            logger.error("Erro ao remover estoque: " + e.getMessage());
 		}
 	}
 
 	@Override
 	public void update(Estoque estoque) {
         String query = "UPDATE estoque SET quantidade = ?, maximo = ?, minimo = ? WHERE id = ?";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
 			ps.setString(1, estoque.getQuantidade());
 			ps.setInt(2, estoque.getMaximo());
 			ps.setInt(3, estoque.getMinimo());
 			ps.setLong(4, estoque.getId());
 			ps.executeUpdate();
 		} catch (Exception e) {
-            logger.error("Erro ao salvar pessoa: " + e.getMessage());
+            logger.error("Erro ao atualizar estoque: " + e.getMessage());
 		}
 	}
 
@@ -59,18 +70,14 @@ public class EstoqueDao implements RepositoryEstoque{
 	public List<Estoque> listar() {
         String query ="SELECT * FROM estoque";
         List<Estoque> lista = new ArrayList<>();
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(query);
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
 			while (rs.next()) {
-				Estoque item = new Estoque();
-				item.setQuantidade(rs.getString("quantidade"));
-				item.setMaximo(rs.getInt("maximo"));
-				item.setMinimo(rs.getInt("minimo"));
-				lista.add(item);
+				lista.add(mapResultSetToEstoque(rs));
 			}
 			return lista;
 		} catch (Exception e) {
-            logger.error("Erro ao salvar pessoa: " + e.getMessage());
+            logger.error("Erro ao listar estoque: " + e.getMessage());
 		}
 		return Collections.emptyList();
 	}
@@ -80,32 +87,29 @@ public class EstoqueDao implements RepositoryEstoque{
 		List<Estoque> lista = new ArrayList<>();
         String query = "SELECT e.* FROM produto p "
                 + "INNER JOIN estoque e ON p.id = e.fk_produto WHERE p.codigo = ?";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
             ps.setString(1, nome);
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    Estoque estoque = new Estoque();
-                    estoque.setQuantidade(rs.getString("quantidade"));
-                    estoque.setMaximo(rs.getInt("maximo"));
-                    estoque.setMinimo(rs.getInt("minimo"));
-                    lista.add(estoque);
+                    lista.add(mapResultSetToEstoque(rs));
                 }
             }
+            return lista;
 		} catch (Exception e) {
-            logger.error("Erro ao salvar pessoa: " + e.getMessage());
+            logger.error("Erro ao buscar estoque: " + e.getMessage());
 		}
 		return lista;
 	}
 
     public String getDataCompraEstoque() {
         String query = "SELECT data_compra FROM estoque ORDER BY data_compra DESC LIMIT 1";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(query);
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
             if (rs.next()) {
                 return rs.getString("data_compra");
             }
         } catch (Exception e) {
-            logger.error("Erro ao salvar pessoa: " + e.getMessage());
+            logger.error("Erro ao obter data de compra do estoque: " + e.getMessage());
         }
         return null;
     }

@@ -29,15 +29,16 @@ public class DespesaController {
     Despesa despesa;
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(DespesaController.class);
 
-    public void salvar( ){
+    public void salvar(){
         try {
-        	despesa = new Despesa();
-        	
-        	
+            despesa = new Despesa();
+            despesa.setNome(txtNome.getText());
+            despesa.setValor(Float.parseFloat(txtValor.getText()));
+            //despesa.setData(txtData.getText());
+
             dao.salvar(despesa);
         } catch (Exception e) {
-           logger.info(e.getMessage());
-
+            logger.error("Erro ao salvar Despesa Controller: " + e.getMessage());
         }
     }
 
@@ -45,16 +46,19 @@ public class DespesaController {
         try {
             dao.remove(txtNome.getText());
         } catch (Exception e) {
-           logger.info(e.getMessage());
+            logger.error("Erro ao remove Despesa Controller: " + e.getMessage());
 
         }
     }
 
     public void update(Despesa despesa ){
         try {
-            dao.update(despesa);
+            if(despesa !=null ){
+                dao.update(despesa);
+            }
+           
         } catch (Exception e) {
-           logger.info(e.getMessage());
+            logger.error("Erro ao update Despesa Controller: " + e.getMessage());
 
         }
     }
@@ -63,7 +67,7 @@ public class DespesaController {
         try {
             dao.buscar(nome);
         } catch (Exception e) {
-           logger.info(e.getMessage());
+            logger.error("Erro ao buscar Despesa Controller: " + e.getMessage());
 
         }
     }
@@ -74,7 +78,7 @@ public class DespesaController {
             dao.listar();
 
         } catch (Exception e) {
-           logger.info(e.getMessage());
+            logger.error("Erro ao lista Despesa Controller: " + e.getMessage());
 
         }
     }
