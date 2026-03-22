@@ -1,5 +1,7 @@
 # Hermes Comercial
 
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+
 Este é um sistema de gestão comercial construído com JavaFX e Maven. Ele usa um banco de dados PostgreSQL e Flyway para migrações de banco de dados.
 
 ## Versionamento
@@ -19,6 +21,23 @@ Para atualizar a versão do projeto, você pode usar os seguintes comandos Maven
 *   Para atualizar a versão principal (ex: de 1.1.0 para 2.0.0):
     ```sh
     mvn build-helper:parse-version versions:set -DnewVersion=\${parsedVersion.nextMajorVersion}.0.0
+    ```
+
+### Atualização Automática do README
+
+Para manter a versão exibida no `README.md` sincronizada com o `pom.xml`, utilize o script `update_readme_version.sh`.
+
+Este script lê a versão atual do `pom.xml` e atualiza o badge de versão no topo deste arquivo.
+
+**Como usar:**
+
+1.  Dê permissão de execução (apenas na primeira vez):
+    ```sh
+    chmod +x update_readme_version.sh
+    ```
+2.  Após alterar a versão com o Maven, execute:
+    ```sh
+    ./update_readme_version.sh
     ```
 
 ## Tecnologias Utilizadas
