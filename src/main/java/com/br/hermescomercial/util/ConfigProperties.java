@@ -13,11 +13,25 @@ public class ConfigProperties {
     private static final Properties properties = new Properties();
 
     static {
-        String path = System.getProperty("user.dir") + "/config.properties";
+        // Tenta carregar do diretório do usuário (onde o jar roda) ou do classpath (para desenvolvimento)
+        String userDir = System.getProperty("user.dir");
+        String path = userDir + "/config.properties";
+        
         try (InputStream inputStream = new FileInputStream(path)) {
             properties.load(inputStream);
+            logger.info("Arquivo config.properties carregado de: " + path);
         } catch (Exception e) {
-            logger.error("Error loading config.properties file from path: " + path, e);
+            logger.warn("Não foi possível carregar config.properties de " + path + ". Tentando carregar do classpath...");
+            try (InputStream cpStream = ConfigProperties.class.getClassLoader().getResourceAsStream("config.properties")) {
+                if (cpStream != null) {
+                    properties.load(cpStream);
+                    logger.info("Arquivo config.properties carregado do classpath.");
+                } else {
+                    logger.error("Arquivo config.properties não encontrado em lugar nenhum!");
+                }
+            } catch (Exception ex) {
+                logger.error("Erro fatal ao carregar configurações", ex);
+            }
         }
     }
 
@@ -26,8 +40,8 @@ public class ConfigProperties {
         if (value != null) {
             return value.trim();
         } else {
-            logger.warn("Property '" + key + "' not found in config.properties");
-            return null; // Return null to indicate the property was not found
+            logger.error("Propriedade '" + key + "' não encontrada no arquivo de configuração.");
+            return null;
         }
     }
 }

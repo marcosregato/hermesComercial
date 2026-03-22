@@ -9,8 +9,9 @@ public class Usuario {
     private String cidade;
     private String estado;
     private String cep;
-    private String cnpj;
-    private String cpf;
+    private String telefone;
+    private String numeroDocumeto;
+    private String whastsapp;
     private String tipoDocumento;
     private String email;
     private String tipoUsuario;
@@ -74,20 +75,20 @@ public class Usuario {
         this.cep = cep;
     }
 
-    public String getCnpj() {
-        return cnpj;
+    public String getNumeroDocumeto() {
+        return numeroDocumeto;
     }
 
-    public void setCnpj(String cnpj) {
-        this.cnpj = cnpj;
+    public void setNumeroDocumeto(String numeroDocumeto) {
+        this.numeroDocumeto = numeroDocumeto;
     }
 
-    public String getCpf() {
-        return cpf;
+    public String getWhastsapp() {
+        return whastsapp;
     }
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
+    public void setWhastsapp(String whastsapp) {
+        this.whastsapp = whastsapp;
     }
 
     public String getTipoDocumento() {
@@ -112,5 +113,13 @@ public class Usuario {
 
     public void setTipousuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
     }
 }

@@ -1,6 +1,5 @@
 package com.br.hermescomercial.controller;
 
-import com.br.hermescomercial.model.Pessoa;
 import com.br.hermescomercial.model.Usuario;
 import com.br.hermescomercial.util.Alerta;
 import com.br.hermescomercial.util.ValidarCampo;

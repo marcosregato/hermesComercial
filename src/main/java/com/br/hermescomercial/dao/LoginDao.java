@@ -18,7 +18,7 @@ public class LoginDao {
        
         Usuario usuario = null;
 
-        String query = "SELECT u.id, u.nome, u.endereco, u.bairro, u.cidade, u.estado, u.cep, u.cnpj, u.cpf, u.email, u.TIPOUSUARIO, u.TIPODOCUMENTO " +
+        String query = "SELECT u.id, u.nome, u.endereco, u.bairro, u.cidade, u.estado, u.cep, u.TELEFONE, u.WHATSAPP, u.email, u.TIPOUSUARIO, u.TIPODOCUMENTO, u.NUMERODOCUMENTO " +
                        "FROM login l " +
                        "INNER JOIN usuario u ON l.fk_usuario = u.id " +
                        "WHERE l.login = ? AND l.senha = ?";
@@ -37,11 +37,12 @@ public class LoginDao {
                     usuario.setCidade(rs.getString("cidade"));
                     usuario.setEstado(rs.getString("estado"));
                     usuario.setCep(rs.getString("cep"));
-                    usuario.setCnpj(rs.getString("cnpj"));
-                    usuario.setCpf(rs.getString("cpf"));
+                    usuario.setTelefone(rs.getString("TELEFONE"));
+                    usuario.setWhastsapp(rs.getString("WHATSAPP"));
                     usuario.setEmail(rs.getString("email"));
                     usuario.setTipousuario(rs.getString("TIPOUSUARIO"));
                     usuario.setTipoDocumento(rs.getString("TIPODOCUMENTO"));
+                    usuario.setNumeroDocumeto(rs.getString("NUMERODOCUMENTO"));
                 }
             }
         } catch (Exception e) {
@@ -51,19 +52,20 @@ public class LoginDao {
     }
     
     public void salvar(Usuario usuario) {
-        String query = "INSERT INTO usuario (nome, endereco, bairro, cidade, estado, cep, cnpj, cpf, email, TIPOUSUARIO, TIPODOCUMENTO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO usuario (nome, endereco, bairro, cidade, estado, cep, telefone, whatsapp, email, TIPOUSUARIO, TIPODOCUMENTO, NUMERODOCUMENTO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getEndereco());
             ps.setString(3, usuario.getBairro());
             ps.setString(4, usuario.getCidade());
-            ps.setString(5,usuario.getEstado());
-            ps.setString(6,usuario.getCep());
-            ps.setString(7,usuario.getCnpj());
-            ps.setString(8,usuario.getCpf());
-            ps.setString(9,usuario.getEmail());
-            ps.setString(10,usuario.getTipousuario());
-            ps.setString(11,usuario.getTipoDocumento());
+            ps.setString(5, usuario.getEstado());
+            ps.setString(6, usuario.getCep());
+            ps.setString(7, usuario.getTelefone());
+            ps.setString(8, usuario.getWhastsapp());
+            ps.setString(9, usuario.getEmail());
+            ps.setString(10, usuario.getTipousuario());
+            ps.setString(11, usuario.getTipoDocumento());
+            ps.setString(12, usuario.getNumeroDocumeto());
             ps.executeUpdate();
         } catch (Exception e) { 
             logger.error("Erro ao salvar usuario: " + e.getMessage());
@@ -71,10 +73,10 @@ public class LoginDao {
         }
     }
     
-    public void remove(String nome){
-        String query = "DELETE FROM usuario WHERE nome=?";
+    public void remove(String numeroDocumento){
+        String query = "DELETE FROM usuario WHERE NUMERODOCUMENTO =?";
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
-            ps.setString(1, nome);
+            ps.setString(1, numeroDocumento);
             ps.executeUpdate();
         } catch (Exception e) {
             logger.error("Erro ao remover usuario: " + e.getMessage());
@@ -83,7 +85,7 @@ public class LoginDao {
     }
     
     public void update(Usuario usuario){
-        String query = "UPDATE usuario SET nome = ?, endereco = ?, bairro = ?, cidade = ?, estado = ?, cep = ?, cnpj = ?, cpf = ?, email = ?, TIPOUSUARIO = ?, TIPODOCUMENTO = ? WHERE id = ?";
+        String query = "UPDATE usuario SET nome = ?, endereco = ?, bairro = ?, cidade = ?, estado = ?, cep = ?, TELEFONE = ?, WHATSAPP = ?, email = ?, TIPOUSUARIO = ?, TIPODOCUMENTO = ?, NUMERODOCUMENTO = ? WHERE NUMERODOCUMENTO = ?";
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getEndereco());
@@ -91,12 +93,14 @@ public class LoginDao {
             ps.setString(4, usuario.getCidade());
             ps.setString(5, usuario.getEstado());
             ps.setString(6, usuario.getCep());
-            ps.setString(7, usuario.getCnpj());
-            ps.setString(8, usuario.getCpf());
+            ps.setString(7, usuario.getTelefone());
+            ps.setString(8, usuario.getWhastsapp());
             ps.setString(9, usuario.getEmail());
             ps.setString(10, usuario.getTipousuario());
             ps.setString(11, usuario.getTipoDocumento());
-            ps.setLong(12, usuario.getId());
+            ps.setString(12, usuario.getNumeroDocumeto());
+            ps.setString(13, usuario.getNumeroDocumeto());
+            
             ps.executeUpdate();
         } catch (Exception e) {
             logger.error("Erro ao atualizar usuario: " + e.getMessage());
@@ -118,11 +122,12 @@ public class LoginDao {
                 usuario.setCidade(rs.getString("cidade"));
                 usuario.setEstado(rs.getString("estado"));
                 usuario.setCep(rs.getString("cep"));
-                usuario.setCnpj(rs.getString("cnpj"));
-                usuario.setCpf(rs.getString("cpf"));
+                usuario.setTelefone(rs.getString("TELEFONE"));
+                usuario.setWhastsapp(rs.getString("WHATSAPP"));
                 usuario.setEmail(rs.getString("email"));
                 usuario.setTipousuario(rs.getString("TIPOUSUARIO"));
                 usuario.setTipoDocumento(rs.getString("TIPODOCUMENTO"));
+                usuario.setNumeroDocumeto(rs.getString("NUMERODOCUMENTO"));
                 lista.add(usuario);
             }
         } catch (Exception e) {

@@ -2,6 +2,7 @@ package com.br.hermescomercial.controller.usuario;
 
 import com.br.hermescomercial.dao.UsuarioDao;
 import com.br.hermescomercial.model.Usuario;
+import com.br.hermescomercial.util.ValidarCampo;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -15,9 +16,9 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CadUsuarioController implements Initializable {
+public class UsuarioController implements Initializable {
 
-    private static final Logger logger = LogManager.getLogger(CadUsuarioController.class);
+    private static final Logger logger = LogManager.getLogger(UsuarioController.class);
 
     @FXML
     private TextField txtNome;
@@ -37,14 +38,24 @@ public class CadUsuarioController implements Initializable {
     @FXML
     private TextField txtCep;
 
+
     @FXML
-    private TextField txtCnpjCpf;
+    private ComboBox<String> comboTipoDocumento;
+
+    @FXML
+    private TextField txtNumeroDocumento;
 
     @FXML
     private TextField txtEmail;
 
     @FXML
-    private ComboBox<String> comboTipo;
+    private TextField txtTelefone;
+
+    @FXML
+    private TextField txtWhatsapp;
+
+    @FXML
+    private ComboBox<String> comboTipoUsuario;
 
     @FXML
     private Button btSalvar;
@@ -60,13 +71,18 @@ public class CadUsuarioController implements Initializable {
 
     private UsuarioDao dao = new UsuarioDao();
 
+    private ValidarCampo validarCampo = new ValidarCampo();
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (comboEstado != null) {
             comboEstado.setItems(FXCollections.observableArrayList("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"));
         }
-        if (comboTipo != null) {
-            comboTipo.setItems(FXCollections.observableArrayList("Usuario", "Fornecedor", "Cliente", "Funcionário"));
+        if (comboTipoUsuario != null) {
+            comboTipoUsuario.setItems(FXCollections.observableArrayList("Usuario", "Fornecedor", "Cliente", "Funcionário"));
+        }
+        if (comboTipoDocumento != null) {
+            comboTipoDocumento.setItems(FXCollections.observableArrayList("CPF", "CNPJ"));
         }
     }
 
@@ -78,16 +94,19 @@ public class CadUsuarioController implements Initializable {
             usuario.setBairro(txtBairro.getText());
             usuario.setCidade(txtCidade.getText());
             usuario.setEstado(comboEstado.getValue());
+            usuario.setWhastsapp(txtWhatsapp.getText());
+            usuario.setTelefone(txtTelefone.getText());
+            usuario.setTipoDocumento(comboTipoDocumento.getValue());
+            usuario.setNumeroDocumetn(txtNumeroDocumento.getText());
             usuario.setCep(txtCep.getText());
             usuario.setEmail(txtEmail.getText());
-            usuario.setTipousuario(comboTipo.getValue());
+            usuario.setTipousuario(comboTipoUsuario.getValue());
 
-            if ("Fornecedor".equals(comboTipo.getValue())) {
-                usuario.setTipoDocumento("CNPJ");
-                usuario.setCnpj(txtCnpjCpf.getText());
+            if ("Fornecedor".equals(comboTipoUsuario.getValue()) && "CNPJ".equals(comboTipoDocumento.getValue())) {
+                validarCampo.isCNPJ(txtNumeroDocumento.getText());
+
             } else {
-                usuario.setTipoDocumento("CPF");
-                usuario.setCpf(txtCnpjCpf.getText());
+                validarCampo.isCPF(txtNumeroDocumento.getText());
             }
 
             dao.salvar(usuario);
@@ -114,16 +133,19 @@ public class CadUsuarioController implements Initializable {
             usuario.setBairro(txtBairro.getText());
             usuario.setCidade(txtCidade.getText());
             usuario.setEstado(comboEstado.getValue());
+            usuario.setWhastsapp(txtWhatsapp.getText());
+            usuario.setTelefone(txtTelefone.getText());
+            usuario.setTipoDocumento(comboTipoDocumento.getValue());
+            usuario.setNumeroDocumetn(txtNumeroDocumento.getText());
             usuario.setCep(txtCep.getText());
             usuario.setEmail(txtEmail.getText());
-            usuario.setTipousuario(comboTipo.getValue());
+            usuario.setTipousuario(comboTipoUsuario.getValue());
 
-            if ("Fornecedor".equals(comboTipo.getValue())) {
-                usuario.setTipoDocumento("CNPJ");
-                usuario.setCnpj(txtCnpjCpf.getText());
+            if ("Fornecedor".equals(comboTipoUsuario.getValue()) && "CNPJ".equals(comboTipoDocumento.getValue())) {
+                validarCampo.isCNPJ(txtNumeroDocumento.getText());
+
             } else {
-                usuario.setTipoDocumento("CPF");
-                usuario.setCpf(txtCnpjCpf.getText());
+                validarCampo.isCPF(txtNumeroDocumento.getText());
             }
 
             dao.update(usuario);
@@ -143,10 +165,14 @@ public class CadUsuarioController implements Initializable {
                     txtBairro.setText(p.getBairro());
                     txtCidade.setText(p.getCidade());
                     comboEstado.setValue(p.getEstado());
+                    txtWhatsapp.setText(p.getWhastsapp());
+                    txtTelefone.setText(p.getTelefone());
+                    comboTipoDocumento.setValue(p.getTipoDocumento());
+                    txtNumeroDocumento.setText(p.getNumeroDocumetn());
                     txtCep.setText(p.getCep());
+
                     txtEmail.setText(p.getEmail());
-                    comboTipo.setValue(p.getTipousuario());
-                    txtCnpjCpf.setText("Fornecedor".equals(p.getTipousuario()) ? p.getCnpj() : p.getCpf());
+                    comboTipoUsuario.setValue(p.getTipousuario());
                 }
             }
         } catch (Exception e) {
