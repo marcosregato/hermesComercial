@@ -24,7 +24,7 @@ public class UsuarioDao {
         usuario.setEstado(rs.getString("estado"));
         usuario.setCep(rs.getString("cep"));
         usuario.setTipoDocumento(rs.getString("tipoDocumento"));
-        usuario.setNumeroDocumetn(rs.getString("numeroDocumento"));
+        usuario.setNumeroDocumeto(rs.getString("numeroDocumento"));
         usuario.setWhastsapp(rs.getString("whatsapp"));
         usuario.setTelefone(rs.getString("telefone"));
         usuario.setEmail(rs.getString("email"));
@@ -42,7 +42,7 @@ public class UsuarioDao {
             ps.setString(5, usuario.getEstado());
             ps.setString(6, usuario.getCep());
             ps.setString(7, usuario.getTipoDocumento());
-            ps.setString(8, usuario.getNumeroDocumetn());
+            ps.setString(8, usuario.getNumeroDocumeto());
             ps.setString(9, usuario.getWhastsapp());
             ps.setString(10, usuario.getTelefone());
             ps.setString(11, usuario.getEmail());
@@ -62,7 +62,7 @@ public class UsuarioDao {
             ps.setString(4, usuario.getEstado());
             ps.setString(5, usuario.getCep());
             ps.setString(6, usuario.getTipoDocumento());
-            ps.setString(7, usuario.getNumeroDocumetn());
+            ps.setString(7, usuario.getNumeroDocumeto());
             ps.setString(8, usuario.getWhastsapp());
             ps.setString(9, usuario.getTelefone());
             ps.setString(10, usuario.getEmail());
