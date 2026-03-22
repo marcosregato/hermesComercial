@@ -11,6 +11,7 @@ public class Pessoa {
     private String cep;
     private String cnpj;
     private String cpf;
+    private String tipoDocumento;
     private String email;
     private String tipoPessoa;
 
@@ -89,6 +90,14 @@ public class Pessoa {
         this.cpf = cpf;
     }
 
+    public String getTipoDocumento() {
+        return tipoDocumento;
+    }
+
+    public void setTipoDocumento(String tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -105,7 +114,5 @@ public class Pessoa {
         this.tipoPessoa = tipoPessoa;
     }
 
-    public void setTipoUsuario(String tipoUsuario) {
-        this.tipoPessoa = tipoUsuario;
-    }
+
 }

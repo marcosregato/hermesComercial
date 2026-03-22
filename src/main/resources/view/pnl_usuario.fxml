@@ -39,7 +39,7 @@
       </Pane>
       <Pane layoutX="14.0" layoutY="367.0" prefHeight="427.0" prefWidth="1207.0" style="-fx-border-color: #ADFF2F; -fx-border-radius: 10;">
          <children>
-            <TableView fx:id="tabelaUsuario" layoutX="10.0" layoutY="82.0" prefHeight="334.0" prefWidth="1187.0">
+            <TableView fx:id="tabelaPessoa" layoutX="10.0" layoutY="82.0" prefHeight="334.0" prefWidth="1187.0">
               <columns>
                 <TableColumn prefWidth="75.0" text="C1" />
                 <TableColumn prefWidth="75.0" text="C2" />
@@ -47,8 +47,8 @@
             </TableView>
             <Text layoutX="27.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nome :" />
             <TextField fx:id="txtPesqNome" layoutX="81.0" layoutY="29.0" prefHeight="24.0" prefWidth="498.0" />
-            <ComboBox fx:id="comboTipoUsuario" layoutX="715.0" layoutY="30.0" prefHeight="24.0" prefWidth="184.0" />
-            <Text layoutX="593.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de Usuário :" />
+            <ComboBox fx:id="comboTipoPessoa" layoutX="715.0" layoutY="30.0" prefHeight="24.0" prefWidth="184.0" />
+            <Text layoutX="593.0" layoutY="46.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tipo de Pessoa :" />
             <Button fx:id="btPesquisar" layoutX="929.0" layoutY="30.0" mnemonicParsing="false" text="PESQUISAR" />
          </children>
       </Pane>

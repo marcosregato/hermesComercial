@@ -13,7 +13,7 @@ import java.util.List;
 
 import com.br.hermescomercial.connectionDB.ConnectionBD;
 import com.br.hermescomercial.model.Atributo;
-import com.br.hermescomercial.model.Custo;
+import com.br.hermescomercial.model.Venda;
 import org.apache.logging.log4j.LogManager;
 /**
  *
@@ -27,7 +27,7 @@ public class CustoController {
 
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(CustoController.class);
     
-    public void salvar(Custo custo){
+    public void salvar(Venda custo){
         try {
 
             con  = new ConnectionBD();
@@ -91,7 +91,7 @@ public class CustoController {
         }
     }
     
-    public void update(Custo custo){
+    public void update(Venda custo){
         try {
 
             con  = new ConnectionBD();
@@ -110,7 +110,7 @@ public class CustoController {
         }
     }
     
-    public List<Custo> buscar(String nome){
+    public List<Venda> buscar(String nome){
         try {
 
             /*            String query =  "SELECT * FROM custo WHERE nome =?";

@@ -2,18 +2,18 @@ package com.br.hermescomercial.Repository;
 
 import java.util.List;
 
-import com.br.hermescomercial.model.Custo;
+import com.br.hermescomercial.model.Venda;
 
 public interface RepositoryCusto {
 	
-	void salvar(Custo custo);
+	void salvar(Venda custo);
 
 	void remove(String nome);
 
-	void update(Custo custo);
+	void update(Venda custo);
 
-	List<Custo> listar();
+	List<Venda> listar();
 
-	List<Custo> buscar(String nome);
+	List<Venda> buscar(String nome);
 
 }

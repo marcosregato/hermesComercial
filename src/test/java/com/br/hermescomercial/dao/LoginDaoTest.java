@@ -5,12 +5,12 @@ import org.junit.jupiter.api.Test;
 class LoginDaoTest {
 
     @Test
-    void testInfoUsuario() {
+    void testInfoPessoa() {
         // TODO: Implement test
     }
 
     @Test
-    void testAcessarUsuario() {
+    void testAcessarPessoa() {
         // TODO: Implement test
     }
 }

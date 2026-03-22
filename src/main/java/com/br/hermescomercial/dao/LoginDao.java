@@ -1,7 +1,7 @@
 package com.br.hermescomercial.dao;
 
 import com.br.hermescomercial.connectionDB.ConnectionBD;
-import com.br.hermescomercial.model.Pessoa;
+import com.br.hermescomercial.model.Usuario;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,23 +14,13 @@ public class LoginDao {
     private ConnectionBD con = new ConnectionBD();
     private static final Logger logger = LogManager.getLogger(LoginDao.class);
 
-
-//    private Estoque mapResultSetToLogin(ResultSet rs) throws SQLException {
-//        Login login = new Login();
-//        login.setId(rs.getLong("id"));
-//        login.setQuantidade(rs.getString("quantidade"));
-//        login.setMaximo(rs.getInt("maximo"));
-//        login.setMinimo(rs.getInt("minimo"));
-//        return login;
-//    }
-
-    public Pessoa acessarPessoa(String login, String senha) {
+    public Usuario acessarUsuario(String login, String senha) {
        
-        Pessoa pessoa = null;
+        Usuario usuario = null;
 
-        String query = "SELECT p.id, p.nome, p.endereco, p.bairro, p.cidade, p.estado, p.cep, p.cnpj, p.cpf, p.email, p.tipoUsuario " +
+        String query = "SELECT u.id, u.nome, u.endereco, u.bairro, u.cidade, u.estado, u.cep, u.cnpj, u.cpf, u.email, u.TIPOUSUARIO, u.TIPODOCUMENTO " +
                        "FROM login l " +
-                       "INNER JOIN pessoa p ON l.fk_pessoa = p.id " +
+                       "INNER JOIN usuario u ON l.fk_usuario = u.id " +
                        "WHERE l.login = ? AND l.senha = ?";
 
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
@@ -39,100 +29,104 @@ public class LoginDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    pessoa = new Pessoa();
-                    pessoa.setId(rs.getLong("id"));
-                    pessoa.setNome(rs.getString("nome"));
-                    pessoa.setEndereco(rs.getString("endereco"));
-                    pessoa.setBairro(rs.getString("bairro"));
-                    pessoa.setCidade(rs.getString("cidade"));
-                    pessoa.setEstado(rs.getString("estado"));
-                    pessoa.setCep(rs.getString("cep"));
-                    pessoa.setCnpj(rs.getString("cnpj"));
-                    pessoa.setCpf(rs.getString("cpf"));
-                    pessoa.setEmail(rs.getString("email"));
-                    pessoa.setTipoUsuario(rs.getString("tipoUsuario"));
+                    usuario = new Usuario();
+                    usuario.setId(rs.getLong("id"));
+                    usuario.setNome(rs.getString("nome"));
+                    usuario.setEndereco(rs.getString("endereco"));
+                    usuario.setBairro(rs.getString("bairro"));
+                    usuario.setCidade(rs.getString("cidade"));
+                    usuario.setEstado(rs.getString("estado"));
+                    usuario.setCep(rs.getString("cep"));
+                    usuario.setCnpj(rs.getString("cnpj"));
+                    usuario.setCpf(rs.getString("cpf"));
+                    usuario.setEmail(rs.getString("email"));
+                    usuario.setTipousuario(rs.getString("TIPOUSUARIO"));
+                    usuario.setTipoDocumento(rs.getString("TIPODOCUMENTO"));
                 }
             }
         } catch (Exception e) {
-            logger.error("Erro ao acessar usuário", e);
+            logger.error("Erro ao acessar usuario", e);
         }
-        return pessoa;
+        return usuario;
     }
     
-    public void salvar(Pessoa pessoa) {
-        String query = "INSERT INTO pessoa (nome, endereco, bairro, cidade, estado, cep, cnpj, cpf, email, tipousuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void salvar(Usuario usuario) {
+        String query = "INSERT INTO usuario (nome, endereco, bairro, cidade, estado, cep, cnpj, cpf, email, TIPOUSUARIO, TIPODOCUMENTO) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
-            ps.setString(1, pessoa.getNome());
-            ps.setString(2, pessoa.getEndereco());
-            ps.setString(3, pessoa.getBairro());
-            ps.setString(4, pessoa.getCidade());
-            ps.setString(5,pessoa.getEstado());
-            ps.setString(6,pessoa.getCep());
-            ps.setString(7,pessoa.getCnpj());
-            ps.setString(8,pessoa.getCpf());
-            ps.setString(9,pessoa.getEmail());
-            ps.setString(10,pessoa.getTipoPessoa());
+            ps.setString(1, usuario.getNome());
+            ps.setString(2, usuario.getEndereco());
+            ps.setString(3, usuario.getBairro());
+            ps.setString(4, usuario.getCidade());
+            ps.setString(5,usuario.getEstado());
+            ps.setString(6,usuario.getCep());
+            ps.setString(7,usuario.getCnpj());
+            ps.setString(8,usuario.getCpf());
+            ps.setString(9,usuario.getEmail());
+            ps.setString(10,usuario.getTipousuario());
+            ps.setString(11,usuario.getTipoDocumento());
             ps.executeUpdate();
         } catch (Exception e) { 
-            logger.error("Erro ao salvar pessoa: " + e.getMessage());
+            logger.error("Erro ao salvar usuario: " + e.getMessage());
 
         }
     }
     
     public void remove(String nome){
-        String query = "DELETE FROM pessoa WHERE nome=?";
+        String query = "DELETE FROM usuario WHERE nome=?";
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
             ps.setString(1, nome);
             ps.executeUpdate();
         } catch (Exception e) {
-            logger.error("Erro ao remover pessoa: " + e.getMessage());
+            logger.error("Erro ao remover usuario: " + e.getMessage());
 
         }
     }
     
-    public void update(Pessoa pessoa){
-        String query = "UPDATE pessoa SET nome = ?, endereco = ?, bairro = ?, cidade = ?, estado = ?, cep = ?, cnpj = ?, cpf = ?, email = ?, tipousuario = ? WHERE id = ?";
+    public void update(Usuario usuario){
+        String query = "UPDATE usuario SET nome = ?, endereco = ?, bairro = ?, cidade = ?, estado = ?, cep = ?, cnpj = ?, cpf = ?, email = ?, TIPOUSUARIO = ?, TIPODOCUMENTO = ? WHERE id = ?";
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
-            ps.setString(1, pessoa.getNome());
-            ps.setString(2, pessoa.getEndereco());
-            ps.setString(3, pessoa.getBairro());
-            ps.setString(4, pessoa.getCidade());
-            ps.setString(5, pessoa.getEstado());
-            ps.setString(6, pessoa.getCep());
-            ps.setString(7, pessoa.getCnpj());
-            ps.setString(8, pessoa.getCpf());
-            ps.setString(9, pessoa.getEmail());
-            ps.setString(10, pessoa.getTipoPessoa());
-            ps.setLong(11, pessoa.getId());
+            ps.setString(1, usuario.getNome());
+            ps.setString(2, usuario.getEndereco());
+            ps.setString(3, usuario.getBairro());
+            ps.setString(4, usuario.getCidade());
+            ps.setString(5, usuario.getEstado());
+            ps.setString(6, usuario.getCep());
+            ps.setString(7, usuario.getCnpj());
+            ps.setString(8, usuario.getCpf());
+            ps.setString(9, usuario.getEmail());
+            ps.setString(10, usuario.getTipousuario());
+            ps.setString(11, usuario.getTipoDocumento());
+            ps.setLong(12, usuario.getId());
             ps.executeUpdate();
         } catch (Exception e) {
-            logger.error("Erro ao atualizar pessoa: " + e.getMessage());
+            logger.error("Erro ao atualizar usuario: " + e.getMessage());
 
         }
     }
     
-    public List<Pessoa> listar(){
-        String query = "SELECT * FROM pessoa";
-        List<Pessoa> lista = new java.util.ArrayList<>();
+    public List<Usuario> listar(){
+        String query = "SELECT * FROM usuario";
+        List<Usuario> lista = new java.util.ArrayList<>();
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Pessoa pessoa = new Pessoa();
-                pessoa.setId(rs.getLong("id"));
-                pessoa.setNome(rs.getString("nome"));
-                pessoa.setEndereco(rs.getString("endereco"));
-                pessoa.setBairro(rs.getString("bairro"));
-                pessoa.setCidade(rs.getString("cidade"));
-                pessoa.setEstado(rs.getString("estado"));
-                pessoa.setCep(rs.getString("cep"));
-                pessoa.setCnpj(rs.getString("cnpj"));
-                pessoa.setCpf(rs.getString("cpf"));
-                pessoa.setEmail(rs.getString("email"));
-                pessoa.setTipoUsuario(rs.getString("tipousuario"));
-                lista.add(pessoa);
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getLong("id"));
+                usuario.setNome(rs.getString("nome"));
+                usuario.setEndereco(rs.getString("endereco"));
+                usuario.setBairro(rs.getString("bairro"));
+                usuario.setCidade(rs.getString("cidade"));
+                usuario.setEstado(rs.getString("estado"));
+                usuario.setCep(rs.getString("cep"));
+                usuario.setCnpj(rs.getString("cnpj"));
+                usuario.setCpf(rs.getString("cpf"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setTipousuario(rs.getString("TIPOUSUARIO"));
+                usuario.setTipoDocumento(rs.getString("TIPODOCUMENTO"));
+                lista.add(usuario);
             }
         } catch (Exception e) {
-            logger.error("Erro ao listar pessoa: " + e.getMessage());
+            logger.error("Erro ao listar usuario: " + e.getMessage());
         }
         return lista;
     }

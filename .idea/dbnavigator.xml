@@ -11,16 +11,25 @@
   </component>
   <component name="DBNavigator.Project.DatabaseAssistantManager">
     <assistants>
-      <assistant-state connection-id="7c48ab59-efc8-4954-bd30-b28b8e52a814" assistant-type="PUBLIC" default-profile-name="" selected-chat-id="" availability="AVAILABLE" acknowledgement="NONE" selected="true">
+      <assistant-state connection-id="7c48ab59-efc8-4954-bd30-b28b8e52a814" assistant-type="SELECT_AI" default-profile-name="" selected-chat-id="" availability="UNAVAILABLE" acknowledgement="NONE">
         <tools />
       </assistant-state>
-      <assistant-state connection-id="7c48ab59-efc8-4954-bd30-b28b8e52a814" assistant-type="SELECT_AI" default-profile-name="" selected-chat-id="" availability="UNAVAILABLE" acknowledgement="NONE">
+      <assistant-state connection-id="7c48ab59-efc8-4954-bd30-b28b8e52a814" assistant-type="PUBLIC" default-profile-name="" selected-chat-id="2C3A5A8786284F17A04381F078032989" availability="AVAILABLE" acknowledgement="ENGAGED" selected="true">
+        <chats>
+          <chat id="2C3A5A8786284F17A04381F078032989" title="" session-signature="" timestamp="1773873266590">
+            <messages />
+            <context provider="" profile="" model="" action="" interactive="true" />
+          </chat>
+        </chats>
+        <tools />
+      </assistant-state>
+      <assistant-state connection-id="f1656b60-eb0f-4517-8450-0bd32b3b9574" assistant-type="SELECT_AI" default-profile-name="" selected-chat-id="" availability="UNAVAILABLE" acknowledgement="NONE">
         <tools />
       </assistant-state>
       <assistant-state connection-id="f1656b60-eb0f-4517-8450-0bd32b3b9574" assistant-type="PUBLIC" default-profile-name="" selected-chat-id="" availability="AVAILABLE" acknowledgement="NONE" selected="true">
         <tools />
       </assistant-state>
-      <assistant-state connection-id="f1656b60-eb0f-4517-8450-0bd32b3b9574" assistant-type="SELECT_AI" default-profile-name="" selected-chat-id="" availability="UNAVAILABLE" acknowledgement="NONE">
+      <assistant-state connection-id="virtual-postgres-connection" assistant-type="SELECT_AI" default-profile-name="" selected-chat-id="" availability="UNAVAILABLE" acknowledgement="NONE" selected="true">
         <tools />
       </assistant-state>
     </assistants>

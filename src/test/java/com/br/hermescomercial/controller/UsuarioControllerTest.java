@@ -3,7 +3,7 @@ package com.br.hermescomercial.controller;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class UsuarioControllerTest {
+class PessoaControllerTest {
 
     @Test
     void initialize() {
@@ -11,27 +11,27 @@ class UsuarioControllerTest {
     }
 
     @Test
-    void salvarUsuario() {
+    void salvarPessoa() {
         // TODO: Implement test
     }
 
     @Test
-    void deletarUsuario() {
+    void deletarPessoa() {
         // TODO: Implement test
     }
 
     @Test
-    void alterarUsuario() {
+    void alterarPessoa() {
         // TODO: Implement test
     }
 
     @Test
-    void listarUsuario() {
+    void listarPessoa() {
         // TODO: Implement test
     }
 
     @Test
-    void buscarUsuario() {
+    void buscarPessoa() {
         // TODO: Implement test
     }
 }

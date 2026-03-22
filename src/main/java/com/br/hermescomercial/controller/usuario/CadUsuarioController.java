@@ -1,7 +1,7 @@
-package com.br.hermescomercial.controller.pessoa;
+package com.br.hermescomercial.controller.usuario;
 
-import com.br.hermescomercial.dao.PessoaDao;
-import com.br.hermescomercial.model.Pessoa;
+import com.br.hermescomercial.dao.UsuarioDao;
+import com.br.hermescomercial.model.Usuario;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -9,14 +9,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.List;
+import java.util.ResourceBundle;
 
-public class CadPessoaController implements Initializable {
+public class CadUsuarioController implements Initializable {
 
-    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(CadPessoaController.class);
+    private static final Logger logger = LogManager.getLogger(CadUsuarioController.class);
 
     @FXML
     private TextField txtNome;
@@ -57,7 +58,7 @@ public class CadPessoaController implements Initializable {
     @FXML
     private TextField PesNome;
 
-    private PessoaDao dao = new PessoaDao();
+    private UsuarioDao dao = new UsuarioDao();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -65,31 +66,31 @@ public class CadPessoaController implements Initializable {
             comboEstado.setItems(FXCollections.observableArrayList("AC", "AL", "AP", "AM", "BA", "CE", "DF", "ES", "GO", "MA", "MT", "MS", "MG", "PA", "PB", "PR", "PE", "PI", "RJ", "RN", "RS", "RO", "RR", "SC", "SP", "SE", "TO"));
         }
         if (comboTipo != null) {
-            comboTipo.setItems(FXCollections.observableArrayList("Pessoa", "Fornecedor", "Cliente", "Funcionário"));
+            comboTipo.setItems(FXCollections.observableArrayList("Usuario", "Fornecedor", "Cliente", "Funcionário"));
         }
     }
 
     public void salvar() {
         try {
-            Pessoa pessoa = new Pessoa();
-            pessoa.setNome(txtNome.getText());
-            pessoa.setEndereco(txtEndereco.getText());
-            pessoa.setBairro(txtBairro.getText());
-            pessoa.setCidade(txtCidade.getText());
-            pessoa.setEstado(comboEstado.getValue());
-            pessoa.setCep(txtCep.getText());
-            pessoa.setEmail(txtEmail.getText());
-            pessoa.setTipoPessoa(comboTipo.getValue());
+            Usuario usuario = new Usuario();
+            usuario.setNome(txtNome.getText());
+            usuario.setEndereco(txtEndereco.getText());
+            usuario.setBairro(txtBairro.getText());
+            usuario.setCidade(txtCidade.getText());
+            usuario.setEstado(comboEstado.getValue());
+            usuario.setCep(txtCep.getText());
+            usuario.setEmail(txtEmail.getText());
+            usuario.setTipousuario(comboTipo.getValue());
 
             if ("Fornecedor".equals(comboTipo.getValue())) {
-                pessoa.setTipoDocumento("CNPJ");
-                pessoa.setCnpj(txtCnpjCpf.getText());
+                usuario.setTipoDocumento("CNPJ");
+                usuario.setCnpj(txtCnpjCpf.getText());
             } else {
-                pessoa.setTipoDocumento("CPF");
-                pessoa.setCpf(txtCnpjCpf.getText());
+                usuario.setTipoDocumento("CPF");
+                usuario.setCpf(txtCnpjCpf.getText());
             }
 
-            dao.salvar(pessoa);
+            dao.salvar(usuario);
         } catch (Exception e) {
             logger.error("Erro ao salvar: " + e.getMessage());
         }
@@ -107,25 +108,25 @@ public class CadPessoaController implements Initializable {
 
     public void update() {
         try {
-            Pessoa pessoa = new Pessoa();
-            pessoa.setNome(txtNome.getText());
-            pessoa.setEndereco(txtEndereco.getText());
-            pessoa.setBairro(txtBairro.getText());
-            pessoa.setCidade(txtCidade.getText());
-            pessoa.setEstado(comboEstado.getValue());
-            pessoa.setCep(txtCep.getText());
-            pessoa.setEmail(txtEmail.getText());
-            pessoa.setTipoPessoa(comboTipo.getValue());
+            Usuario usuario = new Usuario();
+            usuario.setNome(txtNome.getText());
+            usuario.setEndereco(txtEndereco.getText());
+            usuario.setBairro(txtBairro.getText());
+            usuario.setCidade(txtCidade.getText());
+            usuario.setEstado(comboEstado.getValue());
+            usuario.setCep(txtCep.getText());
+            usuario.setEmail(txtEmail.getText());
+            usuario.setTipousuario(comboTipo.getValue());
 
             if ("Fornecedor".equals(comboTipo.getValue())) {
-                pessoa.setTipoDocumento("CNPJ");
-                pessoa.setCnpj(txtCnpjCpf.getText());
+                usuario.setTipoDocumento("CNPJ");
+                usuario.setCnpj(txtCnpjCpf.getText());
             } else {
-                pessoa.setTipoDocumento("CPF");
-                pessoa.setCpf(txtCnpjCpf.getText());
+                usuario.setTipoDocumento("CPF");
+                usuario.setCpf(txtCnpjCpf.getText());
             }
 
-            dao.update(pessoa);
+            dao.update(usuario);
         } catch (Exception e) {
             logger.error("Erro ao atualizar: " + e.getMessage());
         }
@@ -134,9 +135,9 @@ public class CadPessoaController implements Initializable {
     public void buscar() {
         try {
             if (PesNome != null && !PesNome.getText().isEmpty()) {
-                List<Pessoa> resultados = dao.buscar(PesNome.getText());
+                List<Usuario> resultados = dao.buscar(PesNome.getText());
                 if (!resultados.isEmpty()) {
-                    Pessoa p = resultados.get(0);
+                    Usuario p = resultados.get(0);
                     txtNome.setText(p.getNome());
                     txtEndereco.setText(p.getEndereco());
                     txtBairro.setText(p.getBairro());
@@ -144,23 +145,23 @@ public class CadPessoaController implements Initializable {
                     comboEstado.setValue(p.getEstado());
                     txtCep.setText(p.getCep());
                     txtEmail.setText(p.getEmail());
-                    comboTipo.setValue(p.getTipoPessoa());
-                    txtCnpjCpf.setText("Fornecedor".equals(p.getTipoPessoa()) ? p.getCnpj() : p.getCpf());
+                    comboTipo.setValue(p.getTipousuario());
+                    txtCnpjCpf.setText("Fornecedor".equals(p.getTipousuario()) ? p.getCnpj() : p.getCpf());
                 }
             }
         } catch (Exception e) {
-            logger.error("Erro ao buscar pessoa: " + e.getMessage());
+            logger.error("Erro ao buscar usuario: " + e.getMessage());
         }
     }
 
     public void lista() {
         try {
-            List<Pessoa> todos = dao.lista();
-            for (Pessoa p : todos) {
-                logger.info("Pessoa na lista: " + p.getNome());
+            List<Usuario> todos = dao.lista();
+            for (Usuario p : todos) {
+                logger.info("Usuario na lista: " + p.getNome());
             }
         } catch (Exception e) {
-            logger.error("Erro ao listar pessoas: " + e.getMessage());
+            logger.error("Erro ao listar usuarios: " + e.getMessage());
         }
     }
 }

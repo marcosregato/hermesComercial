@@ -1,11 +1,9 @@
 package com.br.hermescomercial.Repository;
 
+import com.br.hermescomercial.model.Usuario;
 import java.util.List;
 
-import com.br.hermescomercial.model.Usuario;
-
 public interface RepositoryUsuario {
-	
 	
 	void salvar(Usuario usuario);
 	
@@ -16,8 +14,5 @@ public interface RepositoryUsuario {
 	List<Usuario> lista();
 	
 	List<Usuario> buscar(String nome);
-	
-	
-	
 
 }

@@ -25,16 +25,20 @@ public class EstoqueDao implements RepositoryEstoque{
         estoque.setQuantidade(rs.getString("quantidade"));
         estoque.setMaximo(rs.getInt("maximo"));
         estoque.setMinimo(rs.getInt("minimo"));
+        estoque.setLote(rs.getString("lote"));
+        estoque.setDtVencimento(rs.getString("dtVencimento"));
         return estoque;
     }
 
 	@Override
 	public void salvar(Estoque estoque) {
-        String query ="INSERT INTO estoque (quantidade, maximo, minimo) VALUES (?, ?, ?)";
+        String query ="INSERT INTO estoque (quantidade, maximo, minimo, lote, dtvencimento) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
 			ps.setString(1, estoque.getQuantidade());
 			ps.setInt(2, estoque.getMaximo());
 			ps.setInt(3, estoque.getMinimo());
+			ps.setString(4, estoque.getLote());
+			ps.setString(5, estoque.getDtVencimento());
 			ps.executeUpdate();
 		} catch (Exception e) {
             logger.error("Erro ao salvar estoque: " + e.getMessage());
@@ -54,12 +58,14 @@ public class EstoqueDao implements RepositoryEstoque{
 
 	@Override
 	public void update(Estoque estoque) {
-        String query = "UPDATE estoque SET quantidade = ?, maximo = ?, minimo = ? WHERE id = ?";
+        String query = "UPDATE estoque SET quantidade = ?, maximo = ?, minimo = ?, lote = ?, dtvencimento = ? WHERE id = ?";
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(query)) {
 			ps.setString(1, estoque.getQuantidade());
 			ps.setInt(2, estoque.getMaximo());
 			ps.setInt(3, estoque.getMinimo());
-			ps.setLong(4, estoque.getId());
+			ps.setString(4, estoque.getLote());
+			ps.setString(5, estoque.getDtVencimento());
+			ps.setLong(6, estoque.getId());
 			ps.executeUpdate();
 		} catch (Exception e) {
             logger.error("Erro ao atualizar estoque: " + e.getMessage());

@@ -2,7 +2,7 @@ package com.br.hermescomercial.controller;
 
 import org.junit.jupiter.api.Test;
 
-class CustoControllerTest {
+class VendaControllerTest {
 
     @Test
     void initialize() {

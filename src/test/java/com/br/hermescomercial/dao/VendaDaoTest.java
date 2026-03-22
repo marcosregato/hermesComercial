@@ -2,7 +2,7 @@ package com.br.hermescomercial.dao;
 
 import org.junit.jupiter.api.Test;
 
-class CustoDaoTest {
+class VendaDaoTest {
 
     @Test
     void testSalvar() {

@@ -38,7 +38,7 @@ public class LoginController {
 
             Pessoa pessoa = principalController.infoPessoa(txtLogin.getText(), txtSenha.getText());
             if (pessoa != null) {
-                System.out.println("Usuário logado com sucesso!");
+                System.out.println("Pessoa logado com sucesso!");
                 try {
                     // Carrega o FXML da tela principal
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Layout_principal.fxml"));

@@ -16,6 +16,7 @@ public class PessoaDao {
 
     private Pessoa mapResultSetToPessoa(ResultSet rs) throws SQLException {
         Pessoa pessoa = new Pessoa();
+        pessoa.setId(rs.getLong("id"));
         pessoa.setNome(rs.getString("nome"));
         pessoa.setEndereco(rs.getString("endereco"));
         pessoa.setBairro(rs.getString("bairro"));
@@ -24,13 +25,14 @@ public class PessoaDao {
         pessoa.setCep(rs.getString("cep"));
         pessoa.setCnpj(rs.getString("cnpj"));
         pessoa.setCpf(rs.getString("cpf"));
+        pessoa.setTipoDocumento(rs.getString("tipoDocumento"));
         pessoa.setEmail(rs.getString("email"));
         pessoa.setTipoPessoa(rs.getString("tipoPessoa"));
         return pessoa;
     }
 
     public void salvar(Pessoa pessoa) {
-        String sql = "INSERT INTO pessoa (nome, endereco, bairro, city, estado, cep, cnpj, cpf, email, tipoPessoa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO pessoa (nome, endereco, bairro, cidade, estado, cep, cnpj, cpf,tipoDocumento, email, tipoPessoa) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql)) {
             ps.setString(1, pessoa.getNome());
             ps.setString(2, pessoa.getEndereco());
@@ -40,6 +42,7 @@ public class PessoaDao {
             ps.setString(6, pessoa.getCep());
             ps.setString(7, pessoa.getCnpj());
             ps.setString(8, pessoa.getCpf());
+            ps.setString(9, pessoa.getTipoDocumento());
             ps.setString(9, pessoa.getEmail());
             ps.setString(10, pessoa.getTipoPessoa());
             ps.executeUpdate();
@@ -49,8 +52,8 @@ public class PessoaDao {
     }
 
     public void update(Pessoa pessoa) {
-        String sql = "UPDATE pessoa SET endereco=?, bairro=?, cidade=?, estado=?, cep=?, cnpj=?, cpf=?, email=?, tipoPessoa=? WHERE nome=?";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(sql)) {
+        String sql = "UPDATE pessoa SET endereco=?, bairro=?, cidade=?, estado=?, cep=?, cnpj=?, cpf=?,tipoDocumento=?, email=?, tipoPessoa=? WHERE nome=?";
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql)) {
             ps.setString(1, pessoa.getEndereco());
             ps.setString(2, pessoa.getBairro());
             ps.setString(3, pessoa.getCidade());
@@ -58,6 +61,7 @@ public class PessoaDao {
             ps.setString(5, pessoa.getCep());
             ps.setString(6, pessoa.getCnpj());
             ps.setString(7, pessoa.getCpf());
+            ps.setString(8, pessoa.getTipoDocumento());
             ps.setString(8, pessoa.getEmail());
             ps.setString(9, pessoa.getTipoPessoa());
             ps.setString(10, pessoa.getNome());
@@ -69,7 +73,7 @@ public class PessoaDao {
 
     public void remove(String nome) {
         String sql = "DELETE FROM pessoa WHERE nome=?";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(sql)) {
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql)) {
             ps.setString(1, nome);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -80,7 +84,7 @@ public class PessoaDao {
     public List<Pessoa> buscar(String nome) {
         String sql = "SELECT * FROM pessoa WHERE nome LIKE ?";
         List<Pessoa> lista = new ArrayList<>();
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(sql)) {
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql)) {
             ps.setString(1, "%" + nome + "%");
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -97,7 +101,7 @@ public class PessoaDao {
     public List<Pessoa> lista() {
         String sql = "SELECT * FROM pessoa";
         List<Pessoa> lista = new ArrayList<>();
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(sql);
+        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 lista.add(mapResultSetToPessoa(rs));
