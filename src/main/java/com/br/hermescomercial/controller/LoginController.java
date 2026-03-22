@@ -1,6 +1,7 @@
 package com.br.hermescomercial.controller;
 
 import com.br.hermescomercial.model.Pessoa;
+import com.br.hermescomercial.model.Usuario;
 import com.br.hermescomercial.util.Alerta;
 import com.br.hermescomercial.util.ValidarCampo;
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 public class LoginController {
 
@@ -36,9 +38,9 @@ public class LoginController {
     @FXML
     public void handleBtEntra() {
 
-            Pessoa pessoa = principalController.infoPessoa(txtLogin.getText(), txtSenha.getText());
-            if (pessoa != null) {
-                System.out.println("Pessoa logado com sucesso!");
+            List<Usuario> usuario = principalController.infoUsuario(txtLogin.getText(), txtSenha.getText());
+            if (usuario != null) {
+                System.out.println("Usuario logado com sucesso!");
                 try {
                     // Carrega o FXML da tela principal
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Layout_principal.fxml"));
