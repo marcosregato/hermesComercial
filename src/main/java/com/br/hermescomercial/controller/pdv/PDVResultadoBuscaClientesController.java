@@ -124,19 +124,30 @@ public class PDVResultadoBuscaClientesController implements Initializable {
         this.termoBusca = termo;
         
         try {
+            System.out.println("DEBUG RESULTADOS: Iniciando carregamento para termo: " + termo + ", tipo: " + tipoBusca);
+            
             List<Usuario> usuarios;
             if ("nome".equals(tipoBusca)) {
-                usuarios = usuarioDao.buscarClientePorNomeCpfCnpj(termo);
+                usuarios = usuarioDao.buscarClientePorNome(termo);
             } else {
-                usuarios = usuarioDao.buscarClientePorNomeCpfCnpj(termo);
+                usuarios = usuarioDao.buscarClientePorCpfCnpj(termo);
+            }
+            
+            System.out.println("DEBUG RESULTADOS: Encontrados " + usuarios.size() + " usuários");
+            for (Usuario usuario : usuarios) {
+                System.out.println("DEBUG RESULTADOS: Usuário encontrado - ID: " + usuario.getId() + ", Nome: " + usuario.getNome());
             }
             
             resultados.clear();
             resultados.addAll(usuarios);
             
+            System.out.println("DEBUG RESULTADOS: ObservableList atualizada com " + resultados.size() + " itens");
+            
             // Atualizar informações
             lblTermoBusca.setText("Termo da busca: " + termo + (tipoBusca != null ? " (por " + tipoBusca + ")" : ""));
             lblQuantidadeResultados.setText("Resultados encontrados: " + usuarios.size());
+            
+            System.out.println("DEBUG RESULTADOS: Labels atualizadas - Termo: " + lblTermoBusca.getText() + ", Quantidade: " + lblQuantidadeResultados.getText());
             
             if (resultados.isEmpty()) {
                 mostrarAlerta("Nenhum cliente encontrado para o termo: " + termo, Alert.AlertType.INFORMATION);

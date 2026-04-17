@@ -169,24 +169,29 @@ public class PDVPrincipalController implements Initializable {
         // Listener para busca de cliente por CPF/CNPJ
         txtBuscarClienteCpfCnpj.textProperty().addListener((obs, oldValue, newValue) -> {
             if (newValue != null && !newValue.matches("\\d*")) {
-                // Remove caracteres não numéricos
+                // Remove caracteres não numéricos apenas se for diferente
                 String textoFiltrado = newValue.replaceAll("[^0-9]", "");
-                txtBuscarClienteCpfCnpj.setText(textoFiltrado);
-                
-                // Exibe alerta sobre caracteres inválidos
-                mostrarAlerta("O campo CPF/CNPJ aceita apenas números.\n" +
-                             "Caracteres inválidos foram removidos automaticamente.", 
-                             Alert.AlertType.WARNING);
+                if (!newValue.equals(textoFiltrado)) {
+                    txtBuscarClienteCpfCnpj.setText(textoFiltrado);
+                    
+                    // Exibe alerta sobre caracteres inválidos
+                    mostrarAlerta("O campo CPF/CNPJ aceita apenas números.\n" +
+                                 "Caracteres inválidos foram removidos automaticamente.", 
+                                 Alert.AlertType.WARNING);
+                }
                 return;
             }
             
             // Limita o tamanho máximo (14 para CPF, 18 para CNPJ)
             if (newValue.length() > 18) {
-                txtBuscarClienteCpfCnpj.setText(newValue.substring(0, 18));
+                String textoLimitado = newValue.substring(0, 18);
+                if (!newValue.equals(textoLimitado)) {
+                    txtBuscarClienteCpfCnpj.setText(textoLimitado);
+                }
                 return;
             }
             
-            if (newValue.length() >= 3) {
+            if (newValue.length() >= 2) {
                 buscarClientePorCpfCnpj(newValue);
             }
         });
@@ -450,11 +455,14 @@ public class PDVPrincipalController implements Initializable {
             javafx.stage.Stage stage = new javafx.stage.Stage();
             stage.setTitle("Resultado da Busca de Clientes");
             stage.setScene(new javafx.scene.Scene(root));
-            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            // Removendo modalidade para evitar bloqueio
+            stage.initModality(javafx.stage.Modality.NONE);
             stage.setResizable(true);
             stage.setWidth(800);
             stage.setHeight(600);
             System.out.println("DEBUG: Stage de resultados configurado, mostrando janela...");
+            
+            // Usar show() não bloqueante
             stage.show();
             System.out.println("DEBUG: Janela de resultados aberta com sucesso");
             
@@ -601,9 +609,9 @@ public class PDVPrincipalController implements Initializable {
 
     private void buscarClientePorNome(String textoBusca) {
         try {
-            if (textoBusca.length() >= 3) {
+            if (textoBusca.length() >= 2) {
                 UsuarioDao usuarioDao = new UsuarioDao();
-                List<Usuario> clientes = usuarioDao.buscarClientePorNomeCpfCnpj(textoBusca);
+                List<Usuario> clientes = usuarioDao.buscarClientePorNome(textoBusca);
                 
                 if (!clientes.isEmpty()) {
                     // Pegar o primeiro cliente encontrado
@@ -634,9 +642,9 @@ public class PDVPrincipalController implements Initializable {
     
     private void buscarClientePorCpfCnpj(String textoBusca) {
         try {
-            if (textoBusca.length() >= 3) {
+            if (textoBusca.length() >= 2) {
                 UsuarioDao usuarioDao = new UsuarioDao();
-                List<Usuario> clientes = usuarioDao.buscarClientePorNomeCpfCnpj(textoBusca);
+                List<Usuario> clientes = usuarioDao.buscarClientePorCpfCnpj(textoBusca);
                 
                 if (!clientes.isEmpty()) {
                     // Pegar o primeiro cliente encontrado

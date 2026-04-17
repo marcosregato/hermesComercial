@@ -10,11 +10,13 @@ com/br/hermescomercial/controller/pdv/PDVPagamentoController$1.class
 com/br/hermescomercial/controller/pdv/PDVCaixaAbertoController$2.class
 com/br/hermescomercial/model/NotaFiscalPagamento.class
 com/br/hermescomercial/controller/pdv/PDVBuscaProdutoController$2.class
+com/br/hermescomercial/controller/pdv/PDVPrincipalController$1.class
 com/br/hermescomercial/model/ItemVenda.class
 com/br/hermescomercial/business/pdv/ImpressoraManager.class
 com/br/hermescomercial/dao/PagamentoDao.class
 com/br/hermescomercial/controller/pdv/PDVNotaFiscalController.class
 com/br/hermescomercial/dao/ItemVendaDao.class
+com/br/hermescomercial/controller/pdv/PDVResultadoBuscaClientesController.class
 com/br/hermescomercial/controller/pdv/PDVRelatoriosController$RelatorioPagamento.class
 com/br/hermescomercial/model/Cliente.class
 com/br/hermescomercial/dao/ClienteDao.class
@@ -31,10 +33,12 @@ com/br/hermescomercial/controller/pdv/PDVRelatoriosController.class
 com/br/hermescomercial/model/CarrinhoCompras.class
 com/br/hermescomercial/business/impressao/ImpressaoNaoFiscalService.class
 com/br/hermescomercial/model/NotaFiscalTransporte.class
+com/br/hermescomercial/controller/pdv/PDVPrincipalController.class
 com/br/hermescomercial/controller/pdv/PDVConfiguracaoImpressoraController.class
 com/br/hermescomercial/model/Usuario.class
 com/br/hermescomercial/model/NotaFiscalPagamentoItem.class
 com/br/hermescomercial/controller/pdv/PDVConfiguracaoImpressoraController$1.class
+com/br/hermescomercial/controller/pdv/PDVResultadoBuscaClientesController$ClienteSelectionCallback.class
 com/br/hermescomercial/controller/pdv/PDVClientesController.class
 com/br/hermescomercial/business/pdv/PDVManager.class
 com/br/hermescomercial/controller/pdv/PDVClientesController$1.class

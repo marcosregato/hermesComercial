@@ -94,8 +94,8 @@ public class UsuarioDao {
         }
     }
 
-    public List<Usuario> buscar(String nome) {
-        String sql = "SELECT * FROM USUARIO WHERE nome LIKE ?";
+    public List<Usuario> buscarClientePorNome(String nome) {
+        String sql = "SELECT * FROM USUARIO WHERE tipousuario = 'CLIENTE' AND NOME ILIKE ?";
         List<Usuario> lista = new ArrayList<>();
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, "%" + nome + "%");
@@ -111,20 +111,32 @@ public class UsuarioDao {
         return lista;
     }
 
-    public List<Usuario> buscarClientePorNomeCpfCnpj(String textoBusca) {
-        String sql = "SELECT * FROM USUARIO WHERE tipousuario = 'CLIENTE' AND nome ILIKE ?";
+    public List<Usuario> buscarClientePorCpfCnpj(String textoBusca) {
+        String sql = "SELECT * FROM USUARIO WHERE tipousuario = 'CLIENTE' AND (CPF ILIKE ? OR CNPJ ILIKE ?)";
         List<Usuario> lista = new ArrayList<>();
-        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
-            String busca = "%" + textoBusca + "%";
-            ps.setString(1, busca);
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    Usuario usuario = mapResultSetToUsuario(rs);
-                    lista.add(usuario);
+        try {
+            System.out.println("DEBUG DAO: Executando SQL: " + sql);
+            System.out.println("DEBUG DAO: Parâmetro: %" + textoBusca + "%");
+            
+            try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
+                String busca = "%" + textoBusca + "%";
+                ps.setString(1, busca);
+                ps.setString(2, busca);
+                
+                try (ResultSet rs = ps.executeQuery()) {
+                    int count = 0;
+                    while (rs.next()) {
+                        count++;
+                        Usuario usuario = mapResultSetToUsuario(rs);
+                        System.out.println("DEBUG DAO: Cliente " + count + " - ID: " + usuario.getId() + ", Nome: " + usuario.getNome() + ", CPF/CNPJ: " + usuario.getNumeroDocumeto());
+                        lista.add(usuario);
+                    }
+                    System.out.println("DEBUG DAO: Total de clientes encontrados: " + count);
                 }
             }
         } catch (Exception e) {
-            logger.error("Erro ao buscar cliente por nome/CPF/CNPJ: " + e.getMessage());
+            System.out.println("DEBUG DAO: Erro na busca: " + e.getMessage());
+            logger.error("Erro ao buscar cliente por CPF/CNPJ: " + e.getMessage());
         }
         return lista;
     }
