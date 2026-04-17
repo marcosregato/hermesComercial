@@ -4,6 +4,7 @@
  */
 package com.br.hermescomercial.dao;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,18 +12,18 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.br.hermescomercial.Repository.RepositoryProduto;
-import com.br.hermescomercial.connectionDB.ConnectionBD;
-import com.br.hermescomercial.model.Produto;
+import com.br.hermescomercial.connectionBD.ConnectionBD;
+import java.math.BigDecimal;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.br.hermescomercial.model.Produto;
 
 /**
  *
  * @author marcos
  */
-public class ProdutoDao implements RepositoryProduto {
+public class ProdutoDao {
 
     private ConnectionBD con = new ConnectionBD();
     private static final Logger logger = LogManager.getLogger(ProdutoDao.class);
@@ -39,62 +40,59 @@ public class ProdutoDao implements RepositoryProduto {
     }
 
 
-	@Override
-	public void salvar(Produto produto) {
+    public boolean salvar(Produto produto) throws SQLException {
         String query ="INSERT INTO produto (nome, categoria, subCategoria, codigo, marca,dataCompra) VALUES (?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query)) {
 
 
-			ps.setString(1, produto.getNome());
-			ps.setString(2, produto.getCategoria());
-			ps.setString(3, produto.getSubCategoria());
-			ps.setString(4, produto.getCodigo());
-			ps.setString(5, produto.getMarca());
-			ps.setString(6, produto.getDataCompra());
+            ps.setString(1, produto.getNome());
+            ps.setString(2, produto.getCategoria());
+            ps.setString(3, produto.getSubCategoria());
+            ps.setString(4, produto.getCodigo());
+            ps.setString(5, produto.getMarca());
+            ps.setString(6, produto.getDataCompra());
 
-			ps.executeUpdate();
+            ps.executeUpdate();
 
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return true;
+    }
 
-	}
-
-	@Override
-	public void remove(String nome) {
+    public boolean remove(String nome) throws SQLException {
         String query = "DELETE FROM produto WHERE nome=?";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query)) {
 
-			ps.setString(1, nome);
-			ps.executeUpdate();
+            ps.setString(1, nome);
+            ps.executeUpdate();
 
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return true;
+    }
 
-	}
-
-	@Override
-	public void update(Produto produto) {
+    public boolean update(Produto produto) throws SQLException {
         String query = "UPDATE produto SET categoria = ?, subCategoria = ?, codigo = ?, marca = ?, dataCompra = ? WHERE nome = ?";
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(query)) {
-			ps.setString(1, produto.getCategoria());
-			ps.setString(2, produto.getSubCategoria());
-			ps.setString(3, produto.getCodigo());
-			ps.setString(4, produto.getMarca());
-			ps.setString(5, produto.getDataCompra());
-			ps.setString(6, produto.getNome());
-			ps.executeUpdate();
-		} catch (Exception e) {
-			logger.error(e.getMessage(), e);
-		}
-	}
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query)) {
+            ps.setString(1, produto.getCategoria());
+            ps.setString(2, produto.getSubCategoria());
+            ps.setString(3, produto.getCodigo());
+            ps.setString(4, produto.getMarca());
+            ps.setString(5, produto.getDataCompra());
+            ps.setString(6, produto.getNome());
+            ps.executeUpdate();
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return true;
+    }
 
-    @Override
-    public List<Produto> buscar(String nome) {
+    public List<Produto> buscar(String nome) throws SQLException {
         String sql = "SELECT * FROM produto WHERE nome LIKE ?";
         List<Produto> lista = new ArrayList<>();
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(sql)) {
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, "%" + nome + "%");
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -108,11 +106,10 @@ public class ProdutoDao implements RepositoryProduto {
         return lista;
     }
 
-    @Override
     public List<Produto> listar() {
         String sql = "SELECT * FROM produto";
         List<Produto> lista = new ArrayList<>();
-        try (PreparedStatement ps = con.getConnection("").prepareStatement(sql);
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 lista.add(mapResultSetToProduto(rs));
@@ -121,6 +118,89 @@ public class ProdutoDao implements RepositoryProduto {
             logger.error("Erro ao listar produtos: " + e.getMessage());
         }
         return lista;
+    }
+
+    // Métodos adicionais para compatibilidade
+    public List<Produto> buscarComFiltros(String nome, String categoria, String subCategoria, 
+                                         String codigoBarras, BigDecimal precoMin, BigDecimal precoMax, 
+                                         Integer estoqueMin, boolean ativos, boolean inativos) {
+        List<Produto> lista = new ArrayList<>();
+        StringBuilder sql = new StringBuilder("SELECT * FROM produto WHERE 1=1");
+        
+        try (Connection conn = ConnectionBD.getConnection()) {
+            if (nome != null && !nome.trim().isEmpty()) {
+                sql.append(" AND nome LIKE ?");
+            }
+            if (categoria != null && !categoria.trim().isEmpty()) {
+                sql.append(" AND categoria LIKE ?");
+            }
+            if (codigoBarras != null && !codigoBarras.trim().isEmpty()) {
+                sql.append(" AND codigo LIKE ?");
+            }
+            if (precoMin != null) {
+                sql.append(" AND preco_venda >= ?");
+            }
+            if (precoMax != null) {
+                sql.append(" AND preco_venda <= ?");
+            }
+            if (estoqueMin != null) {
+                sql.append(" AND estoque >= ?");
+            }
+            
+            try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+                int paramIndex = 1;
+                
+                if (nome != null && !nome.trim().isEmpty()) {
+                    ps.setString(paramIndex++, "%" + nome + "%");
+                }
+                if (categoria != null && !categoria.trim().isEmpty()) {
+                    ps.setString(paramIndex++, "%" + categoria + "%");
+                }
+                if (codigoBarras != null && !codigoBarras.trim().isEmpty()) {
+                    ps.setString(paramIndex++, "%" + codigoBarras + "%");
+                }
+                if (precoMin != null) {
+                    ps.setBigDecimal(paramIndex++, precoMin);
+                }
+                if (precoMax != null) {
+                    ps.setBigDecimal(paramIndex++, precoMax);
+                }
+                if (estoqueMin != null) {
+                    ps.setInt(paramIndex++, estoqueMin);
+                }
+                
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        lista.add(mapResultSetToProduto(rs));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Erro ao buscar produtos com filtros: " + e.getMessage(), e);
+        }
+        
+        return lista;
+    }
+
+    public Produto buscarPorCodigoBarras(String codigoBarras) {
+        String sql = "SELECT * FROM produto WHERE codigo = ? OR codigo_barras = ?";
+        
+        try (Connection conn = ConnectionBD.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            
+            ps.setString(1, codigoBarras);
+            ps.setString(2, codigoBarras);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToProduto(rs);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Erro ao buscar produto por código de barras: " + e.getMessage(), e);
+        }
+        
+        return null;
     }
 
 }

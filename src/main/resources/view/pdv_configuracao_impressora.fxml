@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.br.hermescomercial.controller.pdv.PDVConfiguracaoImpressoraController">
+   <top>
+      <VBox style="-fx-background-color: #2c3e50;">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10; -fx-background-color: #34495e;">
+               <children>
+                  <Button fx:id="btnVoltar" text="« Voltar" styleClass="button-secondary" onAction="#onVoltar"/>
+                  <Label text="CONFIG. IMPRESSORA" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+                  <Region />
+                  <Label fx:id="lblDataHora" text="01/01/2024 12:00:00" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   
+   <center>
+      <ScrollPane fitToWidth="true">
+         <content>
+            <VBox spacing="20" style="-fx-padding: 20;">
+               <children>
+                  <!-- Status da Impressora -->
+                  <GridPane hgap="20" vgap="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-background-radius: 10;">
+                     <children>
+                        <Label text="STATUS DA IMPRESSORA" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+                        
+                        <Label text="Impressora:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="lblNomeImpressora" text="Não configurada" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        
+                        <Label text="Status:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="lblStatus" text="Offline" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        
+                        <Label text="Última Verificação:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="lblUltimaVerificacao" text="Nunca" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        
+                        <Label text="Mensagem:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+                        <Label fx:id="lblMensagemStatus" text="Não verificado" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints minWidth="120" prefWidth="120"/>
+                        <ColumnConstraints minWidth="200" prefWidth="300"/>
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="30" prefHeight="30"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                     </rowConstraints>
+                  </GridPane>
+                  
+                  <!-- Ações Rápidas -->
+                  <HBox spacing="10" alignment="CENTER_LEFT">
+                     <children>
+                        <Button fx:id="btnVerificarStatus" text="Verificar Status" styleClass="button-info" onAction="#onVerificarStatus"/>
+                        <Button fx:id="btnTestarImpressao" text="Testar Impressão" styleClass="button-primary" onAction="#onTestarImpressao"/>
+                        <Button fx:id="btnAbrirGaveta" text="Abrir Gaveta" styleClass="button-warning" onAction="#onAbrirGaveta"/>
+                        <Region />
+                        <Button fx:id="btnConectar" text="Conectar" styleClass="button-success" onAction="#onConectar"/>
+                        <Button fx:id="btnDesconectar" text="Desconectar" styleClass="button-danger" onAction="#onDesconectar"/>
+                     </children>
+                  </HBox>
+                  
+                  <!-- Configurações Básicas -->
+                  <GridPane hgap="20" vgap="15" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-radius: 5;">
+                     <children>
+                        <Label text="CONFIGURAÇÕES BÁSICAS" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+                        
+                        <Label text="Nome:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="txtNome" text="Impressora Térmica Padrão" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        
+                        <Label text="Fabricante:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cmbFabricante" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        
+                        <Label text="Modelo:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="txtModelo" text="TM-T20" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        
+                        <Label text="Tipo de Conexão:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cmbTipoConexao" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        
+                        <Label text="Driver:" GridPane.columnIndex="0" GridPane.rowIndex="5" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cmbDriver" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                        
+                        <Label text="Colunas:" GridPane.columnIndex="0" GridPane.rowIndex="6" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cmbColunas" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                        
+                        <Label text="Codificação:" GridPane.columnIndex="0" GridPane.rowIndex="7" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cmbCodificacao" GridPane.columnIndex="1" GridPane.rowIndex="7"/>
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints minWidth="120" prefWidth="120"/>
+                        <ColumnConstraints minWidth="200" prefWidth="300"/>
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="30" prefHeight="30"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                     </rowConstraints>
+                  </GridPane>
+                  
+                  <!-- Configurações de Conexão -->
+                  <GridPane hgap="20" vgap="15" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-radius: 5;">
+                     <children>
+                        <Label text="CONFIGURAÇÕES DE CONEXÃO" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+                        
+                        <!-- USB -->
+                        <Label text="Porta USB:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="txtPortaUSB" text="USB001" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        
+                        <!-- Serial -->
+                        <Label text="Porta Serial:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cmbPortaSerial" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        
+                        <Label text="Baud Rate:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cmbBaudRate" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        
+                        <!-- Rede -->
+                        <Label text="Endereço IP:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="txtIP" text="192.168.1.100" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        
+                        <Label text="Porta:" GridPane.columnIndex="0" GridPane.rowIndex="5" style="-fx-font-weight: bold;"/>
+                        <TextField fx:id="txtPortaRede" text="9100" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                        
+                        <!-- Bluetooth -->
+                        <Label text="Dispositivo BT:" GridPane.columnIndex="0" GridPane.rowIndex="6" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cmbDispositivoBT" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints minWidth="120" prefWidth="120"/>
+                        <ColumnConstraints minWidth="200" prefWidth="300"/>
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="30" prefHeight="30"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                     </rowConstraints>
+                  </GridPane>
+                  
+                  <!-- Recursos Adicionais -->
+                  <GridPane hgap="20" vgap="15" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-radius: 5;">
+                     <children>
+                        <Label text="RECURSOS ADICIONAIS" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+                        
+                        <CheckBox fx:id="chkCortaPapel" text="Cortar Papel" selected="true" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                        
+                        <CheckBox fx:id="chkGavetaDinheiro" text="Gaveta de Dinheiro" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                        
+                        <CheckBox fx:id="chkImpressoraCupom" text="Impressora de Cupom Fiscal" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                        
+                        <Label text="Display Cliente:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+                        <ComboBox fx:id="cmbDisplayCliente" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                     </children>
+                     <columnConstraints>
+                        <ColumnConstraints minWidth="200" prefWidth="200"/>
+                        <ColumnConstraints minWidth="200" prefWidth="200"/>
+                     </columnConstraints>
+                     <rowConstraints>
+                        <RowConstraints minHeight="30" prefHeight="30"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                        <RowConstraints minHeight="25" prefHeight="25"/>
+                     </rowConstraints>
+                  </GridPane>
+                  
+                  <!-- Configurações Avançadas -->
+                  <VBox spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-radius: 5;">
+                     <children>
+                        <Label text="CONFIGURAÇÕES AVANÇADAS" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                        
+                        <VBox spacing="5">
+                           <children>
+                              <Label text="Configurações Avançadas (JSON):" style="-fx-font-weight: bold;"/>
+                              <TextArea fx:id="txtConfiguracaoAvancada" prefRowCount="4" wrapText="true" 
+                                       text="{&#10;  &quot;timeout&quot;: 5000,&#10;  &quot;retry_count&quot;: 3,&#10;  &quot;buffer_size&quot;: 1024&#10;}" 
+                                       style="-fx-font-family: monospace;"/>
+                           </children>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Botões de Ação -->
+                  <HBox spacing="10" alignment="CENTER_RIGHT">
+                     <children>
+                        <Button fx:id="btnSalvar" text="Salvar Configuração" styleClass="button-success" onAction="#onSalvar"/>
+                        <Button fx:id="btnRestaurar" text="Restaurar Padrão" styleClass="button-secondary" onAction="#onRestaurar"/>
+                        <Button fx:id="btnTestarConexao" text="Testar Conexão" styleClass="button-info" onAction="#onTestarConexao"/>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
+   </center>
+   
+   <bottom>
+      <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10; -fx-background-color: #ecf0f1;">
+         <children>
+            <Label fx:id="lblStatus" text="Configuração de impressora" style="-fx-text-fill: #f39c12; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Operador:" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblOperador" text="João Silva"/>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

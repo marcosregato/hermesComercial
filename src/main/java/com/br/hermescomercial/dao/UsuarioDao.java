@@ -1,6 +1,6 @@
 package com.br.hermescomercial.dao;
 
-import com.br.hermescomercial.connectionDB.ConnectionBD;
+import com.br.hermescomercial.connectionBD.ConnectionBD;
 import com.br.hermescomercial.model.Usuario;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -29,12 +29,22 @@ public class UsuarioDao {
         usuario.setTelefone(rs.getString("telefone"));
         usuario.setEmail(rs.getString("email"));
         usuario.setTipousuario(rs.getString("tipoUsuario"));
+        
+        // Para CPF e CNPJ, usar campo numeroDocumento existente
+        String cpf = rs.getString("cpf");
+        String cnpj = rs.getString("cnpj");
+        if (cpf != null && !cpf.isEmpty()) {
+            usuario.setNumeroDocumeto(cpf);
+        } else if (cnpj != null && !cnpj.isEmpty()) {
+            usuario.setNumeroDocumeto(cnpj);
+        }
+        
         return usuario;
     }
 
     public void salvar(Usuario usuario) {
         String sql = "INSERT INTO USUARIO (nome, endereco, bairro, cidade, estado, cep, tipoDocumento, numeroDocumento, whatsapp, telefone, email, tipoUsuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql)) {
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getEndereco());
             ps.setString(3, usuario.getBairro());
@@ -55,7 +65,7 @@ public class UsuarioDao {
 
     public void update(Usuario usuario) {
         String sql = "UPDATE USUARIO SET endereco=?, bairro=?, cidade=?, estado=?, cep=?, tipoDocumento=?, numeroDocumento=?, whatsapp=?, telefone=?, email=?, tipoUsuario=? WHERE nome=?";
-        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql)) {
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuario.getEndereco());
             ps.setString(2, usuario.getBairro());
             ps.setString(3, usuario.getCidade());
@@ -76,7 +86,7 @@ public class UsuarioDao {
 
     public void remove(String nome) {
         String sql = "DELETE FROM USUARIO WHERE nome=?";
-        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql)) {
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, nome);
             ps.executeUpdate();
         } catch (Exception e) {
@@ -87,7 +97,7 @@ public class UsuarioDao {
     public List<Usuario> buscar(String nome) {
         String sql = "SELECT * FROM USUARIO WHERE nome LIKE ?";
         List<Usuario> lista = new ArrayList<>();
-        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql)) {
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, "%" + nome + "%");
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -101,10 +111,28 @@ public class UsuarioDao {
         return lista;
     }
 
-    public List<Usuario> lista() {
+    public List<Usuario> buscarClientePorNomeCpfCnpj(String textoBusca) {
+        String sql = "SELECT * FROM USUARIO WHERE tipousuario = 'CLIENTE' AND nome ILIKE ?";
+        List<Usuario> lista = new ArrayList<>();
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
+            String busca = "%" + textoBusca + "%";
+            ps.setString(1, busca);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    Usuario usuario = mapResultSetToUsuario(rs);
+                    lista.add(usuario);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Erro ao buscar cliente por nome/CPF/CNPJ: " + e.getMessage());
+        }
+        return lista;
+    }
+
+    public List<Usuario> listar() {
         String sql = "SELECT * FROM USUARIO";
         List<Usuario> lista = new ArrayList<>();
-        try (PreparedStatement ps = con.getConnection("Postgres").prepareStatement(sql);
+        try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 lista.add(mapResultSetToUsuario(rs));

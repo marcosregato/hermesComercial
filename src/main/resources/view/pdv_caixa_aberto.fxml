@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.br.hermescomercial.controller.pdv.PDVCaixaAbertoController">
+   <top>
+      <VBox style="-fx-background-color: #2c3e50;">
+         <children>
+            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10; -fx-background-color: #34495e;">
+               <children>
+                  <Button fx:id="btnVoltar" text="« Voltar" styleClass="button-secondary" onAction="#onVoltar"/>
+                  <Label text="CAIXA ABERTO" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
+                  <Region />
+                  <Label fx:id="lblDataHora" text="01/01/2024 12:00:00" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </top>
+   
+   <center>
+      <VBox spacing="20" style="-fx-padding: 20;">
+         <children>
+            <!-- Informações do Caixa -->
+            <GridPane hgap="20" vgap="10" style="-fx-background-color: #ecf0f1; -fx-padding: 15; -fx-background-radius: 10;">
+               <children>
+                  <Label text="Informações do Caixa" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" GridPane.columnIndex="0" GridPane.rowIndex="0" GridPane.columnSpan="2"/>
+                  
+                  <Label text="Terminal:" GridPane.columnIndex="0" GridPane.rowIndex="1" style="-fx-font-weight: bold;"/>
+                  <Label fx:id="lblTerminal" text="001" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                  
+                  <Label text="Operador:" GridPane.columnIndex="0" GridPane.rowIndex="2" style="-fx-font-weight: bold;"/>
+                  <Label fx:id="lblOperador" text="João Silva" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                  
+                  <Label text="Data de Abertura:" GridPane.columnIndex="0" GridPane.rowIndex="3" style="-fx-font-weight: bold;"/>
+                  <Label fx:id="lblDataAbertura" text="01/01/2024 08:00:00" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                  
+                  <Label text="Status:" GridPane.columnIndex="0" GridPane.rowIndex="4" style="-fx-font-weight: bold;"/>
+                  <Label fx:id="lblStatus" text="ABERTO" style="-fx-text-fill: #27ae60; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+               </children>
+               <columnConstraints>
+                  <ColumnConstraints minWidth="100" prefWidth="100"/>
+                  <ColumnConstraints minWidth="150" prefWidth="200"/>
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="30" prefHeight="30"/>
+                  <RowConstraints minHeight="25" prefHeight="25"/>
+                  <RowConstraints minHeight="25" prefHeight="25"/>
+                  <RowConstraints minHeight="25" prefHeight="25"/>
+                  <RowConstraints minHeight="25" prefHeight="25"/>
+               </rowConstraints>
+            </GridPane>
+            
+            <!-- Valores do Caixa -->
+            <SplitPane dividerPositions="0.5" VBox.vgrow="ALWAYS">
+               <items>
+                  <!-- Saldo Atual -->
+                  <VBox spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-radius: 5;">
+                     <children>
+                        <Label text="SALDO ATUAL" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                        
+                        <GridPane hgap="10" vgap="5">
+                           <children>
+                              <Label text="Saldo Inicial:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+                              <Label fx:id="lblSaldoInicial" text="R$ 0,00" GridPane.columnIndex="1" GridPane.rowIndex="0" style="-fx-font-weight: bold;"/>
+                              
+                              <Label text="Vendas do Dia:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
+                              <Label fx:id="lblVendasDia" text="R$ 0,00" GridPane.columnIndex="1" GridPane.rowIndex="1" style="-fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+                              
+                              <Label text="Entradas:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+                              <Label fx:id="lblEntradas" text="R$ 0,00" GridPane.columnIndex="1" GridPane.rowIndex="2" style="-fx-text-fill: #3498db; -fx-font-weight: bold;"/>
+                              
+                              <Label text="Saídas:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+                              <Label fx:id="lblSaidas" text="R$ 0,00" GridPane.columnIndex="1" GridPane.rowIndex="3" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold;"/>
+                              
+                              <Separator GridPane.columnIndex="0" GridPane.rowIndex="4" GridPane.columnSpan="2"/>
+                              
+                              <Label text="Saldo Atual:" GridPane.columnIndex="0" GridPane.rowIndex="5" style="-fx-font-weight: bold;"/>
+                              <Label fx:id="lblSaldoAtual" text="R$ 0,00" GridPane.columnIndex="1" GridPane.rowIndex="5" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints minWidth="100" prefWidth="100"/>
+                              <ColumnConstraints minWidth="100" prefWidth="120"/>
+                           </columnConstraints>
+                        </GridPane>
+                     </children>
+                  </VBox>
+                  
+                  <!-- Movimentações -->
+                  <VBox spacing="10" style="-fx-background-color: #ffffff; -fx-padding: 15; -fx-border-color: #bdc3c7; -fx-border-radius: 5;">
+                     <children>
+                        <HBox alignment="CENTER_LEFT" spacing="10">
+                           <children>
+                              <Label text="MOVIMENTAÇÕES" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
+                              <Region HBox.hgrow="ALWAYS"/>
+                              <Button fx:id="btnAtualizar" text="Atualizar" styleClass="button-secondary"/>
+                           </children>
+                        </HBox>
+                        
+                        <TableView fx:id="tblMovimentacoes" VBox.vgrow="ALWAYS" style="-fx-max-height: 300;">
+                           <columns>
+                              <TableColumn fx:id="colHora" text="Hora" prefWidth="80"/>
+                              <TableColumn fx:id="colTipo" text="Tipo" prefWidth="80"/>
+                              <TableColumn fx:id="colDescricao" text="Descrição" prefWidth="200"/>
+                              <TableColumn fx:id="colValor" text="Valor" prefWidth="100"/>
+                           </columns>
+                        </TableView>
+                     </children>
+                  </VBox>
+               </items>
+            </SplitPane>
+            
+            <!-- Ações -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+               <children>
+                  <Button fx:id="btnSuprimento" text="Suprimento" styleClass="button-info" onAction="#onSuprimento"/>
+                  <Button fx:id="btnSangria" text="Sangria" styleClass="button-warning" onAction="#onSangria"/>
+                  <Button fx:id="btnFecharCaixa" text="Fechar Caixa" styleClass="button-danger" onAction="#onFecharCaixa"/>
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </center>
+   
+   <bottom>
+      <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10; -fx-background-color: #ecf0f1;">
+         <children>
+            <Label fx:id="lblStatus" text="Caixa aberto e operacional" style="-fx-text-fill: #27ae60; -fx-font-weight: bold;"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="Terminal:" style="-fx-font-weight: bold;"/>
+            <Label fx:id="lblTerminalInfo" text="001"/>
+         </children>
+      </HBox>
+   </bottom>
+</BorderPane>

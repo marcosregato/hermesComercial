@@ -4,18 +4,25 @@
  */
 package com.br.hermescomercial.model;
 
+import java.math.BigDecimal;
+
 /**
  *
  * @author marcos
  */
 public class Produto  {
 
+	private Long id;
 	private String nome;
     private String categoria;
     private String subCategoria;
     private String codigo;
     private String marca;
     private String dataCompra;
+    private String codigoBarras;
+    private String unidade;
+    private BigDecimal precoVenda;
+    private int estoque;
     
     
 	public String getNome() {
@@ -55,9 +62,57 @@ public class Produto  {
 		this.dataCompra = dataCompra;
 	}
 
-    
-    
-	
-	
-	
+    // Métodos adicionais para compatibilidade
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCodigoBarras() {
+        return codigoBarras;
+    }
+
+    public void setCodigoBarras(String codigoBarras) {
+        this.codigoBarras = codigoBarras;
+    }
+
+    public String getUnidade() {
+        return unidade;
+    }
+
+    public void setUnidade(String unidade) {
+        this.unidade = unidade;
+    }
+
+    public BigDecimal getPrecoVenda() {
+        return precoVenda;
+    }
+
+    public void setPrecoVenda(BigDecimal precoVenda) {
+        this.precoVenda = precoVenda;
+    }
+
+    public int getEstoque() {
+        return estoque;
+    }
+
+    public void setEstoque(int estoque) {
+        this.estoque = estoque;
+    }
+
+    // Métodos adicionais para compatibilidade
+    public BigDecimal getPreco() {
+        return precoVenda;
+    }
+
+    public int getQuantidadeEstoque() {
+        return estoque;
+    }
+
+    public String getAcoes() {
+        return "Ações"; // Placeholder para coluna de ações
+    }
 }
