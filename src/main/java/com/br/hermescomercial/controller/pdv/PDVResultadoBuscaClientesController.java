@@ -44,7 +44,7 @@ public class PDVResultadoBuscaClientesController implements Initializable {
     private ObservableList<Usuario> resultados;
     private UsuarioDao usuarioDao;
     private Usuario clienteSelecionado;
-    private String termoBusca;
+    // private String termoBusca; - não utilizado
     
     // Callback para retornar cliente selecionado
     private ClienteSelectionCallback callback;
@@ -120,8 +120,8 @@ public class PDVResultadoBuscaClientesController implements Initializable {
         btnSelecionar.setDisable(true);
     }
     
-    public void carregarResultados(String termo, String tipoBusca) {
-        this.termoBusca = termo;
+    public boolean carregarResultados(String termo, String tipoBusca) {
+        // this.termoBusca = termo; - não utilizado
         
         try {
             System.out.println("DEBUG RESULTADOS: Iniciando carregamento para termo: " + termo + ", tipo: " + tipoBusca);
@@ -149,12 +149,18 @@ public class PDVResultadoBuscaClientesController implements Initializable {
             
             System.out.println("DEBUG RESULTADOS: Labels atualizadas - Termo: " + lblTermoBusca.getText() + ", Quantidade: " + lblQuantidadeResultados.getText());
             
+            // Retorna false se não encontrou resultados para não exibir a tela
             if (resultados.isEmpty()) {
-                mostrarAlerta("Nenhum cliente encontrado para o termo: " + termo, Alert.AlertType.INFORMATION);
+                System.out.println("DEBUG RESULTADOS: Nenhum cliente encontrado, tela não será exibida");
+                return false;
             }
             
+            return true;
+            
         } catch (Exception e) {
+            System.out.println("DEBUG RESULTADOS: Erro ao carregar resultados: " + e.getMessage());
             mostrarAlerta("Erro ao carregar resultados: " + e.getMessage(), Alert.AlertType.ERROR);
+            return false;
         }
     }
     

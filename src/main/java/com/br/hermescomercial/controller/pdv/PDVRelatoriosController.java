@@ -3,7 +3,7 @@ package com.br.hermescomercial.controller.pdv;
 import com.br.hermescomercial.model.VendaPDV;
 import com.br.hermescomercial.model.ItemVenda;
 import com.br.hermescomercial.model.Usuario;
-import com.br.hermescomercial.dao.VendaDao;
+// import com.br.hermescomercial.dao.VendaDao; - não utilizado
 import com.br.hermescomercial.dao.UsuarioDao;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 
 import java.net.URL;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,13 +22,13 @@ import java.util.ResourceBundle;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Map;
-import java.util.HashMap;
+// import java.util.Map; - não utilizado
+// import java.util.HashMap; - não utilizado
 
 public class PDVRelatoriosController implements Initializable {
 
     // DAOs
-    private VendaDao vendaDao;
+    // private VendaDao vendaDao; - não utilizado
     private UsuarioDao usuarioDao;
     
     // Dados
@@ -181,48 +182,80 @@ public class PDVRelatoriosController implements Initializable {
     }
 
     private void inicializarComponentes() {
-        // Inicializar DAOs
-        this.vendaDao = new VendaDao();
+        inicializarDAOs();
+        inicializarListasObservaveis();
+        configurarComboBoxes();
+        configurarSelecoesPadrao();
+        configurarDatasPadrao();
+        configurarInformacoesTerminal();
+        configurarStatusInicial();
+        configurarBotoesExportacao();
+    }
+    
+    private void inicializarDAOs() {
+        // this.vendaDao = new VendaDao(); - não utilizado
         this.usuarioDao = new UsuarioDao();
-        
-        // Inicializar listas observáveis
+    }
+    
+    private void inicializarListasObservaveis() {
         this.vendasDetalhadas = FXCollections.observableArrayList();
         this.produtosMaisVendidos = FXCollections.observableArrayList();
         this.formasPagamento = FXCollections.observableArrayList();
         this.vendasPorHora = FXCollections.observableArrayList();
         this.desempenhoOperadores = FXCollections.observableArrayList();
-        
-        // Configurar combo boxes
+    }
+    
+    private void configurarComboBoxes() {
+        configurarComboTipoRelatorio();
+        configurarComboOperador();
+        configurarComboTerminal();
+        configurarComboFormaPagamento();
+    }
+    
+    private void configurarComboTipoRelatorio() {
         comboTipoRelatorio.setItems(FXCollections.observableArrayList(
             "VENDAS_DETALHADAS", "PRODUTOS_MAIS_VENDIDOS", "FORMAS_PAGAMENTO", 
             "VENDAS_POR_HORA", "DESEMPENHO_OPERADORES", "RESUMO_COMPLETO"
         ));
         comboTipoRelatorio.getSelectionModel().selectFirst();
-        
+    }
+    
+    private void configurarComboOperador() {
         comboOperador.setItems(FXCollections.observableArrayList("Todos"));
+    }
+    
+    private void configurarComboTerminal() {
         comboTerminal.setItems(FXCollections.observableArrayList("Todos", "001", "002", "003"));
+    }
+    
+    private void configurarComboFormaPagamento() {
         comboFormaPagamento.setItems(FXCollections.observableArrayList(
             "Todas", "DINHEIRO", "CARTAO_DEBITO", "CARTAO_CREDITO", "PIX", "TRANSFERENCIA"
         ));
-        
-        // Configurar seleções padrão
+    }
+    
+    private void configurarSelecoesPadrao() {
         comboOperador.getSelectionModel().selectFirst();
         comboTerminal.getSelectionModel().selectFirst();
         comboFormaPagamento.getSelectionModel().selectFirst();
-        
-        // Configurar datas padrão (últimos 7 dias)
+    }
+    
+    private void configurarDatasPadrao() {
         LocalDate hoje = LocalDate.now();
         dpDataFinal.setValue(hoje);
         dpDataInicial.setValue(hoje.minusDays(7));
-        
-        // Configurar informações do terminal
+    }
+    
+    private void configurarInformacoesTerminal() {
         lblTerminal.setText("Terminal: 001");
         lblOperador.setText("Operador: João");
-        
-        // Configurar status inicial
+    }
+    
+    private void configurarStatusInicial() {
         atualizarStatus("Selecione os filtros e gere o relatório");
-        
-        // Desabilitar botões de exportação
+    }
+    
+    private void configurarBotoesExportacao() {
         btnExportarPDF.setDisable(true);
         btnExportarExcel.setDisable(true);
         btnImprimir.setDisable(true);
@@ -660,7 +693,7 @@ public class PDVRelatoriosController implements Initializable {
         
         // Calcular ticket médio
         if (totalVendas > 0) {
-            BigDecimal ticketMedio = valorTotal.divide(new BigDecimal(totalVendas), 2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal ticketMedio = valorTotal.divide(new BigDecimal(totalVendas), 2, RoundingMode.HALF_UP);
             lblTicketMedio.setText(formatarMoeda(ticketMedio));
         } else {
             lblTicketMedio.setText("R$ 0,00");

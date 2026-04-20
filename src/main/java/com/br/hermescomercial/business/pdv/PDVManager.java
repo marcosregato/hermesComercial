@@ -1,6 +1,6 @@
 package com.br.hermescomercial.business.pdv;
 
-import com.br.hermescomercial.dao.VendaDao;
+// import com.br.hermescomercial.dao.VendaDao; - não utilizado
 import com.br.hermescomercial.model.CarrinhoCompras;
 import com.br.hermescomercial.model.Pagamento;
 import com.br.hermescomercial.model.Produto;
@@ -11,27 +11,53 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
+// import java.util.List; - não utilizado
 
 public class PDVManager {
     
     private static final Logger logger = LogManager.getLogger(PDVManager.class);
     
+    // Instância Singleton
+    private static volatile PDVManager instance;
+    
     private CarrinhoCompras carrinhoAtual;
     private Usuario operadorAtual;
-    private VendaDao vendaDao;
+    // private VendaDao vendaDao; - não utilizado
     
     // Configurações do PDV
     private boolean caixaAberto;
     private boolean modoTreinamento;
     private String numeroTerminal;
+    
+    // Cache para performance
+    private java.util.Map<String, Produto> cacheProdutos;
+    private long cacheProdutosTimestamp;
+    private static final long CACHE_DURATION_MS = 300000; // 5 minutos
 
-    public PDVManager() {
-        this.vendaDao = new VendaDao();
-        this.carrinhoAtual = new CarrinhoCompras();
+    // Construtor privado para Singleton
+    private PDVManager() {
+        // this.vendaDao = new VendaDao(); - não utilizado
+        this.caixaAberto = false;
         this.modoTreinamento = false;
         this.numeroTerminal = "001";
-        verificarStatusCaixa();
+        this.cacheProdutos = new java.util.concurrent.ConcurrentHashMap<>();
+        this.cacheProdutosTimestamp = 0;
+        logger.info("PDVManager inicializado");
+    }
+    
+    /**
+     * Método Singleton para obter a única instância do PDVManager
+     * @return Instância única do PDVManager
+     */
+    public static PDVManager getInstance() {
+        if (instance == null) {
+            synchronized (PDVManager.class) {
+                if (instance == null) {
+                    instance = new PDVManager();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -89,7 +115,7 @@ public class PDVManager {
             }
 
             // Obter preço do produto
-            BigDecimal valorUnitario = obterPrecoProduto(produto);
+            BigDecimal valorUnitario = produto.getPrecoVenda();
             
             carrinhoAtual.adicionarItem(produto, quantidade, valorUnitario);
             
@@ -135,27 +161,23 @@ public class PDVManager {
     }
 
     /**
-     * Aplica desconto em um item específico
-     * @param codigoProduto Código do produto
+     * Aplica desconto em item do carrinho
+     * @param produtoId ID do produto
      * @param desconto Valor do desconto
      * @return true se aplicado com sucesso
      */
-    public boolean aplicarDescontoItem(String codigoProduto, BigDecimal desconto) {
+    public boolean aplicarDescontoItem(String produtoId, BigDecimal desconto) {
         try {
-            if (carrinhoAtual == null || desconto == null || desconto.compareTo(BigDecimal.ZERO) < 0) {
-                return false;
-            }
-
-            Produto produto = buscarProdutoPorCodigo(codigoProduto);
-            if (produto == null) {
+            if (carrinhoAtual == null || carrinhoAtual.estaVazio()) {
+                logger.error("Carrinho vazio para aplicar desconto");
                 return false;
             }
 
             // Encontrar item no carrinho
             for (var item : carrinhoAtual.getItens()) {
-                if (produto.equals(item.getProduto())) {
+                if (produtoId.equals(item.getProduto().getId().toString())) {
                     carrinhoAtual.aplicarDescontoItem(item, desconto);
-                    logger.info("Desconto aplicado no item: " + produto.getNome() + " (-" + desconto + ")");
+                    logger.info("Desconto aplicado no item: " + item.getProduto().getNome() + " (-" + desconto + ")");
                     return true;
                 }
             }
@@ -164,6 +186,55 @@ public class PDVManager {
 
         } catch (Exception e) {
             logger.error("Erro ao aplicar desconto: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    /**
+     * Valida quantidade de itens no carrinho
+     * @param quantidade Quantidade a ser validada
+     * @return true se válida
+     */
+    public boolean validarQuantidade(int quantidade) {
+        try {
+            if (quantidade <= 0) {
+                return false;
+            }
+            
+            // Validar quantidade máxima permitida (ex: 1000 itens)
+            if (quantidade > 1000) {
+                return false;
+            }
+            
+            return true;
+        } catch (Exception e) {
+            logger.error("Erro ao validar quantidade: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    /**
+     * Valida produto para adicionar ao carrinho
+     * @param produto Produto a ser validado
+     * @return true se válido
+     */
+    public boolean validarProduto(Produto produto) {
+        try {
+            if (produto == null) {
+                return false;
+            }
+            
+            if (produto.getNome() == null || produto.getNome().trim().isEmpty()) {
+                return false;
+            }
+            
+            if (produto.getPrecoVenda() == null || produto.getPrecoVenda().compareTo(BigDecimal.ZERO) <= 0) {
+                return false;
+            }
+            
+            return true;
+        } catch (Exception e) {
+            logger.error("Erro ao validar produto: " + e.getMessage(), e);
             return false;
         }
     }
@@ -336,14 +407,7 @@ public class PDVManager {
         }
     }
 
-    /**
-     * Verifica se o caixa está aberto
-     */
-    private void verificarStatusCaixa() {
-        // Implementação futura - verificar status do caixa
-        this.caixaAberto = false; // Por enquanto, sempre fechado ao iniciar
-    }
-
+    
     /**
      * Verifica se há estoque disponível
      */
@@ -358,29 +422,58 @@ public class PDVManager {
     }
 
     /**
-     * Obtém preço do produto
+     * Busca produto usando cache para melhorar performance
      */
-    private BigDecimal obterPrecoProduto(Produto produto) {
-        try {
-            // Lógica para obter preço - implementar conforme necessário
-            return new BigDecimal("10.00"); // Simplificado para exemplo
-        } catch (Exception e) {
-            logger.error("Erro ao obter preço do produto: " + e.getMessage(), e);
-            return BigDecimal.ZERO;
+    public Produto buscarProdutoPorCodigo(String codigo) {
+        // Verificar se o cache está válido
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - cacheProdutosTimestamp > CACHE_DURATION_MS) {
+            // Cache expirou, limpar
+            cacheProdutos.clear();
+            cacheProdutosTimestamp = currentTime;
         }
+        
+        // Buscar do cache primeiro
+        Produto produto = cacheProdutos.get(codigo);
+        if (produto != null) {
+            logger.debug("Produto encontrado no cache: " + codigo);
+            return produto;
+        }
+        
+        // Se não encontrou no cache, buscar do banco (simulado)
+        produto = buscarProdutoNoBanco(codigo);
+        if (produto != null) {
+            cacheProdutos.put(codigo, produto);
+            logger.debug("Produto carregado e cacheado: " + codigo);
+        }
+        
+        return produto;
     }
-
+    
     /**
-     * Busca produto por código
+     * Simula busca de produto no banco de dados
      */
-    private Produto buscarProdutoPorCodigo(String codigo) {
-        try {
-            // Implementar busca de produto por código
-            return new Produto(); // Simplificado para exemplo
-        } catch (Exception e) {
-            logger.error("Erro ao buscar produto: " + e.getMessage(), e);
-            return null;
+    private Produto buscarProdutoNoBanco(String codigo) {
+        // Simulação - em produção seria consulta real ao banco
+        if (codigo != null && !codigo.trim().isEmpty()) {
+            Produto produto = new Produto();
+            produto.setId(Long.parseLong(codigo.replaceAll("[^0-9]", "")));
+            produto.setCodigo(codigo);
+            produto.setNome("Produto " + codigo);
+            produto.setPrecoVenda(new java.math.BigDecimal("10.00"));
+            produto.setEstoque(100);
+            return produto;
         }
+        return null;
+    }
+    
+    /**
+     * Limpa cache de produtos
+     */
+    public void limparCacheProdutos() {
+        cacheProdutos.clear();
+        cacheProdutosTimestamp = 0;
+        logger.info("Cache de produtos limpo");
     }
 
     /**
@@ -400,24 +493,151 @@ public class PDVManager {
         return carrinhoAtual;
     }
 
+    public boolean isCaixaAberto() {
+        return caixaAberto;
+    }
+
     public Usuario getOperadorAtual() {
         return operadorAtual;
     }
 
-    public boolean isCaixaAberto() {
-        return caixaAberto;
+    public String getNumeroTerminal() {
+        return numeroTerminal;
     }
 
     public boolean isModoTreinamento() {
         return modoTreinamento;
     }
 
-    public void setModoTreinamento(boolean modoTreinamento) {
-        this.modoTreinamento = modoTreinamento;
+    /**
+     * Valida valor monetário
+     * @param valor Valor a ser validado
+     * @return true se válido
+     */
+    public boolean validarValor(BigDecimal valor) {
+        try {
+            if (valor == null) {
+                return false;
+            }
+            
+            // Validações básicas
+            if (valor.compareTo(BigDecimal.ZERO) < 0) {
+                return false;
+            }
+            
+            // Valor máximo permitido (ex: R$ 10.000,00)
+            BigDecimal valorMaximo = new BigDecimal("10000.00");
+            if (valor.compareTo(valorMaximo) > 0) {
+                return false;
+            }
+            
+            return true;
+        } catch (Exception e) {
+            logger.error("Erro ao validar valor: " + e.getMessage(), e);
+            return false;
+        }
     }
 
-    public String getNumeroTerminal() {
-        return numeroTerminal;
+    /**
+     * Cria objeto VendaPDV a partir do carrinho atual
+     * @return VendaPDV criada
+     */
+    public VendaPDV criarVendaPDV() {
+        try {
+            if (carrinhoAtual == null || carrinhoAtual.estaVazio()) {
+                logger.error("Carrinho vazio para criar venda");
+                return null;
+            }
+
+            VendaPDV venda = new VendaPDV();
+            venda.setValorTotal(carrinhoAtual.getValorTotal());
+            venda.setValorFinal(carrinhoAtual.getValorFinal());
+            venda.setDataVenda(LocalDateTime.now());
+            venda.setOperador(operadorAtual);
+            venda.setItens(carrinhoAtual.getItens());
+            venda.setNumeroTerminal(numeroTerminal);
+            venda.setNumeroCupom(gerarNumeroCupom());
+            
+            if (carrinhoAtual.getCliente() != null) {
+                venda.setCliente(carrinhoAtual.getCliente());
+            }
+
+            return venda;
+        } catch (Exception e) {
+            logger.error("Erro ao criar venda PDV: " + e.getMessage(), e);
+            return null;
+        }
+    }
+
+    /**
+     * Finaliza sessão PDV
+     * @return true se finalizada com sucesso
+     */
+    public boolean finalizarSessaoPDV() {
+        try {
+            if (carrinhoAtual != null) {
+                carrinhoAtual.fecharCarrinho();
+                this.carrinhoAtual = null;
+            }
+            
+            this.operadorAtual = null;
+            logger.info("Sessão PDV finalizada");
+            return true;
+        } catch (Exception e) {
+            logger.error("Erro ao finalizar sessão PDV: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    /**
+     * Obtém sessão PDV atual
+     * @return Sessão atual ou null
+     */
+    public Object getSessaoAtual() {
+        return carrinhoAtual != null ? carrinhoAtual : null;
+    }
+
+    /**
+     * Cancela venda por ID
+     * @param idVenda ID da venda
+     * @return true se cancelada com sucesso
+     */
+    public boolean cancelarVenda(Long idVenda) {
+        try {
+            // Implementar lógica de cancelamento de venda
+            // Por enquanto, apenas registra o log
+            logger.info("Cancelando venda ID: " + idVenda);
+            
+            // Aqui deveria buscar a venda no banco e marcar como cancelada
+            // vendaDao.cancelar(idVenda); // Implementar quando DAO estiver pronto
+            
+            return true;
+        } catch (Exception e) {
+            logger.error("Erro ao cancelar venda: " + e.getMessage(), e);
+            return false;
+        }
+    }
+
+    /**
+     * Busca venda por ID
+     * @param idVenda ID da venda
+     * @return Venda encontrada ou null
+     */
+    public VendaPDV buscarVendaPorId(Long idVenda) {
+        try {
+            // Implementar busca no banco
+            // return vendaDao.buscarPorId(idVenda); // Implementar quando DAO estiver pronto
+            
+            // Por enquanto, retorna null
+            return null;
+        } catch (Exception e) {
+            logger.error("Erro ao buscar venda por ID: " + e.getMessage(), e);
+            return null;
+        }
+    }
+
+    public void setModoTreinamento(boolean modoTreinamento) {
+        this.modoTreinamento = modoTreinamento;
     }
 
     public void setNumeroTerminal(String numeroTerminal) {

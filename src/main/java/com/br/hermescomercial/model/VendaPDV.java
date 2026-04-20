@@ -2,6 +2,7 @@ package com.br.hermescomercial.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class VendaPDV {
@@ -29,6 +30,7 @@ public class VendaPDV {
         this.dataVenda = LocalDateTime.now();
         this.status = "ABERTA";
         this.valorDesconto = BigDecimal.ZERO;
+        this.itens = new ArrayList<>();
     }
 
     public Long getId() {

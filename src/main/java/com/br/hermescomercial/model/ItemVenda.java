@@ -95,6 +95,19 @@ public class ItemVenda {
         this.observacao = observacao;
     }
 
+    // Métodos otimizados para PropertyValueFactory - melhor performance
+    public String getProdutoId() {
+        return produto != null ? String.valueOf(produto.getId()) : "";
+    }
+    
+    public String getProdutoNome() {
+        return produto != null ? produto.getNome() : "";
+    }
+    
+    public String getAcoes() {
+        return "Remover";
+    }
+
     private void calcularValores() {
         if (valorUnitario != null && quantidade > 0) {
             this.valorTotal = valorUnitario.multiply(BigDecimal.valueOf(quantidade));

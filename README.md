@@ -85,6 +85,8 @@ Este script realiza as seguintes ações:
 
 ## Como Executar
 
+### Execução em Desenvolvimento
+
 1.  Compile o projeto usando o Maven:
 
     ```sh
@@ -96,6 +98,28 @@ Este script realiza as seguintes ações:
     ```sh
     mvn javafx:run
     ```
+
+### Geração do Executável
+
+Para criar um executável independente que pode ser distribuído:
+
+1.  Gere o JAR com todas as dependências:
+
+    ```sh
+    mvn clean package -DskipTests
+    ```
+
+2.  O executável será criado em `target/hermesComercial-1.0.1.jar`
+
+3.  Para distribuir o sistema completo:
+    - Copie o arquivo JAR para o diretório desejado
+    - Use os scripts de execução fornecidos (Linux/Windows)
+    - Certifique-se de que o JavaFX está instalado no sistema de destino
+
+**Localização dos scripts de execução:**
+- Scripts prontos para uso estão disponíveis em `/home/marcos/ExecutaveSistema/`
+- Incluem suporte completo a logs e configuração de JavaFX
+- Funcionam em Linux e Windows
 
 ## Manutenção do Banco de Dados
 

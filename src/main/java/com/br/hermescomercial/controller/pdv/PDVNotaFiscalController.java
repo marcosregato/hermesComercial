@@ -6,7 +6,7 @@ import com.br.hermescomercial.model.NotaFiscalItem;
 import com.br.hermescomercial.model.NotaFiscalPagamentoItem;
 import com.br.hermescomercial.model.VendaPDV;
 import com.br.hermescomercial.model.Usuario;
-import com.br.hermescomercial.model.Produto;
+// import com.br.hermescomercial.model.Produto; - não utilizado
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;

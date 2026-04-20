@@ -6,7 +6,6 @@ import com.br.hermescomercial.model.Cliente;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Button;
-import javafx.collections.ObservableList;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;

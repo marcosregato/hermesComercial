@@ -92,6 +92,7 @@ public class PDVBuscaProdutoController implements Initializable {
         inicializarListeners();
         inicializarTabelas();
         inicializarTimer();
+        configurarValidacaoCamposNumericos();
         carregarDadosIniciais();
     }
 
@@ -517,6 +518,88 @@ public class PDVBuscaProdutoController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(mensagem);
         alert.showAndWait();
+    }
+
+    private void configurarValidacaoCamposNumericos() {
+        // Configurar TextFormatter para Preço Mínimo (apenas números e vírgula decimal)
+        txtPrecoMinimo.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9,]", "");
+            // Permitir apenas uma vírgula e no máximo duas casas decimais
+            String[] partes = newText.split(",");
+            if (partes.length > 2) {
+                newText = partes[0] + "," + partes[1];
+            }
+            if (partes.length == 2 && partes[1].length() > 2) {
+                newText = partes[0] + "," + partes[1].substring(0, 2);
+            }
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo Preço Mínimo aceita apenas números e uma vírgula decimal. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
+        
+        // Configurar TextFormatter para Preço Máximo (apenas números e vírgula decimal)
+        txtPrecoMaximo.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9,]", "");
+            // Permitir apenas uma vírgula e no máximo duas casas decimais
+            String[] partes = newText.split(",");
+            if (partes.length > 2) {
+                newText = partes[0] + "," + partes[1];
+            }
+            if (partes.length == 2 && partes[1].length() > 2) {
+                newText = partes[0] + "," + partes[1].substring(0, 2);
+            }
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo Preço Máximo aceita apenas números e uma vírgula decimal. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
+        
+        // Configurar TextFormatter para Estoque Mínimo (apenas números)
+        txtEstoqueMinimo.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9]", "");
+            if (newText.length() > 6) newText = newText.substring(0, 6); // Limite para estoque
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo Estoque Mínimo aceita apenas números. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
+        
+        // Configurar TextFormatter para Quantidade no diálogo (apenas números)
+        if (txtQuantidadeDialog != null) {
+            txtQuantidadeDialog.setTextFormatter(new TextFormatter<>(change -> {
+                String newText = change.getControlNewText().replaceAll("[^0-9]", "");
+                if (newText.length() > 4) newText = newText.substring(0, 4); // Limite para quantidade
+                if (!change.getControlNewText().equals(newText)) {
+                    change.setText(newText);
+                    mostrarAlerta("O campo Quantidade aceita apenas números. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+                }
+                return change;
+            }));
+        }
+        
+        // Configurar TextFormatter para Desconto no diálogo (apenas números e vírgula decimal)
+        if (txtDescontoDialog != null) {
+            txtDescontoDialog.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9,]", "");
+            // Permitir apenas uma vírgula e no máximo duas casas decimais
+            String[] partes = newText.split(",");
+            if (partes.length > 2) {
+                newText = partes[0] + "," + partes[1];
+            }
+            if (partes.length == 2 && partes[1].length() > 2) {
+                newText = partes[0] + "," + partes[1].substring(0, 2);
+            }
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo Desconto aceita apenas números e uma vírgula decimal. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+            }));
+        }
     }
 
     private void fecharTela() {

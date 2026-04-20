@@ -23,16 +23,41 @@ public class HermesPDVApplication extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/pdv_principal.fxml"));
             Parent root = loader.load();
             
-            // Configurar a cena
-            Scene scene = new Scene(root, 1200, 800);
+            // Configurar a cena com tamanho responsivo
+            Scene scene = new Scene(root);
             scene.getStylesheets().add(getClass().getResource("/css/pdv.css").toExternalForm());
             
-            // Configurar o stage principal
+            // Configurar o stage principal com redimensionamento responsivo
             primaryStage.setTitle("Hermes Comercial - Sistema PDV");
             primaryStage.setScene(scene);
+            
+            // Configurar redimensionamento responsivo
             primaryStage.setResizable(true);
-            primaryStage.setMinWidth(1000);
+            primaryStage.setMinWidth(800);
             primaryStage.setMinHeight(600);
+            
+            // Tamanho inicial baseado na resolução da tela
+            javafx.geometry.Rectangle2D screenBounds = javafx.stage.Screen.getPrimary().getBounds();
+            double screenWidth = screenBounds.getWidth();
+            double screenHeight = screenBounds.getHeight();
+            
+            // Definir tamanho inicial responsivo
+            if (screenWidth >= 1920) {
+                // Full HD ou maior
+                primaryStage.setWidth(1400);
+                primaryStage.setHeight(900);
+            } else if (screenWidth >= 1366) {
+                // HD
+                primaryStage.setWidth(1200);
+                primaryStage.setHeight(800);
+            } else {
+                // Resoluções menores
+                primaryStage.setWidth(screenWidth * 0.9);
+                primaryStage.setHeight(screenHeight * 0.8);
+            }
+            
+            // Centralizar janela na tela
+            primaryStage.centerOnScreen();
             
             // Tentar carregar ícone da aplicação
             try {

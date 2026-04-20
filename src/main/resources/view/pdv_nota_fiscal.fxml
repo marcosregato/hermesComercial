@@ -103,7 +103,7 @@
                      <children>
                         <Label text="ITENS DA NOTA FISCAL" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
                         <Region HBox.hgrow="ALWAYS"/>
-                        <Button fx:id="btnAdicionarItem" text="Adicionar Item" styleClass="button-primary"/>
+                        <Button fx:id="btnAdicionarItem" text="Adicionar Item" styleClass="button-primary" onAction="#onAdicionarItem"/>
                      </children>
                   </HBox>
                   

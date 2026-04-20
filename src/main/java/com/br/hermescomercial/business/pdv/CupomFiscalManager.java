@@ -16,6 +16,10 @@ public class CupomFiscalManager {
     
     private static final Logger logger = LogManager.getLogger(CupomFiscalManager.class);
     
+    // Instância Singleton
+    private static volatile CupomFiscalManager instance;
+    
+    // Formatters de data
     private static final DateTimeFormatter FORMATADOR_DATA = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static final DateTimeFormatter FORMATADOR_DATA_CURTA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
@@ -25,12 +29,29 @@ public class CupomFiscalManager {
     private String telefoneEmpresa;
     private String numeroTerminal;
 
-    public CupomFiscalManager() {
+    // Construtor privado para Singleton
+    private CupomFiscalManager() {
         this.nomeEmpresa = "Hermes Comercial Ltda";
         this.cnpjEmpresa = "12.345.678/0001-95";
-        this.enderecoEmpresa = "Rua Comercial, 123 - Centro - São Paulo/SP";
-        this.telefoneEmpresa = "(11) 1234-5678";
+        this.enderecoEmpresa = "Rua das Flores, 123";
+        this.telefoneEmpresa = "(11) 3456-7890";
         this.numeroTerminal = "001";
+        logger.info("CupomFiscalManager inicializado");
+    }
+    
+    /**
+     * Método Singleton para obter a única instância do CupomFiscalManager
+     * @return Instância única do CupomFiscalManager
+     */
+    public static CupomFiscalManager getInstance() {
+        if (instance == null) {
+            synchronized (CupomFiscalManager.class) {
+                if (instance == null) {
+                    instance = new CupomFiscalManager();
+                }
+            }
+        }
+        return instance;
     }
 
     /**

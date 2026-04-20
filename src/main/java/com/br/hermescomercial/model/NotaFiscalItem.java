@@ -130,6 +130,10 @@ public class NotaFiscalItem {
         return String.format("R$ %,.2f", valorUnitario).replace('.', ',');
     }
     
+    public String getAcoes() {
+        return "Ações";
+    }
+    
     // Getters e Setters
     public Long getId() {
         return id;

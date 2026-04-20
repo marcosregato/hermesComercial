@@ -189,19 +189,8 @@ public class ItemVendaDao {
     }
 
     // Métodos auxiliares para compatibilidade com o modelo existente
-    private void setIdVenda(Long idVenda) {
-        // Implementar conforme necessário
-    }
-
-    private Long getIdVenda() {
-        return null; // Implementar conforme necessário
-    }
-
-    private void setIdProduto(Long idProduto) {
-        // Implementar conforme necessário
-    }
-
-    private Long getIdProduto() {
-        return null; // Implementar conforme necessário
-    }
+    // private void setIdVenda(Long idVenda) - método não utilizado
+    // private Long getIdVenda() - método não utilizado
+    // private void setIdProduto(Long idProduto) - método não utilizado
+    // private Long getIdProduto() - método não utilizado
 }

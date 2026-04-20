@@ -11,6 +11,9 @@ public class ImpressoraManager {
     
     private static final Logger logger = LogManager.getLogger(ImpressoraManager.class);
     
+    // Instância Singleton
+    private static volatile ImpressoraManager instance;
+    
     // Configurações da impressora
     private String nomeImpressora;
     private int colunasPorLinha;
@@ -18,23 +21,39 @@ public class ImpressoraManager {
     private boolean modoDebug;
     
     // Sequências de controle ESC/POS
-    private static final byte[] ESC = new byte[]{0x1B};
-    private static final byte[] GS = new byte[]{0x1D};
+    // private static final byte[] ESC = new byte[]{0x1B}; - não utilizado
+    // private static final byte[] GS = new byte[]{0x1D}; - não utilizado
     private static final byte[] LF = new byte[]{0x0A};
-    private static final byte[] CR = new byte[]{0x0D};
+    // private static final byte[] CR = new byte[]{0x0D}; - não utilizado
     private static final byte[] INIT = new byte[]{0x1B, 0x40};
     private static final byte[] CUT_PAPER = new byte[]{0x1B, 0x69};
     private static final byte[] BOLD_ON = new byte[]{0x1B, 0x45, 0x01};
     private static final byte[] BOLD_OFF = new byte[]{0x1B, 0x45, 0x00};
     private static final byte[] ALIGN_CENTER = new byte[]{0x1B, 0x61, 0x01};
     private static final byte[] ALIGN_LEFT = new byte[]{0x1B, 0x61, 0x00};
-    private static final byte[] ALIGN_RIGHT = new byte[]{0x1B, 0x61, 0x02};
+    // private static final byte[] ALIGN_RIGHT = new byte[]{0x1B, 0x61, 0x02}; - não utilizado
 
-    public ImpressoraManager() {
+    // Construtor privado para Singleton
+    private ImpressoraManager() {
         this.nomeImpressora = "Default";
         this.colunasPorLinha = 48;
         this.caracteresPorLinha = 48;
         this.modoDebug = false;
+    }
+    
+    /**
+     * Método Singleton para obter a única instância do ImpressoraManager
+     * @return Instância única do ImpressoraManager
+     */
+    public static ImpressoraManager getInstance() {
+        if (instance == null) {
+            synchronized (ImpressoraManager.class) {
+                if (instance == null) {
+                    instance = new ImpressoraManager();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -255,8 +274,8 @@ public class ImpressoraManager {
     private boolean imprimirWindows(byte[] dados) {
         try {
             // Usar comando COPY para enviar para porta LPT1 ou USB
-            String comando = "cmd /c echo " + new String(dados) + " > LPT1";
-            Process process = Runtime.getRuntime().exec(comando);
+            ProcessBuilder pb = new ProcessBuilder("cmd", "/c", "echo", new String(dados), ">", "LPT1");
+            Process process = pb.start();
             
             return process.waitFor() == 0;
 
@@ -272,8 +291,8 @@ public class ImpressoraManager {
     private boolean imprimirLinux(byte[] dados) {
         try {
             // Usar lp para enviar para impressora
-            String comando = "lp -d " + nomeImpressora;
-            Process process = Runtime.getRuntime().exec(comando);
+            ProcessBuilder pb = new ProcessBuilder("lp", "-d", nomeImpressora);
+            Process process = pb.start();
             
             try (OutputStream os = process.getOutputStream()) {
                 os.write(dados);

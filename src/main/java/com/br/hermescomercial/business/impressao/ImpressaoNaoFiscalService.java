@@ -4,7 +4,7 @@ import com.br.hermescomercial.model.ImpressoraNaoFiscal;
 import com.br.hermescomercial.model.VendaPDV;
 import com.br.hermescomercial.model.ItemVenda;
 import com.br.hermescomercial.model.NotaFiscal;
-import com.br.hermescomercial.model.Usuario;
+// import com.br.hermescomercial.model.Usuario; - não utilizado
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +12,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
+// import java.time.LocalDateTime; - não utilizado
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -21,8 +21,8 @@ public class ImpressaoNaoFiscalService {
     private static final Logger logger = LogManager.getLogger(ImpressaoNaoFiscalService.class);
     
     private static final int LINE_FEED = 10;
-    private static final int CARRIAGE_RETURN = 13;
-    private static final int FORM_FEED = 12;
+    // private static final int CARRIAGE_RETURN = 13; - não utilizado
+    // private static final int FORM_FEED = 12; - não utilizado
     private static final int ESC = 27;
     private static final int GS = 29;
     
@@ -35,7 +35,7 @@ public class ImpressaoNaoFiscalService {
     private static final byte[] DOUBLE_HEIGHT_ON = {ESC, '!', 16};
     private static final byte[] DOUBLE_HEIGHT_OFF = {ESC, '!', 0};
     private static final byte[] CUT_PAPER = {GS, 'V', 1};
-    private static final byte[] PARTIAL_CUT = {GS, 'V', 66};
+    // private static final byte[] PARTIAL_CUT = {GS, 'V', 66}; - não utilizado
     private static final byte[] OPEN_DRAWER = {ESC, 'p', 0, 60, 120};
     
     private ImpressoraNaoFiscal impressoraConfigurada;
@@ -619,11 +619,19 @@ public class ImpressaoNaoFiscalService {
             
             // Simulação bem-sucedida
             Socket socket = new Socket(impressoraConfigurada.getIp(), impressoraConfigurada.getPortaRede());
-            outputStream = socket.getOutputStream();
-            conectado = true;
-            impressoraConfigurada.atualizarStatus(true, "Conectado via Rede");
-            logger.info("Conectado via Rede: " + impressoraConfigurada.getIp() + ":" + impressoraConfigurada.getPortaRede());
-            return true;
+            try {
+                outputStream = socket.getOutputStream();
+                conectado = true;
+                impressoraConfigurada.atualizarStatus(true, "Conectado via Rede");
+                logger.info("Conectado via Rede: " + impressoraConfigurada.getIp() + ":" + impressoraConfigurada.getPortaRede());
+                return true;
+            } finally {
+                try {
+                    socket.close();
+                } catch (IOException e) {
+                    logger.warn("Erro ao fechar socket: " + e.getMessage());
+                }
+            }
         } catch (Exception e) {
             logger.error("Erro na conexão de rede: " + e.getMessage());
             impressoraConfigurada.atualizarStatus(false, "Erro de rede: " + e.getMessage());

@@ -5,163 +5,114 @@
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 
-<BorderPane fx:id="borderPane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.br.hermescomercial.controller.pdv.PDVPrincipalController">
+<BorderPane fx:id="borderPane" styleClass="border-pane" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.br.hermescomercial.controller.pdv.PDVPrincipalController">
    <top>
       <VBox style="-fx-background-color: #2c3e50;">
          <children>
-            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 10; -fx-background-color: #34495e;">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="header-box" style="-fx-padding: 10; -fx-background-color: #34495e;">
                <children>
-                  <Label text="HERMES COMERCIAL - PDV" style="-fx-text-fill: white; -fx-font-size: 18px; -fx-font-weight: bold;"/>
-                  <Region />
-                  <Label fx:id="lblDataHora" text="01/01/2024 12:00:00" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
-                  <Label fx:id="lblOperador" text="Operador: João" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 0 0 0 20;"/>
-                  <Label fx:id="lblTerminal" text="Terminal: 001" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 0 0 0 20;"/>
+                  <Label text="HERMES COMERCIAL - PDV" styleClass="header-title" style="-fx-text-fill: white; -fx-font-weight: bold;"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Label fx:id="lblDataHora" text="01/01/2024 12:00:00" styleClass="header-label" style="-fx-text-fill: white;"/>
+                  <Label fx:id="lblOperador" text="Operador: João" styleClass="header-label" style="-fx-text-fill: white; -fx-padding: 0 0 0 20;"/>
+                  <Label fx:id="lblTerminal" text="Terminal: 001" styleClass="header-label" style="-fx-text-fill: white; -fx-padding: 0 0 0 20;"/>
+                  <Label fx:id="lblStatusCaixa" text="Caixa: FECHADO" styleClass="header-label" style="-fx-text-fill: #e74c3c; -fx-font-weight: bold; -fx-padding: 0 0 0 20;"/>
                </children>
             </HBox>
-            <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 5 10; -fx-background-color: #2c3e50;">
+            <HBox alignment="CENTER_LEFT" spacing="10" styleClass="hbox-responsive" style="-fx-padding: 5 10; -fx-background-color: #2c3e50;">
                <children>
-                  <Button fx:id="btnNovaVenda" text="Nova Venda" styleClass="button-primary" onAction="#onNovaVenda"/>
-                  <Button fx:id="btnBuscarProduto" text="Buscar Produto" styleClass="button-secondary" onAction="#onBuscarProduto"/>
-                  <Button fx:id="btnClientes" text="Clientes" styleClass="button-secondary" onAction="#onClientes"/>
-                  <Button fx:id="btnRelatorios" text="Relatórios" styleClass="button-secondary" onAction="#onRelatorios"/>
-                  <Button fx:id="btnNotaFiscal" text="Nota Fiscal" styleClass="button-info" onAction="#onNotaFiscal"/>
-                  <Button fx:id="btnConfigImpressora" text="Config. Impressora" styleClass="button-secondary" onAction="#onConfigImpressora"/>
-                  <Region />
-                  <Button fx:id="btnAbrirCaixa" text="Abrir Caixa" styleClass="button-success" onAction="#onAbrirCaixa"/>
-                  <Button fx:id="btnFecharCaixa" text="Fechar Caixa" styleClass="button-danger" onAction="#onFecharCaixa"/>
-                  <Button fx:id="btnSair" text="Sair" styleClass="button-danger" onAction="#onSair"/>
+                  <Button fx:id="btnAbrirVenda" text="Abrir Venda" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onAbrirVenda"/>
+                  <Button fx:id="btnFecharVenda" text="Fechar Venda" styleClass="button-warning, button-responsive" prefWidth="100.0" onAction="#onFecharVenda"/>
+                  <Button fx:id="btnBuscarProduto" text="Buscar Produto" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onBuscarProduto"/>
+                  <Button fx:id="btnCadastrarProduto" text="Cadastrar Produto" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onCadastrarProduto"/>
+                  <Button fx:id="btnClientes" text="Clientes" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onClientes"/>
+                  <Button fx:id="btnRelatorios" text="Relatórios" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onRelatorios"/>
+                  <Button fx:id="btnNotaFiscal" text="Nota Fiscal" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onNotaFiscal"/>
+                  <Button fx:id="btnCupomFiscal" text="Cupom Fiscal" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onCupomFiscal"/>
+                  <Button fx:id="btnConfigImpressora" text="Config. Impressora" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onConfigImpressora"/>
+                  <Region HBox.hgrow="ALWAYS"/>
+                  <Button fx:id="btnAbrirCaixa" text="Abrir Caixa" styleClass="button-success, button-responsive" onAction="#onAbrirCaixa"/>
+                  <Button fx:id="btnFecharCaixa" text="Fechar Caixa" styleClass="button-danger, button-responsive" onAction="#onFecharCaixa"/>
+                  <Button fx:id="btnSair" text="Sair" styleClass="button-danger, button-responsive" onAction="#onSair"/>
                </children>
             </HBox>
          </children>
       </VBox>
    </top>
    
+   <!-- Painel de Informações do Caixa (visível quando caixa estiver aberto) -->
+   <VBox fx:id="painelCaixaAberto" style="-fx-background-color: #27ae60; -fx-padding: 10; -fx-spacing: 5;" managed="false" visible="false">
+      <children>
+         <HBox alignment="CENTER_LEFT" spacing="15">
+            <children>
+               <Label text="CAIXA ABERTO" style="-fx-text-fill: white; -fx-font-size: 16px; -fx-font-weight: bold;"/>
+               <Region />
+               <Label fx:id="lblDataAbertura" text="Aberto em: 19/04/2026 15:38" style="-fx-text-fill: white; -fx-font-size: 14px;"/>
+               <Label fx:id="lblOperadorCaixa" text="Operador: João" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-padding: 0 0 0 20;"/>
+               <Label fx:id="lblValorCaixa" text="Valor em Caixa: R$ 0,00" style="-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;"/>
+            </children>
+         </HBox>
+      </children>
+   </VBox>
+   
    <center>
-      <VBox spacing="20" style="-fx-padding: 20;">
-         <children>
-            <!-- Área de Produtos -->
-            <TitledPane text="Produtos" expanded="true" collapsible="false">
-               <content>
-                  <VBox spacing="10">
-                     <children>
-                        <HBox spacing="10" alignment="CENTER_LEFT">
+      <ScrollPane fitToWidth="true" fitToHeight="true" style="-fx-padding: 5;">
+         <content>
+            <VBox spacing="20" styleClass="content-vbox" style="-fx-padding: 20;">
+               <children>
+                  <!-- Área de Cliente -->
+                  <TitledPane text="Cliente" expanded="true" collapsible="false">
+                     <content>
+                        <VBox spacing="10">
                            <children>
-                              <TextField fx:id="txtBuscarProduto" promptText="Digite código ou descrição..." styleClass="text-field-search"/>
-                              <Button fx:id="btnBuscar" text="Buscar" styleClass="button-primary" onAction="#onBuscarProduto"/>
-                              <Button fx:id="btnCodigoBarras" text="Cód. Barras" styleClass="button-info" onAction="#onCodigoBarras"/>
-                           </children>
-                        </HBox>
-                        
-                        <TableView fx:id="tblProdutos" styleClass="table-view">
-                           <columns>
-                              <TableColumn fx:id="colCodigo" text="Código" prefWidth="80"/>
-                              <TableColumn fx:id="colDescricao" text="Descrição" prefWidth="200"/>
-                              <TableColumn fx:id="colPreco" text="Preço" prefWidth="80"/>
-                              <TableColumn fx:id="colEstoque" text="Estoque" prefWidth="80"/>
-                              <TableColumn fx:id="colAcoes" text="Ações" prefWidth="100"/>
-                           </columns>
-                        </TableView>
-                     </children>
-                  </VBox>
-               </content>
-            </TitledPane>
-            
-            <!-- Área de Cliente -->
-            <TitledPane text="Cliente" expanded="true" collapsible="false">
-               <content>
-                  <VBox spacing="10">
-                     <children>
-                        <!-- Busca por Nome -->
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                           <children>
-                              <Label text="Nome:" style="-fx-font-weight: bold; -fx-min-width: 50;"/>
-                              <TextField fx:id="txtBuscarClienteNome" promptText="Digite o nome do cliente..." HBox.hgrow="ALWAYS" styleClass="text-field-search"/>
-                              <Button fx:id="btnBuscarClienteNome" text="Buscar" styleClass="button-primary" onAction="#onBuscarClienteNome"/>
-                           </children>
-                        </HBox>
-                        
-                        <!-- Busca por CPF/CNPJ -->
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                           <children>
-                              <Label text="CPF/CNPJ:" style="-fx-font-weight: bold; -fx-min-width: 50;"/>
-                              <TextField fx:id="txtBuscarClienteCpfCnpj" promptText="Digite o CPF ou CNPJ..." HBox.hgrow="ALWAYS" styleClass="text-field-search"/>
-                              <Button fx:id="btnBuscarClienteCpfCnpj" text="Buscar" styleClass="button-primary" onAction="#onBuscarClienteCpfCnpj"/>
-                           </children>
-                        </HBox>
-                        
-                        <!-- Botões de Ação -->
-                        <HBox spacing="10" alignment="CENTER_LEFT">
-                           <children>
-                              <Button fx:id="btnNovoCliente" text="Novo Cliente" styleClass="button-success" onAction="#onNovoCliente"/>
-                              <Button fx:id="btnLimparCliente" text="Limpar Campos" styleClass="button-secondary" onAction="#onLimparCliente"/>
-                              <Region HBox.hgrow="ALWAYS"/>
-                              <Label fx:id="lblClienteSelecionado" text="Nenhum cliente selecionado" style="-fx-text-fill: #666; -fx-font-style: italic;"/>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </content>
-            </TitledPane>
-            
-            <!-- Carrinho de Compras -->
-            <TitledPane text="Carrinho de Compras" expanded="true" collapsible="false">
-               <content>
-                  <VBox spacing="10">
-                     <children>
-                        <TableView fx:id="tblCarrinho" styleClass="table-view">
-                           <columns>
-                              <TableColumn fx:id="colItemCodigo" text="Código" prefWidth="60"/>
-                              <TableColumn fx:id="colItemDescricao" text="Descrição" prefWidth="150"/>
-                              <TableColumn fx:id="colItemQtd" text="Qtd" prefWidth="50"/>
-                              <TableColumn fx:id="colItemValor" text="Valor" prefWidth="80"/>
-                              <TableColumn fx:id="colItemTotal" text="Total" prefWidth="80"/>
-                              <TableColumn fx:id="colItemAcoes" text="Ações" prefWidth="80"/>
-                           </columns>
-                        </TableView>
-                        
-                        <!-- Resumo do Carrinho -->
-                        <VBox spacing="5" style="-fx-background-color: #f8f9fa; -fx-padding: 10; -fx-border-color: #dee2e6; -fx-border-radius: 5;">
-                           <children>
-                              <HBox alignment="CENTER_LEFT">
+                              <!-- Campos de Busca Lado a Lado -->
+                              <HBox spacing="15" alignment="CENTER_LEFT">
                                  <children>
-                                    <Label text="Subtotal:" style="-fx-font-weight: bold;"/>
-                                    <Region />
-                                    <Label fx:id="lblSubtotal" text="R$ 0,00" style="-fx-font-weight: bold;"/>
+                                    <!-- Busca por Nome -->
+                                    <VBox spacing="5">
+                                       <children>
+                                          <Label text="Nome:" style="-fx-font-weight: bold;"/>
+                                          <HBox spacing="5" alignment="CENTER_LEFT">
+                                             <children>
+                                                <TextField fx:id="txtBuscarClienteNome" promptText="Digite o nome do cliente..." prefWidth="250" styleClass="text-field-search"/>
+                                                <Button fx:id="btnBuscarClienteNome" text="Buscar" styleClass="button-primary" onAction="#onBuscarClienteNome"/>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                    
+                                    <!-- Busca por CPF/CNPJ -->
+                                    <VBox spacing="5">
+                                       <children>
+                                          <Label text="CPF/CNPJ:" style="-fx-font-weight: bold;"/>
+                                          <HBox spacing="5" alignment="CENTER_LEFT">
+                                             <children>
+                                                <TextField fx:id="txtBuscarClienteCpfCnpj" promptText="Digite o CPF ou CNPJ..." prefWidth="200" styleClass="text-field-search"/>
+                                                <Button fx:id="btnBuscarClienteCpfCnpj" text="Buscar" styleClass="button-primary" onAction="#onBuscarClienteCpfCnpj"/>
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER_LEFT">
+                              
+                              <!-- Botões de Ação -->
+                              <HBox spacing="10" alignment="CENTER_LEFT">
                                  <children>
-                                    <Label text="Desconto:" style="-fx-font-weight: bold;"/>
-                                    <Region />
-                                    <Label fx:id="lblDesconto" text="R$ 0,00" style="-fx-font-weight: bold;"/>
-                                 </children>
-                              </HBox>
-                              <Separator/>
-                              <HBox alignment="CENTER_LEFT">
-                                 <children>
-                                    <Label text="Total:" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #28a745;"/>
-                                    <Region />
-                                    <Label fx:id="lblTotal" text="R$ 0,00" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: #28a745;"/>
+                                    <Button fx:id="btnNovoCliente" text="Novo Cliente" styleClass="button-success" onAction="#onNovoCliente"/>
+                                    <Button fx:id="btnLimparCliente" text="Limpar Campos" styleClass="button-secondary" onAction="#onLimparCliente"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label fx:id="lblClienteSelecionado" text="Nenhum cliente selecionado" style="-fx-text-fill: #666; -fx-font-style: italic;"/>
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        
-                        <!-- Botões de Ação -->
-                        <HBox spacing="10" alignment="CENTER">
-                           <children>
-                              <Button fx:id="btnDesconto" text="Desconto" styleClass="button-warning" onAction="#onDesconto"/>
-                              <Button fx:id="btnCancelarItem" text="Cancelar Item" styleClass="button-danger" onAction="#onCancelarItem"/>
-                              <Button fx:id="btnLimparCarrinho" text="Limpar Carrinho" styleClass="button-secondary" onAction="#onLimparCarrinho"/>
-                              <Button fx:id="btnFinalizar" text="Finalizar Venda" styleClass="button-success" onAction="#onFinalizar"/>
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
-               </content>
-            </TitledPane>
-         </children>
-      </VBox>
+                     </content>
+                  </TitledPane>
+               </children>
+            </VBox>
+         </content>
+      </ScrollPane>
    </center>
    
    <bottom>

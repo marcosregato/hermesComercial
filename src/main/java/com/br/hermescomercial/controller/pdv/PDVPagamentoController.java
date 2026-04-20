@@ -10,7 +10,7 @@ import com.br.hermescomercial.model.Pagamento;
 import com.br.hermescomercial.model.Produto;
 import com.br.hermescomercial.model.VendaPDV;
 import com.br.hermescomercial.model.Usuario;
-import com.br.hermescomercial.model.Cliente;
+// import com.br.hermescomercial.model.Cliente; - não utilizado
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-import java.util.List;
+// import java.util.List; - não utilizado
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -132,10 +132,11 @@ public class PDVPagamentoController implements Initializable {
     }
 
     private void inicializarManagers() {
-        this.pdvManager = new PDVManager();
-        this.pagamentoManager = new PagamentoManager();
-        this.cupomManager = new CupomFiscalManager();
-        this.impressoraManager = new ImpressoraManager();
+        // Inicializar managers usando Singleton
+        this.pdvManager = PDVManager.getInstance();
+        this.pagamentoManager = PagamentoManager.getInstance();
+        this.cupomManager = CupomFiscalManager.getInstance();
+        this.impressoraManager = ImpressoraManager.getInstance();
         
         // Configurar modo debug para impressora
         impressoraManager.setModoDebug(true);

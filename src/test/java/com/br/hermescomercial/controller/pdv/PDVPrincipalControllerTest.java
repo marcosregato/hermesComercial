@@ -2,7 +2,6 @@ package com.br.hermescomercial.controller.pdv;
 
 import com.br.hermescomercial.dao.UsuarioDao;
 import com.br.hermescomercial.model.Usuario;
-import com.br.hermescomercial.model.Cliente;
 import com.br.hermescomercial.business.pdv.PDVManager;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Label;

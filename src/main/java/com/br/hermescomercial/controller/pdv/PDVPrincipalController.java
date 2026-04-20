@@ -1,39 +1,46 @@
 package com.br.hermescomercial.controller.pdv;
 
 import com.br.hermescomercial.business.pdv.PDVManager;
-import com.br.hermescomercial.business.pdv.PagamentoManager;
-import com.br.hermescomercial.business.pdv.CupomFiscalManager;
+// import com.br.hermescomercial.business.pdv.PagamentoManager; - não utilizado
+// import com.br.hermescomercial.business.pdv.CupomFiscalManager; - não utilizado
 import com.br.hermescomercial.business.pdv.ImpressoraManager;
-import com.br.hermescomercial.model.CarrinhoCompras;
 import com.br.hermescomercial.model.ItemVenda;
 import com.br.hermescomercial.model.Produto;
-import com.br.hermescomercial.model.Cliente;
 import com.br.hermescomercial.model.Usuario;
 import com.br.hermescomercial.model.VendaPDV;
+import com.br.hermescomercial.model.Cliente;
 import com.br.hermescomercial.model.Pagamento;
 import com.br.hermescomercial.dao.UsuarioDao;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.net.URL;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.VBox;
 import java.math.BigDecimal;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ResourceBundle;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class PDVPrincipalController implements Initializable {
 
+    
     // Managers
     private PDVManager pdvManager;
-    private PagamentoManager pagamentoManager;
-    private CupomFiscalManager cupomManager;
+    // private PagamentoManager pagamentoManager; - não utilizado
+    // private CupomFiscalManager cupomManager; - não utilizado
     private ImpressoraManager impressoraManager;
     
     // Dados
@@ -52,7 +59,10 @@ public class PDVPrincipalController implements Initializable {
     
     // Botões Principais
     @FXML private Button btnNovaVenda;
+    @FXML private Button btnAbrirVenda;
+    @FXML private Button btnFecharVenda;
     @FXML private Button btnBuscarProduto;
+    @FXML private Button btnCadastrarProduto;
     @FXML private Button btnClientes;
     @FXML private Button btnRelatorios;
     @FXML private Button btnAbrirCaixa;
@@ -63,6 +73,9 @@ public class PDVPrincipalController implements Initializable {
     @FXML private TextField txtBuscarProduto;
     @FXML private Button btnBuscar;
     @FXML private Button btnCodigoBarras;
+    @FXML private Button btnNotaFiscal;
+    @FXML private Button btnCupomFiscal;
+    @FXML private Button btnConfigImpressora;
     @FXML private TableView<Produto> tblProdutos;
     @FXML private TableColumn<Produto, String> colCodigo;
     @FXML private TableColumn<Produto, String> colDescricao;
@@ -70,7 +83,7 @@ public class PDVPrincipalController implements Initializable {
     @FXML private TableColumn<Produto, Integer> colEstoque;
     @FXML private TableColumn<Produto, String> colAcoes;
     
-    // Teclado Numérico
+    // Teclado Numérico Antigo (legado)
     @FXML private Button btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn0, btnDecimal, btnQuantidade;
     
     // Cliente
@@ -106,6 +119,11 @@ public class PDVPrincipalController implements Initializable {
     @FXML private Label lblStatusCaixa;
     @FXML private Label lblValorCaixa;
     @FXML private Label lblStatus;
+    
+    // Painel do Caixa Aberto
+    @FXML private VBox painelCaixaAberto;
+    @FXML private Label lblDataAbertura;
+    @FXML private Label lblOperadorCaixa;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -115,13 +133,53 @@ public class PDVPrincipalController implements Initializable {
         inicializarTabelas();
         inicializarTimer();
         carregarDadosIniciais();
+        
+        // Configurar validação para campo CPF/CNPJ (apenas números)
+        configurarValidacaoCpfCnpj();
+        
+        // Atualizar status do caixa
+        atualizarStatusCaixa();
+    }
+    
+    private void configurarValidacaoCpfCnpj() {
+        // Configurar TextFormatter para aceitar apenas números no campo CPF/CNPJ
+        txtBuscarClienteCpfCnpj.setTextFormatter(new TextFormatter<>(change -> {
+            if (change.getControlNewText().isEmpty()) {
+                return change;
+            }
+            
+            // Permitir apenas números
+            String newText = change.getControlNewText().replaceAll("[^0-9]", "");
+            
+            // Limitar tamanho máximo (18 para CNPJ, 14 para CPF)
+            if (newText.length() > 18) {
+                newText = newText.substring(0, 18);
+            }
+            
+            if (change.getControlNewText().equals(newText)) {
+                return change;
+            } else {
+                change.setText(newText);
+                return change;
+            }
+        }));
+        
+        // Adicionar listener para mostrar alerta sobre caracteres inválidos
+        txtBuscarClienteCpfCnpj.textProperty().addListener((obs, oldValue, newValue) -> {
+            if (newValue != null && !newValue.matches("\\d*")) {
+                mostrarAlerta("O campo CPF/CNPJ aceita apenas números.\n" +
+                           "Caracteres inválidos foram removidos automaticamente.", 
+                           Alert.AlertType.WARNING);
+            }
+        });
     }
 
     private void inicializarManagers() {
-        this.pdvManager = new PDVManager();
-        this.pagamentoManager = new PagamentoManager();
-        this.cupomManager = new CupomFiscalManager();
-        this.impressoraManager = new ImpressoraManager();
+        // Inicializar managers usando Singleton
+        this.pdvManager = PDVManager.getInstance();
+        // this.pagamentoManager = PagamentoManager.getInstance(); - não utilizado
+        // this.cupomManager = CupomFiscalManager.getInstance(); - não utilizado
+        this.impressoraManager = ImpressoraManager.getInstance();
         
         // Configurar modo debug para impressora
         impressoraManager.setModoDebug(true);
@@ -150,18 +208,12 @@ public class PDVPrincipalController implements Initializable {
     }
 
     private void inicializarListeners() {
-        // Listener para busca de produtos
-        txtBuscarProduto.textProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue != null && !newValue.trim().isEmpty()) {
-                buscarProdutos(newValue);
-            } else {
-                carregarProdutosPadrao();
-            }
-        });
+        // Listener para busca de produtos (removido - tela de produtos não está mais na principal)
+        // txtBuscarProduto foi removido do FXML
         
         // Listener para busca de cliente por nome
         txtBuscarClienteNome.textProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue != null && newValue.length() >= 2) {
+            if (newValue != null && !newValue.trim().isEmpty()) {
                 buscarClientePorNome(newValue);
             }
         });
@@ -191,17 +243,13 @@ public class PDVPrincipalController implements Initializable {
                 return;
             }
             
-            if (newValue.length() >= 2) {
+            if (newValue != null && !newValue.trim().isEmpty()) {
                 buscarClientePorCpfCnpj(newValue);
             }
         });
         
-        // Listener para seleção na tabela de produtos
-        tblProdutos.getSelectionModel().selectedItemProperty().addListener((obs, oldValue, newValue) -> {
-            if (newValue != null) {
-                adicionarProdutoAoCarrinho(newValue);
-            }
-        });
+        // Listener para seleção na tabela de produtos (removido - tela de produtos não está mais na principal)
+        // tblProdutos foi removido do FXML
         
         // Listener para atualização do carrinho
         itensCarrinho.addListener((javafx.collections.ListChangeListener<ItemVenda>) change -> {
@@ -211,51 +259,11 @@ public class PDVPrincipalController implements Initializable {
     }
 
     private void inicializarTabelas() {
-        // Configurar tabela de produtos
-        colCodigo.setCellValueFactory(new PropertyValueFactory<>("codigo"));
-        colDescricao.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        colPreco.setCellValueFactory(new PropertyValueFactory<>("precoVenda"));
-        colEstoque.setCellValueFactory(new PropertyValueFactory<>("estoque"));
-        colAcoes.setCellValueFactory(new PropertyValueFactory<>("acoes"));
+        // Configurar tabela de produtos (removido - tela de produtos não está mais na principal)
+        // tblProdutos e colunas foram removidos do FXML
         
-        // Configurar tabela de produtos como não editável
-        tblProdutos.setEditable(false);
-        tblProdutos.setFocusTraversable(false);
-        
-        // Configurar colunas da tabela de produtos como não editáveis
-        colCodigo.setEditable(false);
-        colDescricao.setEditable(false);
-        colPreco.setEditable(false);
-        colEstoque.setEditable(false);
-        colAcoes.setEditable(false);
-        
-        tblProdutos.setItems(produtosDisponiveis);
-        
-        // Configurar tabela de carrinho
-        colItemCodigo.setCellValueFactory(new PropertyValueFactory<>("codigoProduto"));
-        colItemDescricao.setCellValueFactory(cellData -> {
-            Produto produto = cellData.getValue().getProduto();
-            return javafx.beans.binding.Bindings.createStringBinding(() -> 
-                produto != null ? produto.getNome() : "");
-        });
-        colItemQtd.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
-        colItemValor.setCellValueFactory(new PropertyValueFactory<>("valorUnitario"));
-        colItemTotal.setCellValueFactory(new PropertyValueFactory<>("valorFinal"));
-        colItemAcoes.setCellValueFactory(new PropertyValueFactory<>("acoes"));
-        
-        // Configurar tabela de carrinho como não editável
-        tblCarrinho.setEditable(false);
-        tblCarrinho.setFocusTraversable(false);
-        
-        // Configurar colunas da tabela de carrinho como não editáveis
-        colItemCodigo.setEditable(false);
-        colItemDescricao.setEditable(false);
-        colItemQtd.setEditable(false);
-        colItemValor.setEditable(false);
-        colItemTotal.setEditable(false);
-        colItemAcoes.setEditable(false);
-        
-        tblCarrinho.setItems(itensCarrinho);
+        // Configurar tabela de carrinho (removido - tela de carrinho não está mais na principal)
+        // tblCarrinho e colunas foram removidos do FXML
     }
 
     private void inicializarTimer() {
@@ -272,22 +280,61 @@ public class PDVPrincipalController implements Initializable {
 
     private void carregarDadosIniciais() {
         carregarProdutosPadrao();
-        atualizarTotais();
-        atualizarBotoesCarrinho();
+        // carregarItensExemploCarrinho() removido - tela de carrinho não está mais na principal
+        // atualizarTotais() removido - labels do carrinho foram removidos do FXML
+        // atualizarBotoesCarrinho() removido - botões do carrinho foram removidos do FXML
     }
 
     // Métodos de Ação dos Botões
-    @FXML
-    private void onNovaVenda() {
-        limparCarrinho();
-        atualizarStatus("Nova venda iniciada");
-    }
 
     @FXML
     private void onBuscarProduto() {
         System.out.println("DEBUG: Botão Buscar Produto pressionado");
         atualizarStatus("Abrindo tela de busca de produtos...");
         abrirTelaBuscaProdutos();
+    }
+
+    @FXML
+    private void onAbrirVenda() {
+        System.out.println("DEBUG: Botão Abrir Venda pressionado");
+        atualizarStatus("Abrindo tela de venda...");
+        abrirTelaVenda();
+    }
+
+    @FXML
+    private void onFecharVenda() {
+        System.out.println("DEBUG: Botão Fechar Venda pressionado");
+        
+        // Verificar se há uma venda em andamento
+        if (pdvManager.getCarrinhoAtual() == null || pdvManager.getCarrinhoAtual().estaVazio()) {
+            mostrarAlerta("Não há venda em andamento para fechar.", Alert.AlertType.WARNING);
+            return;
+        }
+        
+        // Confirmar ação do usuário
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Confirmar Fechamento de Venda");
+        alert.setHeaderText("Deseja realmente fechar esta venda?");
+        alert.setContentText("Esta ação não poderá ser desfeita.");
+        
+        if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
+            try {
+                // Cancelar a venda atual
+                boolean sucesso = pdvManager.cancelarVenda();
+                
+                if (sucesso) {
+                    atualizarStatus("Venda fechada com sucesso!");
+                    limparCarrinho();
+                    mostrarAlerta("Venda fechada com sucesso!", Alert.AlertType.INFORMATION);
+                } else {
+                    atualizarStatus("Erro ao fechar venda!");
+                    mostrarAlerta("Ocorreu um erro ao fechar a venda.", Alert.AlertType.ERROR);
+                }
+            } catch (Exception e) {
+                atualizarStatus("Erro ao fechar venda: " + e.getMessage());
+                mostrarAlerta("Erro ao fechar venda: " + e.getMessage(), Alert.AlertType.ERROR);
+            }
+        }
     }
 
     @FXML
@@ -315,6 +362,20 @@ public class PDVPrincipalController implements Initializable {
         System.out.println("DEBUG: Botão Nota Fiscal pressionado");
         atualizarStatus("Abrindo tela de nota fiscal...");
         abrirTelaNotaFiscal();
+    }
+
+    @FXML
+    private void onCupomFiscal() {
+        System.out.println("DEBUG: Botão Cupom Fiscal pressionado");
+        atualizarStatus("Abrindo tela de cupom fiscal...");
+        abrirTelaCupomFiscal();
+    }
+
+    @FXML
+    private void onCadastrarProduto() {
+        System.out.println("DEBUG: Botão Cadastrar Produto pressionado");
+        atualizarStatus("Abrindo tela de cadastro de produto...");
+        abrirTelaCadastroProduto();
     }
 
     @FXML
@@ -414,6 +475,12 @@ public class PDVPrincipalController implements Initializable {
             txtBuscarClienteNome.requestFocus();
             return;
         }
+        
+        // Carregar dados do último cliente selecionado se o campo estiver vazio
+        if (txtBuscarClienteCpfCnpj.getText().trim().isEmpty()) {
+            carregarUltimoClienteSelecionado();
+        }
+        
         abrirTelaResultadosBusca(busca, "nome");
     }
 
@@ -449,8 +516,14 @@ public class PDVPrincipalController implements Initializable {
                 }
             });
             
-            // Carregar resultados
-            controller.carregarResultados(termo, tipoBusca);
+            // Carregar resultados e verificar se encontrou algo
+            boolean encontrouResultados = controller.carregarResultados(termo, tipoBusca);
+            
+            if (!encontrouResultados) {
+                System.out.println("DEBUG: Nenhum cliente encontrado, tela não será exibida");
+                atualizarStatus("Nenhum cliente encontrado para: " + termo);
+                return; // Não exibe a tela se não encontrou resultados
+            }
             
             javafx.stage.Stage stage = new javafx.stage.Stage();
             stage.setTitle("Resultado da Busca de Clientes");
@@ -470,38 +543,6 @@ public class PDVPrincipalController implements Initializable {
             System.out.println("DEBUG: Erro ao abrir tela de resultados: " + e.getMessage());
             e.printStackTrace();
             atualizarStatus("Erro ao abrir tela de resultados: " + e.getMessage());
-        }
-    }
-    
-    private void buscarClienteUnificado() {
-        String buscaNome = txtBuscarClienteNome.getText();
-        String buscaCpfCnpj = txtBuscarClienteCpfCnpj.getText();
-        
-        // Verificar se pelo menos um campo está preenchido
-        boolean nomePreenchido = buscaNome != null && !buscaNome.trim().isEmpty();
-        boolean cpfCnpjPreenchido = buscaCpfCnpj != null && !buscaCpfCnpj.trim().isEmpty();
-        
-        if (!nomePreenchido && !cpfCnpjPreenchido) {
-            mostrarAlerta("Preencha pelo menos um dos campos de busca:\n\n" +
-                         "- Campo Nome: Digite o nome do cliente\n" +
-                         "- Campo CPF/CNPJ: Digite o CPF ou CNPJ do cliente\n\n" +
-                         "Ao preencher um dos campos, clique em Buscar para localizar o cliente.", 
-                         Alert.AlertType.WARNING);
-            
-            // Focar no primeiro campo vazio
-            if (!nomePreenchido) {
-                txtBuscarClienteNome.requestFocus();
-            } else {
-                txtBuscarClienteCpfCnpj.requestFocus();
-            }
-            return;
-        }
-        
-        // Realizar busca pelo campo preenchido
-        if (nomePreenchido) {
-            buscarClientePorNome(buscaNome);
-        } else if (cpfCnpjPreenchido) {
-            buscarClientePorCpfCnpj(buscaCpfCnpj);
         }
     }
 
@@ -566,31 +607,6 @@ public class PDVPrincipalController implements Initializable {
     }
 
     // Métodos de Negócio
-    private void buscarProdutos(String textoBusca) {
-        try {
-            // Simular busca de produtos
-            produtosDisponiveis.clear();
-            
-            // Adicionar produtos simulados
-            for (int i = 1; i <= 5; i++) {
-                Produto produto = new Produto();
-                produto.setId((long) i);
-                produto.setNome("Produto " + i + " - " + textoBusca);
-                produto.setPrecoVenda(new BigDecimal(10.50 * i));
-                produto.setEstoque(50);
-                produto.setUnidade("UN");
-                
-                if (produto.getNome().toLowerCase().contains(textoBusca.toLowerCase())) {
-                    produtosDisponiveis.add(produto);
-                }
-            }
-            
-            atualizarStatus(produtosDisponiveis.size() + " produtos encontrados");
-            
-        } catch (Exception e) {
-            atualizarStatus("Erro ao buscar produtos: " + e.getMessage());
-        }
-    }
 
     private void carregarProdutosPadrao() {
         produtosDisponiveis.clear();
@@ -607,9 +623,10 @@ public class PDVPrincipalController implements Initializable {
         }
     }
 
+    
     private void buscarClientePorNome(String textoBusca) {
         try {
-            if (textoBusca.length() >= 2) {
+            if (textoBusca != null && !textoBusca.trim().isEmpty()) {
                 UsuarioDao usuarioDao = new UsuarioDao();
                 List<Usuario> clientes = usuarioDao.buscarClientePorNome(textoBusca);
                 
@@ -642,7 +659,7 @@ public class PDVPrincipalController implements Initializable {
     
     private void buscarClientePorCpfCnpj(String textoBusca) {
         try {
-            if (textoBusca.length() >= 2) {
+            if (textoBusca != null && !textoBusca.trim().isEmpty()) {
                 UsuarioDao usuarioDao = new UsuarioDao();
                 List<Usuario> clientes = usuarioDao.buscarClientePorCpfCnpj(textoBusca);
                 
@@ -676,36 +693,6 @@ public class PDVPrincipalController implements Initializable {
     private void atualizarLabelClienteSelecionado(String texto) {
         if (lblClienteSelecionado != null) {
             lblClienteSelecionado.setText(texto);
-        }
-    }
-
-    private void adicionarProdutoAoCarrinho(Produto produto) {
-        try {
-            if (produto == null) {
-                mostrarAlerta("Selecione um produto válido", Alert.AlertType.WARNING);
-                return;
-            }
-            
-            int quantidade = 1; // Padrão
-            BigDecimal valorUnitario = produto.getPrecoVenda();
-            
-            boolean sucesso = pdvManager.adicionarProduto(produto, quantidade);
-            
-            if (sucesso) {
-                atualizarInterfaceCarrinho();
-                atualizarStatus("Produto adicionado: " + produto.getNome());
-                
-                // Limpar busca
-                txtBuscarProduto.clear();
-                
-                // Focar novamente no campo de busca
-                txtBuscarProduto.requestFocus();
-            } else {
-                mostrarAlerta("Erro ao adicionar produto ao carrinho", Alert.AlertType.ERROR);
-            }
-            
-        } catch (Exception e) {
-            atualizarStatus("Erro ao adicionar produto: " + e.getMessage());
         }
     }
 
@@ -765,7 +752,7 @@ public class PDVPrincipalController implements Initializable {
             lblTotal.setText("R$ 0,00");
         }
     }
-
+    
     private void atualizarBotoesCarrinho() {
         boolean temItens = !itensCarrinho.isEmpty();
         
@@ -777,12 +764,31 @@ public class PDVPrincipalController implements Initializable {
 
     private void atualizarStatusCaixa() {
         if (pdvManager.isCaixaAberto()) {
+            // Atualizar label no header
             lblStatusCaixa.setText("Caixa: ABERTO");
-            lblStatusCaixa.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-background-color: #27ae60; -fx-background-radius: 10; -fx-padding: 4 8;");
+            lblStatusCaixa.setStyle("-fx-text-fill: #27ae60; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;");
+            
+            // Mostrar painel do caixa aberto
+            painelCaixaAberto.setVisible(true);
+            painelCaixaAberto.setManaged(true);
+            
+            // Atualizar informações do painel
+            LocalDateTime agora = LocalDateTime.now();
+            DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+            lblDataAbertura.setText("Aberto em: " + agora.format(formatador));
+            lblOperadorCaixa.setText("Operador: " + (operadorAtual != null ? operadorAtual.getNome() : "João"));
             lblValorCaixa.setText("Valor em Caixa: R$ 1.000,00");
+            
         } else {
+            // Atualizar label no header
             lblStatusCaixa.setText("Caixa: FECHADO");
-            lblStatusCaixa.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-background-color: #e74c3c; -fx-background-radius: 10; -fx-padding: 4 8;");
+            lblStatusCaixa.setStyle("-fx-text-fill: #e74c3c; -fx-font-size: 14px; -fx-font-weight: bold; -fx-padding: 0 0 0 20;");
+            
+            // Esconder painel do caixa aberto
+            painelCaixaAberto.setVisible(false);
+            painelCaixaAberto.setManaged(false);
+            
+            // Atualizar valor do caixa
             lblValorCaixa.setText("Valor em Caixa: R$ 0,00");
         }
     }
@@ -872,6 +878,37 @@ public class PDVPrincipalController implements Initializable {
         }
     }
 
+    private void abrirTelaVenda() {
+        try {
+            System.out.println("DEBUG: Tentando abrir tela de venda");
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/view/pdv_venda.fxml"));
+            System.out.println("DEBUG: FXML de venda carregado, fazendo load...");
+            javafx.scene.Parent root = loader.load();
+            System.out.println("DEBUG: FXML de venda carregado com sucesso");
+            
+            // Configurar controller
+            com.br.hermescomercial.controller.pdv.PDVVendaController controller = loader.getController();
+            // controller.setPDVManager(pdvManager); - método não utilizado
+            controller.setOperadorAtual(operadorAtual);
+            
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Venda - PDV Hermes Comercial");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.setResizable(true);
+            stage.setWidth(1200);
+            stage.setHeight(700);
+            System.out.println("DEBUG: Stage de venda configurado, mostrando janela...");
+            stage.show();
+            System.out.println("DEBUG: Janela de venda aberta com sucesso");
+            
+        } catch (Exception e) {
+            System.out.println("DEBUG: Erro ao abrir tela de venda: " + e.getMessage());
+            e.printStackTrace();
+            atualizarStatus("Erro ao abrir tela de venda: " + e.getMessage());
+        }
+    }
+
     private void abrirTelaPagamento() {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
@@ -889,6 +926,51 @@ public class PDVPrincipalController implements Initializable {
             
         } catch (Exception e) {
             atualizarStatus("Erro ao abrir tela de pagamento: " + e.getMessage());
+        }
+    }
+    
+    private void carregarUltimoClienteSelecionado() {
+        try {
+            if (pdvManager.getCarrinhoAtual() != null && 
+                pdvManager.getCarrinhoAtual().getCliente() != null) {
+                
+                Cliente ultimoCliente = pdvManager.getCarrinhoAtual().getCliente();
+                
+                // Carregar nos campos de busca
+                txtBuscarClienteNome.setText(ultimoCliente.getNome());
+                txtBuscarClienteCpfCnpj.setText(ultimoCliente.getCpf() != null ? ultimoCliente.getCpf() : "");
+                
+                atualizarLabelClienteSelecionado(ultimoCliente.getNome() + " - " + 
+                    (ultimoCliente.getCpf() != null ? ultimoCliente.getCpf() : ""));
+                
+                atualizarStatus("Último cliente carregado: " + ultimoCliente.getNome());
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar último cliente selecionado: " + e.getMessage());
+            atualizarStatus("Erro ao carregar último cliente: " + e.getMessage());
+        }
+    }
+
+    private void abrirTelaCadastroProduto() {
+        try {
+            System.out.println("DEBUG: Tentando abrir tela de cadastro de produto");
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/view/pdv_cadastro_produto.fxml"));
+            System.out.println("DEBUG: FXML de cadastro de produto carregado, fazendo load...");
+            javafx.scene.Parent root = loader.load();
+            System.out.println("DEBUG: FXML de cadastro de produto carregado com sucesso");
+            
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Cadastro de Produto");
+            stage.setScene(new javafx.scene.Scene(root));
+            System.out.println("DEBUG: Stage de cadastro de produto configurado, mostrando janela...");
+            stage.show();
+            System.out.println("DEBUG: Janela de cadastro de produto aberta com sucesso");
+            
+        } catch (Exception e) {
+            System.out.println("DEBUG: Erro ao abrir tela de cadastro de produto: " + e.getMessage());
+            atualizarStatus("Erro ao abrir tela de cadastro de produto");
+            e.printStackTrace();
         }
     }
 
@@ -977,6 +1059,36 @@ public class PDVPrincipalController implements Initializable {
         }
     }
 
+    private void abrirTelaCupomFiscal() {
+        try {
+            System.out.println("DEBUG: Tentando abrir tela de cupom fiscal");
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/view/pdv_cupom_fiscal.fxml"));
+            System.out.println("DEBUG: FXML de cupom fiscal carregado, fazendo load...");
+            javafx.scene.Parent root = loader.load();
+            System.out.println("DEBUG: FXML de cupom fiscal carregado com sucesso");
+            
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Cupom Fiscal");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.setResizable(true);
+            stage.setWidth(1200);
+            stage.setHeight(700);
+            System.out.println("DEBUG: Stage de cupom fiscal configurado, mostrando janela...");
+            stage.show();
+            System.out.println("DEBUG: Janela de cupom fiscal aberta com sucesso");
+            
+            // Passar dados para o controller
+            // PDVCupomFiscalController controller = loader.getController(); - não utilizado
+            // Aqui você pode passar dados adicionais se necessário
+            
+        } catch (Exception e) {
+            System.out.println("DEBUG: Erro ao abrir tela de cupom fiscal: " + e.getMessage());
+            e.printStackTrace();
+            atualizarStatus("Erro ao abrir tela de cupom fiscal: " + e.getMessage());
+        }
+    }
+
     private VendaPDV criarVendaSimulada() {
         try {
             VendaPDV venda = new VendaPDV();
@@ -1058,6 +1170,8 @@ public class PDVPrincipalController implements Initializable {
         }
     }
 
+    
+    
     // Métodos Utilitários
     private String formatarMoeda(BigDecimal valor) {
         if (valor == null) return "R$ 0,00";

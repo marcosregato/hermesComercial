@@ -20,7 +20,7 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10" style="-fx-padding: 5 10; -fx-background-color: #2c3e50;">
                <children>
-                  <Button fx:id="btnNovaVenda" text="Nova Venda" styleClass="button-primary" onAction="#onNovaVenda"/>
+                  <Button fx:id="btnAbrirVenda" text="Abrir Venda" styleClass="button-primary" onAction="#onAbrirVenda"/>
                   <Button fx:id="btnBuscarProduto" text="Buscar Produto" styleClass="button-secondary" onAction="#onBuscarProduto"/>
                   <Button fx:id="btnClientes" text="Clientes" styleClass="button-secondary" onAction="#onClientes"/>
                   <Button fx:id="btnRelatorios" text="Relatórios" styleClass="button-secondary" onAction="#onRelatorios"/>

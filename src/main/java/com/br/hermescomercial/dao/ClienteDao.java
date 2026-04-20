@@ -13,10 +13,10 @@ public class ClienteDao {
     private static final Logger logger = LogManager.getLogger(ClienteDao.class.getName());
 
     public boolean salvar(Cliente cliente) throws SQLException {
-        String sql = "INSERT INTO CLIENTE (NOME, TIPO_PESSOA, CPF, RG, DATA_NASCIMENTO, CNPJ, " +
+        String sql = "INSERT INTO USUARIO (NOME, TIPO_USUARIO, TIPO_PESSOA, CPF, RG, DATA_NASCIMENTO, CNPJ, " +
                     "NOME_FANTASIA, INSCRICAO_ESTADUAL, TELEFONE, CELULAR, EMAIL, CEP, ENDERECO, " +
                     "NUMERO, COMPLEMENTO, BAIRRO, CIDADE, ESTADO, OBSERVACOES, ATIVO) " +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                    "VALUES (?, 'CLIENTE', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -60,11 +60,11 @@ public class ClienteDao {
     }
 
     public boolean update(Cliente cliente) throws SQLException {
-        String sql = "UPDATE CLIENTE SET NOME = ?, TIPO_PESSOA = ?, CPF = ?, RG = ?, DATA_NASCIMENTO = ?, " +
+        String sql = "UPDATE USUARIO SET NOME = ?, TIPO_PESSOA = ?, CPF = ?, RG = ?, DATA_NASCIMENTO = ?, " +
                     "CNPJ = ?, NOME_FANTASIA = ?, INSCRICAO_ESTADUAL = ?, TELEFONE = ?, CELULAR = ?, " +
                     "EMAIL = ?, CEP = ?, ENDERECO = ?, NUMERO = ?, COMPLEMENTO = ?, BAIRRO = ?, " +
                     "CIDADE = ?, ESTADO = ?, OBSERVACOES = ?, ATIVO = ?, DATA_ATUALIZACAO = CURRENT_TIMESTAMP " +
-                    "WHERE ID = ?";
+                    "WHERE ID = ? AND TIPO_USUARIO = 'CLIENTE'";
 
         try (Connection conn = ConnectionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -99,7 +99,7 @@ public class ClienteDao {
     }
 
     public boolean remove(String id) throws SQLException {
-        String sql = "DELETE FROM CLIENTE WHERE ID = ?";
+        String sql = "DELETE FROM USUARIO WHERE ID = ? AND TIPO_USUARIO = 'CLIENTE'";
 
         try (Connection conn = ConnectionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -113,7 +113,7 @@ public class ClienteDao {
     }
 
     public List<Cliente> listar() {
-        String sql = "SELECT * FROM CLIENTE ORDER BY NOME";
+        String sql = "SELECT * FROM USUARIO WHERE TIPO_USUARIO = 'CLIENTE' ORDER BY NOME";
         List<Cliente> clientes = new ArrayList<>();
 
         try (Connection conn = ConnectionBD.getConnection();
@@ -131,7 +131,7 @@ public class ClienteDao {
 
     public List<Cliente> buscarComFiltros(String busca, boolean apenasAtivos, 
                                           boolean apenasFisica, boolean apenasJuridica) {
-        StringBuilder sql = new StringBuilder("SELECT * FROM CLIENTE WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT * FROM USUARIO WHERE TIPO_USUARIO = 'CLIENTE'");
         List<Object> parametros = new ArrayList<>();
 
         if (busca != null && !busca.trim().isEmpty()) {
@@ -177,7 +177,7 @@ public class ClienteDao {
     }
 
     public Cliente buscarPorId(Long id) throws SQLException {
-        String sql = "SELECT * FROM CLIENTE WHERE ID = ?";
+        String sql = "SELECT * FROM USUARIO WHERE ID = ? AND TIPO_USUARIO = 'CLIENTE'";
 
         try (Connection conn = ConnectionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -197,7 +197,7 @@ public class ClienteDao {
     }
 
     public Cliente buscarPorCPF(String cpf) throws SQLException {
-        String sql = "SELECT * FROM CLIENTE WHERE CPF = ? AND ATIVO = true";
+        String sql = "SELECT * FROM USUARIO WHERE CPF = ? AND ATIVO = true AND TIPO_USUARIO = 'CLIENTE'";
 
         try (Connection conn = ConnectionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -217,7 +217,7 @@ public class ClienteDao {
     }
 
     public Cliente buscarPorCNPJ(String cnpj) throws SQLException {
-        String sql = "SELECT * FROM CLIENTE WHERE CNPJ = ? AND ATIVO = true";
+        String sql = "SELECT * FROM USUARIO WHERE CNPJ = ? AND ATIVO = true AND TIPO_USUARIO = 'CLIENTE'";
 
         try (Connection conn = ConnectionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

@@ -25,7 +25,7 @@ import com.br.hermescomercial.model.Produto;
  */
 public class ProdutoDao {
 
-    private ConnectionBD con = new ConnectionBD();
+    // private ConnectionBD con = new ConnectionBD(); - não utilizado
     private static final Logger logger = LogManager.getLogger(ProdutoDao.class);
 
     private Produto mapResultSetToProduto(ResultSet rs) throws SQLException {

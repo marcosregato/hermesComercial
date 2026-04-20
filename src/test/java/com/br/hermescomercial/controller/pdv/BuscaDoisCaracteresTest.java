@@ -95,7 +95,7 @@ public class BuscaDoisCaracteresTest {
     @DisplayName("Deve validar comportamento do listener com 2 caracteres")
     void testListenerComDoisCaracteres() {
         // Simula o comportamento do listener do TextField
-        String oldValue = "";
+        // String oldValue = ""; - não utilizado
         String newValue = "Jo";
         
         // Simula a validação do listener
@@ -113,7 +113,7 @@ public class BuscaDoisCaracteresTest {
     @Test
     @DisplayName("Deve validar comportamento do listener com 1 caractere")
     void testListenerComUmCaractere() {
-        String oldValue = "";
+        // String oldValue = ""; - não utilizado
         String newValue = "J";
         
         // Simula a validação do listener

@@ -130,3 +130,10 @@ rebel.xml
 /dist/
 /nbdist/
 /.nb-gradle/
+
+# Scripts executáveis
+*.sh
+!hermes-pdv.sh
+
+# Documentação
+README_EXECUTAVEL.md

@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
-import java.util.List;
+// import java.util.List; - não utilizado
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -26,7 +26,7 @@ public class PDVCaixaAbertoController implements Initializable {
     private ObservableList<MovimentacaoCaixa> movimentacoes;
     private Timer timer;
     private DateTimeFormatter formatadorDataHora = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
-    private DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm:ss");
+    // private DateTimeFormatter formatadorHora = DateTimeFormatter.ofPattern("HH:mm:ss"); - não utilizado
 
     // Componentes FXML
     @FXML private Button btnVoltar;
@@ -66,7 +66,8 @@ public class PDVCaixaAbertoController implements Initializable {
         this.movimentacoes = FXCollections.observableArrayList();
         
         // Configurar dados iniciais (simulados)
-        this.pdvManager = new PDVManager();
+        // Inicializar PDVManager usando Singleton
+        this.pdvManager = PDVManager.getInstance();
         this.operadorAtual = new Usuario();
         operadorAtual.setNome("João Silva");
         operadorAtual.setId(1L);

@@ -10,7 +10,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.net.URL;
-import java.time.LocalDate;
+// import java.time.LocalDate; - não utilizado
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
@@ -110,6 +110,7 @@ public class PDVClientesController implements Initializable {
         inicializarListeners();
         inicializarTabelas();
         inicializarTimer();
+        configurarValidacaoCamposNumericos();
         carregarDadosIniciais();
     }
 
@@ -609,6 +610,85 @@ public class PDVClientesController implements Initializable {
         alert.setContentText("Esta ação não pode ser desfeita.");
         
         return alert.showAndWait().get() == ButtonType.OK;
+    }
+
+    private void configurarValidacaoCamposNumericos() {
+        // Configurar TextFormatter para CPF (apenas números, máximo 11 dígitos)
+        txtCPF.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9]", "");
+            if (newText.length() > 11) newText = newText.substring(0, 11);
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo CPF aceita apenas números. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
+        
+        // Configurar TextFormatter para CNPJ (apenas números, máximo 14 dígitos)
+        txtCNPJ.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9]", "");
+            if (newText.length() > 14) newText = newText.substring(0, 14);
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo CNPJ aceita apenas números. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
+        
+        // Configurar TextFormatter para RG (apenas números e letras, máximo 15 caracteres)
+        txtRG.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9A-Za-z]", "");
+            if (newText.length() > 15) newText = newText.substring(0, 15);
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo RG aceita apenas números e letras. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
+        
+        // Configurar TextFormatter para Telefone (apenas números, máximo 11 dígitos)
+        txtTelefone.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9]", "");
+            if (newText.length() > 11) newText = newText.substring(0, 11);
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo Telefone aceita apenas números. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
+        
+        // Configurar TextFormatter para Celular (apenas números, máximo 11 dígitos)
+        txtCelular.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9]", "");
+            if (newText.length() > 11) newText = newText.substring(0, 11);
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo Celular aceita apenas números. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
+        
+        // Configurar TextFormatter para CEP (apenas números, máximo 8 dígitos)
+        txtCEP.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9]", "");
+            if (newText.length() > 8) newText = newText.substring(0, 8);
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo CEP aceita apenas números. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
+        
+        // Configurar TextFormatter para campo de busca (apenas números para CPF/CNPJ)
+        txtBuscarCliente.setTextFormatter(new TextFormatter<>(change -> {
+            String newText = change.getControlNewText().replaceAll("[^0-9]", "");
+            if (newText.length() > 18) newText = newText.substring(0, 18);
+            if (!change.getControlNewText().equals(newText)) {
+                change.setText(newText);
+                mostrarAlerta("O campo de busca por CPF/CNPJ aceita apenas números. Caracteres inválidos foram removidos.", Alert.AlertType.WARNING);
+            }
+            return change;
+        }));
     }
 
     private void fecharTela() {

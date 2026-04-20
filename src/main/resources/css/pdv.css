@@ -1,19 +1,324 @@
 /* Estilos CSS para o Sistema PDV Hermes Comercial */
 
-/* Cores do Tema */
+/* Cores do Tema - Design Moderno */
 .root {
-    -fx-primary-color: #2c3e50;
-    -fx-secondary-color: #34495e;
-    -fx-accent-color: #3498db;
-    -fx-success-color: #27ae60;
-    -fx-warning-color: #f39c12;
-    -fx-danger-color: #e74c3c;
-    -fx-info-color: #17a2b8;
-    -fx-light-color: #ecf0f1;
-    -fx-dark-color: #2c3e50;
+    -fx-primary-color: #1a1a2e;
+    -fx-secondary-color: #16213e;
+    -fx-accent-color: #0f3460;
+    -fx-success-color: #16c79a;
+    -fx-warning-color: #ffc947;
+    -fx-danger-color: #ee4540;
+    -fx-info-color: #4fbdba;
+    -fx-light-color: #f8f9fa;
+    -fx-dark-color: #1a1a2e;
+    -fx-gradient-start: #1a1a2e;
+    -fx-gradient-end: #0f3460;
     
-    -fx-font-family: "Segoe UI", Arial, sans-serif;
+    -fx-font-family: "Segoe UI", "Roboto", "Helvetica Neue", Arial, sans-serif;
     -fx-font-size: 14px;
+    -fx-background-color: #f8f9fa;
+}
+
+/* Gradientes e Sombras Elegantes */
+.elegant-gradient {
+    -fx-background-color: linear-gradient(to bottom, #1a1a2e, #0f3460);
+}
+
+.card-shadow {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 10, 0.5, 0, 2);
+}
+
+.deep-shadow {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 15, 0.5, 0, 4);
+}
+
+/* ===== ESTILOS RESPONSIVOS ===== */
+
+/* Container Principal Responsivo */
+.border-pane {
+    -fx-pref-width: 100%;
+    -fx-pref-height: 100%;
+    -fx-min-width: 800px;
+    -fx-min-height: 600px;
+}
+
+/* Header Responsivo */
+.header-box {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+    -fx-wrap-text: true;
+}
+
+.header-label {
+    -fx-font-size: 14px;
+    -fx-wrap-text: true;
+    -fx-max-width: 200px;
+}
+
+.header-title {
+    -fx-font-size: 18px;
+    -fx-wrap-text: true;
+}
+
+/* Botões Responsivos e Elegantes */
+.button-responsive {
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-cursor: hand;
+    -fx-font-weight: 600;
+    -fx-padding: 10 20;
+    -fx-wrap-text: true;
+    -fx-max-width: 150px;
+    -fx-min-width: 80px;
+    -fx-font-size: 13px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 4, 0.5, 0, 1);
+    -fx-transition: all 0.3s ease;
+}
+
+.button-responsive:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 6, 0.5, 0, 2);
+    -fx-scale-x: 1.02;
+    -fx-scale-y: 1.02;
+}
+
+.button-responsive:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 2, 0.5, 0, 1);
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
+}
+
+/* Tabelas Responsivas e Elegantes */
+.table-view-responsive {
+    -fx-pref-width: 100%;
+    -fx-max-width: 100%;
+    -fx-min-height: 300px;
+    -fx-fill-width: true;
+    -fx-hgrow: always;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0.5, 0, 2);
+}
+
+.table-column-responsive {
+    -fx-pref-width: 100px;
+    -fx-min-width: 50px;
+    -fx-max-width: 400px;
+    -fx-fill-width: true;
+    -fx-background-color: #f8f9fa;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-padding: 8px;
+    -fx-font-weight: 600;
+    -fx-font-size: 13px;
+}
+
+/* Tabela do Carrinho */
+.carrinho-table {
+    -fx-pref-width: 100%;
+    -fx-max-width: 100%;
+    -fx-min-height: 300px;
+    -fx-fill-width: true;
+    -fx-hgrow: always;
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0.5, 0, 2);
+}
+
+.table-view-responsive .table-cell {
+    -fx-padding: 8px;
+    -fx-border-color: #f0f0f0;
+    -fx-border-width: 0 0 1px 0;
+    -fx-font-size: 13px;
+}
+
+.table-view-responsive .table-row-cell:selected {
+    -fx-background-color: linear-gradient(to right, #1a1a2e, #0f3460);
+    -fx-text-fill: white;
+}
+
+/* VBox e HBox Responsivas */
+.vbox-responsive {
+    -fx-fill-width: true;
+    -fx-hgrow: always;
+}
+
+.hbox-responsive {
+    -fx-fill-width: true;
+    -fx-hgrow: always;
+}
+
+/* TitledPane Responsivo */
+.titled-pane-responsive {
+    -fx-pref-width: 100%;
+    -fx-max-width: 100%;
+    -fx-fill-width: true;
+    -fx-hgrow: always;
+}
+
+/* Campos de Texto Responsivos */
+.text-field-responsive {
+    -fx-pref-width: 200px;
+    -fx-max-width: 300px;
+    -fx-min-width: 100px;
+}
+
+.text-field-search-responsive {
+    -fx-pref-width: 250px;
+    -fx-max-width: 400px;
+    -fx-min-width: 150px;
+}
+
+/* Áreas de Conteúdo Responsivas */
+.content-vbox {
+    -fx-spacing: 15px;
+    -fx-padding: 20px;
+    -fx-fill-width: true;
+}
+
+.titled-pane-responsive {
+    -fx-pref-width: 100%;
+    -fx-max-width: 100%;
+}
+
+/* Teclado Numérico Responsivo */
+.teclado-grid {
+    -fx-hgap: 5px;
+    -fx-vgap: 5px;
+    -fx-alignment: center;
+}
+
+.teclado-button {
+    -fx-pref-width: 60px;
+    -fx-pref-height: 60px;
+    -fx-max-width: 80px;
+    -fx-max-height: 80px;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+}
+
+/* Carrinho de Compras Responsivo */
+.carrinho-table {
+    -fx-pref-height: 300px;
+    -fx-max-height: 400px;
+    -fx-min-height: 200px;
+}
+
+/* Painel de Status Responsivo */
+.status-panel {
+    -fx-padding: 10px;
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+    -fx-wrap-text: true;
+}
+
+/* Media Queries para diferentes tamanhos de tela */
+@media (max-width: 1200px) {
+    .header-label {
+        -fx-font-size: 12px;
+        -fx-max-width: 150px;
+    }
+    
+    .teclado-button {
+        -fx-pref-width: 50px;
+        -fx-pref-height: 50px;
+    }
+    
+    .text-field-responsive {
+        -fx-pref-width: 150px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .header-title {
+        -fx-font-size: 16px;
+    }
+    
+    .button-responsive {
+        -fx-padding: 6 12;
+        -fx-font-size: 12px;
+    }
+    
+    .teclado-button {
+        -fx-pref-width: 45px;
+        -fx-pref-height: 45px;
+        -fx-font-size: 14px;
+    }
+    
+    .content-vbox {
+        -fx-spacing: 10px;
+        -fx-padding: 15px;
+    }
+}
+
+@media (max-width: 800px) {
+    .header-box {
+        -fx-spacing: 5px;
+    }
+    
+    .header-label {
+        -fx-font-size: 11px;
+        -fx-max-width: 120px;
+    }
+    
+    .button-responsive {
+        -fx-padding: 4 8;
+        -fx-font-size: 11px;
+        -fx-max-width: 100px;
+    }
+    
+    .teclado-button {
+        -fx-pref-width: 40px;
+        -fx-pref-height: 40px;
+        -fx-font-size: 12px;
+    }
+    
+    .table-column-responsive {
+        -fx-pref-width: 80px;
+        -fx-min-width: 60px;
+    }
+    
+    .content-vbox {
+        -fx-spacing: 8px;
+        -fx-padding: 10px;
+    }
+}
+
+/* Layouts Flexíveis */
+.hbox-responsive {
+    -fx-spacing: 10px;
+    -fx-alignment: center-left;
+    -fx-fill-width: true;
+}
+
+.vbox-responsive {
+    -fx-spacing: 10px;
+    -fx-fill-width: true;
+}
+
+/* Componentes que se adaptam */
+.responsive-label {
+    -fx-wrap-text: true;
+    -fx-max-width: 200px;
+}
+
+.responsive-button-large {
+    -fx-pref-width: 120px;
+    -fx-pref-height: 50px;
+    -fx-max-width: 150px;
+    -fx-min-width: 80px;
+    -fx-font-size: 14px;
+}
+
+.responsive-button-small {
+    -fx-pref-width: 80px;
+    -fx-pref-height: 40px;
+    -fx-max-width: 100px;
+    -fx-min-width: 60px;
+    -fx-font-size: 12px;
 }
 
 /* Botões Principais */

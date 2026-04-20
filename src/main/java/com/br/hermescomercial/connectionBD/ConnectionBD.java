@@ -10,7 +10,7 @@ public class ConnectionBD {
     private static final Logger logger = LogManager.getLogger(ConnectionBD.class.getName());
     
     // Configurações do banco de dados
-    private static final String URL = "jdbc:postgresql://localhost:5432/hermescomercial";
+    private static final String URL = "jdbc:postgresql://localhost:5432/hermescomercialdb";
     private static final String USER = "hermesuser";
     private static final String PASSWORD = "hermespass";
     

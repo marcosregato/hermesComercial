@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +14,16 @@ public class PagamentoManager {
     
     private static final Logger logger = LogManager.getLogger(PagamentoManager.class);
     
+    // Instância Singleton
+    private static volatile PagamentoManager instance;
+    
     private List<String> formasPagamentoPermitidas;
     private BigDecimal valorMinimoPagamento;
     private boolean permiteMultiplosPagamentos;
     private int maximoParcelas;
 
-    public PagamentoManager() {
+    // Construtor privado para Singleton
+    private PagamentoManager() {
         this.formasPagamentoPermitidas = new ArrayList<>();
         this.formasPagamentoPermitidas.add("DINHEIRO");
         this.formasPagamentoPermitidas.add("CARTAO_DEBITO");
@@ -29,6 +34,21 @@ public class PagamentoManager {
         this.valorMinimoPagamento = new BigDecimal("0.01");
         this.permiteMultiplosPagamentos = true;
         this.maximoParcelas = 12;
+    }
+    
+    /**
+     * Método Singleton para obter a única instância do PagamentoManager
+     * @return Instância única do PagamentoManager
+     */
+    public static PagamentoManager getInstance() {
+        if (instance == null) {
+            synchronized (PagamentoManager.class) {
+                if (instance == null) {
+                    instance = new PagamentoManager();
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -89,7 +109,7 @@ public class PagamentoManager {
                 return null;
             }
 
-            BigDecimal valorParcela = valorTotal.divide(BigDecimal.valueOf(numeroParcelas), 2, BigDecimal.ROUND_HALF_UP);
+            BigDecimal valorParcela = valorTotal.divide(BigDecimal.valueOf(numeroParcelas), 2, RoundingMode.HALF_UP);
 
             Pagamento pagamento = new Pagamento();
             pagamento.setTipoPagamento("CARTAO_CREDITO");
