@@ -47,12 +47,20 @@ public class UsuarioServiceBasico {
     public Usuario buscarPorNome(String nome) {
         try {
             if (nome == null || nome.trim().isEmpty()) {
+                logger.warn("Busca por nome vazia ou nula");
                 return null;
             }
-            // TODO: Implementar busca quando método estiver disponível no DAO
+            
+            List<Usuario> usuarios = usuarioDao.buscarClientePorNome(nome);
+            if (usuarios != null && !usuarios.isEmpty()) {
+                logger.debug("Usuário encontrado por nome: {}", nome);
+                return usuarios.get(0); // Retorna o primeiro encontrado
+            }
+            
+            logger.debug("Nenhum usuário encontrado com nome: {}", nome);
             return null;
         } catch (Exception e) {
-            logger.error("Erro ao buscar usuário por nome: " + e.getMessage(), e);
+            logger.error("Erro ao buscar usuário por nome '{}': {}", nome, e.getMessage(), e);
             throw new RuntimeException("Não foi possível buscar usuário", e);
         }
     }

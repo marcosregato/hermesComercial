@@ -1,7 +1,8 @@
 package com.br.hermescomercial.service;
 
-import com.br.hermescomercial.dao.ClienteDao;
 import com.br.hermescomercial.model.Cliente;
+import com.br.hermescomercial.dao.ClienteDao;
+import com.br.hermescomercial.exception.BusinessException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -86,8 +87,8 @@ public class ClienteService {
             }
             return clienteDao.buscarComFiltros(nome, false, false, false);
         } catch (Exception e) {
-            logger.error("Erro ao buscar clientes: " + e.getMessage(), e);
-            throw new RuntimeException("Não foi possível buscar clientes", e);
+            logger.error("Erro ao buscar clientes por nome '{}': {}", nome, e.getMessage(), e);
+            throw new BusinessException("Não foi possível buscar clientes", e);
         }
     }
     
@@ -99,8 +100,8 @@ public class ClienteService {
         try {
             return clienteDao.listar();
         } catch (Exception e) {
-            logger.error("Erro ao listar clientes: " + e.getMessage(), e);
-            throw new RuntimeException("Não foi possível listar clientes", e);
+            logger.error("Erro ao listar clientes: {}", e.getMessage(), e);
+            throw new BusinessException("Não foi possível listar clientes", e);
         }
     }
     

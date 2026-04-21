@@ -23,8 +23,13 @@ import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class PDVVendaController implements Initializable {
 
+    private static final Logger logger = LogManager.getLogger(PDVVendaController.class);
+    
     // private PDVManager pdvManager; - não utilizado
     private VendaPDV vendaAtual;
     private Usuario operadorAtual;
@@ -153,18 +158,16 @@ public class PDVVendaController implements Initializable {
                     try {
                         // Obter o produto diretamente da célula atual
                         Produto produto = getTableView().getItems().get(getIndex());
-                        System.out.println("DEBUG: Botão Adicionar pressionado");
-                        System.out.println("DEBUG: Produto obtido da célula: " + (produto != null ? produto.getNome() : "NULL"));
                         
                         if (produto != null) {
-                            System.out.println("DEBUG: Chamando adicionarProdutoAoCarrinho");
+                            logger.debug("Adicionando produto ao carrinho: {}", produto.getNome());
                             adicionarProdutoAoCarrinho(produto);
                         } else {
-                            System.out.println("DEBUG: Produto nulo na célula");
+                            logger.warn("Tentativa de adicionar produto nulo ao carrinho");
                         }
                     } catch (Exception ex) {
-                        System.err.println("Erro ao adicionar produto: " + ex.getMessage());
-                        ex.printStackTrace();
+                        logger.error("Erro ao adicionar produto ao carrinho: {}", ex.getMessage(), ex);
+                        mostrarAlerta("Não foi possível adicionar o produto ao carrinho.", Alert.AlertType.ERROR);
                     }
                 });
             }
@@ -202,18 +205,16 @@ public class PDVVendaController implements Initializable {
                     try {
                         // Obter o item diretamente da célula atual
                         ItemVenda item = getTableView().getItems().get(getIndex());
-                        System.out.println("DEBUG: Botão Remover pressionado");
-                        System.out.println("DEBUG: Item obtido da célula: " + (item != null ? item.getProdutoNome() : "NULL"));
                         
                         if (item != null) {
-                            System.out.println("DEBUG: Chamando removerItemDoCarrinho");
+                            logger.debug("Removendo item do carrinho: {}", item.getProdutoNome());
                             removerItemDoCarrinho(item);
                         } else {
-                            System.out.println("DEBUG: Item nulo na célula");
+                            logger.warn("Tentativa de remover item nulo do carrinho");
                         }
                     } catch (Exception ex) {
-                        System.err.println("Erro ao remover item: " + ex.getMessage());
-                        ex.printStackTrace();
+                        logger.error("Erro ao remover item do carrinho: {}", ex.getMessage(), ex);
+                        mostrarAlerta("Não foi possível remover o item do carrinho.", Alert.AlertType.ERROR);
                     }
                 });
             }

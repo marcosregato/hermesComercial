@@ -35,13 +35,14 @@ public class ProdutoDao {
         produto.setCodigo(rs.getString("codigo"));
         produto.setMarca(rs.getString("marca"));
         produto.setSubCategoria(rs.getString("subCategoria"));
-        produto.setDataCompra(rs.getString("dataCompra"));
+        // Removida referência a dataCompra pois a coluna não existe no banco
+        // produto.setDataCompra(rs.getString("dataCompra"));
         return produto;
     }
 
 
     public boolean salvar(Produto produto) throws SQLException {
-        String query ="INSERT INTO produto (nome, categoria, subCategoria, codigo, marca,dataCompra) VALUES (?, ?, ?, ?, ?, ?)";
+        String query ="INSERT INTO produto (nome, categoria, subCategoria, codigo, marca) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query)) {
 
 
@@ -50,7 +51,8 @@ public class ProdutoDao {
             ps.setString(3, produto.getSubCategoria());
             ps.setString(4, produto.getCodigo());
             ps.setString(5, produto.getMarca());
-            ps.setString(6, produto.getDataCompra());
+            // Removida dataCompra pois a coluna não existe no banco
+            // ps.setString(6, produto.getDataCompra());
 
             ps.executeUpdate();
 
@@ -74,14 +76,15 @@ public class ProdutoDao {
     }
 
     public boolean update(Produto produto) throws SQLException {
-        String query = "UPDATE produto SET categoria = ?, subCategoria = ?, codigo = ?, marca = ?, dataCompra = ? WHERE nome = ?";
+        String query = "UPDATE produto SET categoria = ?, subCategoria = ?, codigo = ?, marca = ? WHERE nome = ?";
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query)) {
             ps.setString(1, produto.getCategoria());
             ps.setString(2, produto.getSubCategoria());
             ps.setString(3, produto.getCodigo());
             ps.setString(4, produto.getMarca());
-            ps.setString(5, produto.getDataCompra());
-            ps.setString(6, produto.getNome());
+            // Removida dataCompra pois a coluna não existe no banco
+            // ps.setString(5, produto.getDataCompra());
+            ps.setString(5, produto.getNome());
             ps.executeUpdate();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);

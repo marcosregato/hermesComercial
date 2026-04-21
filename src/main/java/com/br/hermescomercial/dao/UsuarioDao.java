@@ -43,7 +43,7 @@ public class UsuarioDao {
     }
 
     public void salvar(Usuario usuario) {
-        String sql = "INSERT INTO USUARIO (nome, endereco, bairro, cidade, estado, cep, tipoDocumento, numeroDocumento, whatsapp, telefone, email, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO USUARIO (nome, endereco, bairro, cidade, estado, cep, numeroDocumento, whatsapp, telefone, email, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getEndereco());
@@ -51,12 +51,13 @@ public class UsuarioDao {
             ps.setString(4, usuario.getCidade());
             ps.setString(5, usuario.getEstado());
             ps.setString(6, usuario.getCep());
-            ps.setString(7, usuario.getTipoDocumento());
-            ps.setString(8, usuario.getNumeroDocumeto());
-            ps.setString(9, usuario.getWhastsapp());
-            ps.setString(10, usuario.getTelefone());
-            ps.setString(11, usuario.getEmail());
-            ps.setString(12, usuario.getTipousuario());
+            // Removida tipoDocumento pois a coluna não existe no banco
+            // ps.setString(7, usuario.getTipoDocumento());
+            ps.setString(7, usuario.getNumeroDocumeto());
+            ps.setString(8, usuario.getWhastsapp());
+            ps.setString(9, usuario.getTelefone());
+            ps.setString(10, usuario.getEmail());
+            ps.setString(11, usuario.getTipousuario());
             ps.executeUpdate();
         } catch (Exception e) {
             logger.error("Erro ao salvar usuario: " + e.getMessage());
@@ -64,19 +65,20 @@ public class UsuarioDao {
     }
 
     public void update(Usuario usuario) {
-        String sql = "UPDATE USUARIO SET endereco=?, bairro=?, cidade=?, estado=?, cep=?, tipoDocumento=?, numeroDocumento=?, whatsapp=?, telefone=?, email=?, tipo_usuario=? WHERE nome=?";
+        String sql = "UPDATE USUARIO SET endereco=?, bairro=?, cidade=?, estado=?, cep=?, numeroDocumento=?, whatsapp=?, telefone=?, email=?, tipo_usuario=? WHERE nome=?";
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuario.getEndereco());
             ps.setString(2, usuario.getBairro());
             ps.setString(3, usuario.getCidade());
             ps.setString(4, usuario.getEstado());
             ps.setString(5, usuario.getCep());
-            ps.setString(6, usuario.getTipoDocumento());
-            ps.setString(7, usuario.getNumeroDocumeto());
-            ps.setString(8, usuario.getWhastsapp());
-            ps.setString(9, usuario.getTelefone());
-            ps.setString(10, usuario.getEmail());
-            ps.setString(11, usuario.getTipousuario());
+            // Removida tipoDocumento pois a coluna não existe no banco
+            // ps.setString(6, usuario.getTipoDocumento());
+            ps.setString(6, usuario.getNumeroDocumeto());
+            ps.setString(7, usuario.getWhastsapp());
+            ps.setString(8, usuario.getTelefone());
+            ps.setString(9, usuario.getEmail());
+            ps.setString(10, usuario.getTipousuario());
             ps.setString(12, usuario.getNome());
             ps.executeUpdate();
         } catch (Exception e) {
@@ -95,38 +97,17 @@ public class UsuarioDao {
     }
 
     public List<Usuario> buscarClientePorNome(String nome) {
+        if (nome == null || nome.trim().isEmpty()) {
+            logger.warn("Busca por nome vazia ou nula");
+            return new ArrayList<>();
+        }
+        
         String sql = "SELECT * FROM USUARIO WHERE TIPO_USUARIO = 'CLIENTE' AND NOME ILIKE ?";
         List<Usuario> lista = new ArrayList<>();
+        
         try {
-            System.out.println("DEBUG DAO: Executando SQL por nome: " + sql);
-            System.out.println("DEBUG DAO: Parâmetro: %" + nome + "%");
+            logger.debug("Buscando clientes por nome: {}", nome);
             
-            // Primeiro, vamos verificar todos os usuários no banco
-            String sqlTodos = "SELECT * FROM USUARIO";
-            try (PreparedStatement psTodos = ConnectionBD.getConnection().prepareStatement(sqlTodos)) {
-                try (ResultSet rsTodos = psTodos.executeQuery()) {
-                    System.out.println("DEBUG DAO: Verificando todos os usuários no banco:");
-                    int totalUsuarios = 0;
-                    int totalClientes = 0;
-                    while (rsTodos.next()) {
-                        totalUsuarios++;
-                        String tipoUsuario = rsTodos.getString("TIPO_USUARIO");
-                        String nomeUsuario = rsTodos.getString("NOME");
-                        System.out.println("DEBUG DAO: Usuário " + totalUsuarios + " - Nome: " + nomeUsuario + ", Tipo: " + tipoUsuario);
-                        
-                        if ("CLIENTE".equals(tipoUsuario)) {
-                            totalClientes++;
-                            if (nomeUsuario.toLowerCase().contains(nome.toLowerCase())) {
-                                System.out.println("DEBUG DAO: *** CLIENTE ENCONTRADO COM 'jo' no nome: " + nomeUsuario);
-                            }
-                        }
-                    }
-                    System.out.println("DEBUG DAO: Total de usuários no banco: " + totalUsuarios);
-                    System.out.println("DEBUG DAO: Total de clientes no banco: " + totalClientes);
-                }
-            }
-            
-            // Agora executa a busca específica
             try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
                 String busca = "%" + nome + "%";
                 ps.setString(1, busca);
@@ -136,26 +117,30 @@ public class UsuarioDao {
                     while (rs.next()) {
                         count++;
                         Usuario usuario = mapResultSetToUsuario(rs);
-                        System.out.println("DEBUG DAO: Cliente " + count + " - ID: " + usuario.getId() + ", Nome: " + usuario.getNome());
+                        logger.debug("Cliente encontrado: {} - ID: {}, Nome: {}", count, usuario.getId(), usuario.getNome());
                         lista.add(usuario);
                     }
-                    System.out.println("DEBUG DAO: Total de clientes encontrados por nome: " + count);
+                    logger.info("Total de clientes encontrados por nome '{}': {}", nome, count);
                 }
             }
-        } catch (Exception e) {
-            System.out.println("DEBUG DAO: Erro na busca por nome: " + e.getMessage());
-            e.printStackTrace();
-            logger.error("Erro ao buscar usuario: " + e.getMessage());
+        } catch (SQLException e) {
+            logger.error("Erro ao buscar clientes por nome '{}': {}", nome, e.getMessage(), e);
+            throw new RuntimeException("Não foi possível buscar clientes por nome", e);
         }
         return lista;
     }
 
     public List<Usuario> buscarClientePorCpfCnpj(String textoBusca) {
+        if (textoBusca == null || textoBusca.trim().isEmpty()) {
+            logger.warn("Busca por CPF/CNPJ vazia ou nula");
+            return new ArrayList<>();
+        }
+        
         String sql = "SELECT * FROM USUARIO WHERE TIPO_USUARIO = 'CLIENTE' AND (CPF ILIKE ? OR CNPJ ILIKE ?)";
         List<Usuario> lista = new ArrayList<>();
+        
         try {
-            System.out.println("DEBUG DAO: Executando SQL: " + sql);
-            System.out.println("DEBUG DAO: Parâmetro: %" + textoBusca + "%");
+            logger.debug("Buscando clientes por CPF/CNPJ: {}", textoBusca);
             
             try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
                 String busca = "%" + textoBusca + "%";
@@ -167,25 +152,30 @@ public class UsuarioDao {
                     while (rs.next()) {
                         count++;
                         Usuario usuario = mapResultSetToUsuario(rs);
-                        System.out.println("DEBUG DAO: Cliente " + count + " - ID: " + usuario.getId() + ", Nome: " + usuario.getNome() + ", CPF/CNPJ: " + usuario.getNumeroDocumeto());
+                        logger.debug("Cliente encontrado: {} - ID: {}, Nome: {}, CPF/CNPJ: {}", count, usuario.getId(), usuario.getNome(), usuario.getNumeroDocumeto());
                         lista.add(usuario);
                     }
-                    System.out.println("DEBUG DAO: Total de clientes encontrados: " + count);
+                    logger.info("Total de clientes encontrados por CPF/CNPJ '{}': {}", textoBusca, count);
                 }
             }
-        } catch (Exception e) {
-            System.out.println("DEBUG DAO: Erro na busca: " + e.getMessage());
-            logger.error("Erro ao buscar cliente por CPF/CNPJ: " + e.getMessage());
+        } catch (SQLException e) {
+            logger.error("Erro ao buscar clientes por CPF/CNPJ '{}': {}", textoBusca, e.getMessage(), e);
+            throw new RuntimeException("Não foi possível buscar clientes por CPF/CNPJ", e);
         }
         return lista;
     }
 
     public List<Usuario> buscarClientePorNomeCpfCnpj(String textoBusca) {
+        if (textoBusca == null || textoBusca.trim().isEmpty()) {
+            logger.warn("Busca unificada vazia ou nula");
+            return new ArrayList<>();
+        }
+        
         String sql = "SELECT * FROM USUARIO WHERE TIPO_USUARIO = 'CLIENTE' AND (NOME ILIKE ? OR CPF ILIKE ? OR CNPJ ILIKE ?)";
         List<Usuario> lista = new ArrayList<>();
+        
         try {
-            System.out.println("DEBUG DAO: Executando SQL unificado: " + sql);
-            System.out.println("DEBUG DAO: Parâmetro: %" + textoBusca + "%");
+            logger.debug("Buscando clientes por Nome/CPF/CNPJ: {}", textoBusca);
             
             try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
                 String busca = "%" + textoBusca + "%";
@@ -198,15 +188,15 @@ public class UsuarioDao {
                     while (rs.next()) {
                         count++;
                         Usuario usuario = mapResultSetToUsuario(rs);
-                        System.out.println("DEBUG DAO: Cliente " + count + " - ID: " + usuario.getId() + ", Nome: " + usuario.getNome() + ", CPF/CNPJ: " + usuario.getNumeroDocumeto());
+                        logger.debug("Cliente encontrado: {} - ID: {}, Nome: {}, CPF/CNPJ: {}", count, usuario.getId(), usuario.getNome(), usuario.getNumeroDocumeto());
                         lista.add(usuario);
                     }
-                    System.out.println("DEBUG DAO: Total de clientes encontrados: " + count);
+                    logger.info("Total de clientes encontrados por Nome/CPF/CNPJ '{}': {}", textoBusca, count);
                 }
             }
-        } catch (Exception e) {
-            System.out.println("DEBUG DAO: Erro na busca unificada: " + e.getMessage());
-            logger.error("Erro ao buscar cliente por Nome/CPF/CNPJ: " + e.getMessage());
+        } catch (SQLException e) {
+            logger.error("Erro ao buscar clientes por Nome/CPF/CNPJ '{}': {}", textoBusca, e.getMessage(), e);
+            throw new RuntimeException("Não foi possível buscar clientes por Nome/CPF/CNPJ", e);
         }
         return lista;
     }
