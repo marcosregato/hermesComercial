@@ -1,7 +1,7 @@
 package com.br.hermescomercial.controller.pdv;
 
 import com.br.hermescomercial.model.Produto;
-import com.br.hermescomercial.dao.ProdutoDao;
+import com.br.hermescomercial.service.ProdutoService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -20,8 +20,8 @@ import java.util.TimerTask;
 
 public class PDVCadastroProdutoController implements Initializable {
 
-    // DAO
-    private ProdutoDao produtoDao;
+    // Service
+    private ProdutoService produtoService;
     
     // Dados
     private Produto produtoEdicao;
@@ -77,8 +77,8 @@ public class PDVCadastroProdutoController implements Initializable {
     }
 
     private void inicializarComponentes() {
-        // Inicializar DAO
-        this.produtoDao = new ProdutoDao();
+        // Inicializar Service
+        this.produtoService = new ProdutoService();
         
         // Configurar informações do terminal
         lblTerminal.setText("Terminal: 001");
@@ -243,23 +243,15 @@ public class PDVCadastroProdutoController implements Initializable {
 
             if (modoEdicao && produtoEdicao != null) {
                 // Atualizar produto existente
-                if (produtoDao.update(produto)) {
-                    mostrarAlerta("Produto atualizado com sucesso!", Alert.AlertType.INFORMATION);
-                    atualizarStatus("Produto atualizado com sucesso");
-                } else {
-                    mostrarAlerta("Erro ao atualizar produto!", Alert.AlertType.ERROR);
-                    atualizarStatus("Erro ao atualizar produto");
-                }
+                produtoService.atualizar(produto);
+                mostrarAlerta("Produto atualizado com sucesso!", Alert.AlertType.INFORMATION);
+                atualizarStatus("Produto atualizado com sucesso");
             } else {
                 // Inserir novo produto
-                if (produtoDao.salvar(produto)) {
-                    mostrarAlerta("Produto cadastrado com sucesso!", Alert.AlertType.INFORMATION);
-                    atualizarStatus("Produto cadastrado com sucesso");
-                    limparCampos();
-                } else {
-                    mostrarAlerta("Erro ao cadastrar produto!", Alert.AlertType.ERROR);
-                    atualizarStatus("Erro ao cadastrar produto");
-                }
+                produtoService.salvar(produto);
+                mostrarAlerta("Produto cadastrado com sucesso!", Alert.AlertType.INFORMATION);
+                atualizarStatus("Produto cadastrado com sucesso");
+                limparCampos();
             }
 
         } catch (Exception e) {
@@ -277,14 +269,10 @@ public class PDVCadastroProdutoController implements Initializable {
 
         if (confirmarExclusao()) {
             try {
-                if (produtoDao.remove(produtoEdicao.getNome())) {
-                    mostrarAlerta("Produto excluído com sucesso!", Alert.AlertType.INFORMATION);
-                    atualizarStatus("Produto excluído com sucesso");
-                    limparCampos();
-                } else {
-                    mostrarAlerta("Erro ao excluir produto!", Alert.AlertType.ERROR);
-                    atualizarStatus("Erro ao excluir produto");
-                }
+                produtoService.remover(produtoEdicao.getNome());
+                mostrarAlerta("Produto excluído com sucesso!", Alert.AlertType.INFORMATION);
+                atualizarStatus("Produto excluído com sucesso");
+                limparCampos();
             } catch (Exception e) {
                 mostrarAlerta("Erro ao excluir produto: " + e.getMessage(), Alert.AlertType.ERROR);
                 atualizarStatus("Erro ao excluir produto");

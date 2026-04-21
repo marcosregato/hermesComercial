@@ -15,7 +15,7 @@ public class Usuario {
     private String tipoDocumento;
     private String email;
     private String tipoUsuario;
-
+    
     public Usuario() {
     }
 
@@ -111,7 +111,7 @@ public class Usuario {
         return tipoUsuario;
     }
 
-    public void setTipousuario(String tipoUsuario) {
+    public void setTipoUsuario(String tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
     }
 

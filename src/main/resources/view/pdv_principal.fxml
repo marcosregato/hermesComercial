@@ -21,19 +21,85 @@
             </HBox>
             <HBox alignment="CENTER_LEFT" spacing="10" styleClass="hbox-responsive" style="-fx-padding: 5 10; -fx-background-color: #2c3e50;">
                <children>
-                  <Button fx:id="btnAbrirVenda" text="Abrir Venda" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onAbrirVenda"/>
-                  <Button fx:id="btnFecharVenda" text="Fechar Venda" styleClass="button-warning, button-responsive" prefWidth="100.0" onAction="#onFecharVenda"/>
-                  <Button fx:id="btnBuscarProduto" text="Buscar Produto" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onBuscarProduto"/>
-                  <Button fx:id="btnCadastrarProduto" text="Cadastrar Produto" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onCadastrarProduto"/>
-                  <Button fx:id="btnClientes" text="Clientes" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onClientes"/>
-                  <Button fx:id="btnRelatorios" text="Relatórios" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onRelatorios"/>
-                  <Button fx:id="btnNotaFiscal" text="Nota Fiscal" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onNotaFiscal"/>
-                  <Button fx:id="btnCupomFiscal" text="Cupom Fiscal" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onCupomFiscal"/>
-                  <Button fx:id="btnConfigImpressora" text="Config. Impressora" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onConfigImpressora"/>
+                  <!-- Grupo Vendas -->
+                  <VBox spacing="5">
+                     <children>
+                        <Label text="VENDAS" style="-fx-text-fill: #ecf0f1; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 0 0 2px 0;"/>
+                        <HBox spacing="5">
+                           <children>
+                              <Button fx:id="btnAbrirVenda" text="Abrir Venda" styleClass="button-success, button-responsive" prefWidth="100.0" onAction="#onAbrirVenda"/>
+                              <Button fx:id="btnFecharVenda" text="Fechar Venda" styleClass="button-warning, button-responsive" prefWidth="100.0" onAction="#onFecharVenda"/>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+                  <Separator orientation="VERTICAL" style="-fx-background-color: #34495e; -fx-padding: 0 5 0 5;"/>
+                  
+                  <!-- Grupo Produtos -->
+                  <VBox spacing="5">
+                     <children>
+                        <Label text="PRODUTOS" style="-fx-text-fill: #ecf0f1; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 0 0 2px 0;"/>
+                        <HBox spacing="5">
+                           <children>
+                              <Button fx:id="btnBuscarProduto" text="Buscar Produto" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onBuscarProduto"/>
+                              <Button fx:id="btnCadastrarProduto" text="Cadastrar Produto" styleClass="button-primary, button-responsive" prefWidth="100.0" onAction="#onCadastrarProduto"/>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+                  <Separator orientation="VERTICAL" style="-fx-background-color: #34495e; -fx-padding: 0 5 0 5;"/>
+                  
+                  <!-- Grupo Clientes -->
+                  <VBox spacing="5">
+                     <children>
+                        <Label text="CLIENTES" style="-fx-text-fill: #ecf0f1; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 0 0 2px 0;"/>
+                        <Button fx:id="btnClientes" text="Clientes" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onClientes"/>
+                     </children>
+                  </VBox>
+                  
+                  <Separator orientation="VERTICAL" style="-fx-background-color: #34495e; -fx-padding: 0 5 0 5;"/>
+                  
+                  <!-- Grupo Relatórios -->
+                  <VBox spacing="5">
+                     <children>
+                        <Label text="RELATÓRIOS" style="-fx-text-fill: #ecf0f1; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 0 0 2px 0;"/>
+                        <HBox spacing="5">
+                           <children>
+                              <Button fx:id="btnRelatorios" text="Relatórios" styleClass="button-info, button-responsive" prefWidth="100.0" onAction="#onRelatorios"/>
+                              <Button fx:id="btnNotaFiscal" text="Nota Fiscal" styleClass="button-secondary, button-responsive" prefWidth="100.0" onAction="#onNotaFiscal"/>
+                              <Button fx:id="btnCupomFiscal" text="Cupom Fiscal" styleClass="button-secondary, button-responsive" prefWidth="100.0" onAction="#onCupomFiscal"/>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  
+                  <Separator orientation="VERTICAL" style="-fx-background-color: #34495e; -fx-padding: 0 5 0 5;"/>
+                  
+                  <!-- Grupo Sistema -->
+                  <VBox spacing="5">
+                     <children>
+                        <Label text="SISTEMA" style="-fx-text-fill: #ecf0f1; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 0 0 2px 0;"/>
+                        <Button fx:id="btnConfigSistema" text="Config. Sistema" styleClass="button-dark, button-responsive" prefWidth="100.0" onAction="#onConfigSistema"/>
+                     </children>
+                  </VBox>
+                  
                   <Region HBox.hgrow="ALWAYS"/>
-                  <Button fx:id="btnAbrirCaixa" text="Abrir Caixa" styleClass="button-success, button-responsive" onAction="#onAbrirCaixa"/>
-                  <Button fx:id="btnFecharCaixa" text="Fechar Caixa" styleClass="button-danger, button-responsive" onAction="#onFecharCaixa"/>
-                  <Button fx:id="btnSair" text="Sair" styleClass="button-danger, button-responsive" onAction="#onSair"/>
+                  
+                  <!-- Grupo Caixa -->
+                  <VBox spacing="5">
+                     <children>
+                        <Label text="CAIXA" style="-fx-text-fill: #ecf0f1; -fx-font-size: 10px; -fx-font-weight: bold; -fx-padding: 0 0 2px 0;"/>
+                        <HBox spacing="5">
+                           <children>
+                              <Button fx:id="btnAbrirCaixa" text="Abrir Caixa" styleClass="button-success, button-responsive" prefWidth="100.0" onAction="#onAbrirCaixa"/>
+                              <Button fx:id="btnFecharCaixa" text="Fechar Caixa" styleClass="button-danger, button-responsive" prefWidth="100.0" onAction="#onFecharCaixa"/>
+                              <Button fx:id="btnSair" text="Sair" styleClass="button-danger, button-responsive" prefWidth="80.0" onAction="#onSair"/>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
             </HBox>
          </children>

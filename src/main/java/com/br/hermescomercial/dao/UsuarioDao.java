@@ -26,7 +26,7 @@ public class UsuarioDao {
         usuario.setWhastsapp(rs.getString("WHATSAPP"));
         usuario.setTelefone(rs.getString("TELEFONE"));
         usuario.setEmail(rs.getString("EMAIL"));
-        usuario.setTipousuario(rs.getString("TIPO_USUARIO"));
+        usuario.setTipoUsuario(rs.getString("TIPO_USUARIO"));
         
         // Para CPF e CNPJ, usar os campos diretos da tabela
         String cpf = rs.getString("CPF");

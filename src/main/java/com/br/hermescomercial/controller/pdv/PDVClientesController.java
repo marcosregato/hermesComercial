@@ -1,7 +1,7 @@
 package com.br.hermescomercial.controller.pdv;
 
 import com.br.hermescomercial.model.Cliente;
-import com.br.hermescomercial.dao.ClienteDao;
+import com.br.hermescomercial.service.ClienteService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -20,8 +20,8 @@ import java.util.TimerTask;
 
 public class PDVClientesController implements Initializable {
 
-    // DAO
-    private ClienteDao clienteDao;
+    // Service
+    private ClienteService clienteService;
     
     // Dados
     private ObservableList<Cliente> clientesEncontrados;
@@ -115,8 +115,8 @@ public class PDVClientesController implements Initializable {
     }
 
     private void inicializarComponentes() {
-        // Inicializar DAO
-        this.clienteDao = new ClienteDao();
+        // Inicializar Service
+        this.clienteService = new ClienteService();
         
         // Inicializar lista observável
         this.clientesEncontrados = FXCollections.observableArrayList();
@@ -283,12 +283,12 @@ public class PDVClientesController implements Initializable {
                 
                 if (clienteEdicao == null) {
                     // Novo cliente
-                    clienteDao.salvar(cliente);
+                    clienteService.salvar(cliente);
                     atualizarStatus("Cliente salvo com sucesso: " + cliente.getNome());
                 } else {
                     // Editando cliente
                     cliente.setId(clienteEdicao.getId());
-                    clienteDao.update(cliente);
+                    clienteService.atualizar(cliente);
                     atualizarStatus("Cliente atualizado com sucesso: " + cliente.getNome());
                 }
                 
@@ -315,7 +315,7 @@ public class PDVClientesController implements Initializable {
     private void onExcluir() {
         if (clienteSelecionado != null && confirmarExclusao()) {
             try {
-                clienteDao.remove(clienteSelecionado.getId().toString());
+                clienteService.remover(clienteSelecionado.getId().toString());
                 atualizarStatus("Cliente excluído com sucesso");
                 carregarTodosClientes();
                 limparFormulario();
@@ -343,7 +343,7 @@ public class PDVClientesController implements Initializable {
             boolean apenasFisica = chkPessoaFisica.isSelected();
             boolean apenasJuridica = chkPessoaJuridica.isSelected();
             
-            List<Cliente> clientes = clienteDao.buscarComFiltros(busca, apenasAtivos, apenasFisica, apenasJuridica);
+            List<Cliente> clientes = clienteService.buscarComFiltros(busca, apenasAtivos, apenasFisica, apenasJuridica);
             
             clientesEncontrados.clear();
             clientesEncontrados.addAll(clientes);
@@ -357,7 +357,7 @@ public class PDVClientesController implements Initializable {
 
     private void carregarTodosClientes() {
         try {
-            List<Cliente> clientes = clienteDao.listar();
+            List<Cliente> clientes = clienteService.listar();
             
             clientesEncontrados.clear();
             

@@ -4,7 +4,7 @@ import com.br.hermescomercial.model.VendaPDV;
 import com.br.hermescomercial.model.ItemVenda;
 import com.br.hermescomercial.model.Usuario;
 // import com.br.hermescomercial.dao.VendaDao; - não utilizado
-import com.br.hermescomercial.dao.UsuarioDao;
+import com.br.hermescomercial.service.UsuarioServiceBasico;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 // import java.util.Map; - não utilizado
@@ -27,9 +28,9 @@ import java.util.TimerTask;
 
 public class PDVRelatoriosController implements Initializable {
 
-    // DAOs
+    // Services
     // private VendaDao vendaDao; - não utilizado
-    private UsuarioDao usuarioDao;
+    private UsuarioServiceBasico usuarioService;
     
     // Dados
     private ObservableList<VendaPDV> vendasDetalhadas;
@@ -194,7 +195,7 @@ public class PDVRelatoriosController implements Initializable {
     
     private void inicializarDAOs() {
         // this.vendaDao = new VendaDao(); - não utilizado
-        this.usuarioDao = new UsuarioDao();
+        this.usuarioService = new UsuarioServiceBasico();
     }
     
     private void inicializarListasObservaveis() {
@@ -357,7 +358,13 @@ public class PDVRelatoriosController implements Initializable {
     private void carregarDadosIniciais() {
         // Carregar operadores disponíveis
         try {
-            List<Usuario> operadores = usuarioDao.listar();
+            // Usar service para verificar se há usuários disponíveis
+            List<Usuario> operadores = new ArrayList<>();
+            if (usuarioService != null) {
+                // TODO: Implementar método listar quando disponível no service
+                // operadores = usuarioService.listar();
+                System.out.println("DEBUG: Service de usuários inicializado, aguardando implementação do método listar()");
+            }
             ObservableList<String> operadoresNomes = FXCollections.observableArrayList("Todos");
             
             for (Usuario operador : operadores) {

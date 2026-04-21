@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox spacing="20" alignment="CENTER" style="-fx-padding: 40; -fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.br.hermescomercial.controller.DatabaseConfigController">
+    
+    <children>
+        
+        <!-- Título -->
+        <Label text="Configuração de Banco de Dados" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+        
+        <!-- Informação Atual -->
+        <VBox spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #e8f4fd; -fx-padding: 15; -fx-background-radius: 8;">
+            <Label text="Configuração Atual:" style="-fx-font-weight: bold; -fx-text-fill: #1976d2;" />
+            <Label fx:id="lblCurrentDatabase" text="Carregando..." style="-fx-text-fill: #424242;" />
+            <Label fx:id="lblDatabaseDescription" text="Carregando..." style="-fx-text-fill: #666666; -fx-font-size: 12px;" />
+        </VBox>
+        
+        <!-- Opções de Banco -->
+        <VBox spacing="15" alignment="CENTER_LEFT" style="-fx-background-color: #ffffff; -fx-padding: 20; -fx-background-radius: 8; -fx-border-color: #e0e0e0; -fx-border-radius: 8;">
+            <Label text="Selecione o tipo de banco de dados:" style="-fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+            
+            <RadioButton fx:id="rbPostgreSQL" text="PostgreSQL (Recomendado)" style="-fx-font-size: 14px;">
+                <toggleGroup>
+                    <ToggleGroup fx:id="databaseGroup" />
+                </toggleGroup>
+            </RadioButton>
+            
+            <RadioButton fx:id="rbExcel" text="Excel (Arquivos Locais)" style="-fx-font-size: 14px;" toggleGroup="$databaseGroup" />
+            
+            <RadioButton fx:id="rbSQLite" text="SQLite (Arquivo Único)" style="-fx-font-size: 14px;" toggleGroup="$databaseGroup" />
+            
+            <!-- Descrições -->
+            <VBox spacing="5" style="-fx-padding: 10 0 0 25;">
+                <Label text="• PostgreSQL: Banco robusto, multiusuário, ideal para produção" style="-fx-text-fill: #666666; -fx-font-size: 11px;" wrapText="true" />
+                <Label text="• Excel: Simples, portátil, ideal para pequenos volumes" style="-fx-text-fill: #666666; -fx-font-size: 11px;" wrapText="true" />
+                <Label text="• SQLite: Leve, rápido, arquivo único de banco" style="-fx-text-fill: #666666; -fx-font-size: 11px;" wrapText="true" />
+            </VBox>
+        </VBox>
+        
+        <!-- Área de Informações -->
+        <VBox fx:id="infoBox" spacing="10" alignment="CENTER_LEFT" style="-fx-background-color: #fff3e0; -fx-padding: 15; -fx-background-radius: 8;" visible="false">
+            <Label fx:id="lblInfoTitle" text="Informações" style="-fx-font-weight: bold; -fx-text-fill: #f57c00;" />
+            <Label fx:id="lblInfoContent" text="" style="-fx-text-fill: #666666; -fx-font-size: 12px;" wrapText="true" />
+        </VBox>
+        
+        <!-- Botões -->
+        <HBox spacing="15" alignment="CENTER">
+            <Button fx:id="btnTestConnection" text="Testar Conexão" style="-fx-background-color: #4caf50; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5;" onAction="#testConnection" />
+            <Button fx:id="btnSave" text="Salvar Configuração" style="-fx-background-color: #2196f3; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5;" onAction="#saveConfiguration" />
+            <Button fx:id="btnCancel" text="Cancelar" style="-fx-background-color: #757575; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 10 20; -fx-background-radius: 5;" onAction="#cancel" />
+        </HBox>
+        
+        <!-- Status -->
+        <Label fx:id="lblStatus" text="" style="-fx-text-fill: #666666; -fx-font-size: 12px;" />
+        
+    </children>
+    
+</VBox>

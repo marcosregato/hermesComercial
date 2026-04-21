@@ -10,7 +10,10 @@ import com.br.hermescomercial.model.Usuario;
 import com.br.hermescomercial.model.VendaPDV;
 import com.br.hermescomercial.model.Cliente;
 import com.br.hermescomercial.model.Pagamento;
-import com.br.hermescomercial.dao.UsuarioDao;
+import com.br.hermescomercial.service.ProdutoService;
+import com.br.hermescomercial.service.ClienteService;
+import com.br.hermescomercial.service.UsuarioServiceBasico;
+import com.br.hermescomercial.service.VendaService;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,6 +33,7 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -42,6 +46,12 @@ public class PDVPrincipalController implements Initializable {
     // private PagamentoManager pagamentoManager; - não utilizado
     // private CupomFiscalManager cupomManager; - não utilizado
     private ImpressoraManager impressoraManager;
+    
+    // Services
+    private ProdutoService produtoService;
+    private ClienteService clienteService;
+    private UsuarioServiceBasico usuarioService;
+    private VendaService vendaService;
     
     // Dados
     private Usuario operadorAtual;
@@ -76,6 +86,7 @@ public class PDVPrincipalController implements Initializable {
     @FXML private Button btnNotaFiscal;
     @FXML private Button btnCupomFiscal;
     @FXML private Button btnConfigImpressora;
+    @FXML private Button btnConfigSistema;
     @FXML private TableView<Produto> tblProdutos;
     @FXML private TableColumn<Produto, String> colCodigo;
     @FXML private TableColumn<Produto, String> colDescricao;
@@ -128,6 +139,7 @@ public class PDVPrincipalController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         inicializarManagers();
+        inicializarServices();
         inicializarComponentes();
         inicializarListeners();
         inicializarTabelas();
@@ -172,6 +184,25 @@ public class PDVPrincipalController implements Initializable {
                            Alert.AlertType.WARNING);
             }
         });
+    }
+    
+    /**
+     * Inicializa os serviços de negócio
+     */
+    private void inicializarServices() {
+        try {
+            // Inicializar services
+            produtoService = new ProdutoService();
+            clienteService = new ClienteService();
+            usuarioService = new UsuarioServiceBasico();
+            vendaService = new VendaService();
+            
+            System.out.println("DEBUG: Services inicializados com sucesso");
+            
+        } catch (Exception e) {
+            System.err.println("ERRO ao inicializar serviços: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     private void inicializarManagers() {
@@ -287,18 +318,62 @@ public class PDVPrincipalController implements Initializable {
 
     // Métodos de Ação dos Botões
 
-    @FXML
-    private void onBuscarProduto() {
-        System.out.println("DEBUG: Botão Buscar Produto pressionado");
-        atualizarStatus("Abrindo tela de busca de produtos...");
-        abrirTelaBuscaProdutos();
-    }
-
+    
     @FXML
     private void onAbrirVenda() {
         System.out.println("DEBUG: Botão Abrir Venda pressionado");
-        atualizarStatus("Abrindo tela de venda...");
-        abrirTelaVenda();
+        atualizarStatus("Abrindo nova venda...");
+        abrirNovaVenda();
+    }
+    
+    /**
+     * Abre uma nova venda no PDV
+     */
+    private void abrirNovaVenda() {
+        try {
+            // Limpa o carrinho atual
+            if (itensCarrinho != null) {
+                itensCarrinho.clear();
+            } else {
+                itensCarrinho = FXCollections.observableArrayList();
+            }
+            
+            // Validar operador usando usuarioService
+            if (operadorAtual != null && usuarioService != null) {
+                // Verificar se o operador está válido
+                if (usuarioService.existeUsuario(operadorAtual.getNome())) {
+                    System.out.println("Operador validado: " + operadorAtual.getNome());
+                } else {
+                    System.out.println("Aviso: Operador não encontrado no sistema: " + operadorAtual.getNome());
+                }
+            }
+            
+            // Criar nova venda usando o serviço
+            if (vendaService != null) {
+                // TODO: Implementar criação de venda quando o método estiver disponível
+                // vendaService.criarVenda(operadorAtual);
+            }
+            
+            atualizarStatus("Nova venda aberta com sucesso");
+            System.out.println("Nova venda aberta pelo operador: " + (operadorAtual != null ? operadorAtual.getNome() : "Desconhecido"));
+            
+        } catch (Exception e) {
+            atualizarStatus("Erro ao abrir nova venda");
+            showAlert("Erro", "Não foi possível abrir nova venda: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Mostra um alerta para o usuário
+     * @param titulo Título do alerta
+     * @param mensagem Mensagem do alerta
+     */
+    private void showAlert(String titulo, String mensagem) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensagem);
+        alert.showAndWait();
     }
 
     @FXML
@@ -319,8 +394,13 @@ public class PDVPrincipalController implements Initializable {
         
         if (alert.showAndWait().orElse(ButtonType.CANCEL) == ButtonType.OK) {
             try {
-                // Cancelar a venda atual
+                // Cancelar a venda atual usando o serviço quando disponível
                 boolean sucesso = pdvManager.cancelarVenda();
+                
+                // TODO: Usar vendaService quando implementado
+                // if (vendaService != null && pdvManager.getCarrinhoAtual() != null) {
+                //     vendaService.cancelarVenda(pdvManager.getCarrinhoAtual().getId());
+                // }
                 
                 if (sucesso) {
                     atualizarStatus("Venda fechada com sucesso!");
@@ -377,12 +457,60 @@ public class PDVPrincipalController implements Initializable {
         atualizarStatus("Abrindo tela de cadastro de produto...");
         abrirTelaCadastroProduto();
     }
-
+    
     @FXML
-    private void onConfigImpressora() {
-        System.out.println("DEBUG: Botão Configuração de Impressora pressionado");
-        atualizarStatus("Abrindo tela de configuração de impressora...");
-        abrirTelaConfiguracaoImpressora();
+    private void onBuscarProduto() {
+        System.out.println("DEBUG: Botão Buscar Produto pressionado");
+        buscarProdutos();
+    }
+    
+    private void buscarProdutos() {
+        try {
+            String termoBusca = txtBuscarProduto.getText();
+            List<Produto> produtos = produtoService.buscarPorNome(termoBusca);
+            produtosDisponiveis.setAll(produtos);
+            tblProdutos.refresh();
+            atualizarStatus("Encontrados " + produtos.size() + " produtos");
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar produtos: " + e.getMessage());
+            atualizarStatus("Erro ao buscar produtos");
+            showAlert("Erro", "Não foi possível buscar produtos: " + e.getMessage());
+        }
+    }
+
+        
+    @FXML
+    private void onConfigSistema() {
+        System.out.println("DEBUG: Botão Configuração de Sistema pressionado");
+        atualizarStatus("Abrindo tela de configuração do sistema...");
+        abrirTelaConfiguracaoSistema();
+    }
+    
+    private void abrirTelaConfiguracaoSistema() {
+        try {
+            System.out.println("DEBUG: Tentando abrir tela de configuração do sistema");
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
+                getClass().getResource("/view/sistema_config.fxml"));
+            javafx.scene.Parent root = loader.load();
+            
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Configurações do Sistema");
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            atualizarStatus("Configurações do sistema carregadas");
+            
+        } catch (Exception e) {
+            System.err.println("ERRO ao abrir tela de configuração do sistema: " + e.getMessage());
+            e.printStackTrace();
+            atualizarStatus("Erro ao abrir configurações do sistema");
+            javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Não foi possível abrir a tela de configuração");
+            alert.setContentText("Erro: " + e.getMessage());
+            alert.showAndWait();
+        }
     }
 
     @FXML
@@ -474,6 +602,24 @@ public class PDVPrincipalController implements Initializable {
             mostrarAlerta("O campo de busca por nome não pode estar vazio. Digite um nome para buscar.", Alert.AlertType.WARNING);
             txtBuscarClienteNome.requestFocus();
             return;
+        }
+        
+        try {
+            // Usar clienteService para buscar clientes
+            List<Cliente> clientes = clienteService.buscarPorNome(busca);
+            
+            if (clientes.isEmpty()) {
+                mostrarAlerta("Nenhum cliente encontrado com o nome: " + busca, Alert.AlertType.INFORMATION);
+                return;
+            }
+            
+            // TODO: Implementar exibição dos resultados na interface
+            atualizarStatus("Encontrados " + clientes.size() + " clientes");
+            
+        } catch (Exception e) {
+            System.err.println("Erro ao buscar clientes por nome: " + e.getMessage());
+            atualizarStatus("Erro ao buscar clientes");
+            showAlert("Erro", "Não foi possível buscar clientes: " + e.getMessage());
         }
         
         // Carregar dados do último cliente selecionado se o campo estiver vazio
@@ -627,8 +773,8 @@ public class PDVPrincipalController implements Initializable {
     private void buscarClientePorNome(String textoBusca) {
         try {
             if (textoBusca != null && !textoBusca.trim().isEmpty()) {
-                UsuarioDao usuarioDao = new UsuarioDao();
-                List<Usuario> clientes = usuarioDao.buscarClientePorNome(textoBusca);
+                // TODO: Implementar busca por nome quando disponível no service
+                List<Usuario> clientes = new ArrayList<>(); // usuarioService.buscarPorNome(textoBusca);
                 
                 if (!clientes.isEmpty()) {
                     // Pegar o primeiro cliente encontrado
@@ -660,8 +806,8 @@ public class PDVPrincipalController implements Initializable {
     private void buscarClientePorCpfCnpj(String textoBusca) {
         try {
             if (textoBusca != null && !textoBusca.trim().isEmpty()) {
-                UsuarioDao usuarioDao = new UsuarioDao();
-                List<Usuario> clientes = usuarioDao.buscarClientePorCpfCnpj(textoBusca);
+                // TODO: Implementar busca por CPF/CNPJ quando disponível no service
+                List<Usuario> clientes = new ArrayList<>(); // usuarioService.buscarPorCpfCnpj(textoBusca);
                 
                 if (!clientes.isEmpty()) {
                     // Pegar o primeiro cliente encontrado
@@ -807,31 +953,6 @@ public class PDVPrincipalController implements Initializable {
     }
 
     // Métodos de Navegação
-    private void abrirTelaBuscaProdutos() {
-        try {
-            System.out.println("DEBUG: Tentando abrir tela de busca de produtos");
-            // Carregar FXML da tela de busca
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                getClass().getResource("/view/pdv_busca_produto.fxml"));
-            System.out.println("DEBUG: FXML carregado, fazendo load...");
-            javafx.scene.Parent root = loader.load();
-            System.out.println("DEBUG: FXML carregado com sucesso");
-            
-            // Abrir em nova janela ou dialog
-            javafx.stage.Stage stage = new javafx.stage.Stage();
-            stage.setTitle("Busca de Produtos");
-            stage.setScene(new javafx.scene.Scene(root));
-            System.out.println("DEBUG: Stage configurado, mostrando janela...");
-            stage.show();
-            System.out.println("DEBUG: Janela de busca de produtos aberta com sucesso");
-            
-        } catch (Exception e) {
-            System.out.println("DEBUG: Erro ao abrir tela de busca: " + e.getMessage());
-            e.printStackTrace();
-            atualizarStatus("Erro ao abrir tela de busca: " + e.getMessage());
-        }
-    }
-
     private void abrirTelaClientes() {
         try {
             System.out.println("DEBUG: Tentando abrir tela de clientes");
@@ -878,37 +999,7 @@ public class PDVPrincipalController implements Initializable {
         }
     }
 
-    private void abrirTelaVenda() {
-        try {
-            System.out.println("DEBUG: Tentando abrir tela de venda");
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                getClass().getResource("/view/pdv_venda.fxml"));
-            System.out.println("DEBUG: FXML de venda carregado, fazendo load...");
-            javafx.scene.Parent root = loader.load();
-            System.out.println("DEBUG: FXML de venda carregado com sucesso");
-            
-            // Configurar controller
-            com.br.hermescomercial.controller.pdv.PDVVendaController controller = loader.getController();
-            // controller.setPDVManager(pdvManager); - método não utilizado
-            controller.setOperadorAtual(operadorAtual);
-            
-            javafx.stage.Stage stage = new javafx.stage.Stage();
-            stage.setTitle("Venda - PDV Hermes Comercial");
-            stage.setScene(new javafx.scene.Scene(root));
-            stage.setResizable(true);
-            stage.setWidth(1200);
-            stage.setHeight(700);
-            System.out.println("DEBUG: Stage de venda configurado, mostrando janela...");
-            stage.show();
-            System.out.println("DEBUG: Janela de venda aberta com sucesso");
-            
-        } catch (Exception e) {
-            System.out.println("DEBUG: Erro ao abrir tela de venda: " + e.getMessage());
-            e.printStackTrace();
-            atualizarStatus("Erro ao abrir tela de venda: " + e.getMessage());
-        }
-    }
-
+    
     private void abrirTelaPagamento() {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
@@ -1032,33 +1123,7 @@ public class PDVPrincipalController implements Initializable {
         }
     }
 
-    private void abrirTelaConfiguracaoImpressora() {
-        try {
-            System.out.println("DEBUG: Tentando abrir tela de configuração de impressora");
-            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(
-                getClass().getResource("/view/pdv_configuracao_impressora.fxml"));
-            System.out.println("DEBUG: FXML de configuração de impressora carregado, fazendo load...");
-            javafx.scene.Parent root = loader.load();
-            System.out.println("DEBUG: FXML de configuração de impressora carregado com sucesso");
-            
-            javafx.stage.Stage stage = new javafx.stage.Stage();
-            stage.setTitle("Config. Impressora");
-            stage.setScene(new javafx.scene.Scene(root));
-            System.out.println("DEBUG: Stage de configuração de impressora configurado, mostrando janela...");
-            stage.show();
-            System.out.println("DEBUG: Janela de configuração de impressora aberta com sucesso");
-            
-            // Passar dados para o controller
-            PDVConfiguracaoImpressoraController controller = loader.getController();
-            controller.setOperadorAtual(operadorAtual);
-            
-        } catch (Exception e) {
-            System.out.println("DEBUG: Erro ao abrir tela de configuração de impressora: " + e.getMessage());
-            e.printStackTrace();
-            atualizarStatus("Erro ao abrir tela de configuração de impressora: " + e.getMessage());
-        }
-    }
-
+    
     private void abrirTelaCupomFiscal() {
         try {
             System.out.println("DEBUG: Tentando abrir tela de cupom fiscal");

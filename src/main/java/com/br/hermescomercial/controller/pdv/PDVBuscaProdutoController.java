@@ -2,7 +2,7 @@ package com.br.hermescomercial.controller.pdv;
 
 import com.br.hermescomercial.model.Produto;
 import com.br.hermescomercial.model.ItemVenda;
-import com.br.hermescomercial.dao.ProdutoDao;
+import com.br.hermescomercial.service.ProdutoService;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -21,8 +21,8 @@ import java.util.TimerTask;
 
 public class PDVBuscaProdutoController implements Initializable {
 
-    // DAO
-    private ProdutoDao produtoDao;
+    // Service
+    private ProdutoService produtoService;
     
     // Dados
     private ObservableList<Produto> produtosEncontrados;
@@ -97,8 +97,8 @@ public class PDVBuscaProdutoController implements Initializable {
     }
 
     private void inicializarComponentes() {
-        // Inicializar DAO
-        this.produtoDao = new ProdutoDao();
+        // Inicializar Service
+        this.produtoService = new ProdutoService();
         
         // Inicializar lista observável
         this.produtosEncontrados = FXCollections.observableArrayList();
@@ -260,7 +260,6 @@ public class PDVBuscaProdutoController implements Initializable {
         long inicio = System.currentTimeMillis();
         
         try {
-            String codigoBarras = txtCodigoBarras.getText();
             String codigoInterno = txtCodigoInterno.getText();
             String descricao = txtDescricao.getText();
             String categoria = comboCategoria.getSelectionModel().getSelectedItem();
@@ -287,10 +286,10 @@ public class PDVBuscaProdutoController implements Initializable {
                 return;
             }
             
-            List<Produto> produtos = produtoDao.buscarComFiltros(
-                codigoBarras, codigoInterno, descricao, categoria,
+            List<Produto> produtos = produtoService.buscarComFiltros(
+                descricao, categoria, null, codigoInterno,
                 precoMinimo, precoMaximo, estoqueMinimo,
-                chkApenasComEstoque.isSelected(), chkApenasAtivos.isSelected()
+                chkApenasAtivos.isSelected(), chkApenasComEstoque.isSelected()
             );
             
             produtosEncontrados.clear();
@@ -309,7 +308,7 @@ public class PDVBuscaProdutoController implements Initializable {
 
     private void buscarPorCodigoBarras(String codigoBarras) {
         try {
-            Produto produto = produtoDao.buscarPorCodigoBarras(codigoBarras);
+            Produto produto = produtoService.buscarPorCodigoBarras(codigoBarras);
             
             if (produto != null) {
                 produtosEncontrados.clear();
@@ -338,7 +337,7 @@ public class PDVBuscaProdutoController implements Initializable {
 
     private void carregarTodosProdutos() {
         try {
-            List<Produto> produtos = produtoDao.listar();
+            List<Produto> produtos = produtoService.listar();
             
             produtosEncontrados.clear();
             

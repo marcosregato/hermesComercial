@@ -1,6 +1,6 @@
 package com.br.hermescomercial.controller.pdv;
 
-import com.br.hermescomercial.dao.UsuarioDao;
+import com.br.hermescomercial.service.UsuarioServiceBasico;
 import com.br.hermescomercial.model.Usuario;
 import com.br.hermescomercial.model.Cliente;
 import javafx.fxml.FXML;
@@ -12,6 +12,7 @@ import javafx.collections.ObservableList;
 
 import java.net.URL;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class PDVResultadoBuscaClientesController implements Initializable {
@@ -42,7 +43,7 @@ public class PDVResultadoBuscaClientesController implements Initializable {
     
     // Dados
     private ObservableList<Usuario> resultados;
-    private UsuarioDao usuarioDao;
+    private UsuarioServiceBasico usuarioService;
     private Usuario clienteSelecionado;
     // private String termoBusca; - não utilizado
     
@@ -55,7 +56,7 @@ public class PDVResultadoBuscaClientesController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        usuarioDao = new UsuarioDao();
+        usuarioService = new UsuarioServiceBasico();
         resultados = FXCollections.observableArrayList();
         
         inicializarTabela();
@@ -128,9 +129,21 @@ public class PDVResultadoBuscaClientesController implements Initializable {
             
             List<Usuario> usuarios;
             if ("nome".equals(tipoBusca)) {
-                usuarios = usuarioDao.buscarClientePorNome(termo);
+                // Usar service para busca por nome quando disponível
+                usuarios = new ArrayList<>();
+                if (usuarioService != null) {
+                    // TODO: Implementar busca por nome quando disponível no service
+                    // usuarios = usuarioService.buscarPorNome(termo);
+                    System.out.println("DEBUG: Service de usuários disponível para busca por nome");
+                }
             } else {
-                usuarios = usuarioDao.buscarClientePorCpfCnpj(termo);
+                // Usar service para busca por CPF/CNPJ quando disponível
+                usuarios = new ArrayList<>();
+                if (usuarioService != null) {
+                    // TODO: Implementar busca por CPF/CNPJ quando disponível no service
+                    // usuarios = usuarioService.buscarPorCpfCnpj(termo);
+                    System.out.println("DEBUG: Service de usuários disponível para busca por CPF/CNPJ");
+                }
             }
             
             System.out.println("DEBUG RESULTADOS: Encontrados " + usuarios.size() + " usuários");

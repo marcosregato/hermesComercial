@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane style="-fx-background-color: #f8f9fa;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.br.hermescomercial.controller.SistemaConfigController">
+    
+    <!-- Cabeçalho -->
+    <top>
+        <VBox style="-fx-background-color: #2c3e50; -fx-padding: 20;">
+            <Label text="Configurações do Sistema" style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: white;" />
+            <Label text="Hermes Comercial - PDV" style="-fx-font-size: 14px; -fx-text-fill: #bdc3c7;" />
+        </VBox>
+    </top>
+    
+    <!-- Conteúdo Principal -->
+    <center>
+        <ScrollPane fitToWidth="true" style="-fx-background-color: transparent;">
+            <VBox spacing="30" style="-fx-padding: 30;">
+                
+                <!-- Seção: Banco de Dados -->
+                <VBox spacing="15" style="-fx-background-color: #ffffff; -fx-padding: 25; -fx-background-radius: 10; -fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-border-width: 1;">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="📊" style="-fx-font-size: 24px;" />
+                        <Label text="Banco de Dados" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                    </HBox>
+                    
+                    <GridPane hgap="15" vgap="10">
+                        <Label text="Tipo de Banco:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <ComboBox fx:id="cbDatabaseType" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="Status:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <Label fx:id="lblDatabaseStatus" GridPane.rowIndex="1" GridPane.columnIndex="1" style="-fx-text-fill: #28a745;" />
+                        
+                        <Label text="Descrição:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <Label fx:id="lblDatabaseDescription" GridPane.rowIndex="2" GridPane.columnIndex="1" style="-fx-text-fill: #6c757d; -fx-wrap-text: true;" maxWidth="300" />
+                    </GridPane>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button fx:id="btnTestDatabase" text="Testar Conexão" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 5;" onAction="#testDatabaseConnection" />
+                        <Button fx:id="btnConfigDatabase" text="Configurar..." style="-fx-background-color: #007bff; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 5;" onAction="#openDatabaseConfig" />
+                    </HBox>
+                </VBox>
+                
+                <!-- Seção: Impressora -->
+                <VBox spacing="15" style="-fx-background-color: #ffffff; -fx-padding: 25; -fx-background-radius: 10; -fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-border-width: 1;">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="🖨️" style="-fx-font-size: 24px;" />
+                        <Label text="Configuração de Impressora" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                    </HBox>
+                    
+                    <GridPane hgap="15" vgap="10">
+                        <Label text="Impressora:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <ComboBox fx:id="cbPrinters" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="Modelo:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <TextField fx:id="txtPrinterModel" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="Porta:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <ComboBox fx:id="cbPrinterPort" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="Largura Papel (mm):" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <TextField fx:id="txtPaperWidth" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="Altura Papel (mm):" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <TextField fx:id="txtPaperHeight" GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="250" />
+                    </GridPane>
+                    
+                    <VBox spacing="10">
+                        <CheckBox fx:id="cbPrintHeader" text="Imprimir cabeçalho no cupom" />
+                        <CheckBox fx:id="cbPrintFooter" text="Imprimir rodapé no cupom" />
+                        <CheckBox fx:id="cbAutoCut" text="Corte automático do papel" />
+                    </VBox>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button fx:id="btnTestPrinter" text="Testar Impressão" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 5;" onAction="#testPrinter" />
+                        <Button fx:id="btnDetectPrinters" text="Detectar Impressoras" style="-fx-background-color: #17a2b8; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 5;" onAction="#detectPrinters" />
+                    </HBox>
+                </VBox>
+                
+                <!-- Seção: Sistema -->
+                <VBox spacing="15" style="-fx-background-color: #ffffff; -fx-padding: 25; -fx-background-radius: 10; -fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-border-width: 1;">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="⚙️" style="-fx-font-size: 24px;" />
+                        <Label text="Configurações do Sistema" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                    </HBox>
+                    
+                    <GridPane hgap="15" vgap="10">
+                        <Label text="Nome da Empresa:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <TextField fx:id="txtCompanyName" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="CNPJ:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <TextField fx:id="txtCompanyCNPJ" GridPane.rowIndex="1" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="Endereço:" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <TextField fx:id="txtCompanyAddress" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="Telefone:" GridPane.rowIndex="3" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <TextField fx:id="txtCompanyPhone" GridPane.rowIndex="3" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="Backup Automático:" GridPane.rowIndex="4" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <ComboBox fx:id="cbBackupFrequency" GridPane.rowIndex="4" GridPane.columnIndex="1" prefWidth="250" />
+                    </GridPane>
+                </VBox>
+                
+                <!-- Seção: Logs -->
+                <VBox spacing="15" style="-fx-background-color: #ffffff; -fx-padding: 25; -fx-background-radius: 10; -fx-border-color: #e0e0e0; -fx-border-radius: 10; -fx-border-width: 1;">
+                    <HBox spacing="15" alignment="CENTER_LEFT">
+                        <Label text="📝" style="-fx-font-size: 24px;" />
+                        <Label text="Configurações de Logs" style="-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;" />
+                    </HBox>
+                    
+                    <GridPane hgap="15" vgap="10">
+                        <Label text="Nível de Log:" GridPane.rowIndex="0" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <ComboBox fx:id="cbLogLevel" GridPane.rowIndex="0" GridPane.columnIndex="1" prefWidth="250" />
+                        
+                        <Label text="Diretório de Logs:" GridPane.rowIndex="1" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <HBox spacing="10" GridPane.rowIndex="1" GridPane.columnIndex="1" alignment="CENTER_LEFT">
+                            <TextField fx:id="txtLogDirectory" prefWidth="200" editable="false" />
+                            <Button fx:id="btnBrowseLogDir" text="..." prefWidth="40" onAction="#browseLogDirectory" />
+                        </HBox>
+                        
+                        <Label text="Tamanho Máximo (MB):" GridPane.rowIndex="2" GridPane.columnIndex="0" style="-fx-font-weight: bold; -fx-text-fill: #495057;" />
+                        <TextField fx:id="txtLogMaxSize" GridPane.rowIndex="2" GridPane.columnIndex="1" prefWidth="250" />
+                    </GridPane>
+                    
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <Button fx:id="btnViewLogs" text="Ver Logs" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 5;" onAction="#viewLogs" />
+                        <Button fx:id="btnCleanLogs" text="Limpar Logs Antigos" style="-fx-background-color: #dc3545; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 8 16; -fx-background-radius: 5;" onAction="#cleanLogs" />
+                    </HBox>
+                </VBox>
+                
+            </VBox>
+        </ScrollPane>
+    </center>
+    
+    <!-- Rodapé com Botões -->
+    <bottom>
+        <HBox spacing="15" alignment="CENTER_RIGHT" style="-fx-background-color: #e9ecef; -fx-padding: 20; -fx-border-color: #dee2e6; -fx-border-width: 1 0 0 0;">
+            <Button fx:id="btnSave" text="Salvar Configurações" style="-fx-background-color: #28a745; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 12 24; -fx-background-radius: 6;" onAction="#saveConfiguration" />
+            <Button fx:id="btnCancel" text="Cancelar" style="-fx-background-color: #6c757d; -fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 12 24; -fx-background-radius: 6;" onAction="#cancel" />
+            <Button fx:id="btnReset" text="Restaurar Padrão" style="-fx-background-color: #ffc107; -fx-text-fill: #212529; -fx-font-weight: bold; -fx-font-size: 14px; -fx-padding: 12 24; -fx-background-radius: 6;" onAction="#resetToDefault" />
+        </HBox>
+    </bottom>
+    
+</BorderPane>
