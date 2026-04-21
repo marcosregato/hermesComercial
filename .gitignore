@@ -137,3 +137,27 @@ rebel.xml
 
 # Documentação
 README_EXECUTAVEL.md
+
+# JavaFX specific
+*.fxml~
+stage/
+modular/
+
+# Java 21+ specific
+*.jfr
+*.hprof
+
+# Maven specific
+.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Application specific
+hermes_comercial_log.txt
+database-config.properties
+
+# IDE specific
+.c9/
+*.launch
+.settings/
+.project
+.classpath

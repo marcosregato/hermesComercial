@@ -1,6 +1,6 @@
 # Hermes Comercial
 
-![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)
+![Version](https://img.shields.io/badge/version-2.0.0-blue.svg)
 
 Este é um sistema de gestão comercial construído com JavaFX e Maven. Ele usa um banco de dados PostgreSQL e Flyway para migrações de banco de dados.
 
@@ -109,7 +109,7 @@ Para criar um executável independente que pode ser distribuído:
     mvn clean package -DskipTests
     ```
 
-2.  O executável será criado em `target/hermesComercial-1.0.1.jar`
+2.  O executável será criado em `target/hermesComercial-2.0.0.jar`
 
 3.  Para distribuir o sistema completo:
     - Copie o arquivo JAR para o diretório desejado
