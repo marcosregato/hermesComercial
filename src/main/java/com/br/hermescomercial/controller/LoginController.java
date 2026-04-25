@@ -2,7 +2,6 @@ package com.br.hermescomercial.controller;
 
 import com.br.hermescomercial.model.Pessoa;
 import com.br.hermescomercial.util.Alerta;
-import com.br.hermescomercial.util.ValidarCampo;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,7 +28,6 @@ public class LoginController {
     private TextField txtSenha;
 
     private final Alerta alerta = new Alerta();
-    private final ValidarCampo validarCampo = new ValidarCampo();
 
     private PrincipalController principalController = new PrincipalController();
 

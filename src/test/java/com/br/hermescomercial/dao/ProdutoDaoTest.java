@@ -356,7 +356,7 @@ class ProdutoDaoTest {
         // Act & Assert
         assertDoesNotThrow(() -> {
             produtoDao.salvar(produtoTeste);
-            List<Produto> resultado = produtoDao.buscar("Notebook");
+            produtoDao.buscar("Notebook");
             produtoDao.listar();
             produtoDao.update(produtoTeste);
             produtoDao.remove("Notebook Dell");

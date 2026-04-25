@@ -6,8 +6,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
-import org.apache.logging.log4j.LogManager;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -45,8 +43,6 @@ public class AtributoContreller {
     private Button btSalvar;
 
     AtributoDao dao;
-
-    private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(AtributoContreller.class);
 
     public Boolean salvar(Atributo atributo){
         try {

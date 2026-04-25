@@ -6,7 +6,6 @@ package com.br.hermescomercial.controller.financeiro;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +21,6 @@ import org.apache.logging.log4j.LogManager;
 public class CustoController {
 
     private ConnectionBD con = null;
-    private final Statement smt = null;
     private ResultSet rs = null;
 
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(CustoController.class);

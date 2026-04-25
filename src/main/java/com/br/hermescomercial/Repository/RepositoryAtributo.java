@@ -1,6 +1,5 @@
 package com.br.hermescomercial.Repository;
 
-import com.br.hermescomercial.model.AlertaEstoque;
 import com.br.hermescomercial.model.Atributo;
 
 import java.util.List;
