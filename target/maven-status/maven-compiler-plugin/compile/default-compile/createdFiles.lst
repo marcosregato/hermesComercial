@@ -41,7 +41,6 @@ com/br/hermescomercial/controller/pessoa/CadPessoaController.class
 com/br/hermescomercial/model/Usuario.class
 com/br/hermescomercial/util/ConvertDado.class
 com/br/hermescomercial/Repository/RepositoryDespesa.class
-com/br/hermescomercial/HelloApplication.class
 com/br/hermescomercial/controller/venda/VendaController.class
 com/br/hermescomercial/model/Pessoa.class
 com/br/hermescomercial/model/Despesa.class

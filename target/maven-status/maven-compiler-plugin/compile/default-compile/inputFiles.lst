@@ -24,6 +24,7 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/Repository/RepositoryEstoque.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Caixa.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/util/ConfigProperties.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/MainApplication.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/PessoaDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/ImpostoDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/venda/PdvController.java
@@ -44,7 +45,6 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/produto/CadCategoriaController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Atributo.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Imposto.java
-/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/HelloApplication.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/produto/CadEstoqueController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/ProdutoDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/AlertaEstoque.java

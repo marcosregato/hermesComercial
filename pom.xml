@@ -121,7 +121,7 @@
                     <execution>
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.br.hermescomercial/com.br.hermescomercial.HelloApplication</mainClass>
+                            <mainClass>com.br.hermescomercial.MainApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
