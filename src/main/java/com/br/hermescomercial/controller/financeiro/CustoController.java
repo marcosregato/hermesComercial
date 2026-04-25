@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.br.hermescomercial.connectionDB.ConnectionBD;
+import com.br.hermescomercial.connectionBD.ConnectionBD;
 import com.br.hermescomercial.model.Atributo;
 import com.br.hermescomercial.model.Custo;
 import org.apache.logging.log4j.LogManager;
@@ -20,7 +20,6 @@ import org.apache.logging.log4j.LogManager;
  */
 public class CustoController {
 
-    private ConnectionBD con = null;
     private ResultSet rs = null;
 
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(CustoController.class);
@@ -28,9 +27,8 @@ public class CustoController {
     public void salvar(Custo custo){
         try {
 
-            con  = new ConnectionBD();
-            String query ="INSERT INTO fornecedor (id, nome, tipofornecedor) VALUES (NULL, ?, ?)";
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
+                        String query ="INSERT INTO fornecedor (id, nome, tipofornecedor) VALUES (NULL, ?, ?)";
+            PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query);
 
             //ps.setString(1, fornecedor.getNome());
             //ps.setString(2, fornecedor.getTipoFornecedor());
@@ -47,10 +45,9 @@ public class CustoController {
     public List<Atributo> listar(){
         try {
 
-            con  = new ConnectionBD();
-            String query ="select * from fornecedor";
+                        String query ="select * from fornecedor";
             List<Atributo> lista = new ArrayList<>();
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
+            PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Atributo item = new Atributo();
@@ -74,9 +71,8 @@ public class CustoController {
     public void remove(String nome){
         try {
 
-            con  = new ConnectionBD();
-            String query = "DELETE FROM custo WHERE nome=?";
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
+                        String query = "DELETE FROM custo WHERE nome=?";
+            PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query);
             ps.setString(1, nome);
             ps.executeUpdate();
             rs.close();
@@ -92,9 +88,8 @@ public class CustoController {
     public void update(Custo custo){
         try {
 
-            con  = new ConnectionBD();
-            String query = "update custo set custounitario = ?,custototal = ?";
-            PreparedStatement ps = con.getConnection("").prepareStatement(query);
+                        String query = "update custo set custounitario = ?,custototal = ?";
+            PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query);
             //ps.setFloat(1, custo.getCustoUnitario());
             //ps.setFloat(2, custo.getCustoTotal());
 
