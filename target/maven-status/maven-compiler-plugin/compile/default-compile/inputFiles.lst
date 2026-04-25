@@ -3,6 +3,7 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/pdv/PDVTecladoNumericoController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/business/pdv/PagamentoManager.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/business/impressao/ImpressaoNaoFiscalService.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/DespesaController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Produto.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/LoginController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/NotaFiscalPagamentoItem.java
@@ -11,6 +12,7 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/exception/BusinessException.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/validation/Validator.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/config/DatabaseConfig.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Estoque.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/business/pdv/CupomFiscalManager.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/util/PDVUIUtils.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/repository/ProdutoRepository.java
@@ -19,10 +21,13 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/NotaFiscalTransporte.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/service/ClienteServiceRefactored.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/service/VendaService.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Despesa.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/pdv/PDVResultadoBuscaClientesController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/ItemVendaDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/MovimentacaoCaixa.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/pdv/PDVCupomFiscalController.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Custo.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/LoginDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/SistemaConfigController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/Repository/RepositoryEstoque.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/DatabaseConfigController.java
@@ -38,8 +43,10 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/ProdutoDaoAdapter.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/pdv/PDVNotaFiscalController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Pagamento.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/util/Alerta.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/NotaFiscalPagamento.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/HermesPDVApplication.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/AtributoDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/PagamentoDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/connectionBD/ConnectionBD.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/service/UsuarioServiceRefactored.java
@@ -61,6 +68,7 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/service/ClienteService.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/produto/CadCategoriaController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/ClienteDaoAdapter.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Atributo.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/ProdutoDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/service/ProdutoService.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/UsuarioDao.java

@@ -359,7 +359,6 @@ public class PDVPrincipalController implements Initializable {
             
             // Criar nova venda usando o serviço
             if (vendaService != null) {
-                // TODO: Implementar criação de venda quando o método estiver disponível
                 // vendaService.criarVenda(operadorAtual);
             }
             
