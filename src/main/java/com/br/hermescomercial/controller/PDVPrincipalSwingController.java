@@ -32,7 +32,7 @@ public class PDVPrincipalSwingController {
     
     private void initializeUI() {
         // Aplicar tema moderno
-        mainFrame = new JFrame("Hermes Comercial PDV v2.0 - Premium");
+        mainFrame = new JFrame("Hermes Comercial PDV v2.0.0 - Premium");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1200, 800);
         mainFrame.setLocationRelativeTo(null);
@@ -108,7 +108,7 @@ public class PDVPrincipalSwingController {
         panel.setPreferredSize(new Dimension(0, 80));
         
         // Título central
-        JLabel titleLabel = new JLabel("Hermes Comercial PDV v2.0 - Premium", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("Hermes Comercial PDV v2.0.0 - Premium", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         
@@ -232,18 +232,7 @@ public class PDVPrincipalSwingController {
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
     
-    private JButton createMainButton(String text, String tooltip, ActionListener action) {
-        JButton button = new JButton(text);
-        button.setToolTipText(tooltip);
-        button.setBackground(new Color(41, 128, 185));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 12));
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        button.addActionListener(action);
-        return button;
-    }
-    
+        
     // Métodos de ação
     private void abrirNovaVenda(ActionEvent e) {
         try {
@@ -266,13 +255,13 @@ public class PDVPrincipalSwingController {
             LoggerUtil.logUserAction("Usuário", "CONSULTAR_PRODUTOS", "Acesso ao módulo de consulta");
             
             // Criar frame para consulta de produtos com layout padrão
-            JFrame consultaFrame = new JFrame("📦 Consulta de Produtos v2.0 - Premium");
+            JFrame consultaFrame = new JFrame("📦 Consulta de Produtos v2.0.0 - Premium");
             consultaFrame.setSize(900, 700);
             consultaFrame.setLocationRelativeTo(mainFrame);
             consultaFrame.getContentPane().setBackground(new Color(245, 245, 250));
             
             // Header padrão Nova Venda
-            JPanel headerPanel = createHeaderPanelForDialog(consultaFrame, "📦 Consulta de Produtos v2.0 - Premium");
+            JPanel headerPanel = createHeaderPanelForDialog(consultaFrame, "📦 Consulta de Produtos v2.0.0 - Premium");
             
             // Painel principal com fundo padrão
             JPanel mainPanel = new JPanel(new BorderLayout());
@@ -459,14 +448,14 @@ public class PDVPrincipalSwingController {
             LoggerUtil.logUserAction("Usuário", "GERENCIAR_CLIENTES", "Acesso ao módulo de clientes");
             
             // Criar janela de gestão de clientes com layout padrão
-            JFrame clientesFrame = new JFrame("👥 Gestão de Clientes v2.0 - Premium");
+            JFrame clientesFrame = new JFrame("👥 Gestão de Clientes v2.0.0 - Premium");
             clientesFrame.setSize(1000, 700);
             clientesFrame.setLocationRelativeTo(mainFrame);
             clientesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             clientesFrame.getContentPane().setBackground(new Color(245, 245, 250));
             
             // Header padrão Nova Venda
-            JPanel headerPanel = createHeaderPanelForDialog(clientesFrame, "👥 Gestão de Clientes v2.0 - Premium");
+            JPanel headerPanel = createHeaderPanelForDialog(clientesFrame, "👥 Gestão de Clientes v2.0.0 - Premium");
             
             // Painel principal com fundo padrão
             JPanel mainPanel = new JPanel(new BorderLayout());
@@ -671,22 +660,7 @@ public class PDVPrincipalSwingController {
         }
     }
     
-    private void abrirCaixa(ActionEvent e) {
-        try {
-            LoggerUtil.info("Abrindo módulo de caixa");
-            LoggerUtil.logUserAction("Usuário", "ABRIR_CAIXA", "Acesso ao módulo de caixa");
-            PDVCaixaSwingController caixaController = new PDVCaixaSwingController();
-            caixaController.show();
-            statusLabel.setText("Caixa aberto");
-            LoggerUtil.info("Módulo de caixa aberto com sucesso");
-        } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir caixa", ex);
-            JOptionPane.showMessageDialog(mainFrame, 
-                "Erro ao abrir caixa: " + ex.getMessage(),
-                "Caixa", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
+        
     private void abrirConfiguracoes(ActionEvent e) {
         try {
             LoggerUtil.info("Abrindo módulo de configurações");

@@ -43,7 +43,7 @@ public class PDVConfiguracoesSwingController {
     }
     
     private void initializeUI() {
-        frame = new JFrame("PDV - Configurações do Sistema v2.0 - Premium");
+        frame = new JFrame("PDV - Configurações do Sistema v2.0.0 - Premium");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(900, 700);
         frame.setLocationRelativeTo(null);
@@ -78,7 +78,7 @@ public class PDVConfiguracoesSwingController {
         panel.setPreferredSize(new Dimension(0, 80));
         
         // Título central
-        JLabel titleLabel = new JLabel("⚙️ Configurações do Sistema v2.0 - Premium", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("⚙️ Configurações do Sistema v2.0.0 - Premium", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         
