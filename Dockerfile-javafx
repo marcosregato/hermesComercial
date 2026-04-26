@@ -1,0 +1,88 @@
+# Dockerfile para Hermes Comercial PDV com JavaFX completo
+FROM eclipse-temurin:21-jdk-jammy
+
+# Instalar dependências do sistema para JavaFX
+RUN apt-get update && apt-get install -y \
+    libgtk-3-0 \
+    libgconf-2-4 \
+    libasound2 \
+    libxss1 \
+    libxtst6 \
+    libxrandr2 \
+    libxinerama1 \
+    libcairo-gobject2 \
+    libatk-bridge2.0-0 \
+    libgdk-pixbuf2.0-0 \
+    libgtk-3-0 \
+    libatspi2.0-0 \
+    libdrm2 \
+    libxcomposite1 \
+    libxcursor1 \
+    libxdamage1 \
+    libxi6 \
+    libxtst6 \
+    libgconf-2-4 \
+    xvfb \
+    wget \
+    unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Instalar OpenJFX manualmente
+RUN wget -O openjfx.tar.gz https://download.java.net/java/GA/jfx21/0a3dfdae077d4cf3b8d5b9c90ad5741e/36/GPL/openjfx-21.0.2_linux-x64_bin-sdk.tar.gz && \
+    tar -xzf openjfx.tar.gz -C /opt && \
+    rm openjfx.tar.gz
+
+# Criar diretório da aplicação
+WORKDIR /app
+
+# Copiar arquivos da aplicação
+COPY target/hermesComercial-1.2.0.jar app.jar
+COPY target/dependency/ lib/
+
+# Copiar JavaFX do SDK para o classpath
+RUN cp /opt/javafx-sdk-21.0.2/lib/*.jar lib/
+
+# Criar script de execução com JavaFX correto
+RUN echo '#!/bin/bash\n\
+cd /app\n\
+echo "=== Hermes Comercial PDV - Docker com JavaFX ==="\n\
+echo "Java: $(java -version 2>&1 | head -n1)"\n\
+echo "JAR: app.jar"\n\
+echo "Dependências: $(ls lib/ | wc -l) arquivos"\n\
+echo "JavaFX: $(ls lib/javafx*.jar | wc -l) arquivos"\n\
+echo ""\n\
+\n\
+# Configurar display virtual se necessário\n\
+if [ -z "$DISPLAY" ]; then\n\
+    export DISPLAY=:99\n\
+    Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &\n\
+    sleep 2\n\
+fi\n\
+\n\
+# Construir classpath completo\n\
+CLASSPATH="app.jar"\n\
+for jar in lib/*.jar; do\n\
+    CLASSPATH="$CLASSPATH:$jar"\n\
+done\n\
+\n\
+echo "Executando com JavaFX completo..." \n\
+echo "Display: $DISPLAY"\n\
+echo "JavaFX JARs: $(ls lib/javafx*.jar | wc -l)"\n\
+echo ""\n\
+\n\
+# Tentar diferentes abordagens JavaFX\n\
+echo "Tentando abordagem 1: Classpath completo com JavaFX..."\n\
+java -Xms512m -Xmx2048m -cp "$CLASSPATH" com.br.hermescomercial.MainApplication 2>&1 || {\n\
+    echo "Abordagem 1 falhou, tentando abordagem 2: Com modules..."\n\
+    java --module-path lib --add-modules javafx.controls,javafx.fxml,javafx.graphics -cp "$CLASSPATH" com.br.hermescomercial.MainApplication 2>&1 || {\n\
+        echo "Abordagem 2 falhou, tentando abordagem 3: Opções de sistema..."\n\
+        java -Djavafx.platform=gtk -Dprism.order=sw -Xms512m -Xmx2048m -cp "$CLASSPATH" com.br.hermescomercial.MainApplication\n\
+    }\n\
+}\n\
+' > /app/run.sh && chmod +x /app/run.sh
+
+# Expor porta
+EXPOSE 8080
+
+# Comando padrão
+CMD ["/app/run.sh"]

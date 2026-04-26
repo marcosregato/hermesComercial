@@ -1,5 +1,6 @@
 package com.br.hermescomercial.exception;
 
+
 /**
  * Exceção de negócio para erros de regras de negócio
  */

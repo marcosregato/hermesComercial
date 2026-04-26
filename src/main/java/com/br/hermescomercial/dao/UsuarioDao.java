@@ -1,5 +1,6 @@
 package com.br.hermescomercial.dao;
 
+
 import com.br.hermescomercial.connectionBD.ConnectionBD;
 import com.br.hermescomercial.model.Usuario;
 import java.sql.PreparedStatement;

@@ -1,5 +1,6 @@
 package com.br.hermescomercial.exception;
 
+
 /**
  * Exceção de acesso a dados para erros de banco de dados
  */

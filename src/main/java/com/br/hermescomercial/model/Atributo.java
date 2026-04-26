@@ -1,5 +1,6 @@
 package com.br.hermescomercial.model;
 
+
 public class Atributo {
     private Long id;
     private String nome;

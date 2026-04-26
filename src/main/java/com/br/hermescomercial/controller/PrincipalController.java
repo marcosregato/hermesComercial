@@ -1,13 +1,11 @@
 package com.br.hermescomercial.controller;
 
-import com.br.hermescomercial.dao.LoginDao;
-import com.br.hermescomercial.model.Usuario;
 import org.apache.logging.log4j.LogManager;
 
+import com.br.hermescomercial.dao.LoginDao;
+import com.br.hermescomercial.model.Usuario;
+
 public class PrincipalController {
-	
-	
-    LoginController loginController;
 
     private static final org.apache.logging.log4j.Logger logger = LogManager.getLogger(PrincipalController.class);
     

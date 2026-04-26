@@ -1,5 +1,6 @@
 package com.br.hermescomercial.Repository;
 
+
 import java.util.List;
 
 import com.br.hermescomercial.model.Estoque;

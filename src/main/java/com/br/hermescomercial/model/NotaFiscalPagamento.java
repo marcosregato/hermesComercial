@@ -1,5 +1,6 @@
 package com.br.hermescomercial.model;
 
+
 import java.math.BigDecimal;
 import java.util.List;
 

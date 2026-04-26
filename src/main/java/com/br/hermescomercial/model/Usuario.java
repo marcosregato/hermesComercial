@@ -1,5 +1,6 @@
 package com.br.hermescomercial.model;
 
+
 public class Usuario {
 
     private long id;
