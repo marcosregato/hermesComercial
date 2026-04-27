@@ -4,7 +4,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -290,15 +289,14 @@ public class PDVConfiguracoesSwingController {
         panel.add(cbBancoDados, gbc);
         
         gbc.gridx = 0; gbc.gridy = 8; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
-        JButton btnConfigDB = new JButton("Configurar Conexão");
+        JButton btnConfigDB = com.br.hermescomercial.theme.ModernTheme.createPastelButton("⚙️ Configurar Conexão", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnConfigDB.addActionListener(this::configurarBancoDados);
         panel.add(btnConfigDB, gbc);
         
-        // Pasta de Backup
-        gbc.gridy = 9;
+        gbc.gridx = 0; gbc.gridy = 9;
         panel.add(new JLabel("Pasta de Backup:"), gbc);
         gbc.gridy = 10;
-        JButton btnPastaBackup = new JButton("Selecionar Pasta");
+        JButton btnPastaBackup = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📁 Selecionar Pasta", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnPastaBackup.addActionListener(this::selecionarPastaBackup);
         panel.add(btnPastaBackup, gbc);
         
@@ -320,27 +318,19 @@ public class PDVConfiguracoesSwingController {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBorder(BorderFactory.createTitledBorder("Ações"));
         
-        JButton btnNovo = new JButton("Novo Usuário");
-        btnNovo.setBackground(new Color(40, 167, 69));
-        btnNovo.setForeground(Color.WHITE);
+        JButton btnNovo = com.br.hermescomercial.theme.ModernTheme.createPastelButton("👤 Novo Usuário", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnNovo.addActionListener(this::novoUsuario);
         buttonPanel.add(btnNovo);
         
-        JButton btnEditar = new JButton("Editar Usuário");
-        btnEditar.setBackground(new Color(23, 162, 184));
-        btnEditar.setForeground(Color.WHITE);
+        JButton btnEditar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("✏️ Editar Usuário", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnEditar.addActionListener(this::editarUsuario);
         buttonPanel.add(btnEditar);
         
-        JButton btnExcluir = new JButton("Excluir Usuário");
-        btnExcluir.setBackground(new Color(220, 53, 69));
-        btnExcluir.setForeground(Color.WHITE);
+        JButton btnExcluir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🗑️ Excluir Usuário", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnExcluir.addActionListener(this::excluirUsuario);
         buttonPanel.add(btnExcluir);
         
-        JButton btnResetar = new JButton("Resetar Senha");
-        btnResetar.setBackground(new Color(255, 193, 7));
-        btnResetar.setForeground(Color.BLACK);
+        JButton btnResetar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Resetar Senha", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnResetar.addActionListener(this::resetarSenha);
         buttonPanel.add(btnResetar);
         
@@ -353,29 +343,19 @@ public class PDVConfiguracoesSwingController {
         JPanel panel = new JPanel(new FlowLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Ações"));
         
-        JButton btnSalvar = new JButton("Salvar Configurações");
-        btnSalvar.setBackground(new Color(40, 167, 69));
-        btnSalvar.setForeground(Color.WHITE);
+        JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar Configurações", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnSalvar.addActionListener(this::salvarConfiguracoes);
         
-        JButton btnRestaurar = new JButton("Restaurar Padrão");
-        btnRestaurar.setBackground(new Color(255, 193, 7));
-        btnRestaurar.setForeground(Color.BLACK);
+        JButton btnRestaurar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Restaurar Padrão", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnRestaurar.addActionListener(this::restaurarPadrao);
         
-        JButton btnImportar = new JButton("Importar Config");
-        btnImportar.setBackground(new Color(23, 162, 184));
-        btnImportar.setForeground(Color.WHITE);
+        JButton btnImportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📥 Importar Config", com.br.hermescomercial.theme.ModernTheme.PASTEL_CYAN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnImportar.addActionListener(this::importarConfiguracoes);
         
-        JButton btnExportar = new JButton("Exportar Config");
-        btnExportar.setBackground(new Color(0, 123, 255));
-        btnExportar.setForeground(Color.WHITE);
+        JButton btnExportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar Config", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnExportar.addActionListener(this::exportarConfiguracoes);
         
-        JButton btnSair = new JButton("Sair");
-        btnSair.setBackground(new Color(220, 53, 69));
-        btnSair.setForeground(Color.WHITE);
+        JButton btnSair = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Sair", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnSair.addActionListener(e -> frame.dispose());
         
         panel.add(btnSalvar);
@@ -479,9 +459,9 @@ public class PDVConfiguracoesSwingController {
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             buttonPanel.setBackground(new Color(245, 245, 250));
             
-            JButton btnTestar = createStyledButton("🔧 Testar Conexão", "Testar conexão com banco", null);
-            JButton btnSalvar = createStyledButton("💾 Salvar", "Salvar configurações", null);
-            JButton btnCancelar = createStyledButton("❌ Cancelar", "Cancelar configuração", null);
+            JButton btnTestar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔧 Testar Conexão", com.br.hermescomercial.theme.ModernTheme.PASTEL_CYAN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             
             btnTestar.addActionListener(ev -> {
                 String tipo = (String) cbTipoBanco.getSelectedItem();
@@ -615,32 +595,6 @@ public class PDVConfiguracoesSwingController {
         }
     }
     
-    private JButton createStyledButton(String text, String tooltip, ActionListener action) {
-        JButton button = new JButton(text);
-        button.setBackground(new Color(41, 128, 185));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 12));
-        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setToolTipText(tooltip);
-        if (action != null) {
-            button.addActionListener(action);
-        }
-        
-        // Efeito hover
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(52, 152, 219));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(41, 128, 185));
-            }
-        });
-        
-        return button;
-    }
-    
     private void selecionarPastaBackup(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -695,9 +649,7 @@ public class PDVConfiguracoesSwingController {
         
         // Botões
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        JButton btnSalvar = new JButton("Salvar");
-        btnSalvar.setBackground(new Color(40, 167, 69));
-        btnSalvar.setForeground(Color.WHITE);
+        JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnSalvar.addActionListener(ev -> {
             String nome = txtNome.getText().trim();
             String login = txtLogin.getText().trim();
@@ -737,9 +689,7 @@ public class PDVConfiguracoesSwingController {
             dialog.dispose();
         });
         
-        JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBackground(new Color(220, 53, 69));
-        btnCancelar.setForeground(Color.WHITE);
+        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnCancelar.addActionListener(ev -> dialog.dispose());
         
         buttonPanel.add(btnSalvar);
@@ -776,11 +726,12 @@ public class PDVConfiguracoesSwingController {
         
         Usuario usuario = usuarios.get(selectedRow);
         
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
             "Deseja excluir o usuário:\n" + usuario.getNome() + "?",
-            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+            "Confirmar Exclusão", 
+            new String[]{"Sim", "Não"}, 0);
             
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             usuarios.remove(selectedRow);
             usuariosModel.removeRow(selectedRow);
             JOptionPane.showMessageDialog(frame, "Usuário excluído com sucesso!", 
@@ -798,12 +749,13 @@ public class PDVConfiguracoesSwingController {
         
         Usuario usuario = usuarios.get(selectedRow);
         
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
             "Deseja resetar a senha do usuário:\n" + usuario.getNome() + "?\n" +
             "Nova senha: 123456",
-            "Resetar Senha", JOptionPane.YES_NO_OPTION);
+            "Resetar Senha", 
+            new String[]{"Sim", "Não"}, 0);
             
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             JOptionPane.showMessageDialog(frame, "Senha resetada com sucesso!\nNova senha: 123456", 
                 "Sucesso", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -820,12 +772,13 @@ public class PDVConfiguracoesSwingController {
     }
     
     private void restaurarPadrao(ActionEvent e) {
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
             "Deseja restaurar as configurações padrão?\n" +
             "Todas as alterações serão perdidas.",
-            "Restaurar Padrão", JOptionPane.YES_NO_OPTION);
+            "Restaurar Padrão", 
+            new String[]{"Sim", "Não"}, 0);
             
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             carregarDadosExemplo();
             JOptionPane.showMessageDialog(frame, "Configurações restauradas com sucesso!", 
                 "Sucesso", JOptionPane.INFORMATION_MESSAGE);

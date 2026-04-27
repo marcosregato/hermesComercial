@@ -26,10 +26,16 @@ public class LogViewer extends JFrame {
     private JTable tblLogEntries;
     private DefaultTableModel tableModel;
     private JTextField txtSearch;
+    private JLabel lblStats;
     
     public LogViewer() {
         initializeUI();
         loadLogFiles();
+        // Carregar conteúdo do primeiro arquivo se disponível
+        if (cbLogFile.getItemCount() > 0) {
+            cbLogFile.setSelectedIndex(0);
+            loadLogContent();
+        }
     }
     
     private void initializeUI() {
@@ -41,6 +47,7 @@ public class LogViewer extends JFrame {
         // Painel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.setBackground(Color.WHITE);
         
         // Painel de controles
         JPanel controlPanel = createControlPanel();
@@ -48,6 +55,8 @@ public class LogViewer extends JFrame {
         
         // Painel central com abas
         JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setBackground(Color.WHITE);
+        tabbedPane.setForeground(Color.BLACK);
         
         // Aba de texto
         JScrollPane textScrollPane = createTextPanel();
@@ -77,55 +86,90 @@ public class LogViewer extends JFrame {
     }
     
     private JPanel createControlPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
+        JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(new TitledBorder("Controles"));
+        panel.setBackground(Color.WHITE);
+        
+        // Painel superior para filtros com layout em grid
+        JPanel filterPanel = new JPanel(new GridBagLayout());
+        filterPanel.setOpaque(false);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         
-        // Arquivo de log
+        // Primeira linha - Arquivo e Nível
         gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(new JLabel("Arquivo:"), gbc);
+        JLabel lblArquivo = new JLabel("Arquivo:");
+        lblArquivo.setForeground(Color.BLACK);
+        filterPanel.add(lblArquivo, gbc);
+        
         gbc.gridx = 1;
         cbLogFile = new JComboBox<>();
-        cbLogFile.setPreferredSize(new Dimension(200, 25));
-        panel.add(cbLogFile, gbc);
+        cbLogFile.setPreferredSize(new Dimension(200, 30));
+        cbLogFile.setBackground(Color.WHITE);
+        cbLogFile.setForeground(Color.BLACK);
+        filterPanel.add(cbLogFile, gbc);
         
-        // Nível de log
-        gbc.gridx = 2; gbc.gridy = 0;
-        panel.add(new JLabel("Nível:"), gbc);
+        gbc.gridx = 2;
+        JLabel lblNivel = new JLabel("Nível:");
+        lblNivel.setForeground(Color.BLACK);
+        filterPanel.add(lblNivel, gbc);
+        
         gbc.gridx = 3;
         cbLogLevel = new JComboBox<>(new String[]{"TODOS", "DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"});
-        cbLogLevel.setPreferredSize(new Dimension(120, 25));
-        panel.add(cbLogLevel, gbc);
+        cbLogLevel.setPreferredSize(new Dimension(120, 30));
+        cbLogLevel.setBackground(Color.WHITE);
+        cbLogLevel.setForeground(Color.BLACK);
+        filterPanel.add(cbLogLevel, gbc);
         
-        // Busca
-        gbc.gridx = 4; gbc.gridy = 0;
-        panel.add(new JLabel("Buscar:"), gbc);
-        gbc.gridx = 5;
+        // Segunda linha - Busca e botão
+        gbc.gridx = 0; gbc.gridy = 1;
+        JLabel lblBuscar = new JLabel("Buscar:");
+        lblBuscar.setForeground(Color.BLACK);
+        filterPanel.add(lblBuscar, gbc);
+        
+        gbc.gridx = 1; gbc.gridwidth = 2;
         txtSearch = new JTextField(20);
-        panel.add(txtSearch, gbc);
+        txtSearch.setPreferredSize(new Dimension(300, 30));
+        txtSearch.setBackground(Color.WHITE);
+        txtSearch.setForeground(Color.BLACK);
+        txtSearch.setCaretColor(Color.BLACK);
+        filterPanel.add(txtSearch, gbc);
+        
+        gbc.gridx = 3; gbc.gridwidth = 1;
+        JButton btnSearch = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CYAN, Color.BLACK);
+        btnSearch.addActionListener(e -> filterLogs());
+        btnSearch.setPreferredSize(new Dimension(100, 30));
+        filterPanel.add(btnSearch, gbc);
+        
+        panel.add(filterPanel, BorderLayout.CENTER);
+        
+        // Painel inferior para botões
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        buttonPanel.setOpaque(false);
         
         // Botões
-        gbc.gridx = 6; gbc.gridy = 0;
-        JButton btnRefresh = new JButton("Atualizar");
+        JButton btnRefresh = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Atualizar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, Color.BLACK);
         btnRefresh.addActionListener(this::refreshLogs);
-        panel.add(btnRefresh, gbc);
+        buttonPanel.add(btnRefresh);
         
-        gbc.gridx = 7;
-        JButton btnClear = new JButton("Limpar");
+        JButton btnClear = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🧹 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, Color.BLACK);
         btnClear.addActionListener(this::clearLogs);
-        panel.add(btnClear, gbc);
+        buttonPanel.add(btnClear);
         
-        gbc.gridx = 8;
-        JButton btnExport = new JButton("Exportar");
+        JButton btnExport = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, Color.BLACK);
         btnExport.addActionListener(this::exportLogs);
-        panel.add(btnExport, gbc);
+        buttonPanel.add(btnExport);
+        
+        panel.add(buttonPanel, BorderLayout.SOUTH);
         
         // Listeners
         cbLogFile.addActionListener(e -> loadLogContent());
         cbLogLevel.addActionListener(e -> filterLogs());
         txtSearch.addActionListener(e -> filterLogs());
+        
+        // Campo de busca permite digitação livre
+        txtSearch.setEditable(true);
         
         return panel;
     }
@@ -135,7 +179,11 @@ public class LogViewer extends JFrame {
         txtLogContent.setFont(new Font("Monospaced", Font.PLAIN, 12));
         txtLogContent.setEditable(false);
         txtLogContent.setBackground(Color.WHITE);
-        return new JScrollPane(txtLogContent);
+        txtLogContent.setForeground(Color.BLACK);
+        txtLogContent.setCaretColor(Color.BLACK);
+        JScrollPane scrollPane = new JScrollPane(txtLogContent);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        return scrollPane;
     }
     
     private JScrollPane createTablePanel() {
@@ -148,30 +196,52 @@ public class LogViewer extends JFrame {
         tblLogEntries.getColumnModel().getColumn(2).setPreferredWidth(100);
         tblLogEntries.getColumnModel().getColumn(3).setPreferredWidth(500);
         
-        return new JScrollPane(tblLogEntries);
+        // Aplicar tema claro na tabela
+        tblLogEntries.setBackground(Color.WHITE);
+        tblLogEntries.setForeground(Color.BLACK);
+        tblLogEntries.getTableHeader().setBackground(Color.LIGHT_GRAY);
+        tblLogEntries.getTableHeader().setForeground(Color.BLACK);
+        tblLogEntries.setRowHeight(25);
+        
+        JScrollPane scrollPane = new JScrollPane(tblLogEntries);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        
+        return scrollPane;
     }
     
     private JPanel createStatsPanel() {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
         panel.setBorder(new TitledBorder("Estatísticas"));
+        panel.setBackground(Color.WHITE);
         
-        JLabel lblStats = new JLabel();
+        lblStats = new JLabel();
         lblStats.setFont(new Font("Arial", Font.BOLD, 12));
+        lblStats.setForeground(Color.BLACK);
         panel.add(lblStats);
         
-        // Carregar estatísticas
-        String stats = LoggerUtil.getLogStatistics();
-        lblStats.setText("<html>" + stats.replace("\n", "<br>") + "</html>");
+        // Atualizar estatísticas com nome do arquivo
+        updateStatsPanel();
         
         return panel;
+    }
+    
+    private void updateStatsPanel() {
+        String selectedFile = (String) cbLogFile.getSelectedItem();
+        String fileName = selectedFile != null ? selectedFile : "Nenhum arquivo selecionado";
+        
+        String stats = LoggerUtil.getLogStatistics();
+        String statsText = "<html><b>Arquivo:</b> " + fileName + "<br><br>" + 
+                          stats.replace("\n", "<br>") + "</html>";
+        lblStats.setText(statsText);
     }
     
     private void loadLogFiles() {
         File logDir = new File(LOG_DIR);
         if (!logDir.exists()) {
-            JOptionPane.showMessageDialog(this, 
+            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
                 "Diretório de logs não encontrado: " + LOG_DIR, 
-                "Aviso", JOptionPane.WARNING_MESSAGE);
+                "Aviso", 
+                new String[]{"OK"}, 0);
             return;
         }
         
@@ -189,7 +259,13 @@ public class LogViewer extends JFrame {
         if (selectedFile == null) return;
         
         File logFile = new File(LOG_DIR, selectedFile);
-        if (!logFile.exists()) return;
+        if (!logFile.exists()) {
+            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+                "Arquivo de log não encontrado: " + selectedFile, 
+                "Aviso", 
+                new String[]{"OK"}, 0);
+            return;
+        }
         
         StringBuilder content = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
@@ -198,9 +274,10 @@ public class LogViewer extends JFrame {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, 
+            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
                 "Erro ao ler arquivo de log: " + e.getMessage(), 
-                "Erro", JOptionPane.ERROR_MESSAGE);
+                "Erro", 
+                new String[]{"OK"}, 0);
             return;
         }
         
@@ -209,6 +286,9 @@ public class LogViewer extends JFrame {
         
         // Carregar tabela
         loadLogTable(content.toString());
+        
+        // Atualizar painel de estatísticas
+        updateStatsPanel();
     }
     
     private void loadLogTable(String content) {
@@ -256,35 +336,85 @@ public class LogViewer extends JFrame {
     
     private void filterLogs() {
         String selectedLevel = (String) cbLogLevel.getSelectedItem();
-        String searchText = txtSearch.getText().toLowerCase();
+        String searchText = txtSearch.getText().toLowerCase().trim();
         
-        if (selectedLevel.equals("TODOS") && searchText.isEmpty()) {
-            loadLogContent();
+        // Se não houver texto de busca, apenas filtrar por nível
+        if (searchText.isEmpty()) {
+            filterByLevelOnly(selectedLevel);
             return;
         }
         
-        // Filtrar conteúdo do texto
-        String content = txtLogContent.getText();
-        StringBuilder filteredContent = new StringBuilder();
+        // Buscar arquivos que correspondem ao texto de busca
+        File logDir = new File(LOG_DIR);
+        if (!logDir.exists()) return;
         
-        String[] lines = content.split("\n");
-        for (String line : lines) {
-            boolean matchesLevel = selectedLevel.equals("TODOS") || line.contains("[" + selectedLevel + "]");
-            boolean matchesSearch = searchText.isEmpty() || line.toLowerCase().contains(searchText);
-            
-            if (matchesLevel && matchesSearch) {
-                filteredContent.append(line).append("\n");
-            }
+        File[] logFiles = logDir.listFiles((dir, name) -> 
+            name.toLowerCase().contains(searchText) && name.endsWith(".log"));
+        
+        if (logFiles == null || logFiles.length == 0) {
+            txtLogContent.setText("Nenhum arquivo de log encontrado com: " + searchText);
+            loadLogTable("");
+            return;
         }
         
-        txtLogContent.setText(filteredContent.toString());
-        loadLogTable(filteredContent.toString());
+        // Carregar conteúdo do primeiro arquivo encontrado
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(logFiles[0]))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                // Aplicar filtro por nível se necessário
+                if (selectedLevel.equals("TODOS") || 
+                    line.toUpperCase().contains("[" + selectedLevel.toUpperCase() + "]")) {
+                    content.append(line).append("\n");
+                }
+            }
+        } catch (IOException e) {
+            txtLogContent.setText("Erro ao ler arquivo: " + e.getMessage());
+            loadLogTable("");
+            return;
+        }
+        
+        // Atualizar interface
+        txtLogContent.setText(content.toString());
+        txtLogContent.setCaretPosition(0);
+        loadLogTable(content.toString());
+        
+        // Atualizar ComboBox para o arquivo encontrado
+        String foundFileName = logFiles[0].getName();
+        cbLogFile.setSelectedItem(foundFileName);
+    }
+    
+    private void filterByLevelOnly(String selectedLevel) {
+        String selectedFile = (String) cbLogFile.getSelectedItem();
+        if (selectedFile == null) return;
+        
+        File logFile = new File(LOG_DIR, selectedFile);
+        if (!logFile.exists()) return;
+        
+        StringBuilder content = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (selectedLevel.equals("TODOS") || 
+                    line.toUpperCase().contains("[" + selectedLevel.toUpperCase() + "]")) {
+                    content.append(line).append("\n");
+                }
+            }
+        } catch (IOException e) {
+            return;
+        }
+        
+        txtLogContent.setText(content.toString());
+        txtLogContent.setCaretPosition(0);
+        loadLogTable(content.toString());
     }
     
     private void refreshLogs(ActionEvent e) {
         loadLogFiles();
         loadLogContent();
-        JOptionPane.showMessageDialog(this, "Logs atualizados com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+            "Logs atualizados com sucesso!", "Sucesso", 
+            new String[]{"OK"}, 0);
     }
     
     private void clearLogs(ActionEvent e) {
@@ -296,7 +426,9 @@ public class LogViewer extends JFrame {
     private void exportLogs(ActionEvent e) {
         String content = txtLogContent.getText();
         if (content.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Nenhum conteúdo para exportar!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+                "Nenhum conteúdo para exportar!", "Aviso", 
+                new String[]{"OK"}, 0);
             return;
         }
         
@@ -312,9 +444,15 @@ public class LogViewer extends JFrame {
             
             try (java.io.FileWriter writer = new java.io.FileWriter(selectedFile)) {
                 writer.write(content);
-                JOptionPane.showMessageDialog(this, "Logs exportados com sucesso!\nArquivo: " + selectedFile.getAbsolutePath(), "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+                    "Logs exportados com sucesso!\nArquivo: " + selectedFile.getAbsolutePath(), 
+                    "Sucesso", 
+                    new String[]{"OK"}, 0);
             } catch (IOException ex) {
-                JOptionPane.showMessageDialog(this, "Erro ao exportar logs: " + ex.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+                com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+                    "Erro ao exportar logs: " + ex.getMessage(), 
+                    "Erro", 
+                    new String[]{"OK"}, 0);
             }
         }
     }

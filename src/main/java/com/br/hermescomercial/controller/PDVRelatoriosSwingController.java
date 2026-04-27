@@ -3,6 +3,7 @@ package com.br.hermescomercial.controller;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.awt.event.ActionEvent;
 import java.awt.print.PrinterJob;
 import java.time.LocalDate;
@@ -142,10 +143,10 @@ public class PDVRelatoriosSwingController {
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
         JPanel cardsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         
-        cardsPanel.add(createInfoBox("Total Vendas", "R$ 1.234,56", new Color(0, 128, 0)));
-        cardsPanel.add(createInfoBox("Total Pedidos", "45", new Color(0, 123, 255)));
-        cardsPanel.add(createInfoBox("Ticket Médio", "R$ 27,43", new Color(255, 193, 7)));
-        cardsPanel.add(createInfoBox("Saldo Líquido", "R$ 1.777,78", new Color(0, 123, 255)));
+        cardsPanel.add(createInfoBox("Total Vendas", "R$ 1.234,56", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN));
+        cardsPanel.add(createInfoBox("Total Pedidos", "45", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE));
+        cardsPanel.add(createInfoBox("Ticket Médio", "R$ 27,43", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW));
+        cardsPanel.add(createInfoBox("Saldo Líquido", "R$ 1.777,78", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE));
         
         infoPanel.add(cardsPanel, gbc);
         
@@ -205,9 +206,7 @@ public class PDVRelatoriosSwingController {
         filterPanel.add(txtDateFim, gbc);
         
         gbc.gridx = 6; gbc.gridy = 0;
-        JButton btnFiltrar = new JButton("Filtrar");
-        btnFiltrar.setBackground(new Color(0, 123, 255));
-        btnFiltrar.setForeground(Color.WHITE);
+        JButton btnFiltrar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Filtrar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnFiltrar.addActionListener(this::filtrarVendas);
         filterPanel.add(btnFiltrar, gbc);
         
@@ -338,24 +337,16 @@ public class PDVRelatoriosSwingController {
         JPanel panel = new JPanel(new FlowLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Ações"));
         
-        JButton btnGerarRelatorio = new JButton("Gerar Relatório");
-        btnGerarRelatorio.setBackground(new Color(40, 167, 69));
-        btnGerarRelatorio.setForeground(Color.WHITE);
+        JButton btnGerarRelatorio = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📊 Gerar Relatório", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnGerarRelatorio.addActionListener(this::gerarRelatorio);
         
-        JButton btnExportar = new JButton("Exportar PDF");
-        btnExportar.setBackground(new Color(23, 162, 184));
-        btnExportar.setForeground(Color.WHITE);
+        JButton btnExportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar PDF", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnExportar.addActionListener(this::exportarPDF);
         
-        JButton btnImprimir = new JButton("Imprimir");
-        btnImprimir.setBackground(new Color(0, 123, 255));
-        btnImprimir.setForeground(Color.WHITE);
+        JButton btnImprimir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🖨️ Imprimir", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnImprimir.addActionListener(this::imprimirRelatorio);
         
-        JButton btnLimpar = new JButton("Limpar");
-        btnLimpar.setBackground(new Color(220, 53, 69));
-        btnLimpar.setForeground(Color.WHITE);
+        JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnLimpar.addActionListener(this::limparRelatorio);
         
         panel.add(btnGerarRelatorio);
@@ -367,18 +358,31 @@ public class PDVRelatoriosSwingController {
     }
     
     private JPanel createInfoBox(String title, String value, Color color) {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createLineBorder(color, 2));
-        panel.setBackground(color);
+        JPanel panel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2d.setColor(color);
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+                g2d.dispose();
+            }
+        };
+        panel.setOpaque(false);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(color.darker(), 1),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
         panel.setPreferredSize(new Dimension(150, 80));
         
         JLabel titleLabel = new JLabel(title, JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 12));
-        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setForeground(Color.BLACK);
         
         JLabel valueLabel = new JLabel(value, JLabel.CENTER);
         valueLabel.setFont(new Font("Arial", Font.BOLD, 18));
-        valueLabel.setForeground(Color.WHITE);
+        valueLabel.setForeground(Color.BLACK);
         
         panel.add(titleLabel, BorderLayout.NORTH);
         panel.add(valueLabel, BorderLayout.CENTER);
@@ -455,36 +459,35 @@ public class PDVRelatoriosSwingController {
         relatorioFrame.add(scrollPane, BorderLayout.CENTER);
         
         // Painel de botões
-        JPanel buttonPanel = new JPanel(new FlowLayout());
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         
-        JButton btnCopiar = new JButton("Copiar");
-        btnCopiar.setBackground(new Color(40, 167, 69));
-        btnCopiar.setForeground(Color.WHITE);
+        JButton btnCopiar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📋 Copiar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnCopiar.addActionListener(ev -> {
-            relatorioArea.selectAll();
-            relatorioArea.copy();
-            JOptionPane.showMessageDialog(relatorioFrame, "Relatório copiado para área de transferência!", 
-                "Copiado", JOptionPane.INFORMATION_MESSAGE);
+            String relatorioText = relatorio.toString();
+            StringSelection selection = new StringSelection(relatorioText);
+            Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(relatorioFrame, 
+                "Relatório copiado para área de transferência!", 
+                "Copiado", 
+                new String[]{"OK"}, 0);
         });
         
-        JButton btnFechar = new JButton("Fechar");
-        btnFechar.setBackground(new Color(220, 53, 69));
-        btnFechar.setForeground(Color.WHITE);
+        JButton btnFechar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Fechar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnFechar.addActionListener(ev -> relatorioFrame.dispose());
         
         buttonPanel.add(btnCopiar);
         buttonPanel.add(btnFechar);
-        
         relatorioFrame.add(buttonPanel, BorderLayout.SOUTH);
         
         relatorioFrame.setVisible(true);
         
         // Mensagem de confirmação
-        JOptionPane.showMessageDialog(frame, 
+        com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
             "Relatório gerado com sucesso!\n" +
             "Tipo: " + tabTitle + "\n" +
             "Janela de relatório aberta para visualização.",
-            "Relatório Gerado", JOptionPane.INFORMATION_MESSAGE);
+            "Relatório Gerado", 
+            new String[]{"OK"}, 0);
     }
     
     private void exportarPDF(ActionEvent e) {

@@ -30,13 +30,14 @@ public class PDVPrincipalSwingController {
     
     private void initializeUI() {
         // Aplicar tema moderno
+        com.br.hermescomercial.theme.ModernTheme.applyModernTheme();
         mainFrame = new JFrame("Hermes Comercial PDV v2.1.0 - Premium");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1200, 800);
         mainFrame.setLocationRelativeTo(null);
         
         // Configurar fundo elegante - padrão Nova Venda
-        mainFrame.getContentPane().setBackground(new Color(245, 245, 250));
+        mainFrame.getContentPane().setBackground(com.br.hermescomercial.theme.ModernTheme.BACKGROUND_PRIMARY);
         
         createMenuBar();
         createMainPanel();
@@ -343,8 +344,8 @@ public class PDVPrincipalSwingController {
             JTextField txtBusca = new JTextField(25);
             txtBusca.setFont(new Font("Arial", Font.PLAIN, 12));
             txtBusca.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-            JButton btnBuscar = createStyledButton("🔍 Buscar", "Buscar produtos", null);
-            JButton btnLimpar = createStyledButton("🔄 Limpar", "Limpar busca", null);
+            JButton btnBuscar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             
             buscaInputPanel.add(txtBusca);
             buscaInputPanel.add(btnBuscar);
@@ -399,7 +400,7 @@ public class PDVPrincipalSwingController {
             // Painel de botões estilizado
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
             buttonPanel.setBackground(new Color(245, 245, 250));
-            JButton btnFechar = createStyledButton("❌ Fechar", "Fechar consulta", ev -> consultaFrame.dispose());
+            JButton btnFechar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Fechar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             buttonPanel.add(btnFechar);
             
             // Montar layout
@@ -547,8 +548,8 @@ public class PDVPrincipalSwingController {
             JTextField txtBusca = new JTextField(25);
             txtBusca.setFont(new Font("Arial", Font.PLAIN, 12));
             txtBusca.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-            JButton btnBuscar = createStyledButton("🔍 Buscar", "Buscar clientes", null);
-            JButton btnLimpar = createStyledButton("🔄 Limpar", "Limpar busca", null);
+            JButton btnBuscar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             
             buscaInputPanel.add(txtBusca);
             buscaInputPanel.add(btnBuscar);
@@ -560,10 +561,10 @@ public class PDVPrincipalSwingController {
             // Painel de botões de cadastro estilizado
             JPanel acaoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
             acaoPanel.setBackground(new Color(255, 255, 255));
-            JButton btnNovo = createStyledButton("➕ Novo Cliente", "Cadastrar novo cliente", null);
-            JButton btnEditar = createStyledButton("✏️ Editar", "Editar cliente selecionado", null);
-            JButton btnExcluir = createStyledButton("🗑️ Excluir", "Excluir cliente selecionado", null);
-            JButton btnExportar = createStyledButton("📤 Exportar", "Exportar lista de clientes", null);
+            JButton btnNovo = com.br.hermescomercial.theme.ModernTheme.createPastelButton("➕ Novo Cliente", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            JButton btnEditar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("✏️ Editar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            JButton btnExcluir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🗑️ Excluir", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            JButton btnExportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             
             acaoPanel.add(btnNovo);
             acaoPanel.add(btnEditar);
@@ -611,7 +612,7 @@ public class PDVPrincipalSwingController {
             // Painel de botões inferiores estilizado
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
             buttonPanel.setBackground(new Color(245, 245, 250));
-            JButton btnFechar = createStyledButton("❌ Fechar", "Fechar gestão de clientes", ev -> clientesFrame.dispose());
+            JButton btnFechar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Fechar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             buttonPanel.add(btnFechar);
             
             // Montar layout
@@ -681,10 +682,11 @@ public class PDVPrincipalSwingController {
             btnExcluir.addActionListener(ev -> {
                 int selectedRow = clientesTable.getSelectedRow();
                 if (selectedRow >= 0) {
-                    int confirm = JOptionPane.showConfirmDialog(clientesFrame, 
+                    int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(clientesFrame, 
                         "Deseja excluir o cliente " + tableModel.getValueAt(selectedRow, 1) + "?",
-                        "Excluir Cliente", JOptionPane.YES_NO_OPTION);
-                    if (confirm == JOptionPane.YES_OPTION) {
+                        "Excluir Cliente", 
+                        new String[]{"Sim", "Não"}, 0);
+                    if (confirm == 0) {
                         tableModel.removeRow(selectedRow);
                         JOptionPane.showMessageDialog(clientesFrame, 
                             "Cliente excluído com sucesso!",
@@ -814,7 +816,7 @@ public class PDVPrincipalSwingController {
     private void verLogs(ActionEvent e) {
         try {
             System.out.println("Abrindo visualizador de logs");
-            // LogViewer.showLogViewer(); // Classe não existe
+            com.br.hermescomercial.util.LogViewer.showLogViewer();
         } catch (Exception ex) {
             System.err.println("Erro ao abrir visualizador de logs: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
@@ -824,14 +826,13 @@ public class PDVPrincipalSwingController {
     }
     
     private void limparLogs(ActionEvent e) {
-        int result = JOptionPane.showConfirmDialog(mainFrame, 
+        int result = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(mainFrame, 
             "Deseja limpar logs antigos (mais de 30 dias)?\n\n" +
             "Esta ação não pode ser desfeita.",
             "Limpar Logs", 
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
+            new String[]{"Sim", "Não"}, 0);
             
-        if (result == JOptionPane.YES_OPTION) {
+        if (result == 0) {
             try {
                 // System.out.cleanOldLogs(); // Método não existe
                 System.out.println("Logs antigos limpos pelo usuário");
@@ -892,8 +893,8 @@ public class PDVPrincipalSwingController {
         // Botões
         gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        JButton btnSalvar = new JButton("Salvar");
-        JButton btnCancelar = new JButton("Cancelar");
+        JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         
         btnSalvar.addActionListener(e -> {
             String nome = txtNome.getText().trim();
@@ -998,8 +999,8 @@ public class PDVPrincipalSwingController {
         // Botões
         gbc.gridx = 0; gbc.gridy = 6; gbc.gridwidth = 2;
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        JButton btnSalvar = new JButton("Salvar");
-        JButton btnCancelar = new JButton("Cancelar");
+        JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         
         btnSalvar.addActionListener(e -> {
             String novoNome = txtNome.getText().trim();
