@@ -6,7 +6,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
@@ -148,9 +147,9 @@ public class PDVProdutosUnificadoSwingController {
         txtBuscaConsulta = new JTextField(30);
         txtBuscaConsulta.setFont(new Font("Arial", Font.PLAIN, 12));
         txtBuscaConsulta.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        JButton btnBuscar = createStyledButton("🔍 Buscar", "Buscar produtos", null);
-        JButton btnLimpar = createStyledButton("🔄 Limpar", "Limpar busca", null);
-        JButton btnAtualizar = createStyledButton("🔄 Atualizar", "Atualizar lista", null);
+        JButton btnBuscar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnAtualizar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Atualizar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CYAN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         
         buscaInputPanel.add(txtBuscaConsulta);
         buscaInputPanel.add(btnBuscar);
@@ -199,9 +198,13 @@ public class PDVProdutosUnificadoSwingController {
         // Painel de botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         buttonPanel.setBackground(new Color(245, 245, 250));
-        JButton btnEditar = createStyledButton("✏️ Editar", "Editar produto selecionado", e -> editarProduto());
-        JButton btnExcluir = createStyledButton("🗑️ Excluir", "Excluir produto selecionado", e -> excluirProduto());
-        JButton btnExportar = createStyledButton("📤 Exportar", "Exportar lista de produtos", e -> exportarProdutos());
+        JButton btnEditar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("✏️ Editar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnExcluir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🗑️ Excluir", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnExportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        
+        btnEditar.addActionListener(e -> editarProduto());
+        btnExcluir.addActionListener(e -> excluirProduto());
+        btnExportar.addActionListener(e -> exportarProdutos());
         
         buttonPanel.add(btnEditar);
         buttonPanel.add(btnExcluir);
@@ -314,11 +317,13 @@ public class PDVProdutosUnificadoSwingController {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         buttonPanel.setBackground(new Color(245, 245, 250));
         
-        JButton btnLimpar = createStyledButton("🔄 Limpar", "Limpar campos", null);
-        JButton btnSalvar = createStyledButton("💾 Salvar", "Salvar produto", this::salvarProduto);
-        JButton btnCancelar = createStyledButton("❌ Cancelar", "Cancelar cadastro", e -> limparCampos());
+        JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         
         btnLimpar.addActionListener(e -> limparCampos());
+        btnSalvar.addActionListener(this::salvarProduto);
+        btnCancelar.addActionListener(e -> limparCampos());
         
         buttonPanel.add(btnLimpar);
         buttonPanel.add(btnSalvar);
@@ -332,44 +337,7 @@ public class PDVProdutosUnificadoSwingController {
         return mainPanel;
     }
     
-    private JButton createStyledButton(String text, String tooltip, ActionListener action) {
-        JButton button = new JButton(text);
-        button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
-        button.setForeground(new Color(255, 255, 255)); // Branco elegante
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12)); // Fonte elegante
-        button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
-            BorderFactory.createEmptyBorder(12, 20, 12, 20)
-        ));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setToolTipText(tooltip);
-        button.setOpaque(true);
-        if (action != null) {
-            button.addActionListener(action);
-        }
         
-        // Efeito hover elegante
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(127, 140, 141)); // Cinza mais escuro suave
-                button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(108, 117, 125), 2), // Cinza ainda mais escuro
-                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
-                ));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
-                button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
-                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
-                ));
-            }
-        });
-        
-        return button;
-    }
-    
     private void carregarProdutosDoBanco() {
         produtos.clear();
         
@@ -700,13 +668,14 @@ public class PDVProdutosUnificadoSwingController {
         String codigo = (String) tableModel.getValueAt(selectedRow, 0);
         String descricao = (String) tableModel.getValueAt(selectedRow, 1);
         
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
             "Deseja realmente excluir o produto?\n\n" +
             "Código: " + codigo + "\n" +
             "Descrição: " + descricao,
-            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+            "Confirmar Exclusão", 
+            new String[]{"Sim", "Não"}, 0);
         
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             // Tentar excluir do banco de dados
             boolean sucessoBanco = excluirProdutoDoBanco(codigo);
             
