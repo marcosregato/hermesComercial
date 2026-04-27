@@ -145,7 +145,12 @@ public class PDVCaixaSwingController {
         panel.setBorder(BorderFactory.createTitledBorder("Movimentações"));
         
         String[] columns = {"Data/Hora", "Tipo", "Descrição", "Valor", "Saldo"};
-        tableModel = new DefaultTableModel(columns, 0);
+        tableModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Bloquear edição de todas as células
+            }
+        };
         movimentacoesTable = new JTable(tableModel);
         
         JScrollPane scrollPane = new JScrollPane(movimentacoesTable);
@@ -157,29 +162,19 @@ public class PDVCaixaSwingController {
     private JPanel createButtonsPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
-        JButton btnAbrirCaixa = new JButton("Abrir Caixa");
-        btnAbrirCaixa.setBackground(new Color(0, 128, 0));
-        btnAbrirCaixa.setForeground(Color.WHITE);
+        JButton btnAbrirCaixa = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔓 Abrir Caixa", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnAbrirCaixa.addActionListener(this::abrirCaixa);
         
-        JButton btnAdicionarFundos = new JButton("Adicionar Fundos");
-        btnAdicionarFundos.setBackground(new Color(0, 123, 255));
-        btnAdicionarFundos.setForeground(Color.WHITE);
+        JButton btnAdicionarFundos = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💰 Adicionar Fundos", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnAdicionarFundos.addActionListener(this::adicionarFundos);
         
-        JButton btnRetirarFundos = new JButton("Retirar Fundos");
-        btnRetirarFundos.setBackground(new Color(255, 193, 7));
-        btnRetirarFundos.setForeground(Color.BLACK);
+        JButton btnRetirarFundos = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💸 Retirar Fundos", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnRetirarFundos.addActionListener(this::retirarFundos);
         
-        JButton btnFecharCaixa = new JButton("Fechar Caixa");
-        btnFecharCaixa.setBackground(new Color(220, 53, 69));
-        btnFecharCaixa.setForeground(Color.WHITE);
+        JButton btnFecharCaixa = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔒 Fechar Caixa", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnFecharCaixa.addActionListener(this::fecharCaixa);
         
-        JButton btnRelatorio = new JButton("Relatório");
-        btnRelatorio.setBackground(new Color(108, 117, 125));
-        btnRelatorio.setForeground(Color.WHITE);
+        JButton btnRelatorio = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📊 Relatório", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnRelatorio.addActionListener(e -> gerarRelatorio(e));
         
         panel.add(btnAbrirCaixa);
@@ -339,11 +334,12 @@ public class PDVCaixaSwingController {
                 return;
             }
             
-            int confirm = JOptionPane.showConfirmDialog(frame, 
+            int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
                 "Deseja fechar o caixa?\n\nSaldo atual: R$ " + String.format("%.2f", saldoAtual), 
-                "Fechar Caixa", JOptionPane.YES_NO_OPTION);
+                "Fechar Caixa", 
+                new String[]{"Sim", "Não"}, 0);
                 
-            if (confirm == JOptionPane.YES_OPTION) {
+            if (confirm == 0) {
                 caixaAberto = false;
                 
                 // Adicionar movimentação de fechamento
