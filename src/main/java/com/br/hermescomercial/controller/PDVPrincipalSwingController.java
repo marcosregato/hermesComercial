@@ -67,6 +67,7 @@ public class PDVPrincipalSwingController {
         // Menu Operações
         JMenu operationsMenu = new JMenu("Operações");
         operationsMenu.add(createMenuItem("📦 Gestão de Produtos", this::gerenciarProdutos));
+        operationsMenu.add(createMenuItem("🔍 Consulta Rápida de Produtos", this::consultarProdutos));
         operationsMenu.add(createMenuItem("Clientes", this::gerenciarClientes));
         
         // Menu Relatórios
@@ -244,6 +245,14 @@ public class PDVPrincipalSwingController {
         centerPanel.setOpaque(false);
         centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         
+        // Título do painel principal
+        JLabel titleLabel = new JLabel("🏪 HERMES COMERCIAL PDV", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        titleLabel.setForeground(new Color(52, 73, 94)); // Azul suave profundo
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        titleLabel.setOpaque(true);
+        centerPanel.add(titleLabel, BorderLayout.NORTH);
+        
         // Status label
         statusLabel = new JLabel("Sistema pronto para uso");
         statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // Fonte suave
@@ -251,7 +260,7 @@ public class PDVPrincipalSwingController {
         statusLabel.setBackground(new Color(236, 240, 241)); // Cinza suave claro
         statusLabel.setForeground(new Color(52, 73, 94)); // Azul suave profundo
         statusLabel.setOpaque(true);
-        centerPanel.add(statusLabel, BorderLayout.NORTH);
+        centerPanel.add(statusLabel, BorderLayout.CENTER);
         
         produtosArea = new JTextArea();
         produtosArea.setEditable(false);
@@ -372,6 +381,10 @@ public class PDVPrincipalSwingController {
             produtosTable.getTableHeader().setBackground(new Color(41, 128, 185));
             produtosTable.getTableHeader().setForeground(Color.WHITE);
             
+            // Desabilitar edição da tabela
+            produtosTable.setDefaultEditor(Object.class, null);
+            produtosTable.setEnabled(false);
+            
             // Configurar larguras das colunas
             produtosTable.getColumnModel().getColumn(0).setPreferredWidth(80);
             produtosTable.getColumnModel().getColumn(1).setPreferredWidth(350);
@@ -406,7 +419,10 @@ public class PDVPrincipalSwingController {
             // Montar layout
             JPanel contentPanel = new JPanel(new BorderLayout());
             contentPanel.setBackground(new Color(255, 255, 255));
-            contentPanel.setBorder(BorderFactory.createTitledBorder("Lista de Produtos"));
+            contentPanel.setBorder(BorderFactory.createTitledBorder(
+            "<html><font color='#2C3E50' size='4'><b>📦 CONSULTA RÁPIDA DE PRODUTOS</b></font><br>" +
+            "<font color='#666666' size='2'>Sistema integrado v2.1.4 • Gestão completa • Relatórios detalhados • Interface segura</font></html>"
+        ));
             contentPanel.add(scrollPane, BorderLayout.CENTER);
             
             mainPanel.add(buscaPanel, BorderLayout.NORTH);
@@ -532,7 +548,13 @@ public class PDVPrincipalSwingController {
             mainPanel.setBackground(new Color(245, 245, 250));
             
             // Painel de busca e cadastro
-            JPanel topPanel = new JPanel(new BorderLayout());
+            JPanel buscaCadastroPanel = new JPanel(new FlowLayout());
+            
+            // Painel de botões de cadastro estilizado
+            JPanel acaoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
+            acaoPanel.setBackground(new Color(255, 255, 255));
+            
+            // Painel de busca e cadastro
             
             // Painel de busca estilizado
             JPanel buscaPanel = new JPanel(new BorderLayout());
@@ -559,9 +581,8 @@ public class PDVPrincipalSwingController {
             buscaPanel.add(buscaInputPanel, BorderLayout.CENTER);
             
             // Painel de botões de cadastro estilizado
-            JPanel acaoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 10));
-            acaoPanel.setBackground(new Color(255, 255, 255));
             JButton btnNovo = com.br.hermescomercial.theme.ModernTheme.createPastelButton("➕ Novo Cliente", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            JButton btnFechar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Fechar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             JButton btnEditar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("✏️ Editar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             JButton btnExcluir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🗑️ Excluir", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             JButton btnExportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
@@ -570,9 +591,18 @@ public class PDVPrincipalSwingController {
             acaoPanel.add(btnEditar);
             acaoPanel.add(btnExcluir);
             acaoPanel.add(btnExportar);
+            acaoPanel.add(btnFechar);
             
-            topPanel.add(buscaPanel, BorderLayout.NORTH);
-            topPanel.add(acaoPanel, BorderLayout.SOUTH);
+            // Ação do botão fechar
+            btnFechar.addActionListener(ev -> {
+                clientesFrame.dispose();
+            });
+            
+            // Adicionar botão Fechar ao painel de botões
+            acaoPanel.add(btnFechar);
+            
+            buscaCadastroPanel.add(buscaPanel, BorderLayout.NORTH);
+            buscaCadastroPanel.add(acaoPanel, BorderLayout.SOUTH);
             
             // Tabela de clientes com design melhorado
             String[] columns = {"ID", "Nome", "CPF/CNPJ", "Telefone", "Email", "Status"};
@@ -583,6 +613,10 @@ public class PDVPrincipalSwingController {
             clientesTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
             clientesTable.getTableHeader().setBackground(new Color(41, 128, 185));
             clientesTable.getTableHeader().setForeground(Color.WHITE);
+            
+            // Desabilitar edição da tabela
+            clientesTable.setDefaultEditor(Object.class, null);
+            clientesTable.setEnabled(false);
             
             // Configurar larguras das colunas
             clientesTable.getColumnModel().getColumn(0).setPreferredWidth(60);
@@ -612,7 +646,6 @@ public class PDVPrincipalSwingController {
             // Painel de botões inferiores estilizado
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
             buttonPanel.setBackground(new Color(245, 245, 250));
-            JButton btnFechar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Fechar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
             buttonPanel.add(btnFechar);
             
             // Montar layout
@@ -621,7 +654,7 @@ public class PDVPrincipalSwingController {
             contentPanel.setBorder(BorderFactory.createTitledBorder("Lista de Clientes"));
             contentPanel.add(scrollPane, BorderLayout.CENTER);
             
-            mainPanel.add(topPanel, BorderLayout.NORTH);
+            mainPanel.add(buscaCadastroPanel, BorderLayout.NORTH);
             mainPanel.add(contentPanel, BorderLayout.CENTER);
             mainPanel.add(buttonPanel, BorderLayout.SOUTH);
             
@@ -806,10 +839,15 @@ public class PDVPrincipalSwingController {
     
     private void mostrarSobre(ActionEvent e) {
         JOptionPane.showMessageDialog(mainFrame, 
-            "Hermes Comercial PDV v2.0\n" +
+            "Hermes Comercial PDV v2.1.4\n" +
             "Sistema de Ponto de Venda completo\n" +
             "Desenvolvido em Java Swing\n" +
-            "Versão Premium com Design Moderno",
+            "Versão Premium com Design Moderno\n" +
+            "• Gestão de Produtos com categorias dinâmicas\n" +
+            "• Gestão de Clientes completa\n" +
+            "• Relatórios detalhados\n" +
+            "• Validação de dados monetários\n" +
+            "• Interface não-editável para segurança",
             "Sobre", JOptionPane.INFORMATION_MESSAGE);
     }
     

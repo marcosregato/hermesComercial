@@ -112,7 +112,7 @@ public class PDVLoginSwingController {
             }
         };
         cardPanel.setOpaque(false);
-        cardPanel.setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
+        cardPanel.setBorder(BorderFactory.createEmptyBorder(40, 60, 40, 60));
         cardPanel.setLayout(new GridBagLayout());
         GridBagConstraints cardGbc = new GridBagConstraints();
         
@@ -129,7 +129,7 @@ public class PDVLoginSwingController {
         }
         cardGbc.gridx = 0;
         cardGbc.gridy = 0;
-        cardGbc.insets = new Insets(0, 0, 30, 0);
+        cardGbc.insets = new Insets(0, 0, 25, 0);
         cardPanel.add(lblIcon, cardGbc);
         
         // Título elegante
@@ -138,7 +138,7 @@ public class PDVLoginSwingController {
         lblTitulo.setForeground(new Color(52, 73, 94)); // Azul suave profundo
         lblTitulo.setOpaque(true);
         cardGbc.gridy = 1;
-        cardGbc.insets = new Insets(0, 0, 8, 0);
+        cardGbc.insets = new Insets(0, 0, 6, 0);
         cardPanel.add(lblTitulo, cardGbc);
         
         // Subtítulo elegante
@@ -147,7 +147,7 @@ public class PDVLoginSwingController {
         lblSubtitulo.setForeground(new Color(127, 140, 141)); // Cinza suave
         lblSubtitulo.setOpaque(true);
         cardGbc.gridy = 2;
-        cardGbc.insets = new Insets(0, 0, 40, 0);
+        cardGbc.insets = new Insets(0, 0, 35, 0);
         cardPanel.add(lblSubtitulo, cardGbc);
         
         // Campo Usuário
@@ -174,6 +174,7 @@ public class PDVLoginSwingController {
             }
         };
         txtUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+        txtUsuario.setPreferredSize(new Dimension(450, 45));
         txtUsuario.setBackground(Color.WHITE);
         txtUsuario.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(149, 165, 166), 2), // Cinza azulado suave
@@ -183,7 +184,7 @@ public class PDVLoginSwingController {
         usuarioPanel.add(txtUsuario, BorderLayout.CENTER);
         
         cardGbc.gridy = 3;
-        cardGbc.insets = new Insets(0, 0, 20, 0);
+        cardGbc.insets = new Insets(0, 0, 15, 0);
         cardPanel.add(usuarioPanel, cardGbc);
         
         // Campo Senha
@@ -210,6 +211,7 @@ public class PDVLoginSwingController {
             }
         };
         txtSenha.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+        txtSenha.setPreferredSize(new Dimension(450, 45));
         txtSenha.setBackground(Color.WHITE);
         txtSenha.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(149, 165, 166), 2), // Cinza azulado suave
@@ -219,11 +221,11 @@ public class PDVLoginSwingController {
         senhaPanel.add(txtSenha, BorderLayout.CENTER);
         
         cardGbc.gridy = 4;
-        cardGbc.insets = new Insets(0, 0, 20, 0);
+        cardGbc.insets = new Insets(0, 0, 15, 0);
         cardPanel.add(senhaPanel, cardGbc);
         
         // Botões
-        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 20, 0));
+        JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 30, 0));
         buttonPanel.setOpaque(false);
         
         btnLogin = new JButton("🚀 Entrar");
@@ -257,42 +259,13 @@ public class PDVLoginSwingController {
             }
         });
         
-        btnSair = new JButton("❌ Sair");
-        btnSair.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnSair.setBackground(new Color(211, 115, 115)); // Vermelho suave
-        btnSair.setForeground(new Color(255, 255, 255)); // Branco elegante
-        btnSair.setFocusPainted(false);
-        btnSair.setOpaque(true);
-        btnSair.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(185, 95, 95), 2), // Vermelho borda suave
-            BorderFactory.createEmptyBorder(12, 25, 12, 25)
-        ));
-        btnSair.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnSair.setOpaque(true);
-        
-        // Efeito hover elegante
-        btnSair.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnSair.setBackground(new Color(185, 95, 95)); // Vermelho mais escuro suave
-                btnSair.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(165, 75, 75), 2), // Vermelho ainda mais escuro
-                    BorderFactory.createEmptyBorder(12, 25, 12, 25)
-                ));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnSair.setBackground(new Color(211, 115, 115)); // Vermelho suave
-                btnSair.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(185, 95, 95), 2), // Vermelho borda suave
-                    BorderFactory.createEmptyBorder(12, 25, 12, 25)
-                ));
-            }
-        });
+        btnSair = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Sair", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         
         buttonPanel.add(btnLogin);
         buttonPanel.add(btnSair);
         
         cardGbc.gridy = 5;
-        cardGbc.insets = new Insets(0, 0, 20, 0);
+        cardGbc.insets = new Insets(0, 0, 25, 0);
         cardPanel.add(buttonPanel, cardGbc);
         
         // Status
@@ -302,7 +275,7 @@ public class PDVLoginSwingController {
         lblStatus.setOpaque(true);
         lblStatus.setBackground(new Color(240, 240, 240)); // Cinza claro
         cardGbc.gridy = 6;
-        cardGbc.insets = new Insets(10, 0, 0, 0);
+        cardGbc.insets = new Insets(15, 0, 0, 0);
         cardPanel.add(lblStatus, cardGbc);
         
         // Adicionar card ao painel principal

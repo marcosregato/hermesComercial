@@ -1,11 +1,11 @@
 package com.br.hermescomercial.controller;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
-import java.util.List;
+
 
 /**
  * Controller de Cadastro de Produtos em SWING
@@ -115,10 +115,25 @@ public class PDVProdutoCadastroSwingController {
         gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0;
         formPanel.add(new JLabel("Preço (R$):"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtPreco = new JTextField();
+        txtPreco = new JTextField() {
+            @Override
+            public void processKeyEvent(KeyEvent e) {
+                char c = e.getKeyChar();
+                
+                // Permitir apenas números, vírgula, ponto, backspace, delete, e teclas de controle
+                if (Character.isDigit(c) || c == ',' || c == '.' || 
+                    c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE ||
+                    c == KeyEvent.VK_LEFT || c == KeyEvent.VK_RIGHT ||
+                    c == KeyEvent.VK_HOME || c == KeyEvent.VK_END) {
+                    super.processKeyEvent(e);
+                } else {
+                    e.consume(); // Ignorar outros caracteres
+                }
+            }
+        };
         txtPreco.setFont(new Font("Arial", Font.PLAIN, 12));
         txtPreco.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        txtPreco.setToolTipText("Digite o preço do produto");
+        txtPreco.setToolTipText("Digite o preço do produto (ex: 10,50 ou 100,00)");
         formPanel.add(txtPreco, gbc);
         
         // Estoque
@@ -315,27 +330,79 @@ public class PDVProdutoCadastroSwingController {
      */
     private void carregarCategorias() {
         try {
+            System.out.println("=== INICIANDO CARREGAMENTO DE CATEGORIAS ===");
+            
             // Limpar categorias existentes
             txtCategoria.removeAllItems();
+            System.out.println("✅ Categorias existentes removidas");
             
-            // Adicionar categorias padrão do sistema
-            String[] categorias = {
-                "Informática", "Periféricos", "Monitores", "Acessórios",
-                "Móveis", "Rede", "Armazenamento", "Software",
-                "Impressão", "Gamer"
-            };
+            // Buscar categorias únicas dos produtos cadastrados
+            java.util.Set<String> categoriasUnicas = new java.util.TreeSet<>();
+            
+            try {
+                System.out.println("📊 Buscando produtos no banco de dados...");
+                
+                // Usar ProdutoService para buscar categorias dos produtos
+                com.br.hermescomercial.service.ProdutoService produtoService = new com.br.hermescomercial.service.ProdutoService();
+                java.util.List<com.br.hermescomercial.model.Produto> produtos = produtoService.listar();
+                
+                System.out.println("📦 Encontrados " + produtos.size() + " produtos no banco");
+                
+                // Extrair categorias únicas dos produtos
+                for (com.br.hermescomercial.model.Produto produto : produtos) {
+                    String categoria = produto.getCategoria();
+                    if (categoria != null && !categoria.trim().isEmpty()) {
+                        categoriasUnicas.add(categoria.trim());
+                        System.out.println("📋 Categoria encontrada: " + categoria.trim());
+                    }
+                }
+                
+                System.out.println("🔢 Total de categorias únicas encontradas: " + categoriasUnicas.size());
+                
+            } catch (Exception e) {
+                System.err.println("❌ Erro ao buscar categorias do banco: " + e.getMessage());
+                e.printStackTrace();
+            }
+            
+            // Se não encontrou categorias no banco, adicionar categorias padrão
+            if (categoriasUnicas.isEmpty()) {
+                System.out.println("⚠️ Nenhuma categoria encontrada no banco, usando categorias padrão...");
+                String[] categoriasPadrao = {
+                    "Informática", "Periféricos", "Monitores", "Acessórios",
+                    "Móveis", "Rede", "Armazenamento", "Software",
+                    "Impressão", "Gamer"
+                };
+                for (String categoria : categoriasPadrao) {
+                    categoriasUnicas.add(categoria);
+                    System.out.println("📋 Categoria padrão adicionada: " + categoria);
+                }
+            }
             
             // Popular o JComboBox com as categorias
-            for (String categoria : categorias) {
+            System.out.println("🔄 Populando JComboBox com categorias...");
+            for (String categoria : categoriasUnicas) {
                 txtCategoria.addItem(categoria);
+                System.out.println("✅ Categoria adicionada ao combo: " + categoria);
             }
             
             // Selecionar primeira categoria por padrão
             if (txtCategoria.getItemCount() > 0) {
                 txtCategoria.setSelectedIndex(0);
+                System.out.println("🎯 Primeira categoria selecionada: " + txtCategoria.getSelectedItem());
+                System.out.println("📊 Total de categorias no JComboBox: " + txtCategoria.getItemCount());
+            } else {
+                System.out.println("❌ Nenhuma categoria foi adicionada ao JComboBox!");
             }
+            
+            System.out.println("=== CARREGAMENTO DE CATEGORIAS CONCLUÍDO ===");
+            
         } catch (Exception e) {
-            System.err.println("Erro ao carregar categorias: " + e.getMessage());
+            System.err.println("❌ Erro ao carregar categorias: " + e.getMessage());
+            e.printStackTrace();
+            // Adicionar categoria padrão em caso de erro
+            txtCategoria.addItem("Geral");
+            txtCategoria.setSelectedIndex(0);
+            System.out.println("🔄 Categoria de fallback 'Geral' adicionada devido a erro");
         }
     }
 }

@@ -34,12 +34,13 @@ public class PDVFecharCaixaSwingController {
     
     public PDVFecharCaixaSwingController() {
         this.movimentacoes = new ArrayList<>(50); // Capacidade inicial para melhor performance
+        com.br.hermescomercial.theme.ModernTheme.applyModernTheme();
         initializeUI();
         carregarDadosExemplo();
     }
     
     private void initializeUI() {
-        frame = new JFrame("PDV - Fechamento de Caixa v2.0");
+        frame = new JFrame("PDV - Fechamento de Caixa v2.1.0 - Premium");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1000, 700);
         frame.setLocationRelativeTo(null);
@@ -182,6 +183,10 @@ public class PDVFecharCaixaSwingController {
         resumoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         resumoTable.getTableHeader().setReorderingAllowed(false);
         
+        // Desabilitar edição da tabela
+        resumoTable.setDefaultEditor(Object.class, null);
+        resumoTable.setEnabled(false);
+        
         // Configurar larguras das colunas
         resumoTable.getColumnModel().getColumn(0).setPreferredWidth(100);
         resumoTable.getColumnModel().getColumn(1).setPreferredWidth(200);
@@ -204,9 +209,7 @@ public class PDVFecharCaixaSwingController {
         btnRecalcular.setForeground(Color.WHITE);
         btnRecalcular.addActionListener(this::recalcular);
         
-        JButton btnImprimir = new JButton("Imprimir Relatório");
-        btnImprimir.setBackground(new Color(0, 123, 255));
-        btnImprimir.setForeground(Color.WHITE);
+        JButton btnImprimir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🖨️ Imprimir Relatório", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnImprimir.addActionListener(this::imprimirRelatorio);
         
         JButton btnConfirmar = new JButton("Confirmar Fechamento");
@@ -214,9 +217,7 @@ public class PDVFecharCaixaSwingController {
         btnConfirmar.setForeground(Color.WHITE);
         btnConfirmar.addActionListener(this::confirmarFechamento);
         
-        JButton btnCancelar = new JButton("Cancelar");
-        btnCancelar.setBackground(new Color(220, 53, 69));
-        btnCancelar.setForeground(Color.WHITE);
+        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnCancelar.addActionListener(e -> frame.dispose());
         
         panel.add(btnRecalcular);
@@ -262,13 +263,14 @@ public class PDVFecharCaixaSwingController {
     }
     
     private void confirmarFechamento(ActionEvent e) {
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
             "Deseja confirmar o fechamento do caixa?\n\n" +
             "Saldo Final: " + lblSaldoFinal.getText() + "\n" +
             "Total de Movimentações: " + movimentacoes.size(),
-            "Confirmar Fechamento", JOptionPane.YES_NO_OPTION);
+            "Confirmar Fechamento", 
+            new String[]{"Sim", "Não"}, 0);
             
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             JOptionPane.showMessageDialog(frame, 
                 "Fechamento confirmado com sucesso!\n\n" +
                 "Relatório gerado e caixa encerrado.\n" +

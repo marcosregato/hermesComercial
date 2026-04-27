@@ -1,5 +1,4 @@
 com/br/hermescomercial/controller/PDVProdutosUnificadoSwingController$2.class
-com/br/hermescomercial/controller/PDVLoginSwingController$12.class
 com/br/hermescomercial/controller/PDVLoginSwingController.class
 com/br/hermescomercial/controller/PDVLoginSwingController$6.class
 com/br/hermescomercial/dao/ClienteDaoAdapter.class
@@ -21,6 +20,7 @@ com/br/hermescomercial/controller/PDVRelatoriosSwingController.class
 com/br/hermescomercial/theme/ModernTheme$5.class
 com/br/hermescomercial/cache/CacheService.class
 com/br/hermescomercial/controller/PDVRelatoriosSwingController$1.class
+com/br/hermescomercial/theme/ModernTheme$8.class
 com/br/hermescomercial/MainApplication.class
 com/br/hermescomercial/dao/ProdutoDaoAdapter.class
 com/br/hermescomercial/business/pdv/ImpressoraManager.class
@@ -33,11 +33,11 @@ com/br/hermescomercial/model/VendaPDV.class
 com/br/hermescomercial/service/ProdutoServiceRefactored.class
 com/br/hermescomercial/model/MovimentacaoCaixa.class
 com/br/hermescomercial/injection/UsuarioRepositoryImpl.class
-com/br/hermescomercial/controller/PDVConfiguracoesSwingController$2.class
 com/br/hermescomercial/repository/UsuarioRepository.class
 com/br/hermescomercial/controller/PDVFecharCaixaSwingController$Movimentacao.class
 com/br/hermescomercial/controller/PDVLoginSwingController$1.class
 com/br/hermescomercial/controller/TestRelatorios.class
+com/br/hermescomercial/theme/ModernTheme$7.class
 com/br/hermescomercial/controller/PDVConfiguracoesSwingController.class
 com/br/hermescomercial/util/LoggerUtil.class
 com/br/hermescomercial/dao/ProdutoExcelDao.class
@@ -59,6 +59,7 @@ com/br/hermescomercial/exception/ExceptionHandler.class
 com/br/hermescomercial/config/EnvironmentConfig.class
 com/br/hermescomercial/service/ClienteServiceRefactored.class
 com/br/hermescomercial/controller/PDVProdutosUnificadoSwingController$3.class
+com/br/hermescomercial/theme/ModernTheme$6.class
 com/br/hermescomercial/model/ImpressoraNaoFiscal.class
 com/br/hermescomercial/dao/UsuarioDao.class
 com/br/hermescomercial/model/Pagamento.class
@@ -97,6 +98,7 @@ com/br/hermescomercial/model/Cliente.class
 com/br/hermescomercial/dao/ClienteExcelDao.class
 com/br/hermescomercial/Repository/RepositoryAtributo.class
 com/br/hermescomercial/injection/ProdutoRepositoryImpl.class
+com/br/hermescomercial/controller/PDVRelatoriosSwingController$2.class
 com/br/hermescomercial/controller/PDVLoginSwingController$4.class
 com/br/hermescomercial/service/DesktopService.class
 com/br/hermescomercial/controller/PDVLoginSwingController$10.class
@@ -130,4 +132,5 @@ com/br/hermescomercial/service/VendaService$VendaResumo.class
 com/br/hermescomercial/controller/PDVProdutosUnificadoSwingController.class
 com/br/hermescomercial/controller/PDVVendaSwingController$2.class
 com/br/hermescomercial/model/Estoque.class
+com/br/hermescomercial/controller/PDVCaixaSwingController$1.class
 com/br/hermescomercial/business/pdv/CupomFiscalManager.class

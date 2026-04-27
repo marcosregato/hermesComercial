@@ -142,6 +142,10 @@ public class PDVVendaSwingController {
         produtosTable.getTableHeader().setBackground(new Color(41, 128, 185));
         produtosTable.getTableHeader().setForeground(Color.WHITE);
         
+        // Desabilitar edição da tabela
+        produtosTable.setDefaultEditor(Object.class, null);
+        produtosTable.setEnabled(false);
+        
         // Configurar larguras das colunas
         produtosTable.getColumnModel().getColumn(0).setPreferredWidth(80);
         produtosTable.getColumnModel().getColumn(1).setPreferredWidth(350);
@@ -159,22 +163,10 @@ public class PDVVendaSwingController {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         buttonPanel.setBackground(new Color(245, 245, 250));
         
-        JButton btnRemover = new JButton("🗑️ Remover Item");
-        btnRemover.setBackground(new Color(220, 53, 69));
-        btnRemover.setForeground(Color.WHITE);
-        btnRemover.setFont(new Font("Arial", Font.BOLD, 12));
-        btnRemover.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        btnRemover.setFocusPainted(false);
-        btnRemover.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton btnRemover = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🗑️ Remover Item", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnRemover.addActionListener(this::removerItem);
         
-        JButton btnLimpar = new JButton("🔄 Limpar Venda");
-        btnLimpar.setBackground(new Color(255, 193, 7));
-        btnLimpar.setForeground(Color.BLACK);
-        btnLimpar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnLimpar.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        btnLimpar.setFocusPainted(false);
-        btnLimpar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar Venda", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnLimpar.addActionListener(this::limparVenda);
         
         buttonPanel.add(btnRemover);
@@ -263,31 +255,13 @@ public class PDVVendaSwingController {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         buttonPanel.setBackground(new Color(255, 255, 255));
         
-        JButton btnAdicionar = new JButton("➕ Adicionar Item");
-        btnAdicionar.setBackground(new Color(40, 167, 69));
-        btnAdicionar.setForeground(Color.WHITE);
-        btnAdicionar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnAdicionar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnAdicionar.setFocusPainted(false);
-        btnAdicionar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton btnAdicionar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("➕ Adicionar Item", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnAdicionar.addActionListener(this::adicionarProduto);
         
-        JButton btnBuscar = new JButton("🔍 Buscar Produto");
-        btnBuscar.setBackground(new Color(23, 162, 184));
-        btnBuscar.setForeground(Color.WHITE);
-        btnBuscar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnBuscar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnBuscar.setFocusPainted(false);
-        btnBuscar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton btnBuscar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar Produto", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnBuscar.addActionListener(e -> buscarPorDescricao(e));
         
-        JButton btnEnter = new JButton("⏎ Enter");
-        btnEnter.setBackground(new Color(108, 117, 125));
-        btnEnter.setForeground(Color.WHITE);
-        btnEnter.setFont(new Font("Arial", Font.BOLD, 12));
-        btnEnter.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-        btnEnter.setFocusPainted(false);
-        btnEnter.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton btnEnter = com.br.hermescomercial.theme.ModernTheme.createPastelButton("⏎ Enter", com.br.hermescomercial.theme.ModernTheme.PASTEL_CYAN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnEnter.addActionListener(this::adicionarProduto);
         
         buttonPanel.add(btnAdicionar);
@@ -365,13 +339,7 @@ public class PDVVendaSwingController {
         panel.add(Box.createVerticalStrut(25));
         
         // Botões de ação
-        JButton btnFinalizar = new JButton("✅ Finalizar Venda");
-        btnFinalizar.setBackground(new Color(40, 167, 69));
-        btnFinalizar.setForeground(Color.WHITE);
-        btnFinalizar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnFinalizar.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
-        btnFinalizar.setFocusPainted(false);
-        btnFinalizar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton btnFinalizar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("✅ Finalizar Venda", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnFinalizar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnFinalizar.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnFinalizar.getPreferredSize().height));
         btnFinalizar.addActionListener(this::finalizarVenda);
@@ -379,13 +347,7 @@ public class PDVVendaSwingController {
         panel.add(btnFinalizar);
         panel.add(Box.createVerticalStrut(10));
         
-        JButton btnCancelar = new JButton("❌ Cancelar Venda");
-        btnCancelar.setBackground(new Color(220, 53, 69));
-        btnCancelar.setForeground(Color.WHITE);
-        btnCancelar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnCancelar.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
-        btnCancelar.setFocusPainted(false);
-        btnCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar Venda", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnCancelar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnCancelar.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnCancelar.getPreferredSize().height));
         btnCancelar.addActionListener(this::cancelarVenda);
@@ -452,10 +414,11 @@ public class PDVVendaSwingController {
             return;
         }
         
-        int confirm = JOptionPane.showConfirmDialog(frame, 
-            "Deseja remover este item?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+            "Deseja remover este item?", "Confirmar", 
+            new String[]{"Sim", "Não"}, 0);
             
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             itens.remove(selectedRow);
             tableModel.removeRow(selectedRow);
             atualizarResumo();
@@ -463,10 +426,11 @@ public class PDVVendaSwingController {
     }
     
     private void limparVenda(ActionEvent e) {
-        int confirm = JOptionPane.showConfirmDialog(frame, 
-            "Deseja limpar todos os itens da venda?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+            "Deseja limpar todos os itens da venda?", "Confirmar", 
+            new String[]{"Sim", "Não"}, 0);
             
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             itens.clear();
             tableModel.setRowCount(0);
             atualizarResumo();
@@ -483,11 +447,12 @@ public class PDVVendaSwingController {
         
         BigDecimal total = calcularTotal();
         
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
             String.format("Confirmar finalização da venda?\n\nTotal: R$ %.2f", total), 
-            "Confirmar Venda", JOptionPane.YES_NO_OPTION);
+            "Confirmar Venda", 
+            new String[]{"Sim", "Não"}, 0);
             
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             JOptionPane.showMessageDialog(frame, 
                 "Venda finalizada com sucesso!\n\n" +
                 "Total: R$ " + String.format("%.2f", total) + "\n" +
@@ -501,10 +466,11 @@ public class PDVVendaSwingController {
     }
     
     private void cancelarVenda(ActionEvent e) {
-        int confirm = JOptionPane.showConfirmDialog(frame, 
-            "Deseja cancelar esta venda?", "Cancelar Venda", JOptionPane.YES_NO_OPTION);
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+            "Deseja cancelar esta venda?", "Cancelar Venda", 
+            new String[]{"Sim", "Não"}, 0);
             
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             frame.dispose();
         }
     }

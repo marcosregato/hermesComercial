@@ -38,7 +38,7 @@ public class MainApplication {
         // Executar na thread de UI
         SwingUtilities.invokeLater(() -> {
             try {
-                System.out.println("Iniciando Hermes Comercial PDV v2.1.2");
+                System.out.println("Iniciando Hermes Comercial PDV v2.1.4");
                 
                 // Testar conexão com banco de dados
                 System.out.println("Verificando conexão com banco de dados...");

@@ -134,16 +134,12 @@ public class PDVProdutosSwingController {
         
         // Botões
         gbc.gridx = 6; gbc.gridy = 0; gbc.gridheight = 2;
-        JButton btnBuscar = new JButton("Buscar");
-        btnBuscar.setBackground(new Color(40, 167, 69));
-        btnBuscar.setForeground(Color.WHITE);
+        JButton btnBuscar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnBuscar.addActionListener(this::buscarProdutos);
         filterPanel.add(btnBuscar, gbc);
         
         gbc.gridx = 7; gbc.gridy = 0; gbc.gridheight = 1;
-        JButton btnLimpar = new JButton("Limpar");
-        btnLimpar.setBackground(new Color(255, 193, 7));
-        btnLimpar.setForeground(Color.BLACK);
+        JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnLimpar.addActionListener(this::limparFiltros);
         filterPanel.add(btnLimpar, gbc);
         
@@ -311,11 +307,12 @@ public class PDVProdutosSwingController {
         
         Produto produto = produtos.get(selectedRow);
         
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
             "Deseja excluir o produto:\n" + produto.getDescricao() + "?",
-            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+            "Confirmar Exclusão", 
+            new String[]{"Sim", "Não"}, 0);
             
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirm == 0) {
             produtos.remove(selectedRow);
             tableModel.removeRow(selectedRow);
             JOptionPane.showMessageDialog(frame, "Produto excluído com sucesso!", 

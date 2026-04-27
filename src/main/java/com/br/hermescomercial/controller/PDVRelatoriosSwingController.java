@@ -251,6 +251,11 @@ public class PDVRelatoriosSwingController {
         }
         
         JTable table = new JTable(tableModel);
+        
+        // Desabilitar edição da tabela
+        table.setDefaultEditor(Object.class, null);
+        table.setEnabled(false);
+        
         JScrollPane scrollPane = new JScrollPane(table);
         panel.add(scrollPane, BorderLayout.CENTER);
         
@@ -313,6 +318,11 @@ public class PDVRelatoriosSwingController {
         }
         
         JTable vendasTable = new JTable(vendasModel);
+        
+        // Desabilitar edição da tabela
+        vendasTable.setDefaultEditor(Object.class, null);
+        vendasTable.setEnabled(false);
+        
         JScrollPane vendasScrollPane = new JScrollPane(vendasTable);
         panel.add(vendasScrollPane, BorderLayout.CENTER);
         
@@ -342,6 +352,11 @@ public class PDVRelatoriosSwingController {
         }
         
         JTable produtosTable = new JTable(produtosModel);
+        
+        // Desabilitar edição da tabela
+        produtosTable.setDefaultEditor(Object.class, null);
+        produtosTable.setEnabled(false);
+        
         JScrollPane produtosScrollPane = new JScrollPane(produtosTable);
         panel.add(produtosScrollPane, BorderLayout.CENTER);
         

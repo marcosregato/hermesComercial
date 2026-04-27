@@ -31,7 +31,7 @@ public class PDVProdutosUnificadoSwingController {
     private JTextField txtDescricao;
     private JTextField txtPreco;
     private JTextField txtEstoque;
-    private JTextField txtCategoria;
+    private JComboBox<String> txtCategoria;
     private JTextArea txtObservacoes;
     
     // Lista de produtos (simulação)
@@ -181,6 +181,10 @@ public class PDVProdutosUnificadoSwingController {
         produtosTable.setGridColor(new Color(236, 240, 241)); // Grade suave
         produtosTable.setBackground(Color.WHITE);
         
+        // Desabilitar edição da tabela
+        produtosTable.setDefaultEditor(Object.class, null);
+        produtosTable.setEnabled(false);
+        
         // Configurar header da tabela com cores suaves
         produtosTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12)); // Fonte suave
         produtosTable.getTableHeader().setBackground(new Color(149, 165, 166)); // Cinza azulado suave
@@ -276,10 +280,25 @@ public class PDVProdutosUnificadoSwingController {
         gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0;
         formPanel.add(new JLabel("Preço (R$):"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtPreco = new JTextField();
+        txtPreco = new JTextField() {
+            @Override
+            public void processKeyEvent(java.awt.event.KeyEvent e) {
+                char c = e.getKeyChar();
+                
+                // Permitir apenas números, vírgula, ponto, backspace, delete, e teclas de controle
+                if (Character.isDigit(c) || c == ',' || c == '.' || 
+                    c == java.awt.event.KeyEvent.VK_BACK_SPACE || c == java.awt.event.KeyEvent.VK_DELETE ||
+                    c == java.awt.event.KeyEvent.VK_LEFT || c == java.awt.event.KeyEvent.VK_RIGHT ||
+                    c == java.awt.event.KeyEvent.VK_HOME || c == java.awt.event.KeyEvent.VK_END) {
+                    super.processKeyEvent(e);
+                } else {
+                    e.consume(); // Ignorar outros caracteres
+                }
+            }
+        };
         txtPreco.setFont(new Font("Arial", Font.PLAIN, 12));
         txtPreco.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        txtPreco.setToolTipText("Digite o preço do produto");
+        txtPreco.setToolTipText("Digite o preço do produto (ex: 10,50 ou 100,00)");
         formPanel.add(txtPreco, gbc);
         
         // Estoque
@@ -296,11 +315,14 @@ public class PDVProdutosUnificadoSwingController {
         gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0;
         formPanel.add(new JLabel("Categoria:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtCategoria = new JTextField();
+        txtCategoria = new JComboBox<>();
         txtCategoria.setFont(new Font("Arial", Font.PLAIN, 12));
         txtCategoria.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        txtCategoria.setToolTipText("Digite a categoria do produto");
+        txtCategoria.setToolTipText("Selecione a categoria do produto");
         formPanel.add(txtCategoria, gbc);
+        
+        // Carregar categorias do banco de dados
+        carregarCategorias();
         
         // Observações
         gbc.gridx = 0; gbc.gridy = 5; gbc.weightx = 0;
@@ -322,11 +344,11 @@ public class PDVProdutosUnificadoSwingController {
         
         JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Fechar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         
         btnLimpar.addActionListener(e -> limparCampos());
         btnSalvar.addActionListener(this::salvarProduto);
-        btnCancelar.addActionListener(e -> limparCampos());
+        btnCancelar.addActionListener(e -> frame.dispose());
         
         buttonPanel.add(btnLimpar);
         buttonPanel.add(btnSalvar);
@@ -448,7 +470,7 @@ public class PDVProdutosUnificadoSwingController {
             String descricao = txtDescricao.getText().trim();
             BigDecimal preco = new BigDecimal(txtPreco.getText().trim().replace(",", "."));
             int estoque = Integer.parseInt(txtEstoque.getText().trim());
-            String categoria = txtCategoria.getText().trim();
+            String categoria = (String) txtCategoria.getSelectedItem();
             // String observacoes = txtObservacoes.getText().trim(); // Não utilizado no momento
             
             // Verificar se código já existe (apenas para novos produtos)
@@ -609,7 +631,7 @@ public class PDVProdutosUnificadoSwingController {
         }
         
         // Validar categoria
-        if (txtCategoria.getText().trim().isEmpty()) {
+        if (txtCategoria.getSelectedItem() == null || ((String) txtCategoria.getSelectedItem()).trim().isEmpty()) {
             JOptionPane.showMessageDialog(frame, 
                 "A categoria do produto é obrigatória!",
                 "Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
@@ -625,7 +647,7 @@ public class PDVProdutosUnificadoSwingController {
         txtDescricao.setText("");
         txtPreco.setText("");
         txtEstoque.setText("");
-        txtCategoria.setText("");
+        txtCategoria.setSelectedIndex(0);
         txtObservacoes.setText("");
         txtCodigo.requestFocus();
     }
@@ -658,7 +680,7 @@ public class PDVProdutosUnificadoSwingController {
             txtDescricao.setText(produtoSelecionado.getDescricao());
             txtPreco.setText(String.valueOf(produtoSelecionado.getPreco()));
             txtEstoque.setText(String.valueOf(produtoSelecionado.getEstoque()));
-            txtCategoria.setText(produtoSelecionado.getCategoria());
+            txtCategoria.setSelectedItem(produtoSelecionado.getCategoria());
             txtDescricao.requestFocus();
             
             JOptionPane.showMessageDialog(frame, 
@@ -884,6 +906,87 @@ public class PDVProdutosUnificadoSwingController {
             } else if (selectedIndex == 1) { // Cadastrar Produto
                 mainPanel.setBackground(new Color(250, 230, 230)); // Vermelho escuro suave
             }
+        }
+    }
+    
+    /**
+     * Carrega as categorias cadastradas no banco de dados
+     */
+    private void carregarCategorias() {
+        try {
+            System.out.println("=== INICIANDO CARREGAMENTO DE CATEGORIAS EM GESTÃO DE PRODUTOS ===");
+            
+            // Limpar categorias existentes
+            txtCategoria.removeAllItems();
+            System.out.println("✅ Categorias existentes removidas");
+            
+            // Buscar categorias únicas dos produtos cadastrados
+            java.util.Set<String> categoriasUnicas = new java.util.TreeSet<>();
+            
+            try {
+                System.out.println("📊 Buscando produtos no banco de dados...");
+                
+                // Usar ProdutoService para buscar categorias dos produtos
+                com.br.hermescomercial.service.ProdutoService produtoService = new com.br.hermescomercial.service.ProdutoService();
+                java.util.List<com.br.hermescomercial.model.Produto> produtos = produtoService.listar();
+                
+                System.out.println("📦 Encontrados " + produtos.size() + " produtos no banco");
+                
+                // Extrair categorias únicas dos produtos
+                for (com.br.hermescomercial.model.Produto produto : produtos) {
+                    String categoria = produto.getCategoria();
+                    if (categoria != null && !categoria.trim().isEmpty()) {
+                        categoriasUnicas.add(categoria.trim());
+                        System.out.println("📋 Categoria encontrada: " + categoria.trim());
+                    }
+                }
+                
+                System.out.println("🔢 Total de categorias únicas encontradas: " + categoriasUnicas.size());
+                
+            } catch (Exception e) {
+                System.err.println("❌ Erro ao buscar categorias do banco: " + e.getMessage());
+                e.printStackTrace();
+            }
+            
+            // Se não encontrou categorias no banco, adicionar categorias padrão
+            if (categoriasUnicas.isEmpty()) {
+                System.out.println("⚠️ Nenhuma categoria encontrada no banco, usando categorias padrão...");
+                String[] categoriasPadrao = {
+                    "Informática", "Periféricos", "Monitores", "Acessórios",
+                    "Móveis", "Rede", "Armazenamento", "Software",
+                    "Impressão", "Gamer"
+                };
+                for (String categoria : categoriasPadrao) {
+                    categoriasUnicas.add(categoria);
+                    System.out.println("📋 Categoria padrão adicionada: " + categoria);
+                }
+            }
+            
+            // Popular o JComboBox com as categorias
+            System.out.println("🔄 Populando JComboBox com categorias...");
+            for (String categoria : categoriasUnicas) {
+                txtCategoria.addItem(categoria);
+                System.out.println("✅ Categoria adicionada ao combo: " + categoria);
+            }
+            
+            // Selecionar primeira categoria por padrão
+            if (txtCategoria.getItemCount() > 0) {
+                txtCategoria.setSelectedIndex(0);
+                System.out.println("🎯 Primeira categoria selecionada: " + txtCategoria.getSelectedItem());
+                System.out.println("📊 Total de categorias no JComboBox: " + txtCategoria.getItemCount());
+            } else {
+                System.out.println("❌ Nenhuma categoria foi adicionada ao JComboBox!");
+            }
+            
+            System.out.println("=== CARREGAMENTO DE CATEGORIAS CONCLUÍDO EM GESTÃO DE PRODUTOS ===");
+            
+        } catch (Exception e) {
+            System.err.println("❌ Erro ao carregar categorias: " + e.getMessage());
+            e.printStackTrace();
+            // Adicionar categoria padrão em caso de erro
+            txtCategoria.addItem("Geral");
+            txtCategoria.setSelectedIndex(0);
+            System.out.println("🔄 Categoria de fallback 'Geral' adicionada devido a erro");
         }
     }
 }

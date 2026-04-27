@@ -314,6 +314,10 @@ public class PDVConfiguracoesSwingController {
         usuariosModel = new DefaultTableModel(columns, 0);
         usuariosTable = new JTable(usuariosModel);
         
+        // Desabilitar edição da tabela
+        usuariosTable.setDefaultEditor(Object.class, null);
+        usuariosTable.setEnabled(false);
+        
         JScrollPane scrollPane = new JScrollPane(usuariosTable);
         panel.add(scrollPane, BorderLayout.CENTER);
         
