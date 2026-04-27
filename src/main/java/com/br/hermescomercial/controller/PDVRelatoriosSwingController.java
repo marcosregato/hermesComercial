@@ -783,9 +783,9 @@ public class PDVRelatoriosSwingController {
         // Aplicar destaque visual na aba ativa
         for (int i = 0; i < tabbedPane.getTabCount(); i++) {
             if (i == selectedIndex) {
-                // Aba ativa - fundo azul escuro e texto branco
+                // Aba ativa - fundo azul escuro e texto preto (letra escura)
                 tabbedPane.setBackgroundAt(i, new Color(70, 130, 180)); // Steel Blue (mais escuro)
-                tabbedPane.setForegroundAt(i, Color.WHITE);
+                tabbedPane.setForegroundAt(i, Color.BLACK); // Letra escura
                 
                 // Adicionar indicador visual
                 String activeTitle = "📌 " + tabTitle + " 📌";
