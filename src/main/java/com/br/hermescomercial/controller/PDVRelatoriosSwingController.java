@@ -676,17 +676,54 @@ public class PDVRelatoriosSwingController {
     }
     
     /**
-     * Destaca a aba ativa
+     * Destaca a aba ativa com destaque visual aprimorado
      */
     private void updateTabHighlight() {
         int selectedIndex = tabbedPane.getSelectedIndex();
         String tabTitle = tabbedPane.getTitleAt(selectedIndex);
         
-        // Atualizar título da janela com aba ativa
-        frame.setTitle("PDV - Relatórios v2.1.0 - Premium [" + tabTitle + "]");
+        // Atualizar título da janela com aba ativa e destaque
+        frame.setTitle("🔵 PDV - Relatórios v2.1.0 - Premium [📌 " + tabTitle + " ATIVA]");
         
-        // Log da aba ativa
-        System.out.println("Aba ativa: " + tabTitle + " (índice: " + selectedIndex + ")");
+        // Aplicar destaque visual na aba ativa
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            if (i == selectedIndex) {
+                // Aba ativa - fundo azul claro e texto em negrito
+                tabbedPane.setBackgroundAt(i, new Color(173, 216, 230)); // Light Blue
+                tabbedPane.setForegroundAt(i, Color.BLACK);
+                
+                // Adicionar indicador visual
+                String activeTitle = "📌 " + tabTitle + " 📌";
+                tabbedPane.setTitleAt(i, activeTitle);
+            } else {
+                // Abas inativas - fundo cinza claro
+                tabbedPane.setBackgroundAt(i, new Color(240, 240, 240)); // Light Gray
+                tabbedPane.setForegroundAt(i, Color.DARK_GRAY);
+                
+                // Remover indicador visual
+                String originalTitle = tabbedPane.getTitleAt(i).replace("📌 ", "").replace(" 📌", "");
+                tabbedPane.setTitleAt(i, originalTitle);
+            }
+        }
+        
+        // Log da aba ativa com destaque
+        System.out.println("🔵 ABA ATIVA: " + tabTitle + " (índice: " + selectedIndex + ")");
+        
+        // Feedback visual adicional
+        if (frame.getContentPane() instanceof JPanel) {
+            JPanel mainPanel = (JPanel) frame.getContentPane();
+            if (selectedIndex == 0) { // Período
+                mainPanel.setBackground(new Color(245, 250, 255)); // Azul muito claro
+            } else if (selectedIndex == 1) { // Resumo Diário
+                mainPanel.setBackground(new Color(255, 245, 245)); // Vermelho muito claro
+            } else if (selectedIndex == 2) { // Relatório de Vendas
+                mainPanel.setBackground(new Color(245, 255, 245)); // Verde muito claro
+            } else if (selectedIndex == 3) { // Relatório de Produtos
+                mainPanel.setBackground(new Color(255, 255, 245)); // Amarelo muito claro
+            } else if (selectedIndex == 4) { // Relatório Financeiro
+                mainPanel.setBackground(new Color(255, 245, 255)); // Rosa muito claro
+            }
+        }
     }
     
     /**
