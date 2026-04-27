@@ -103,6 +103,12 @@ public class PDVRelatoriosSwingController {
         
         tabbedPane = new JTabbedPane();
         
+        // Adicionar listener para destacar aba ativa
+        tabbedPane.addChangeListener(e -> updateTabHighlight());
+        
+        // Aba de Período
+        tabbedPane.addTab("Período", createPeriodoPanel());
+        
         // Aba de Resumo
         tabbedPane.addTab("Resumo Diário", createResumoPanel());
         
@@ -115,7 +121,66 @@ public class PDVRelatoriosSwingController {
         // Aba de Financeiro
         tabbedPane.addTab("Relatório Financeiro", createFinanceiroPanel());
         
+        // Destacar primeira aba
+        updateTabHighlight();
+        
         panel.add(tabbedPane, BorderLayout.CENTER);
+        
+        return panel;
+    }
+    
+    private JPanel createPeriodoPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        // Painel de informações
+        JPanel infoPanel = new JPanel(new GridBagLayout());
+        infoPanel.setBorder(BorderFactory.createTitledBorder("Configuração de Período"));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.anchor = GridBagConstraints.WEST;
+        
+        // Data Início
+        gbc.gridx = 0; gbc.gridy = 0;
+        infoPanel.add(new JLabel("Data Início:"), gbc);
+        gbc.gridx = 1;
+        JTextField txtDataInicio = new JTextField(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 10);
+        txtDataInicio.setEditable(true);
+        infoPanel.add(txtDataInicio, gbc);
+        
+        // Data Fim
+        gbc.gridx = 2; gbc.gridy = 0;
+        infoPanel.add(new JLabel("Data Fim:"), gbc);
+        gbc.gridx = 3;
+        JTextField txtDataFim = new JTextField(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 10);
+        txtDataFim.setEditable(true);
+        infoPanel.add(txtDataFim, gbc);
+        
+        // Botão Gerar Relatório
+        gbc.gridx = 4; gbc.gridy = 0;
+        JButton btnGerar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📊 Gerar Relatório", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        btnGerar.addActionListener(e -> JOptionPane.showMessageDialog(frame, 
+            "Relatório gerado para o período: " + txtDataInicio.getText() + " a " + txtDataFim.getText(),
+            "Relatório Gerado", JOptionPane.INFORMATION_MESSAGE));
+        infoPanel.add(btnGerar, gbc);
+        
+        panel.add(infoPanel, BorderLayout.NORTH);
+        
+        // Área de informações
+        JTextArea infoArea = new JTextArea(10, 50);
+        infoArea.setEditable(false);
+        infoArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        infoArea.setText("=== CONFIGURAÇÃO DE PERÍODO ===\n\n" +
+                        "Selecione o período desejado para gerar relatórios detalhados.\n\n" +
+                        "Opções disponíveis:\n" +
+                        "• Relatório de Vendas por Período\n" +
+                        "• Relatório Financeiro Detalhado\n" +
+                        "• Relatório de Produtos Vendidos\n" +
+                        "• Relatório de Movimentação de Caixa\n\n" +
+                        "Use as datas acima para definir o intervalo desejado.");
+        
+        JScrollPane scrollPane = new JScrollPane(infoArea);
+        panel.add(scrollPane, BorderLayout.CENTER);
         
         return panel;
     }
@@ -213,16 +278,16 @@ public class PDVRelatoriosSwingController {
         panel.add(filterPanel, BorderLayout.NORTH);
         
         // Tabela de vendas
-        String[] columnsVendas = {"ID", "Data/Hora", "Cliente", "Valor", "Forma Pgto", "Status"};
+        String[] columnsVendas = {"ID", "Data", "Hora", "Cliente", "Valor", "Forma Pgto", "Status"};
         DefaultTableModel vendasModel = new DefaultTableModel(columnsVendas, 0);
         
         // Dados de exemplo
         Object[][] vendasData = {
-            {"001", "25/04/2024 14:30", "João Silva", "R$ 123,45", "Dinheiro", "Concluída"},
-            {"002", "25/04/2024 15:45", "Maria Santos", "R$ 67,89", "Cartão", "Concluída"},
-            {"003", "25/04/2024 16:20", "Pedro Costa", "R$ 234,56", "Pix", "Concluída"},
-            {"004", "25/04/2024 17:10", "Ana Oliveira", "R$ 89,90", "Dinheiro", "Concluída"},
-            {"005", "25/04/2024 18:25", "Carlos Ferreira", "R$ 456,78", "Cartão", "Concluída"}
+            {"001", "25/04/2024", "14:30", "João Silva", "R$ 123,45", "Dinheiro", "Concluída"},
+            {"002", "25/04/2024", "15:45", "Maria Santos", "R$ 67,89", "Cartão", "Concluída"},
+            {"003", "25/04/2024", "16:20", "Pedro Costa", "R$ 234,56", "Pix", "Concluída"},
+            {"004", "25/04/2024", "17:10", "Ana Oliveira", "R$ 89,90", "Dinheiro", "Concluída"},
+            {"005", "25/04/2024", "18:25", "Carlos Ferreira", "R$ 456,78", "Cartão", "Concluída"}
         };
         
         for (Object[] row : vendasData) {
@@ -611,26 +676,40 @@ public class PDVRelatoriosSwingController {
     }
     
     /**
+     * Destaca a aba ativa
+     */
+    private void updateTabHighlight() {
+        int selectedIndex = tabbedPane.getSelectedIndex();
+        String tabTitle = tabbedPane.getTitleAt(selectedIndex);
+        
+        // Atualizar título da janela com aba ativa
+        frame.setTitle("PDV - Relatórios v2.1.0 - Premium [" + tabTitle + "]");
+        
+        // Log da aba ativa
+        System.out.println("Aba ativa: " + tabTitle + " (índice: " + selectedIndex + ")");
+    }
+    
+    /**
      * Abre o relatório de vendas do dia
      */
     public void abrirRelatorioVendasDia() {
-        tabbedPane.setSelectedIndex(0); // Primeira aba (Vendas do Dia)
-        gerarRelatorio(null);
+        tabbedPane.setSelectedIndex(1); // Primeira aba (Resumo Diário)
+        updateTabHighlight();
     }
     
     /**
      * Abre o relatório de produtos
      */
     public void abrirRelatorioProdutos() {
-        tabbedPane.setSelectedIndex(1); // Segunda aba (Produtos)
-        gerarRelatorio(null);
+        tabbedPane.setSelectedIndex(3); // Terceira aba (Produtos)
+        updateTabHighlight();
     }
     
     /**
      * Abre o relatório financeiro
      */
     public void abrirRelatorioFinanceiro() {
-        tabbedPane.setSelectedIndex(2); // Terceira aba (Financeiro)
-        gerarRelatorio(null);
+        tabbedPane.setSelectedIndex(4); // Quarta aba (Financeiro)
+        updateTabHighlight();
     }
 }
