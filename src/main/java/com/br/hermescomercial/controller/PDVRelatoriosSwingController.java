@@ -216,6 +216,12 @@ public class PDVRelatoriosSwingController {
         txtData.setEditable(true);
         infoPanel.add(txtData, gbc);
         
+        // Botão Buscar Data
+        gbc.gridx = 2; gbc.gridy = 0;
+        JButton btnBuscarData = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        btnBuscarData.addActionListener(e -> buscarPorData(txtData.getText(), "resumo"));
+        infoPanel.add(btnBuscarData, gbc);
+        
         // Cards de resumo
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
         JPanel cardsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
