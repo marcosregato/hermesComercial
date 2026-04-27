@@ -235,9 +235,9 @@ public class PDVRelatoriosSwingController {
         
         // Dados de exemplo
         Object[][] data = {
-            {"08:00-12:00", "VENDA", "Período da manhã", "R$ 567,89", "15"},
-            {"12:00-16:00", "VENDA", "Período da tarde", "R$ 445,67", "18"},
-            {"16:00-20:00", "VENDA", "Período da noite", "R$ 221,00", "12"}
+            {"27/04/2026", "VENDA", "Período da manhã", "R$ 567,89", "15"},
+            {"27/04/2026", "VENDA", "Período da tarde", "R$ 445,67", "18"},
+            {"27/04/2026", "VENDA", "Período da noite", "R$ 221,00", "12"}
         };
         
         for (Object[] row : data) {
