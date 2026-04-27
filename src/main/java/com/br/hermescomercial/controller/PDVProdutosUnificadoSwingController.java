@@ -1,5 +1,7 @@
 package com.br.hermescomercial.controller;
 
+import com.br.hermescomercial.dao.ProdutoDao;
+import com.br.hermescomercial.util.DatabaseConfig;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -9,7 +11,6 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import com.br.hermescomercial.util.DatabaseConfig;
 
 /**
  * Controller Unificado de Produtos em SWING
@@ -38,13 +39,13 @@ public class PDVProdutosUnificadoSwingController {
     private List<Produto> produtos;
     
     public PDVProdutosUnificadoSwingController() {
-        produtos = new ArrayList<>();
+        produtos = new ArrayList<>(100); // Capacidade inicial para melhor performance
         carregarProdutosDoBanco();
         initializeUI();
     }
     
     private void initializeUI() {
-        frame = new JFrame("📦 Gestão de Produtos v2.0.0 - Premium");
+        frame = new JFrame("📦 Gestão de Produtos v2.1.0 - Premium");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(950, 650);
         frame.setLocationRelativeTo(null);
@@ -73,7 +74,7 @@ public class PDVProdutosUnificadoSwingController {
         panel.setPreferredSize(new Dimension(0, 80));
         
         // Título central
-        JLabel titleLabel = new JLabel("📦 Gestão de Produtos v2.0.0 - Premium", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("📦 Gestão de Produtos v2.1.0 - Premium", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         
@@ -372,187 +373,40 @@ public class PDVProdutosUnificadoSwingController {
     private void carregarProdutosDoBanco() {
         produtos.clear();
         
-        System.out.println("=== INICIANDO CARREGAMENTO DE PRODUTOS DO BANCO ===");
+        System.out.println("=== CARREGANDO PRODUTOS USANDO PADRÃO DAO ===");
         
-        // Tentar carregar do banco de dados
         try {
-            System.out.println("1. Verificando configuração do banco...");
-            String dbType = DatabaseConfig.getProperty("database.type");
-            String dbHost = DatabaseConfig.getProperty("database.host");
-            String dbPort = DatabaseConfig.getProperty("database.port");
-            String dbName = DatabaseConfig.getProperty("database.name");
-            System.out.println("   Tipo: " + dbType);
-            System.out.println("   Host: " + dbHost);
-            System.out.println("   Porta: " + dbPort);
-            System.out.println("   Database: " + dbName);
+            // Usar padrão DAO para carregar produtos
+            ProdutoDao produtoDao = new ProdutoDao();
+            List<com.br.hermescomercial.model.Produto> produtosDoBanco = produtoDao.listar();
             
-            System.out.println("2. Testando conexão com o banco...");
-            try (Connection conn = DatabaseConfig.getConnection()) {
-                System.out.println("   ✅ Conexão estabelecida com sucesso!");
-                System.out.println("   URL: " + conn.getMetaData().getURL());
-                
-                // Criar tabela de produtos se não existir
-                System.out.println("3. Verificando/criando tabela produtos...");
-                criarTabelaProdutos();
-                
-                // Verificar se tabela existe e tem dados
-                System.out.println("4. Verificando dados na tabela...");
-                String sqlCount = "SELECT COUNT(*) as total FROM produto";
-                try (Statement stmt = conn.createStatement();
-                     ResultSet rsCount = stmt.executeQuery(sqlCount)) {
-                    
-                    if (rsCount.next()) {
-                        int total = rsCount.getInt("total");
-                        System.out.println("   Total de registros na tabela: " + total);
-                        
-                        if (total > 0) {
-                            // Carregar produtos do banco
-                            System.out.println("5. Carregando produtos...");
-                            String sql = "SELECT codigo, descricao, preco, estoque, categoria FROM produto ORDER BY codigo";
-                            
-                            try (Statement stmt2 = conn.createStatement();
-                                 ResultSet rs = stmt2.executeQuery(sql)) {
-                                
-                                int count = 0;
-                                while (rs.next()) {
-                                    Produto produto = new Produto(
-                                        rs.getString("codigo"),
-                                        rs.getString("descricao"),
-                                        rs.getDouble("preco"),
-                                        rs.getInt("estoque"),
-                                        rs.getString("categoria")
-                                    );
-                                    produtos.add(produto);
-                                    count++;
-                                    System.out.println("   Produto " + count + ": " + produto.getCodigo() + " - " + produto.getDescricao());
-                                }
-                                
-                                System.out.println("✅ Carregados " + produtos.size() + " produtos do banco de dados");
-                                return; // Sucesso, sair do método
-                            }
-                        } else {
-                            System.out.println("   ⚠️ Tabela vazia - adicionando dados de exemplo...");
-                            adicionarDadosExemplo();
-                            return;
-                        }
-                    }
-                }
+            System.out.println("   ✅ Produtos carregados via DAO: " + produtosDoBanco.size());
+            
+            // Converter para o formato usado na interface
+            for (com.br.hermescomercial.model.Produto produtoModel : produtosDoBanco) {
+                Produto produto = new Produto(
+                    produtoModel.getCodigo(),
+                    produtoModel.getNome(),
+                    produtoModel.getPrecoVenda().doubleValue(),
+                    produtoModel.getEstoque(),
+                    produtoModel.getCategoria()
+                );
+                produtos.add(produto);
             }
+            
+            System.out.println("   ✅ Conversão para lista local concluída");
             
         } catch (Exception e) {
-            System.err.println("❌ Erro ao acessar banco de dados: " + e.getMessage());
-            System.err.println("   Stack trace: " + e.getClass().getSimpleName());
-            System.out.println("🔄 Usando modo offline com dados em memória...");
-        }
-        
-        // Fallback para modo offline
-        System.out.println("=== MODO OFFLINE ATIVADO ===");
-        carregarDadosOffline();
-    }
-    
-    private void carregarDadosOffline() {
-        System.out.println("Carregando produtos em modo offline...");
-        
-        produtos.add(new Produto("001", "Notebook Dell Inspire 15", 3500.0, 10, "Informática"));
-        produtos.add(new Produto("002", "Mouse Wireless Logitech MX3", 89.9, 50, "Periféricos"));
-        produtos.add(new Produto("003", "Teclado Mecânico RGB Gamer", 250.0, 25, "Periféricos"));
-        produtos.add(new Produto("004", "Monitor 24\" LED Full HD", 899.0, 15, "Monitores"));
-        produtos.add(new Produto("005", "Webcam HD 1080p com Microfone", 150.0, 30, "Acessórios"));
-        
-        System.out.println("Carregados " + produtos.size() + " produtos em modo offline");
-    }
-    
-    private void criarTabelaProdutos() {
-        String sql = """
-            CREATE TABLE IF NOT EXISTS produto (
-                codigo VARCHAR(20) PRIMARY KEY,
-                descricao VARCHAR(255) NOT NULL,
-                preco DECIMAL(10,2) NOT NULL,
-                estoque INTEGER NOT NULL DEFAULT 0,
-                categoria VARCHAR(100) NOT NULL,
-                data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-            """;
-        
-        try (Connection conn = DatabaseConfig.getConnection();
-             Statement stmt = conn.createStatement()) {
+            System.err.println("   ❌ Erro ao carregar produtos via DAO: " + e.getMessage());
+            e.printStackTrace();
             
-            System.out.println("   Executando SQL: " + sql.replace("\n", " "));
-            stmt.execute(sql);
-            System.out.println("   ✅ Tabela produto verificada/criada com sucesso");
-            
-            // Verificar estrutura da tabela
-            try (ResultSet rs = conn.getMetaData().getTables(null, null, "produto", null)) {
-                if (rs.next()) {
-                    System.out.println("   ✅ Tabela 'produto' existe no banco");
-                } else {
-                    System.out.println("   ⚠️ Tabela 'produto' não encontrada após criação");
-                }
-            }
-            
-        } catch (SQLException e) {
-            System.err.println("   ❌ Erro ao criar tabela produto: " + e.getMessage());
-            System.err.println("   SQL State: " + e.getSQLState());
-            System.err.println("   Error Code: " + e.getErrorCode());
-        }
-    }
-    
-    private void adicionarDadosExemplo() {
-        System.out.println("=== ADICIONANDO DADOS DE EXEMPLO ===");
-        
-        String[] sqlStatements = {
-            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('001', 'Notebook Dell Inspire 15', 3500.00, 10, 'Informática')",
-            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('002', 'Mouse Wireless Logitech MX3', 89.90, 50, 'Periféricos')",
-            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('003', 'Teclado Mecânico RGB Gamer', 250.00, 25, 'Periféricos')",
-            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('004', 'Monitor 24\" LED Full HD', 899.00, 15, 'Monitores')",
-            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('005', 'Webcam HD 1080p com Microfone', 150.00, 30, 'Acessórios')"
-        };
-        
-        try (Connection conn = DatabaseConfig.getConnection();
-             Statement stmt = conn.createStatement()) {
-            
-            System.out.println("   Conectado ao banco para inserir dados exemplo");
-            
-            int inseridos = 0;
-            for (int i = 0; i < sqlStatements.length; i++) {
-                String sql = sqlStatements[i];
-                System.out.println("   Inserindo produto " + (i + 1) + ": " + sql.substring(0, 50) + "...");
-                
-                try {
-                    int result = stmt.executeUpdate(sql);
-                    if (result > 0) {
-                        inseridos++;
-                        System.out.println("   ✅ Produto " + (i + 1) + " inserido com sucesso");
-                    }
-                } catch (SQLException e) {
-                    // Ignorar erros de duplicação (dados já existem)
-                    if (e.getMessage().contains("duplicate") || e.getMessage().contains("UNIQUE") || e.getMessage().contains("PRIMARY KEY")) {
-                        System.out.println("   ⚠️ Produto " + (i + 1) + " já existe (duplicado)");
-                    } else {
-                        System.err.println("   ❌ Erro ao inserir produto " + (i + 1) + ": " + e.getMessage());
-                        System.err.println("      SQL State: " + e.getSQLState());
-                    }
-                }
-            }
-            
-            System.out.println("   Total de produtos inseridos: " + inseridos);
-            
-            // Recarregar após inserir
-            System.out.println("   Recarregando produtos após inserção...");
-            carregarProdutosDoBanco();
-            
-        } catch (SQLException e) {
-            System.err.println("❌ Erro ao adicionar dados exemplo: " + e.getMessage());
-            System.err.println("   SQL State: " + e.getSQLState());
-            System.err.println("   Error Code: " + e.getErrorCode());
-            
-            // Fallback para modo offline se falhar
-            System.out.println("🔄 Usando modo offline...");
+            // Fallback para método antigo se DAO falhar
+            System.out.println("   🔄 Tentando método fallback...");
             carregarDadosOffline();
         }
     }
     
+        
     private void atualizarTabela() {
         tableModel.setRowCount(0);
         for (Produto produto : produtos) {
@@ -624,7 +478,7 @@ public class PDVProdutosUnificadoSwingController {
             BigDecimal preco = new BigDecimal(txtPreco.getText().trim().replace(",", "."));
             int estoque = Integer.parseInt(txtEstoque.getText().trim());
             String categoria = txtCategoria.getText().trim();
-            String observacoes = txtObservacoes.getText().trim();
+            // String observacoes = txtObservacoes.getText().trim(); // Não utilizado no momento
             
             // Verificar se código já existe (apenas para novos produtos)
             boolean isEdicao = !txtCodigo.isEditable();
@@ -968,6 +822,18 @@ public class PDVProdutosUnificadoSwingController {
             System.err.println("Erro ao excluir produto: " + e.getMessage());
             return false;
         }
+    }
+    
+    private void carregarDadosOffline() {
+        System.out.println("Carregando produtos em modo offline...");
+        
+        produtos.add(new Produto("001", "Notebook Dell Inspire 15", 3500.0, 10, "Informática"));
+        produtos.add(new Produto("002", "Mouse Wireless Logitech MX3", 89.9, 50, "Periféricos"));
+        produtos.add(new Produto("003", "Teclado Mecânico RGB Gamer", 250.0, 25, "Periféricos"));
+        produtos.add(new Produto("004", "Monitor 24\" LED Full HD", 899.0, 15, "Monitores"));
+        produtos.add(new Produto("005", "Webcam HD 1080p com Microfone", 150.0, 30, "Acessórios"));
+        
+        System.out.println("Carregados " + produtos.size() + " produtos em modo offline");
     }
     
     public void show() {

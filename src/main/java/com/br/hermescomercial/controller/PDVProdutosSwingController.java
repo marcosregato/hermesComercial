@@ -24,7 +24,7 @@ public class PDVProdutosSwingController {
     private List<Produto> produtos;
     
     public PDVProdutosSwingController() {
-        this.produtos = new ArrayList<>();
+        this.produtos = new ArrayList<>(100); // Capacidade inicial para melhor performance
         initializeUI();
         carregarProdutosExemplo();
     }

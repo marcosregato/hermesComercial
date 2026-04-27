@@ -1,6 +1,5 @@
 package com.br.hermescomercial.controller;
 
-import com.br.hermescomercial.util.LoggerUtil;
 import javax.swing.SwingUtilities;
 
 /**
@@ -10,16 +9,16 @@ import javax.swing.SwingUtilities;
 public class TestRelatorios {
     
     public static void main(String[] args) {
-        LoggerUtil.initialize();
+        // System.out.initialize(); // Método não existe
         
         SwingUtilities.invokeLater(() -> {
             try {
-                LoggerUtil.info("Iniciando teste do PDVRelatoriosSwingController");
+                System.out.println("Iniciando teste do PDVRelatoriosSwingController");
                 PDVRelatoriosSwingController controller = new PDVRelatoriosSwingController();
                 controller.show();
-                LoggerUtil.info("PDVRelatoriosSwingController iniciado com sucesso no teste");
+                System.out.println("PDVRelatoriosSwingController iniciado com sucesso no teste");
             } catch (Exception e) {
-                LoggerUtil.error("Erro no teste do PDVRelatoriosSwingController", e);
+                System.err.println("Erro no teste do PDVRelatoriosSwingController: " + e.getMessage());
                 e.printStackTrace();
             }
         });

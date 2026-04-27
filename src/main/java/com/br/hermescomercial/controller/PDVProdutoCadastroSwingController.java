@@ -25,7 +25,7 @@ public class PDVProdutoCadastroSwingController {
     }
     
     private void initializeUI() {
-        frame = new JFrame("📦 Cadastro de Produtos v2.0.0 - Premium");
+        frame = new JFrame("📦 Cadastro de Produtos v2.1.0 - Premium");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(700, 600);
         frame.setLocationRelativeTo(null);
@@ -55,7 +55,7 @@ public class PDVProdutoCadastroSwingController {
         panel.setPreferredSize(new Dimension(0, 80));
         
         // Título central
-        JLabel titleLabel = new JLabel("📦 Cadastro de Produtos v2.0.0 - Premium", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("📦 Cadastro de Produtos v2.1.0 - Premium", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         

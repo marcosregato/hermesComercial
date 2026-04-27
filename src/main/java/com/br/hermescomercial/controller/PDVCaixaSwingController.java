@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import com.br.hermescomercial.util.LoggerUtil;
 import java.util.List;
 
 /**
@@ -31,17 +30,17 @@ public class PDVCaixaSwingController {
     
     public PDVCaixaSwingController() {
         try {
-            LoggerUtil.info("Iniciando PDVCaixaSwingController");
-            this.movimentacoes = new ArrayList<>();
+            System.out.println("Iniciando PDVCaixaSwingController");
+            this.movimentacoes = new ArrayList<>(50); // Capacidade inicial para melhor performance
             initializeUI();
-            LoggerUtil.info("PDVCaixaSwingController inicializado com sucesso");
+            System.out.println("PDVCaixaSwingController inicializado com sucesso");
         } catch (Exception e) {
-            LoggerUtil.error("Erro ao inicializar PDVCaixaSwingController", e);
+            System.err.println("Erro ao inicializar PDVCaixaSwingController: " + e.getMessage());
         }
     }
     
     private void initializeUI() {
-        frame = new JFrame("PDV - Operações de Caixa v2.0.0 - Premium");
+        frame = new JFrame("PDV - Operações de Caixa v2.1.0 - Premium");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(900, 600);
         frame.setLocationRelativeTo(null);
@@ -79,7 +78,7 @@ public class PDVCaixaSwingController {
         panel.setPreferredSize(new Dimension(0, 80));
         
         // Título central
-        JLabel titleLabel = new JLabel("💰 Operações de Caixa v2.0.0 - Premium", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("💰 Operações de Caixa v2.1.0 - Premium", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         
@@ -194,10 +193,10 @@ public class PDVCaixaSwingController {
     
     private void abrirCaixa(ActionEvent e) {
         try {
-            LoggerUtil.info("Iniciando operação de abertura de caixa");
+            System.out.println("Iniciando operação de abertura de caixa");
             
             if (caixaAberto) {
-                LoggerUtil.warning("Tentativa de abrir caixa já aberto");
+                System.out.println("Tentativa de abrir caixa já aberto");
                 JOptionPane.showMessageDialog(frame, "Caixa já está aberto!", "Aviso", JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -224,15 +223,15 @@ public class PDVCaixaSwingController {
             lblSaldoInicial.setText("R$ " + String.format("%.2f", saldoInicial));
             lblSaldoAtual.setText("R$ " + String.format("%.2f", saldoAtual));
             
-            LoggerUtil.logFinancialTransaction("ABERTURA_CAIXA", saldoInicial, "Abertura do caixa");
-            LoggerUtil.info("Caixa aberto com sucesso - Saldo inicial: R$ " + saldoInicial);
+            // System.out.logFinancialTransaction("ABERTURA_CAIXA", saldoInicial, "Abertura do caixa"); // Método não existe
+            System.out.println("Caixa aberto com sucesso - Saldo inicial: R$ " + saldoInicial);
             
             JOptionPane.showMessageDialog(frame, 
                 "Caixa aberto com sucesso!\n\nSaldo inicial: R$ 1.000,00",
                 "Caixa Aberto", JOptionPane.INFORMATION_MESSAGE);
                 
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir caixa", ex);
+            System.err.println("Erro ao abrir caixa: " + ex.getMessage());
             JOptionPane.showMessageDialog(frame, 
                 "Erro ao abrir caixa: " + ex.getMessage(),
                 "Erro", JOptionPane.ERROR_MESSAGE);
@@ -271,8 +270,8 @@ public class PDVCaixaSwingController {
                 
                 lblSaldoAtual.setText("R$ " + String.format("%.2f", saldoAtual));
                 
-                LoggerUtil.logFinancialTransaction("ADICAO_FUNDOS", valor, "Adição de fundos ao caixa");
-                LoggerUtil.info("Fundos adicionados com sucesso - Valor: R$ " + valor);
+                // System.out.logFinancialTransaction("ADICAO_FUNDOS", valor, "Adição de fundos ao caixa"); // Método não existe
+                System.out.println("Fundos adicionados com sucesso - Valor: R$ " + valor);
                 
                 JOptionPane.showMessageDialog(frame, "Fundos adicionados com sucesso!\nValor: R$ " + String.format("%.2f", valor), 
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -320,8 +319,8 @@ public class PDVCaixaSwingController {
                 
                 lblSaldoAtual.setText("R$ " + String.format("%.2f", saldoAtual));
                 
-                LoggerUtil.logFinancialTransaction("RETIRADA_FUNDOS", valor, "Retirada de fundos do caixa");
-                LoggerUtil.info("Fundos retirados com sucesso - Valor: R$ " + valor);
+                // System.out.logFinancialTransaction("RETIRADA_FUNDOS", valor, "Retirada de fundos do caixa"); // Método não existe
+                System.out.println("Fundos retirados com sucesso - Valor: R$ " + valor);
                 
                 JOptionPane.showMessageDialog(frame, "Fundos retirados com sucesso!\nValor: R$ " + String.format("%.2f", valor), 
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -335,7 +334,7 @@ public class PDVCaixaSwingController {
     private void fecharCaixa(ActionEvent e) {
         try {
             if (!caixaAberto) {
-                LoggerUtil.warning("Tentativa de fechar caixa já fechado");
+                System.out.println("Tentativa de fechar caixa já fechado");
                 JOptionPane.showMessageDialog(frame, "O caixa já está fechado!", "Aviso", JOptionPane.WARNING_MESSAGE);
                 return;
             }
@@ -362,8 +361,8 @@ public class PDVCaixaSwingController {
                 lblStatusCaixa.setText("Fechado");
                 lblStatusCaixa.setForeground(Color.RED);
                 
-                LoggerUtil.logFinancialTransaction("FECHAMENTO_CAIXA", BigDecimal.ZERO, "Fechamento do caixa");
-                LoggerUtil.info("Caixa fechado com sucesso - Saldo final: R$ " + saldoAtual);
+                // System.out.logFinancialTransaction("FECHAMENTO_CAIXA", BigDecimal.ZERO, "Fechamento do caixa"); // Método não existe
+                System.out.println("Caixa fechado com sucesso - Saldo final: R$ " + saldoAtual);
                 
                 JOptionPane.showMessageDialog(frame, 
                     "Caixa fechado com sucesso!\n\n" +
@@ -372,7 +371,7 @@ public class PDVCaixaSwingController {
                     "Fechamento Concluído", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao fechar caixa", ex);
+            System.err.println("Erro ao fechar caixa: " + ex.getMessage());
             JOptionPane.showMessageDialog(frame, 
                 "Erro ao fechar caixa: " + ex.getMessage(),
                 "Erro", JOptionPane.ERROR_MESSAGE);
@@ -381,7 +380,7 @@ public class PDVCaixaSwingController {
     
     private void gerarRelatorio(ActionEvent e) {
         try {
-            LoggerUtil.info("Gerando relatório de caixa");
+            System.out.println("Gerando relatório de caixa");
             
             StringBuilder relatorio = new StringBuilder();
             relatorio.append("=== RELATÓRIO DE CAIXA ===\n\n");
@@ -400,11 +399,11 @@ public class PDVCaixaSwingController {
                        .append("\n");
             }
             
-            LoggerUtil.info("Relatório de caixa gerado com sucesso");
+            System.out.println("Relatório de caixa gerado com sucesso");
             JOptionPane.showMessageDialog(frame, relatorio.toString(), "Relatório de Caixa", JOptionPane.INFORMATION_MESSAGE);
             
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao gerar relatório de caixa", ex);
+            System.err.println("Erro ao gerar relatório de caixa: " + ex.getMessage());
             JOptionPane.showMessageDialog(frame, 
                 "Erro ao gerar relatório: " + ex.getMessage(),
                 "Erro", JOptionPane.ERROR_MESSAGE);

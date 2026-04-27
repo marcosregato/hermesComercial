@@ -33,7 +33,7 @@ public class PDVFecharCaixaSwingController {
     private BigDecimal saldoAtual;
     
     public PDVFecharCaixaSwingController() {
-        this.movimentacoes = new ArrayList<>();
+        this.movimentacoes = new ArrayList<>(50); // Capacidade inicial para melhor performance
         initializeUI();
         carregarDadosExemplo();
     }

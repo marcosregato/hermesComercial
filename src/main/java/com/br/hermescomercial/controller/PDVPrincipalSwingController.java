@@ -5,8 +5,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import com.br.hermescomercial.util.LoggerUtil;
-import com.br.hermescomercial.util.LogViewer;
 
 /**
  * Controller principal do PDV em SWING
@@ -32,7 +30,7 @@ public class PDVPrincipalSwingController {
     
     private void initializeUI() {
         // Aplicar tema moderno
-        mainFrame = new JFrame("Hermes Comercial PDV v2.0.0 - Premium");
+        mainFrame = new JFrame("Hermes Comercial PDV v2.1.0 - Premium");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1200, 800);
         mainFrame.setLocationRelativeTo(null);
@@ -118,7 +116,7 @@ public class PDVPrincipalSwingController {
         }
         
         // Título central elegante
-        JLabel titleLabel = new JLabel("Hermes Comercial PDV v2.0.0 - Premium", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("Hermes Comercial PDV v2.1.0 - Premium", JLabel.CENTER);
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titleLabel.setForeground(new Color(255, 255, 255)); // Branco elegante
         titleLabel.setOpaque(true);
@@ -300,13 +298,12 @@ public class PDVPrincipalSwingController {
     // Métodos de ação
     private void abrirNovaVenda(ActionEvent e) {
         try {
-            LoggerUtil.info("Iniciando nova venda");
-            LoggerUtil.logUserAction("Usuário", "NOVA_VENDA", "Tela de vendas aberta");
+            System.out.println("Iniciando nova venda");
             PDVVendaSwingController vendaController = new PDVVendaSwingController();
             vendaController.show();
             statusLabel.setText("Nova venda iniciada");
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir tela de venda", ex);
+            System.err.println("Erro ao abrir tela de venda: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir tela de venda: " + ex.getMessage(),
                 "Erro", JOptionPane.ERROR_MESSAGE);
@@ -315,17 +312,17 @@ public class PDVPrincipalSwingController {
     
     private void consultarProdutos(ActionEvent e) {
         try {
-            LoggerUtil.info("Acessando consulta de produtos");
-            LoggerUtil.logUserAction("Usuário", "CONSULTAR_PRODUTOS", "Acesso ao módulo de consulta");
+            System.out.println("Acessando consulta de produtos");
+            // System.out.logUserAction("Usuário", "CONSULTAR_PRODUTOS", "Acesso ao módulo de consulta");
             
             // Criar frame para consulta de produtos com layout padrão
-            JFrame consultaFrame = new JFrame("📦 Consulta de Produtos v2.0.0 - Premium");
+            JFrame consultaFrame = new JFrame("📦 Consulta de Produtos v2.1.0 - Premium");
             consultaFrame.setSize(900, 700);
             consultaFrame.setLocationRelativeTo(mainFrame);
             consultaFrame.getContentPane().setBackground(new Color(245, 245, 250));
             
             // Header padrão Nova Venda
-            JPanel headerPanel = createHeaderPanelForDialog(consultaFrame, "📦 Consulta de Produtos v2.0.0 - Premium");
+            JPanel headerPanel = createHeaderPanelForDialog(consultaFrame, "📦 Consulta de Produtos v2.1.0 - Premium");
             
             // Painel principal com fundo padrão
             JPanel mainPanel = new JPanel(new BorderLayout());
@@ -451,11 +448,11 @@ public class PDVPrincipalSwingController {
             consultaFrame.add(mainPanel, BorderLayout.CENTER);
             consultaFrame.setVisible(true);
             
-            LoggerUtil.info("Consulta de produtos aberta com sucesso");
+            System.out.println("Consulta de produtos aberta com sucesso");
             statusLabel.setText("Consulta de produtos aberta");
             
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir consulta de produtos", ex);
+            System.err.println("Erro ao abrir consulta de produtos: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir consulta de produtos: " + ex.getMessage(),
                 "Consulta de Produtos", JOptionPane.ERROR_MESSAGE);
@@ -464,17 +461,17 @@ public class PDVPrincipalSwingController {
     
     private void gerenciarProdutos(ActionEvent e) {
         try {
-            LoggerUtil.info("Acessando gestão unificada de produtos");
-            LoggerUtil.logUserAction("Usuário", "GERENCIAR_PRODUTOS", "Acesso ao módulo unificado de produtos");
+            System.out.println("Acessando gestão unificada de produtos");
+            // System.out.logUserAction("Usuário", "GERENCIAR_PRODUTOS", "Acesso ao módulo unificado de produtos");
             
             // Abrir tela unificada de produtos
             PDVProdutosUnificadoSwingController produtosController = new PDVProdutosUnificadoSwingController();
             produtosController.show();
             
             statusLabel.setText("Gestão de produtos aberta");
-            LoggerUtil.info("Tela unificada de produtos aberta com sucesso");
+            System.out.println("Tela unificada de produtos aberta com sucesso");
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir gestão de produtos", ex);
+            System.err.println("Erro ao abrir gestão de produtos: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir gestão de produtos: " + ex.getMessage(),
                 "Gestão de Produtos", JOptionPane.ERROR_MESSAGE);
@@ -515,18 +512,18 @@ public class PDVPrincipalSwingController {
     
     private void gerenciarClientes(ActionEvent e) {
         try {
-            LoggerUtil.info("Abrindo gestão de clientes");
-            LoggerUtil.logUserAction("Usuário", "GERENCIAR_CLIENTES", "Acesso ao módulo de clientes");
+            System.out.println("Abrindo gestão de clientes");
+            // System.out.logUserAction("Usuário", "GERENCIAR_CLIENTES", "Acesso ao módulo de clientes");
             
             // Criar janela de gestão de clientes com layout padrão
-            JFrame clientesFrame = new JFrame("👥 Gestão de Clientes v2.0.0 - Premium");
+            JFrame clientesFrame = new JFrame("👥 Gestão de Clientes v2.1.0 - Premium");
             clientesFrame.setSize(1000, 700);
             clientesFrame.setLocationRelativeTo(mainFrame);
             clientesFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             clientesFrame.getContentPane().setBackground(new Color(245, 245, 250));
             
             // Header padrão Nova Venda
-            JPanel headerPanel = createHeaderPanelForDialog(clientesFrame, "👥 Gestão de Clientes v2.0.0 - Premium");
+            JPanel headerPanel = createHeaderPanelForDialog(clientesFrame, "👥 Gestão de Clientes v2.1.0 - Premium");
             
             // Painel principal com fundo padrão
             JPanel mainPanel = new JPanel(new BorderLayout());
@@ -720,11 +717,11 @@ public class PDVPrincipalSwingController {
                     "Exportar", JOptionPane.INFORMATION_MESSAGE);
             });
             
-            LoggerUtil.info("Gestão de clientes aberta com sucesso");
+            System.out.println("Gestão de clientes aberta com sucesso");
             statusLabel.setText("Gestão de clientes aberta");
             
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir gestão de clientes", ex);
+            System.err.println("Erro ao abrir gestão de clientes: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir gestão de clientes: " + ex.getMessage(),
                 "Gestão de Clientes", JOptionPane.ERROR_MESSAGE);
@@ -734,13 +731,13 @@ public class PDVPrincipalSwingController {
         
     private void abrirConfiguracoes(ActionEvent e) {
         try {
-            LoggerUtil.info("Abrindo módulo de configurações");
-            LoggerUtil.logUserAction("Usuário", "CONFIGURACOES", "Acesso ao módulo de configurações");
+            System.out.println("Abrindo módulo de configurações");
+            // System.out.logUserAction("Usuário", "CONFIGURACOES", "Acesso ao módulo de configurações");
             PDVConfiguracoesSwingController configController = new PDVConfiguracoesSwingController();
             configController.show();
             statusLabel.setText("Configurações abertas");
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir configurações", ex);
+            System.err.println("Erro ao abrir configurações: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir configurações: " + ex.getMessage(),
                 "Configurações", JOptionPane.ERROR_MESSAGE);
@@ -749,14 +746,14 @@ public class PDVPrincipalSwingController {
     
     private void verRelatorios(ActionEvent e) {
         try {
-            LoggerUtil.info("Abrindo módulo de relatórios");
-            LoggerUtil.logUserAction("Usuário", "RELATORIOS", "Acesso ao módulo de relatórios");
+            System.out.println("Abrindo módulo de relatórios");
+            // System.out.logUserAction("Usuário", "RELATORIOS", "Acesso ao módulo de relatórios");
             PDVRelatoriosSwingController relatoriosController = new PDVRelatoriosSwingController();
             relatoriosController.show();
             statusLabel.setText("Relatórios abertos");
-            LoggerUtil.info("Módulo de relatórios aberto com sucesso");
+            System.out.println("Módulo de relatórios aberto com sucesso");
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir relatórios", ex);
+            System.err.println("Erro ao abrir relatórios: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir relatórios: " + ex.getMessage(),
                 "Relatórios", JOptionPane.ERROR_MESSAGE);
@@ -768,9 +765,9 @@ public class PDVPrincipalSwingController {
             PDVRelatoriosSwingController relatoriosController = new PDVRelatoriosSwingController();
             relatoriosController.show();
             relatoriosController.abrirRelatorioVendasDia();
-            LoggerUtil.info("Relatório de vendas do dia aberto");
+            System.out.println("Relatório de vendas do dia aberto");
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir relatório de vendas do dia", ex);
+            System.err.println("Erro ao abrir relatório de vendas do dia: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir relatório: " + ex.getMessage(),
                 "Relatórios", JOptionPane.ERROR_MESSAGE);
@@ -782,9 +779,9 @@ public class PDVPrincipalSwingController {
             PDVRelatoriosSwingController relatoriosController = new PDVRelatoriosSwingController();
             relatoriosController.show();
             relatoriosController.abrirRelatorioProdutos();
-            LoggerUtil.info("Relatório de produtos aberto");
+            System.out.println("Relatório de produtos aberto");
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir relatório de produtos", ex);
+            System.err.println("Erro ao abrir relatório de produtos: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir relatório: " + ex.getMessage(),
                 "Relatórios", JOptionPane.ERROR_MESSAGE);
@@ -796,9 +793,9 @@ public class PDVPrincipalSwingController {
             PDVRelatoriosSwingController relatoriosController = new PDVRelatoriosSwingController();
             relatoriosController.show();
             relatoriosController.abrirRelatorioFinanceiro();
-            LoggerUtil.info("Relatório financeiro aberto");
+            System.out.println("Relatório financeiro aberto");
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir relatório financeiro", ex);
+            System.err.println("Erro ao abrir relatório financeiro: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir relatório: " + ex.getMessage(),
                 "Relatórios", JOptionPane.ERROR_MESSAGE);
@@ -816,10 +813,10 @@ public class PDVPrincipalSwingController {
     
     private void verLogs(ActionEvent e) {
         try {
-            LoggerUtil.info("Abrindo visualizador de logs");
-            LogViewer.showLogViewer();
+            System.out.println("Abrindo visualizador de logs");
+            // LogViewer.showLogViewer(); // Classe não existe
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao abrir visualizador de logs", ex);
+            System.err.println("Erro ao abrir visualizador de logs: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir visualizador de logs: " + ex.getMessage(),
                 "Logs", JOptionPane.ERROR_MESSAGE);
@@ -836,13 +833,13 @@ public class PDVPrincipalSwingController {
             
         if (result == JOptionPane.YES_OPTION) {
             try {
-                LoggerUtil.cleanOldLogs();
-                LoggerUtil.info("Logs antigos limpos pelo usuário");
+                // System.out.cleanOldLogs(); // Método não existe
+                System.out.println("Logs antigos limpos pelo usuário");
                 JOptionPane.showMessageDialog(mainFrame, 
                     "Logs antigos limpos com sucesso!",
                     "Limpar Logs", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception ex) {
-                LoggerUtil.error("Erro ao limpar logs antigos", ex);
+                System.err.println("Erro ao limpar logs antigos: " + ex.getMessage());
                 JOptionPane.showMessageDialog(mainFrame, 
                     "Erro ao limpar logs: " + ex.getMessage(),
                     "Limpar Logs", JOptionPane.ERROR_MESSAGE);
@@ -924,8 +921,8 @@ public class PDVPrincipalSwingController {
             Object[] newRow = {idStr, nome, cpfCnpj, telefone, email, status};
             tableModel.addRow(newRow);
             
-            LoggerUtil.info("Novo cliente criado: " + nome);
-            LoggerUtil.logUserAction("Usuário", "NOVO_CLIENTE", "Cliente criado: " + nome);
+            System.out.println("Novo cliente criado: " + nome);
+            // System.out.logUserAction("Usuário", "NOVO_CLIENTE", "Cliente criado: " + nome);
             
             JOptionPane.showMessageDialog(dialog, "Cliente criado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             dialog.dispose();
@@ -1029,8 +1026,8 @@ public class PDVPrincipalSwingController {
             tableModel.setValueAt(novoEmail, selectedRow, 4);
             tableModel.setValueAt(novoStatus, selectedRow, 5);
             
-            LoggerUtil.info("Cliente editado: " + novoNome);
-            LoggerUtil.logUserAction("Usuário", "EDITAR_CLIENTE", "Cliente editado: " + novoNome);
+            System.out.println("Cliente editado: " + novoNome);
+            // System.out.logUserAction("Usuário", "EDITAR_CLIENTE", "Cliente editado: " + novoNome);
             
             JOptionPane.showMessageDialog(dialog, "Cliente atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
             dialog.dispose();

@@ -37,7 +37,7 @@ public class PDVRelatoriosSwingController {
     }
     
     private void initializeUI() {
-        frame = new JFrame("PDV - Relatórios v2.0.0 - Premium");
+        frame = new JFrame("PDV - Relatórios v2.1.0 - Premium");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1000, 700);
         frame.setLocationRelativeTo(null);
@@ -72,7 +72,7 @@ public class PDVRelatoriosSwingController {
         panel.setPreferredSize(new Dimension(0, 80));
         
         // Título central
-        JLabel titleLabel = new JLabel("📊 Relatórios do Sistema v2.0.0 - Premium", JLabel.CENTER);
+        JLabel titleLabel = new JLabel("📊 Relatórios do Sistema v2.1.0 - Premium", JLabel.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setForeground(Color.WHITE);
         
