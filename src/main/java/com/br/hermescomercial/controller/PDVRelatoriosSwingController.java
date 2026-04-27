@@ -136,7 +136,7 @@ public class PDVRelatoriosSwingController {
         infoPanel.add(new JLabel("Data:"), gbc);
         gbc.gridx = 1;
         JTextField txtData = new JTextField(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 10);
-        txtData.setEditable(false);
+        txtData.setEditable(true);
         infoPanel.add(txtData, gbc);
         
         // Cards de resumo
