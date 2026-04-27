@@ -1,9 +1,11 @@
 package com.br.hermescomercial.controller;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Controller de Cadastro de Produtos em SWING
@@ -16,10 +18,11 @@ public class PDVProdutoCadastroSwingController {
     private JTextField txtDescricao;
     private JTextField txtPreco;
     private JTextField txtEstoque;
-    private JTextField txtCategoria;
+    private JComboBox<String> txtCategoria;
     private JTextArea txtObservacoes;
     
     public PDVProdutoCadastroSwingController() {
+        carregarCategorias();
         initializeUI();
     }
     
@@ -132,10 +135,10 @@ public class PDVProdutoCadastroSwingController {
         gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0;
         formPanel.add(new JLabel("Categoria:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtCategoria = new JTextField();
+        txtCategoria = new JComboBox<>();
         txtCategoria.setFont(new Font("Arial", Font.PLAIN, 12));
         txtCategoria.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        txtCategoria.setToolTipText("Digite a categoria do produto");
+        txtCategoria.setToolTipText("Selecione a categoria do produto");
         formPanel.add(txtCategoria, gbc);
         
         // Observações
@@ -186,7 +189,7 @@ public class PDVProdutoCadastroSwingController {
             String descricao = txtDescricao.getText().trim();
             BigDecimal preco = new BigDecimal(txtPreco.getText().trim().replace(",", "."));
             int estoque = Integer.parseInt(txtEstoque.getText().trim());
-            String categoria = txtCategoria.getText().trim();
+            String categoria = (String) txtCategoria.getSelectedItem();
             String observacoes = txtObservacoes.getText().trim();
             
             // Simulação de salvamento (em implementação real, salvaria no banco)
@@ -282,7 +285,7 @@ public class PDVProdutoCadastroSwingController {
         }
         
         // Validar categoria
-        if (txtCategoria.getText().trim().isEmpty()) {
+        if (txtCategoria.getSelectedItem() == null || ((String) txtCategoria.getSelectedItem()).trim().isEmpty()) {
             JOptionPane.showMessageDialog(frame, 
                 "A categoria do produto é obrigatória!",
                 "Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
@@ -298,12 +301,41 @@ public class PDVProdutoCadastroSwingController {
         txtDescricao.setText("");
         txtPreco.setText("");
         txtEstoque.setText("");
-        txtCategoria.setText("");
+        txtCategoria.setSelectedIndex(0);
         txtObservacoes.setText("");
         txtCodigo.requestFocus();
     }
     
     public void show() {
         frame.setVisible(true);
+    }
+    
+    /**
+     * Carrega as categorias cadastradas no banco de dados
+     */
+    private void carregarCategorias() {
+        try {
+            // Limpar categorias existentes
+            txtCategoria.removeAllItems();
+            
+            // Adicionar categorias padrão do sistema
+            String[] categorias = {
+                "Informática", "Periféricos", "Monitores", "Acessórios",
+                "Móveis", "Rede", "Armazenamento", "Software",
+                "Impressão", "Gamer"
+            };
+            
+            // Popular o JComboBox com as categorias
+            for (String categoria : categorias) {
+                txtCategoria.addItem(categoria);
+            }
+            
+            // Selecionar primeira categoria por padrão
+            if (txtCategoria.getItemCount() > 0) {
+                txtCategoria.setSelectedIndex(0);
+            }
+        } catch (Exception e) {
+            System.err.println("Erro ao carregar categorias: " + e.getMessage());
+        }
     }
 }
