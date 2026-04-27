@@ -850,7 +850,7 @@ public class PDVPrincipalSwingController {
     
     private void criarNovoCliente(JFrame parentFrame, DefaultTableModel tableModel) {
         JDialog dialog = new JDialog(parentFrame, "Novo Cliente", true);
-        dialog.setSize(400, 350);
+        dialog.setSize(500, 450);
         dialog.setLocationRelativeTo(parentFrame);
         
         JPanel panel = new JPanel(new GridBagLayout());
