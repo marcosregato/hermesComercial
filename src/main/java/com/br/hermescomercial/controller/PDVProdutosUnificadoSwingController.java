@@ -564,6 +564,16 @@ public class PDVProdutosUnificadoSwingController {
         // Validar preço
         try {
             String precoStr = txtPreco.getText().trim().replace(",", ".");
+            
+            // Validar formato monetário (apenas números e vírgula decimal)
+            if (!precoStr.matches("^\\d+(\\.\\d{1,2})?$")) {
+                JOptionPane.showMessageDialog(frame, 
+                    "O preço deve conter apenas números e vírgula decimal!\nEx: 10,50 ou 100,00",
+                    "Preço Inválido", JOptionPane.WARNING_MESSAGE);
+                txtPreco.requestFocus();
+                return false;
+            }
+            
             BigDecimal preco = new BigDecimal(precoStr);
             if (preco.compareTo(BigDecimal.ZERO) <= 0) {
                 JOptionPane.showMessageDialog(frame, 

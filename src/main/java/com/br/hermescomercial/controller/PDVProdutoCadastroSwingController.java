@@ -3,7 +3,6 @@ package com.br.hermescomercial.controller;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 
 /**
@@ -160,43 +159,19 @@ public class PDVProdutoCadastroSwingController {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         buttonPanel.setBackground(new Color(245, 245, 250));
         
-        JButton btnLimpar = createStyledButton("🔄 Limpar", "Limpar campos", null);
-        JButton btnSalvar = createStyledButton("💾 Salvar", "Salvar produto", this::salvarProduto);
-        JButton btnCancelar = createStyledButton("❌ Cancelar", "Cancelar cadastro", e -> frame.dispose());
+        JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         
         btnLimpar.addActionListener(e -> limparCampos());
+        btnSalvar.addActionListener(this::salvarProduto);
+        btnCancelar.addActionListener(e -> frame.dispose());
         
         buttonPanel.add(btnLimpar);
         buttonPanel.add(btnSalvar);
         buttonPanel.add(btnCancelar);
         
         return buttonPanel;
-    }
-    
-    private JButton createStyledButton(String text, String tooltip, ActionListener action) {
-        JButton button = new JButton(text);
-        button.setBackground(new Color(41, 128, 185));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 12));
-        button.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setToolTipText(tooltip);
-        if (action != null) {
-            button.addActionListener(action);
-        }
-        
-        // Efeito hover
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(52, 152, 219));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(41, 128, 185));
-            }
-        });
-        
-        return button;
     }
     
     private void salvarProduto(ActionEvent e) {
@@ -262,6 +237,16 @@ public class PDVProdutoCadastroSwingController {
         // Validar preço
         try {
             String precoStr = txtPreco.getText().trim().replace(",", ".");
+            
+            // Validar formato monetário (apenas números e vírgula decimal)
+            if (!precoStr.matches("^\\d+(\\.\\d{1,2})?$")) {
+                JOptionPane.showMessageDialog(frame, 
+                    "O preço deve conter apenas números e vírgula decimal!\nEx: 10,50 ou 100,00",
+                    "Preço Inválido", JOptionPane.WARNING_MESSAGE);
+                txtPreco.requestFocus();
+                return false;
+            }
+            
             BigDecimal preco = new BigDecimal(precoStr);
             if (preco.compareTo(BigDecimal.ZERO) <= 0) {
                 JOptionPane.showMessageDialog(frame, 
