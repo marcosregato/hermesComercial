@@ -777,17 +777,17 @@ public class PDVRelatoriosSwingController {
         // Aplicar destaque visual na aba ativa
         for (int i = 0; i < tabbedPane.getTabCount(); i++) {
             if (i == selectedIndex) {
-                // Aba ativa - fundo azul claro e texto em negrito
-                tabbedPane.setBackgroundAt(i, new Color(173, 216, 230)); // Light Blue
-                tabbedPane.setForegroundAt(i, Color.BLACK);
+                // Aba ativa - fundo azul escuro e texto branco
+                tabbedPane.setBackgroundAt(i, new Color(70, 130, 180)); // Steel Blue (mais escuro)
+                tabbedPane.setForegroundAt(i, Color.WHITE);
                 
                 // Adicionar indicador visual
                 String activeTitle = "📌 " + tabTitle + " 📌";
                 tabbedPane.setTitleAt(i, activeTitle);
             } else {
-                // Abas inativas - fundo cinza claro
-                tabbedPane.setBackgroundAt(i, new Color(240, 240, 240)); // Light Gray
-                tabbedPane.setForegroundAt(i, Color.DARK_GRAY);
+                // Abas inativas - fundo cinza médio
+                tabbedPane.setBackgroundAt(i, new Color(200, 200, 200)); // Gray médio
+                tabbedPane.setForegroundAt(i, Color.BLACK);
                 
                 // Remover indicador visual
                 String originalTitle = tabbedPane.getTitleAt(i).replace("📌 ", "").replace(" 📌", "");
@@ -798,19 +798,19 @@ public class PDVRelatoriosSwingController {
         // Log da aba ativa com destaque
         System.out.println("🔵 ABA ATIVA: " + tabTitle + " (índice: " + selectedIndex + ")");
         
-        // Feedback visual adicional
+        // Feedback visual adicional com cores mais escuras
         if (frame.getContentPane() instanceof JPanel) {
             JPanel mainPanel = (JPanel) frame.getContentPane();
             if (selectedIndex == 0) { // Período
-                mainPanel.setBackground(new Color(245, 250, 255)); // Azul muito claro
+                mainPanel.setBackground(new Color(230, 240, 250)); // Azul escuro suave
             } else if (selectedIndex == 1) { // Resumo Diário
-                mainPanel.setBackground(new Color(255, 245, 245)); // Vermelho muito claro
+                mainPanel.setBackground(new Color(250, 230, 230)); // Vermelho escuro suave
             } else if (selectedIndex == 2) { // Relatório de Vendas
-                mainPanel.setBackground(new Color(245, 255, 245)); // Verde muito claro
+                mainPanel.setBackground(new Color(230, 250, 230)); // Verde escuro suave
             } else if (selectedIndex == 3) { // Relatório de Produtos
-                mainPanel.setBackground(new Color(255, 255, 245)); // Amarelo muito claro
+                mainPanel.setBackground(new Color(250, 250, 230)); // Amarelo escuro suave
             } else if (selectedIndex == 4) { // Relatório Financeiro
-                mainPanel.setBackground(new Color(255, 245, 255)); // Rosa muito claro
+                mainPanel.setBackground(new Color(250, 230, 250)); // Rosa escuro suave
             }
         }
     }
