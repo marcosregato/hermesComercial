@@ -26,9 +26,11 @@ public class MainApplication {
             }
         }
         
-        // Configurar Look and Feel padrão para evitar problemas de cores
+        // Configurar Look and Feel padrão e aplicar tema moderno
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            com.br.hermescomercial.theme.ModernTheme.applyModernTheme();
+            System.out.println("Tema moderno aplicado com sucesso");
         } catch (Exception e) {
             System.out.println("Não foi possível configurar Look and Feel: " + e.getMessage());
         }
@@ -36,7 +38,7 @@ public class MainApplication {
         // Executar na thread de UI
         SwingUtilities.invokeLater(() -> {
             try {
-                System.out.println("Iniciando Hermes Comercial PDV v2.1.0");
+                System.out.println("Iniciando Hermes Comercial PDV v2.1.2");
                 
                 // Testar conexão com banco de dados
                 System.out.println("Verificando conexão com banco de dados...");
