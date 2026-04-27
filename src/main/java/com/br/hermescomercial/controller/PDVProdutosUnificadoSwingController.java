@@ -111,6 +111,9 @@ public class PDVProdutosUnificadoSwingController {
         JPanel cadastroPanel = createCadastroPanel();
         tabbedPane.addTab("➕ Cadastrar Produto", cadastroPanel);
         
+        // Adicionar listener para destacar aba ativa
+        tabbedPane.addChangeListener(e -> updateTabHighlight());
+        
         return tabbedPane;
     }
     
@@ -830,5 +833,47 @@ public class PDVProdutosUnificadoSwingController {
         public double getPreco() { return preco; }
         public int getEstoque() { return estoque; }
         public String getCategoria() { return categoria; }
+    }
+    
+    /**
+     * Atualiza o destaque visual da aba ativa
+     */
+    private void updateTabHighlight() {
+        int selectedIndex = tabbedPane.getSelectedIndex();
+        String tabTitle = tabbedPane.getTitleAt(selectedIndex);
+        
+        // Atualizar título da janela com aba ativa e destaque
+        frame.setTitle("📦 PDV - Gestão de Produtos v2.1.0 - Premium [📌 " + tabTitle + " ATIVA]");
+        
+        // Aplicar destaque visual na aba ativa
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            if (i == selectedIndex) {
+                // Aba ativa - fundo azul escuro e texto preto (letra escura)
+                tabbedPane.setBackgroundAt(i, new Color(70, 130, 180)); // Steel Blue (mais escuro)
+                tabbedPane.setForegroundAt(i, Color.BLACK); // Letra escura
+                
+                // Adicionar indicador visual
+                String activeTitle = "📌 " + tabTitle + " 📌";
+                tabbedPane.setTitleAt(i, activeTitle);
+            } else {
+                // Abas inativas - fundo cinza médio
+                tabbedPane.setBackgroundAt(i, new Color(200, 200, 200)); // Gray médio
+                tabbedPane.setForegroundAt(i, Color.BLACK);
+                
+                // Remover indicador visual
+                String originalTitle = tabbedPane.getTitleAt(i).replace("📌 ", "").replace(" 📌", "");
+                tabbedPane.setTitleAt(i, originalTitle);
+            }
+        }
+        
+        // Feedback visual adicional com cores mais escuras
+        if (frame.getContentPane() instanceof JPanel) {
+            JPanel mainPanel = (JPanel) frame.getContentPane();
+            if (selectedIndex == 0) { // Consultar Produtos
+                mainPanel.setBackground(new Color(230, 240, 250)); // Azul escuro suave
+            } else if (selectedIndex == 1) { // Cadastrar Produto
+                mainPanel.setBackground(new Color(250, 230, 230)); // Vermelho escuro suave
+            }
+        }
     }
 }

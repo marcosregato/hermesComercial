@@ -121,6 +121,9 @@ public class PDVConfiguracoesSwingController {
         // Aba de Usuários
         tabbedPane.addTab("Usuários", createUsuariosPanel());
         
+        // Adicionar listener para destacar aba ativa
+        tabbedPane.addChangeListener(e -> updateTabHighlight());
+        
         panel.add(tabbedPane, BorderLayout.CENTER);
         
         return panel;
@@ -879,5 +882,51 @@ public class PDVConfiguracoesSwingController {
         public String getNivel() { return nivel; }
         public String getStatus() { return status; }
         public String getUltimoAcesso() { return ultimoAcesso; }
+    }
+    
+    /**
+     * Atualiza o destaque visual da aba ativa
+     */
+    private void updateTabHighlight() {
+        int selectedIndex = tabbedPane.getSelectedIndex();
+        String tabTitle = tabbedPane.getTitleAt(selectedIndex);
+        
+        // Atualizar título da janela com aba ativa e destaque
+        frame.setTitle("⚙️ PDV - Configurações v2.1.0 - Premium [📌 " + tabTitle + " ATIVA]");
+        
+        // Aplicar destaque visual na aba ativa
+        for (int i = 0; i < tabbedPane.getTabCount(); i++) {
+            if (i == selectedIndex) {
+                // Aba ativa - fundo azul escuro e texto preto (letra escura)
+                tabbedPane.setBackgroundAt(i, new Color(70, 130, 180)); // Steel Blue (mais escuro)
+                tabbedPane.setForegroundAt(i, Color.BLACK); // Letra escura
+                
+                // Adicionar indicador visual
+                String activeTitle = "📌 " + tabTitle + " 📌";
+                tabbedPane.setTitleAt(i, activeTitle);
+            } else {
+                // Abas inativas - fundo cinza médio
+                tabbedPane.setBackgroundAt(i, new Color(200, 200, 200)); // Gray médio
+                tabbedPane.setForegroundAt(i, Color.BLACK);
+                
+                // Remover indicador visual
+                String originalTitle = tabbedPane.getTitleAt(i).replace("📌 ", "").replace(" 📌", "");
+                tabbedPane.setTitleAt(i, originalTitle);
+            }
+        }
+        
+        // Feedback visual adicional com cores mais escuras
+        if (frame.getContentPane() instanceof JPanel) {
+            JPanel mainPanel = (JPanel) frame.getContentPane();
+            if (selectedIndex == 0) { // Empresa
+                mainPanel.setBackground(new Color(230, 240, 250)); // Azul escuro suave
+            } else if (selectedIndex == 1) { // Financeiro
+                mainPanel.setBackground(new Color(250, 230, 230)); // Vermelho escuro suave
+            } else if (selectedIndex == 2) { // Sistema
+                mainPanel.setBackground(new Color(230, 250, 230)); // Verde escuro suave
+            } else if (selectedIndex == 3) { // Usuários
+                mainPanel.setBackground(new Color(250, 250, 230)); // Amarelo escuro suave
+            }
+        }
     }
 }
