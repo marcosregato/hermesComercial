@@ -212,6 +212,7 @@ public class PDVVendaSwingController {
         txtCodigo = new JTextField();
         txtCodigo.setFont(new Font("Arial", Font.PLAIN, 12));
         txtCodigo.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtCodigo.setToolTipText("Digite o código do produto e pressione Enter");
         inputPanel.add(txtCodigo, gbc);
         
         gbc.gridx = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0; gbc.insets = new Insets(8, 15, 8, 8);
@@ -233,11 +234,29 @@ public class PDVVendaSwingController {
         
         gbc.gridx = 1; gbc.gridy = 1; gbc.gridwidth = 3; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
         txtDescricao = new JTextField();
-        txtDescricao.setEditable(false);
-        txtDescricao.setBackground(new Color(240, 240, 240));
+        txtDescricao.setEditable(true);
+        txtDescricao.setBackground(Color.WHITE);
         txtDescricao.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
         txtDescricao.setFont(new Font("Arial", Font.PLAIN, 12));
+        txtDescricao.setToolTipText("Digite parte da descrição do produto para buscar");
         inputPanel.add(txtDescricao, gbc);
+        
+        // Adicionar listeners para busca automática
+        txtCodigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    buscarPorCodigo();
+                }
+            }
+        });
+        
+        txtDescricao.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                    buscarPorDescricao(null);
+                }
+            }
+        });
         
         // Botões de ação
         gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 4; gbc.fill = GridBagConstraints.NONE; gbc.anchor = GridBagConstraints.CENTER; gbc.insets = new Insets(15, 8, 8, 8);
@@ -260,7 +279,7 @@ public class PDVVendaSwingController {
         btnBuscar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         btnBuscar.setFocusPainted(false);
         btnBuscar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnBuscar.addActionListener(this::buscarPorDescricao);
+        btnBuscar.addActionListener(e -> buscarPorDescricao(e));
         
         JButton btnEnter = new JButton("⏎ Enter");
         btnEnter.setBackground(new Color(108, 117, 125));
@@ -411,15 +430,15 @@ public class PDVVendaSwingController {
                 String.format("R$ %.2f", produto.getPreco()),
                 String.format("R$ %.2f", item.getSubtotal())
             };
+            
             tableModel.addRow(row);
             
-            // Atualizar resumo
-            atualizarResumo();
-            
-            // Limpar campos
+            // Limpar campos e resetar título
             txtCodigo.setText("");
+            txtDescricao.setText("");
             txtQuantidade.setText("1");
             txtCodigo.requestFocus();
+            frame.setTitle("PDV - Nova Venda v2.0.0 - Premium");
             
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(frame, "Quantidade inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -514,29 +533,6 @@ public class PDVVendaSwingController {
         return null;
     }
     
-    // Busca por descrição
-    private void buscarPorDescricao(ActionEvent e) {
-        String descricao = txtDescricao.getText().trim();
-        
-        if (descricao.isEmpty()) {
-            return;
-        }
-        
-        // Buscar produto por descrição (simulação)
-        Produto produto = buscarProdutoPorDescricao(descricao);
-        
-        if (produto != null) {
-            txtCodigo.setText(produto.getCodigo());
-            txtQuantidade.setText("1");
-            txtQuantidade.requestFocus();
-        } else {
-            JOptionPane.showMessageDialog(frame, 
-                "Produto não encontrado na descrição: " + descricao,
-                "Busca por Descrição", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-    
-    // Simulação de busca por descrição
     private Produto buscarProdutoPorDescricao(String descricao) {
         // Busca case-insensitive por descrição
         descricao = descricao.toLowerCase();
@@ -550,6 +546,64 @@ public class PDVVendaSwingController {
         }
         
         return null;
+    }
+    
+    // Busca por código (automática ao pressionar Enter)
+    private void buscarPorCodigo() {
+        String codigo = txtCodigo.getText().trim();
+        
+        if (codigo.isEmpty()) {
+            return;
+        }
+        
+        // Buscar produto por código (simulação)
+        Produto produto = buscarProdutoPorCodigo(codigo);
+        
+        if (produto != null) {
+            txtDescricao.setText(produto.getDescricao());
+            txtQuantidade.requestFocus();
+            txtQuantidade.selectAll();
+            
+            // Feedback visual sutil
+            frame.setTitle("PDV - Nova Venda v2.0.0 - Premium - Produto: " + produto.getDescricao());
+        } else {
+            JOptionPane.showMessageDialog(frame, 
+                "Produto não encontrado com o código: " + codigo,
+                "Produto Não Encontrado", JOptionPane.WARNING_MESSAGE);
+            txtCodigo.selectAll();
+            txtCodigo.requestFocus();
+        }
+    }
+    
+    // Busca por descrição
+    private void buscarPorDescricao(ActionEvent e) {
+        String descricao = txtDescricao.getText().trim();
+        
+        if (descricao.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, 
+                "Digite uma descrição para buscar o produto!",
+                "Busca de Produto", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Buscar produto por descrição (simulação)
+        Produto produto = buscarProdutoPorDescricao(descricao);
+        
+        if (produto != null) {
+            txtCodigo.setText(produto.getCodigo());
+            txtDescricao.setText(produto.getDescricao());
+            txtQuantidade.requestFocus();
+            txtQuantidade.selectAll();
+            
+            // Feedback visual
+            JOptionPane.showMessageDialog(frame, 
+                "Produto encontrado: " + produto.getDescricao() + " (Código: " + produto.getCodigo() + ")",
+                "Produto Encontrado", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(frame, 
+                "Nenhum produto encontrado com a descrição: " + descricao,
+                "Produto Não Encontrado", JOptionPane.WARNING_MESSAGE);
+        }
     }
     
     public void show() {

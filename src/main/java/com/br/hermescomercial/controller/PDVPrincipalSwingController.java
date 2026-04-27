@@ -67,8 +67,7 @@ public class PDVPrincipalSwingController {
         
         // Menu Operações
         JMenu operationsMenu = new JMenu("Operações");
-        operationsMenu.add(createMenuItem("Consultar Produtos", this::consultarProdutos));
-        operationsMenu.add(createMenuItem("Cadastrar Produto", this::cadastrarProduto));
+        operationsMenu.add(createMenuItem("📦 Gestão de Produtos", this::gerenciarProdutos));
         operationsMenu.add(createMenuItem("Clientes", this::gerenciarClientes));
         
         // Menu Relatórios
@@ -103,22 +102,57 @@ public class PDVPrincipalSwingController {
     
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(8, 12, 12, 12));
         panel.setBackground(new Color(41, 128, 185));
-        panel.setPreferredSize(new Dimension(0, 80));
+        panel.setPreferredSize(new Dimension(0, 75));
         
-        // Título central
+        // Logo da empresa à esquerda
+        try {
+            ImageIcon logoIcon = new ImageIcon(getClass().getResource("/img/logo.png"));
+            Image scaledImage = logoIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+            JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
+            logoLabel.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
+            panel.add(logoLabel, BorderLayout.WEST);
+        } catch (Exception e) {
+            // Se não conseguir carregar o logo, continua sem ele
+        }
+        
+        // Título central elegante
         JLabel titleLabel = new JLabel("Hermes Comercial PDV v2.0.0 - Premium", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        titleLabel.setForeground(new Color(255, 255, 255)); // Branco elegante
+        titleLabel.setOpaque(true);
         
-        // Botão voltar estilizado (não necessário na tela principal, mas mantido para consistência)
+        // Botão elegante
         JButton btnInfo = new JButton("ℹ️ Info");
-        btnInfo.setBackground(new Color(255, 255, 255));
-        btnInfo.setForeground(new Color(41, 128, 185));
-        btnInfo.setFont(new Font("Arial", Font.BOLD, 12));
-        btnInfo.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        btnInfo.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
+        btnInfo.setForeground(new Color(255, 255, 255)); // Branco elegante
+        btnInfo.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnInfo.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
+            BorderFactory.createEmptyBorder(8, 16, 8, 16)
+        ));
         btnInfo.setFocusPainted(false);
+        btnInfo.setOpaque(true);
+        btnInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        // Efeito hover elegante
+        btnInfo.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnInfo.setBackground(new Color(127, 140, 141)); // Cinza mais escuro suave
+                btnInfo.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(108, 117, 125), 2), // Cinza ainda mais escuro
+                    BorderFactory.createEmptyBorder(8, 16, 8, 16)
+                ));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnInfo.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
+                btnInfo.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
+                    BorderFactory.createEmptyBorder(8, 16, 8, 16)
+                ));
+            }
+        });
         btnInfo.addActionListener(e -> {
             JOptionPane.showMessageDialog(mainFrame, 
                 "Hermes Comercial PDV v2.0 - Premium\n" +
@@ -132,10 +166,11 @@ public class PDVPrincipalSwingController {
                 "Sobre", JOptionPane.INFORMATION_MESSAGE);
         });
         
-        // Data e hora atual
+        // Data e hora atual elegante
         JLabel lblDataHora = new JLabel(java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), JLabel.RIGHT);
-        lblDataHora.setFont(new Font("Arial", Font.PLAIN, 12));
-        lblDataHora.setForeground(Color.WHITE);
+        lblDataHora.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        lblDataHora.setForeground(new Color(255, 255, 255)); // Branco elegante
+        lblDataHora.setOpaque(true);
         
         panel.add(btnInfo, BorderLayout.WEST);
         panel.add(titleLabel, BorderLayout.CENTER);
@@ -146,22 +181,34 @@ public class PDVPrincipalSwingController {
     
     private JButton createStyledButton(String text, String tooltip, ActionListener action) {
         JButton button = new JButton(text);
-        button.setBackground(new Color(41, 128, 185));
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Arial", Font.BOLD, 12));
-        button.setBorder(BorderFactory.createEmptyBorder(12, 20, 12, 20));
+        button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
+        button.setForeground(new Color(255, 255, 255)); // Branco elegante
+        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
+            BorderFactory.createEmptyBorder(12, 20, 12, 20)
+        ));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setToolTipText(tooltip);
         button.addActionListener(action);
+        button.setOpaque(true);
         
-        // Efeito hover
+        // Efeito hover elegante
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(52, 152, 219));
+                button.setBackground(new Color(127, 140, 141)); // Cinza mais escuro suave
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(108, 117, 125), 2), // Cinza ainda mais escuro
+                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
+                ));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(41, 128, 185));
+                button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
+                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
+                ));
             }
         });
         
@@ -171,22 +218,39 @@ public class PDVPrincipalSwingController {
     private void createMainPanel() {
         // Painel principal com design moderno
         mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainPanel.setBackground(new Color(245, 245, 250));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        mainPanel.setBackground(new Color(250, 250, 250)); // Cinza muito suave
         
         // Header padrão Nova Venda
         JPanel headerPanel = createHeaderPanel();
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         
-        // Painel central com informações
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBorder(BorderFactory.createTitledBorder("Painel de Controle"));
+        // Painel central com informações - efeito cardPanel elegante
+        JPanel centerPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Fundo elegante com gradiente sutil
+                g2d.setColor(new Color(250, 252, 252)); // Branco suave
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+                
+                // Borda elegante
+                g2d.setColor(new Color(189, 195, 199)); // Cinza suave
+                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 25, 25);
+            }
+        };
+        centerPanel.setOpaque(false);
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         
         // Status label
         statusLabel = new JLabel("Sistema pronto para uso");
-        statusLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // Fonte suave
         statusLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        statusLabel.setBackground(Color.LIGHT_GRAY);
+        statusLabel.setBackground(new Color(236, 240, 241)); // Cinza suave claro
+        statusLabel.setForeground(new Color(52, 73, 94)); // Azul suave profundo
         statusLabel.setOpaque(true);
         centerPanel.add(statusLabel, BorderLayout.NORTH);
         
@@ -317,13 +381,13 @@ public class PDVPrincipalSwingController {
             produtosTable.getColumnModel().getColumn(3).setPreferredWidth(80);
             produtosTable.getColumnModel().getColumn(4).setPreferredWidth(120);
             
-            // Dados de exemplo
+            // Dados de exemplo com tipos corretos
             Object[][] dados = {
-                {"001", "Notebook Dell Inspire 15", "3500.00", "10", "Informática"},
-                {"002", "Mouse Wireless Logitech MX3", "89.90", "50", "Periféricos"},
-                {"003", "Teclado Mecânico RGB Gamer", "250.00", "25", "Periféricos"},
-                {"004", "Monitor 24\" LED Full HD", "899.00", "15", "Monitores"},
-                {"005", "Webcam HD 1080p com Microfone", "150.00", "30", "Acessórios"}
+                {"001", "Notebook Dell Inspire 15", 3500.00, 10, "Informática"},
+                {"002", "Mouse Wireless Logitech MX3", 89.90, 50, "Periféricos"},
+                {"003", "Teclado Mecânico RGB Gamer", 250.00, 25, "Periféricos"},
+                {"004", "Monitor 24\" LED Full HD", 899.00, 15, "Monitores"},
+                {"005", "Webcam HD 1080p com Microfone", 150.00, 30, "Acessórios"}
             };
             
             // Adicionar dados à tabela
@@ -398,15 +462,22 @@ public class PDVPrincipalSwingController {
         }
     }
     
-    private void cadastrarProduto(ActionEvent e) {
+    private void gerenciarProdutos(ActionEvent e) {
         try {
-            LoggerUtil.info("Acessando cadastro de produtos");
-            LoggerUtil.logUserAction("Usuário", "CADASTRAR_PRODUTO", "Acesso ao módulo de produtos");
-            JOptionPane.showMessageDialog(mainFrame, 
-                "Funcionalidade em desenvolvimento.",
-                "Cadastrar Produto", JOptionPane.INFORMATION_MESSAGE);
+            LoggerUtil.info("Acessando gestão unificada de produtos");
+            LoggerUtil.logUserAction("Usuário", "GERENCIAR_PRODUTOS", "Acesso ao módulo unificado de produtos");
+            
+            // Abrir tela unificada de produtos
+            PDVProdutosUnificadoSwingController produtosController = new PDVProdutosUnificadoSwingController();
+            produtosController.show();
+            
+            statusLabel.setText("Gestão de produtos aberta");
+            LoggerUtil.info("Tela unificada de produtos aberta com sucesso");
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao acessar cadastro de produtos", ex);
+            LoggerUtil.error("Erro ao abrir gestão de produtos", ex);
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir gestão de produtos: " + ex.getMessage(),
+                "Gestão de Produtos", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -680,11 +751,15 @@ public class PDVPrincipalSwingController {
         try {
             LoggerUtil.info("Abrindo módulo de relatórios");
             LoggerUtil.logUserAction("Usuário", "RELATORIOS", "Acesso ao módulo de relatórios");
-            JOptionPane.showMessageDialog(mainFrame, 
-                "Módulo de relatórios disponível no menu Relatórios",
-                "Relatórios", JOptionPane.INFORMATION_MESSAGE);
+            PDVRelatoriosSwingController relatoriosController = new PDVRelatoriosSwingController();
+            relatoriosController.show();
+            statusLabel.setText("Relatórios abertos");
+            LoggerUtil.info("Módulo de relatórios aberto com sucesso");
         } catch (Exception ex) {
-            LoggerUtil.error("Erro ao acessar relatórios", ex);
+            LoggerUtil.error("Erro ao abrir relatórios", ex);
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir relatórios: " + ex.getMessage(),
+                "Relatórios", JOptionPane.ERROR_MESSAGE);
         }
     }
     

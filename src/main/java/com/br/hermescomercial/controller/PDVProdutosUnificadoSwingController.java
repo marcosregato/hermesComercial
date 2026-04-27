@@ -1,0 +1,999 @@
+package com.br.hermescomercial.controller;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.math.BigDecimal;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import com.br.hermescomercial.util.DatabaseConfig;
+
+/**
+ * Controller Unificado de Produtos em SWING
+ * Interface completa para cadastro e consulta de produtos
+ * Versão 2.0 - 100% SWING - Layout Premium com Abas
+ */
+public class PDVProdutosUnificadoSwingController {
+    
+    private JFrame frame;
+    private JTabbedPane tabbedPane;
+    
+    // Componentes da aba de Consulta
+    private JTextField txtBuscaConsulta;
+    private JTable produtosTable;
+    private DefaultTableModel tableModel;
+    
+    // Componentes da aba de Cadastro
+    private JTextField txtCodigo;
+    private JTextField txtDescricao;
+    private JTextField txtPreco;
+    private JTextField txtEstoque;
+    private JTextField txtCategoria;
+    private JTextArea txtObservacoes;
+    
+    // Lista de produtos (simulação)
+    private List<Produto> produtos;
+    
+    public PDVProdutosUnificadoSwingController() {
+        produtos = new ArrayList<>();
+        carregarProdutosDoBanco();
+        initializeUI();
+    }
+    
+    private void initializeUI() {
+        frame = new JFrame("📦 Gestão de Produtos v2.0.0 - Premium");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.setSize(950, 650);
+        frame.setLocationRelativeTo(null);
+        
+        // Configurar fundo padrão Nova Venda
+        frame.getContentPane().setBackground(new Color(245, 245, 250));
+        
+        frame.add(createMainPanel());
+    }
+    
+    private JPanel createMainPanel() {
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        mainPanel.setBackground(new Color(245, 245, 250));
+        
+        mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
+        mainPanel.add(createTabbedPane(), BorderLayout.CENTER);
+        
+        return mainPanel;
+    }
+    
+    private JPanel createHeaderPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+        panel.setBackground(new Color(41, 128, 185));
+        panel.setPreferredSize(new Dimension(0, 80));
+        
+        // Título central
+        JLabel titleLabel = new JLabel("📦 Gestão de Produtos v2.0.0 - Premium", JLabel.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE);
+        
+        // Botão voltar estilizado
+        JButton btnVoltar = new JButton("← Voltar");
+        btnVoltar.setBackground(new Color(255, 255, 255));
+        btnVoltar.setForeground(new Color(41, 128, 185));
+        btnVoltar.setFont(new Font("Arial", Font.BOLD, 12));
+        btnVoltar.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        btnVoltar.setFocusPainted(false);
+        btnVoltar.addActionListener(e -> frame.dispose());
+        
+        // Data e hora atual
+        JLabel lblDataHora = new JLabel(java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), JLabel.RIGHT);
+        lblDataHora.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblDataHora.setForeground(Color.WHITE);
+        
+        panel.add(btnVoltar, BorderLayout.WEST);
+        panel.add(titleLabel, BorderLayout.CENTER);
+        panel.add(lblDataHora, BorderLayout.EAST);
+        
+        return panel;
+    }
+    
+    private JTabbedPane createTabbedPane() {
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setFont(new Font("Arial", Font.BOLD, 14));
+        tabbedPane.setBackground(new Color(245, 245, 250));
+        
+        // Aba de Consulta
+        JPanel consultaPanel = createConsultaPanel();
+        tabbedPane.addTab("🔍 Consultar Produtos", consultaPanel);
+        
+        // Aba de Cadastro
+        JPanel cadastroPanel = createCadastroPanel();
+        tabbedPane.addTab("➕ Cadastrar Produto", cadastroPanel);
+        
+        return tabbedPane;
+    }
+    
+    private JPanel createConsultaPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(new Color(250, 250, 250)); // Cinza muito suave
+        
+        // Painel de busca - efeito cardPanel elegante
+        JPanel buscaPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Fundo elegante com gradiente sutil
+                g2d.setColor(new Color(250, 252, 252)); // Branco suave
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+                
+                // Borda elegante
+                g2d.setColor(new Color(189, 195, 199)); // Cinza suave
+                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 25, 25);
+            }
+        };
+        buscaPanel.setOpaque(false);
+        buscaPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        
+        JLabel lblBusca = new JLabel("🔍 Buscar Produto:");
+        lblBusca.setFont(new Font("Arial", Font.BOLD, 14));
+        lblBusca.setForeground(new Color(41, 128, 185));
+        
+        JPanel buscaInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        buscaInputPanel.setBackground(new Color(255, 255, 255));
+        txtBuscaConsulta = new JTextField(30);
+        txtBuscaConsulta.setFont(new Font("Arial", Font.PLAIN, 12));
+        txtBuscaConsulta.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        JButton btnBuscar = createStyledButton("🔍 Buscar", "Buscar produtos", null);
+        JButton btnLimpar = createStyledButton("🔄 Limpar", "Limpar busca", null);
+        JButton btnAtualizar = createStyledButton("🔄 Atualizar", "Atualizar lista", null);
+        
+        buscaInputPanel.add(txtBuscaConsulta);
+        buscaInputPanel.add(btnBuscar);
+        buscaInputPanel.add(btnLimpar);
+        buscaInputPanel.add(btnAtualizar);
+        
+        buscaPanel.add(lblBusca, BorderLayout.NORTH);
+        buscaPanel.add(buscaInputPanel, BorderLayout.CENTER);
+        
+        // Tabela de produtos
+        String[] columns = {"Código", "Descrição", "Preço", "Estoque", "Categoria"};
+        tableModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 2) return Double.class; // Preço
+                if (columnIndex == 3) return Integer.class; // Estoque
+                return String.class;
+            }
+        };
+        
+        produtosTable = new JTable(tableModel);
+        produtosTable.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // Fonte suave
+        produtosTable.setRowHeight(28); // Altura suave aumentada
+        produtosTable.setSelectionBackground(new Color(189, 195, 199)); // Cinza suave para seleção
+        produtosTable.setSelectionForeground(new Color(52, 73, 94)); // Azul suave para texto selecionado
+        produtosTable.setGridColor(new Color(236, 240, 241)); // Grade suave
+        produtosTable.setBackground(Color.WHITE);
+        
+        // Configurar header da tabela com cores suaves
+        produtosTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12)); // Fonte suave
+        produtosTable.getTableHeader().setBackground(new Color(149, 165, 166)); // Cinza azulado suave
+        produtosTable.getTableHeader().setForeground(Color.WHITE);
+        
+        // Configurar larguras das colunas
+        produtosTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+        produtosTable.getColumnModel().getColumn(1).setPreferredWidth(300);
+        produtosTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+        produtosTable.getColumnModel().getColumn(3).setPreferredWidth(80);
+        produtosTable.getColumnModel().getColumn(4).setPreferredWidth(120);
+        
+        JScrollPane scrollPane = new JScrollPane(produtosTable);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        scrollPane.setBackground(new Color(250, 250, 250)); // Cinza muito suave
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        
+        // Painel de botões
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        buttonPanel.setBackground(new Color(245, 245, 250));
+        JButton btnEditar = createStyledButton("✏️ Editar", "Editar produto selecionado", e -> editarProduto());
+        JButton btnExcluir = createStyledButton("🗑️ Excluir", "Excluir produto selecionado", e -> excluirProduto());
+        JButton btnExportar = createStyledButton("📤 Exportar", "Exportar lista de produtos", e -> exportarProdutos());
+        
+        buttonPanel.add(btnEditar);
+        buttonPanel.add(btnExcluir);
+        buttonPanel.add(btnExportar);
+        
+        panel.add(buscaPanel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        // Carregar dados na tabela
+        atualizarTabela();
+        
+        // Ações dos botões
+        btnBuscar.addActionListener(e -> buscarProdutos());
+        btnLimpar.addActionListener(e -> limparBusca());
+        btnAtualizar.addActionListener(e -> atualizarTabelaComFeedback());
+        
+        return panel;
+    }
+    
+    private JPanel createCadastroPanel() {
+        JPanel formPanel = new JPanel(new GridBagLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Fundo elegante com gradiente sutil
+                g2d.setColor(new Color(248, 249, 250)); // Branco suave
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
+                
+                // Borda elegante
+                g2d.setColor(new Color(206, 212, 218)); // Cinza suave
+                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 25, 25);
+            }
+        };
+        formPanel.setOpaque(false);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        // Código
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0;
+        formPanel.add(new JLabel("Código:"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        txtCodigo = new JTextField();
+        txtCodigo.setFont(new Font("Arial", Font.PLAIN, 12));
+        txtCodigo.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtCodigo.setToolTipText("Digite o código do produto");
+        formPanel.add(txtCodigo, gbc);
+        
+        // Descrição
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0;
+        formPanel.add(new JLabel("Descrição:"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        txtDescricao = new JTextField();
+        txtDescricao.setFont(new Font("Arial", Font.PLAIN, 12));
+        txtDescricao.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtDescricao.setToolTipText("Digite a descrição do produto");
+        formPanel.add(txtDescricao, gbc);
+        
+        // Preço
+        gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0;
+        formPanel.add(new JLabel("Preço (R$):"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        txtPreco = new JTextField();
+        txtPreco.setFont(new Font("Arial", Font.PLAIN, 12));
+        txtPreco.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtPreco.setToolTipText("Digite o preço do produto");
+        formPanel.add(txtPreco, gbc);
+        
+        // Estoque
+        gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 0;
+        formPanel.add(new JLabel("Estoque:"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        txtEstoque = new JTextField();
+        txtEstoque.setFont(new Font("Arial", Font.PLAIN, 12));
+        txtEstoque.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtEstoque.setToolTipText("Digite a quantidade em estoque");
+        formPanel.add(txtEstoque, gbc);
+        
+        // Categoria
+        gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0;
+        formPanel.add(new JLabel("Categoria:"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        txtCategoria = new JTextField();
+        txtCategoria.setFont(new Font("Arial", Font.PLAIN, 12));
+        txtCategoria.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtCategoria.setToolTipText("Digite a categoria do produto");
+        formPanel.add(txtCategoria, gbc);
+        
+        // Observações
+        gbc.gridx = 0; gbc.gridy = 5; gbc.weightx = 0;
+        gbc.anchor = GridBagConstraints.NORTHWEST;
+        formPanel.add(new JLabel("Observações:"), gbc);
+        gbc.gridx = 1; gbc.gridy = 5; gbc.weightx = 1.0; gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        txtObservacoes = new JTextArea(3, 20);
+        txtObservacoes.setFont(new Font("Arial", Font.PLAIN, 12));
+        txtObservacoes.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtObservacoes.setBackground(Color.WHITE);
+        txtObservacoes.setToolTipText("Digite observações adicionais (opcional)");
+        JScrollPane scrollPane = new JScrollPane(txtObservacoes);
+        formPanel.add(scrollPane, gbc);
+        
+        // Painel de botões
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        buttonPanel.setBackground(new Color(245, 245, 250));
+        
+        JButton btnLimpar = createStyledButton("🔄 Limpar", "Limpar campos", null);
+        JButton btnSalvar = createStyledButton("💾 Salvar", "Salvar produto", this::salvarProduto);
+        JButton btnCancelar = createStyledButton("❌ Cancelar", "Cancelar cadastro", e -> limparCampos());
+        
+        btnLimpar.addActionListener(e -> limparCampos());
+        
+        buttonPanel.add(btnLimpar);
+        buttonPanel.add(btnSalvar);
+        buttonPanel.add(btnCancelar);
+        
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(245, 245, 250));
+        mainPanel.add(formPanel, BorderLayout.CENTER);
+        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        return mainPanel;
+    }
+    
+    private JButton createStyledButton(String text, String tooltip, ActionListener action) {
+        JButton button = new JButton(text);
+        button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
+        button.setForeground(new Color(255, 255, 255)); // Branco elegante
+        button.setFont(new Font("Segoe UI", Font.BOLD, 12)); // Fonte elegante
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
+            BorderFactory.createEmptyBorder(12, 20, 12, 20)
+        ));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setToolTipText(tooltip);
+        button.setOpaque(true);
+        if (action != null) {
+            button.addActionListener(action);
+        }
+        
+        // Efeito hover elegante
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(127, 140, 141)); // Cinza mais escuro suave
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(108, 117, 125), 2), // Cinza ainda mais escuro
+                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
+                ));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
+                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
+                ));
+            }
+        });
+        
+        return button;
+    }
+    
+    private void carregarProdutosDoBanco() {
+        produtos.clear();
+        
+        System.out.println("=== INICIANDO CARREGAMENTO DE PRODUTOS DO BANCO ===");
+        
+        // Tentar carregar do banco de dados
+        try {
+            System.out.println("1. Verificando configuração do banco...");
+            String dbType = DatabaseConfig.getProperty("database.type");
+            String dbHost = DatabaseConfig.getProperty("database.host");
+            String dbPort = DatabaseConfig.getProperty("database.port");
+            String dbName = DatabaseConfig.getProperty("database.name");
+            System.out.println("   Tipo: " + dbType);
+            System.out.println("   Host: " + dbHost);
+            System.out.println("   Porta: " + dbPort);
+            System.out.println("   Database: " + dbName);
+            
+            System.out.println("2. Testando conexão com o banco...");
+            try (Connection conn = DatabaseConfig.getConnection()) {
+                System.out.println("   ✅ Conexão estabelecida com sucesso!");
+                System.out.println("   URL: " + conn.getMetaData().getURL());
+                
+                // Criar tabela de produtos se não existir
+                System.out.println("3. Verificando/criando tabela produtos...");
+                criarTabelaProdutos();
+                
+                // Verificar se tabela existe e tem dados
+                System.out.println("4. Verificando dados na tabela...");
+                String sqlCount = "SELECT COUNT(*) as total FROM produto";
+                try (Statement stmt = conn.createStatement();
+                     ResultSet rsCount = stmt.executeQuery(sqlCount)) {
+                    
+                    if (rsCount.next()) {
+                        int total = rsCount.getInt("total");
+                        System.out.println("   Total de registros na tabela: " + total);
+                        
+                        if (total > 0) {
+                            // Carregar produtos do banco
+                            System.out.println("5. Carregando produtos...");
+                            String sql = "SELECT codigo, descricao, preco, estoque, categoria FROM produto ORDER BY codigo";
+                            
+                            try (Statement stmt2 = conn.createStatement();
+                                 ResultSet rs = stmt2.executeQuery(sql)) {
+                                
+                                int count = 0;
+                                while (rs.next()) {
+                                    Produto produto = new Produto(
+                                        rs.getString("codigo"),
+                                        rs.getString("descricao"),
+                                        rs.getDouble("preco"),
+                                        rs.getInt("estoque"),
+                                        rs.getString("categoria")
+                                    );
+                                    produtos.add(produto);
+                                    count++;
+                                    System.out.println("   Produto " + count + ": " + produto.getCodigo() + " - " + produto.getDescricao());
+                                }
+                                
+                                System.out.println("✅ Carregados " + produtos.size() + " produtos do banco de dados");
+                                return; // Sucesso, sair do método
+                            }
+                        } else {
+                            System.out.println("   ⚠️ Tabela vazia - adicionando dados de exemplo...");
+                            adicionarDadosExemplo();
+                            return;
+                        }
+                    }
+                }
+            }
+            
+        } catch (Exception e) {
+            System.err.println("❌ Erro ao acessar banco de dados: " + e.getMessage());
+            System.err.println("   Stack trace: " + e.getClass().getSimpleName());
+            System.out.println("🔄 Usando modo offline com dados em memória...");
+        }
+        
+        // Fallback para modo offline
+        System.out.println("=== MODO OFFLINE ATIVADO ===");
+        carregarDadosOffline();
+    }
+    
+    private void carregarDadosOffline() {
+        System.out.println("Carregando produtos em modo offline...");
+        
+        produtos.add(new Produto("001", "Notebook Dell Inspire 15", 3500.0, 10, "Informática"));
+        produtos.add(new Produto("002", "Mouse Wireless Logitech MX3", 89.9, 50, "Periféricos"));
+        produtos.add(new Produto("003", "Teclado Mecânico RGB Gamer", 250.0, 25, "Periféricos"));
+        produtos.add(new Produto("004", "Monitor 24\" LED Full HD", 899.0, 15, "Monitores"));
+        produtos.add(new Produto("005", "Webcam HD 1080p com Microfone", 150.0, 30, "Acessórios"));
+        
+        System.out.println("Carregados " + produtos.size() + " produtos em modo offline");
+    }
+    
+    private void criarTabelaProdutos() {
+        String sql = """
+            CREATE TABLE IF NOT EXISTS produto (
+                codigo VARCHAR(20) PRIMARY KEY,
+                descricao VARCHAR(255) NOT NULL,
+                preco DECIMAL(10,2) NOT NULL,
+                estoque INTEGER NOT NULL DEFAULT 0,
+                categoria VARCHAR(100) NOT NULL,
+                data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                data_atualizacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+            """;
+        
+        try (Connection conn = DatabaseConfig.getConnection();
+             Statement stmt = conn.createStatement()) {
+            
+            System.out.println("   Executando SQL: " + sql.replace("\n", " "));
+            stmt.execute(sql);
+            System.out.println("   ✅ Tabela produto verificada/criada com sucesso");
+            
+            // Verificar estrutura da tabela
+            try (ResultSet rs = conn.getMetaData().getTables(null, null, "produto", null)) {
+                if (rs.next()) {
+                    System.out.println("   ✅ Tabela 'produto' existe no banco");
+                } else {
+                    System.out.println("   ⚠️ Tabela 'produto' não encontrada após criação");
+                }
+            }
+            
+        } catch (SQLException e) {
+            System.err.println("   ❌ Erro ao criar tabela produto: " + e.getMessage());
+            System.err.println("   SQL State: " + e.getSQLState());
+            System.err.println("   Error Code: " + e.getErrorCode());
+        }
+    }
+    
+    private void adicionarDadosExemplo() {
+        System.out.println("=== ADICIONANDO DADOS DE EXEMPLO ===");
+        
+        String[] sqlStatements = {
+            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('001', 'Notebook Dell Inspire 15', 3500.00, 10, 'Informática')",
+            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('002', 'Mouse Wireless Logitech MX3', 89.90, 50, 'Periféricos')",
+            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('003', 'Teclado Mecânico RGB Gamer', 250.00, 25, 'Periféricos')",
+            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('004', 'Monitor 24\" LED Full HD', 899.00, 15, 'Monitores')",
+            "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES ('005', 'Webcam HD 1080p com Microfone', 150.00, 30, 'Acessórios')"
+        };
+        
+        try (Connection conn = DatabaseConfig.getConnection();
+             Statement stmt = conn.createStatement()) {
+            
+            System.out.println("   Conectado ao banco para inserir dados exemplo");
+            
+            int inseridos = 0;
+            for (int i = 0; i < sqlStatements.length; i++) {
+                String sql = sqlStatements[i];
+                System.out.println("   Inserindo produto " + (i + 1) + ": " + sql.substring(0, 50) + "...");
+                
+                try {
+                    int result = stmt.executeUpdate(sql);
+                    if (result > 0) {
+                        inseridos++;
+                        System.out.println("   ✅ Produto " + (i + 1) + " inserido com sucesso");
+                    }
+                } catch (SQLException e) {
+                    // Ignorar erros de duplicação (dados já existem)
+                    if (e.getMessage().contains("duplicate") || e.getMessage().contains("UNIQUE") || e.getMessage().contains("PRIMARY KEY")) {
+                        System.out.println("   ⚠️ Produto " + (i + 1) + " já existe (duplicado)");
+                    } else {
+                        System.err.println("   ❌ Erro ao inserir produto " + (i + 1) + ": " + e.getMessage());
+                        System.err.println("      SQL State: " + e.getSQLState());
+                    }
+                }
+            }
+            
+            System.out.println("   Total de produtos inseridos: " + inseridos);
+            
+            // Recarregar após inserir
+            System.out.println("   Recarregando produtos após inserção...");
+            carregarProdutosDoBanco();
+            
+        } catch (SQLException e) {
+            System.err.println("❌ Erro ao adicionar dados exemplo: " + e.getMessage());
+            System.err.println("   SQL State: " + e.getSQLState());
+            System.err.println("   Error Code: " + e.getErrorCode());
+            
+            // Fallback para modo offline se falhar
+            System.out.println("🔄 Usando modo offline...");
+            carregarDadosOffline();
+        }
+    }
+    
+    private void atualizarTabela() {
+        tableModel.setRowCount(0);
+        for (Produto produto : produtos) {
+            Object[] row = {
+                produto.getCodigo(),
+                produto.getDescricao(),
+                produto.getPreco(),
+                produto.getEstoque(),
+                produto.getCategoria()
+            };
+            tableModel.addRow(row);
+        }
+    }
+    
+    private void atualizarTabelaComFeedback() {
+        atualizarTabela();
+        
+        // Feedback visual
+        JOptionPane.showMessageDialog(frame, 
+            "Lista de produtos atualizada!\nTotal de produtos: " + produtos.size(),
+            "Lista Atualizada", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void buscarProdutos() {
+        String textoBusca = txtBuscaConsulta.getText().toLowerCase().trim();
+        
+        if (textoBusca.isEmpty()) {
+            atualizarTabela();
+            return;
+        }
+        
+        tableModel.setRowCount(0);
+        for (Produto produto : produtos) {
+            if (produto.getCodigo().toLowerCase().contains(textoBusca) ||
+                produto.getDescricao().toLowerCase().contains(textoBusca) ||
+                produto.getCategoria().toLowerCase().contains(textoBusca)) {
+                Object[] row = {
+                    produto.getCodigo(),
+                    produto.getDescricao(),
+                    produto.getPreco(),
+                    produto.getEstoque(),
+                    produto.getCategoria()
+                };
+                tableModel.addRow(row);
+            }
+        }
+    }
+    
+    private void limparBusca() {
+        txtBuscaConsulta.setText("");
+        atualizarTabela();
+        
+        // Feedback visual
+        JOptionPane.showMessageDialog(frame, 
+            "Campo de busca limpo e lista atualizada!",
+            "Busca Limpa", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    private void salvarProduto(ActionEvent e) {
+        try {
+            // Validar campos
+            if (!validarCampos()) {
+                return;
+            }
+            
+            // Coletar dados
+            String codigo = txtCodigo.getText().trim();
+            String descricao = txtDescricao.getText().trim();
+            BigDecimal preco = new BigDecimal(txtPreco.getText().trim().replace(",", "."));
+            int estoque = Integer.parseInt(txtEstoque.getText().trim());
+            String categoria = txtCategoria.getText().trim();
+            String observacoes = txtObservacoes.getText().trim();
+            
+            // Verificar se código já existe (apenas para novos produtos)
+            boolean isEdicao = !txtCodigo.isEditable();
+            if (!isEdicao) {
+                for (Produto p : produtos) {
+                    if (p.getCodigo().equals(codigo)) {
+                        JOptionPane.showMessageDialog(frame, 
+                            "Já existe um produto com este código!",
+                            "Código Duplicado", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                }
+            }
+            
+            // Salvar ou atualizar produto (banco ou offline)
+            boolean sucessoBanco = false;
+            boolean isModoOffline = false;
+            
+            if (isEdicao) {
+                sucessoBanco = atualizarProdutoNoBanco(codigo, descricao, preco.doubleValue(), estoque, categoria);
+                if (sucessoBanco) {
+                    // Atualizar na lista local
+                    for (int i = 0; i < produtos.size(); i++) {
+                        if (produtos.get(i).getCodigo().equals(codigo)) {
+                            produtos.set(i, new Produto(codigo, descricao, preco.doubleValue(), estoque, categoria));
+                            break;
+                        }
+                    }
+                    JOptionPane.showMessageDialog(frame, 
+                        "Produto atualizado com sucesso!",
+                        "Produto Atualizado", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    isModoOffline = true;
+                }
+            } else {
+                sucessoBanco = salvarProdutoNoBanco(codigo, descricao, preco.doubleValue(), estoque, categoria);
+                if (sucessoBanco) {
+                    // Adicionar na lista local
+                    Produto novoProduto = new Produto(codigo, descricao, preco.doubleValue(), estoque, categoria);
+                    produtos.add(novoProduto);
+                    JOptionPane.showMessageDialog(frame, 
+                        "Produto cadastrado com sucesso!",
+                        "Produto Cadastrado", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    isModoOffline = true;
+                }
+            }
+            
+            // Fallback para modo offline
+            if (isModoOffline) {
+                System.out.println("Salvando produto em modo offline...");
+                
+                if (isEdicao) {
+                    // Atualizar na lista local
+                    for (int i = 0; i < produtos.size(); i++) {
+                        if (produtos.get(i).getCodigo().equals(codigo)) {
+                            produtos.set(i, new Produto(codigo, descricao, preco.doubleValue(), estoque, categoria));
+                            break;
+                        }
+                    }
+                    JOptionPane.showMessageDialog(frame, 
+                        "Produto atualizado em modo offline!\n(Alterações não serão persistidas no banco)",
+                        "Modo Offline", JOptionPane.WARNING_MESSAGE);
+                } else {
+                    // Adicionar na lista local
+                    Produto novoProduto = new Produto(codigo, descricao, preco.doubleValue(), estoque, categoria);
+                    produtos.add(novoProduto);
+                    JOptionPane.showMessageDialog(frame, 
+                        "Produto cadastrado em modo offline!\n(Dados não serão persistidos no banco)",
+                        "Modo Offline", JOptionPane.WARNING_MESSAGE);
+                }
+            }
+            
+            // Atualizar tabela
+            atualizarTabela();
+            
+            // Limpar campos e mudar para aba de consulta
+            limparCampos();
+            txtCodigo.setEditable(true); // Reabilitar edição de código
+            tabbedPane.setSelectedIndex(0);
+            
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(frame, 
+                "Verifique os campos numéricos (Preço e Estoque)!",
+                "Erro de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(frame, 
+                "Erro ao cadastrar produto: " + ex.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private boolean validarCampos() {
+        // Validar código
+        if (txtCodigo.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(frame, 
+                "O código do produto é obrigatório!",
+                "Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
+            txtCodigo.requestFocus();
+            return false;
+        }
+        
+        // Validar descrição
+        if (txtDescricao.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(frame, 
+                "A descrição do produto é obrigatória!",
+                "Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
+            txtDescricao.requestFocus();
+            return false;
+        }
+        
+        // Validar preço
+        try {
+            String precoStr = txtPreco.getText().trim().replace(",", ".");
+            BigDecimal preco = new BigDecimal(precoStr);
+            if (preco.compareTo(BigDecimal.ZERO) <= 0) {
+                JOptionPane.showMessageDialog(frame, 
+                    "O preço deve ser maior que zero!",
+                    "Preço Inválido", JOptionPane.WARNING_MESSAGE);
+                txtPreco.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(frame, 
+                "O preço informado é inválido!",
+                "Preço Inválido", JOptionPane.WARNING_MESSAGE);
+            txtPreco.requestFocus();
+            return false;
+        }
+        
+        // Validar estoque
+        try {
+            int estoque = Integer.parseInt(txtEstoque.getText().trim());
+            if (estoque < 0) {
+                JOptionPane.showMessageDialog(frame, 
+                    "O estoque não pode ser negativo!",
+                    "Estoque Inválido", JOptionPane.WARNING_MESSAGE);
+                txtEstoque.requestFocus();
+                return false;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(frame, 
+                "O estoque informado é inválido!",
+                "Estoque Inválido", JOptionPane.WARNING_MESSAGE);
+            txtEstoque.requestFocus();
+            return false;
+        }
+        
+        // Validar categoria
+        if (txtCategoria.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(frame, 
+                "A categoria do produto é obrigatória!",
+                "Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
+            txtCategoria.requestFocus();
+            return false;
+        }
+        
+        return true;
+    }
+    
+    private void limparCampos() {
+        txtCodigo.setText("");
+        txtDescricao.setText("");
+        txtPreco.setText("");
+        txtEstoque.setText("");
+        txtCategoria.setText("");
+        txtObservacoes.setText("");
+        txtCodigo.requestFocus();
+    }
+    
+    private void editarProduto() {
+        int selectedRow = produtosTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(frame, 
+                "Selecione um produto para editar!",
+                "Editar Produto", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Obter produto selecionado
+        String codigo = (String) tableModel.getValueAt(selectedRow, 0);
+        Produto produtoSelecionado = null;
+        
+        for (Produto p : produtos) {
+            if (p.getCodigo().equals(codigo)) {
+                produtoSelecionado = p;
+                break;
+            }
+        }
+        
+        if (produtoSelecionado != null) {
+            // Mudar para aba de cadastro e preencher campos
+            tabbedPane.setSelectedIndex(1);
+            txtCodigo.setText(produtoSelecionado.getCodigo());
+            txtCodigo.setEditable(false); // Não permitir editar código
+            txtDescricao.setText(produtoSelecionado.getDescricao());
+            txtPreco.setText(String.valueOf(produtoSelecionado.getPreco()));
+            txtEstoque.setText(String.valueOf(produtoSelecionado.getEstoque()));
+            txtCategoria.setText(produtoSelecionado.getCategoria());
+            txtDescricao.requestFocus();
+            
+            JOptionPane.showMessageDialog(frame, 
+                "Produto carregado para edição!\n" +
+                "Faça as alterações desejadas e clique em Salvar.",
+                "Editar Produto", JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
+    
+    private void excluirProduto() {
+        int selectedRow = produtosTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(frame, 
+                "Selecione um produto para excluir!",
+                "Excluir Produto", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // Obter produto selecionado
+        String codigo = (String) tableModel.getValueAt(selectedRow, 0);
+        String descricao = (String) tableModel.getValueAt(selectedRow, 1);
+        
+        int confirm = JOptionPane.showConfirmDialog(frame, 
+            "Deseja realmente excluir o produto?\n\n" +
+            "Código: " + codigo + "\n" +
+            "Descrição: " + descricao,
+            "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+        
+        if (confirm == JOptionPane.YES_OPTION) {
+            // Tentar excluir do banco de dados
+            boolean sucessoBanco = excluirProdutoDoBanco(codigo);
+            
+            if (sucessoBanco) {
+                // Remover da lista local
+                produtos.removeIf(p -> p.getCodigo().equals(codigo));
+                
+                // Atualizar tabela
+                atualizarTabela();
+                
+                JOptionPane.showMessageDialog(frame, 
+                    "Produto excluído com sucesso!",
+                    "Produto Excluído", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                // Fallback para modo offline
+                System.out.println("Excluindo produto em modo offline...");
+                
+                // Remover da lista local
+                produtos.removeIf(p -> p.getCodigo().equals(codigo));
+                
+                // Atualizar tabela
+                atualizarTabela();
+                
+                JOptionPane.showMessageDialog(frame, 
+                    "Produto excluído em modo offline!\n(Alteração não será persistida no banco)",
+                    "Modo Offline", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+    }
+    
+    private void exportarProdutos() {
+        StringBuilder export = new StringBuilder();
+        export.append("Código;Descrição;Preço;Estoque;Categoria\n");
+        
+        for (Produto p : produtos) {
+            export.append(p.getCodigo()).append(";");
+            export.append(p.getDescricao()).append(";");
+            export.append(String.format("%.2f", p.getPreco())).append(";");
+            export.append(p.getEstoque()).append(";");
+            export.append(p.getCategoria()).append("\n");
+        }
+        
+        // Simulação de exportação (em implementação real, salvaria em arquivo)
+        JOptionPane.showMessageDialog(frame, 
+            "Lista de produtos exportada com sucesso!\n\n" +
+            "Total de produtos: " + produtos.size() + "\n" +
+            "Formato: CSV (separado por ;)\n\n" +
+            "Em implementação real, seria salvo em arquivo.",
+            "Exportação Concluída", JOptionPane.INFORMATION_MESSAGE);
+        
+        // Log da exportação
+        System.out.println("=== EXPORTAÇÃO DE PRODUTOS ===");
+        System.out.println(export.toString());
+    }
+    
+    private boolean salvarProdutoNoBanco(String codigo, String descricao, double preco, int estoque, String categoria) {
+        String sql = "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES (?, ?, ?, ?, ?)";
+        
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, codigo);
+            pstmt.setString(2, descricao);
+            pstmt.setDouble(3, preco);
+            pstmt.setInt(4, estoque);
+            pstmt.setString(5, categoria);
+            
+            int result = pstmt.executeUpdate();
+            System.out.println("Produto salvo no banco: " + codigo + " - Linhas afetadas: " + result);
+            return result > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Erro ao salvar produto: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    private boolean atualizarProdutoNoBanco(String codigo, String descricao, double preco, int estoque, String categoria) {
+        String sql = "UPDATE produto SET descricao = ?, preco = ?, estoque = ?, categoria = ?, data_atualizacao = CURRENT_TIMESTAMP WHERE codigo = ?";
+        
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, descricao);
+            pstmt.setDouble(2, preco);
+            pstmt.setInt(3, estoque);
+            pstmt.setString(4, categoria);
+            pstmt.setString(5, codigo);
+            
+            int result = pstmt.executeUpdate();
+            System.out.println("Produto atualizado no banco: " + codigo + " - Linhas afetadas: " + result);
+            return result > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Erro ao atualizar produto: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    private boolean excluirProdutoDoBanco(String codigo) {
+        String sql = "DELETE FROM produto WHERE codigo = ?";
+        
+        try (Connection conn = DatabaseConfig.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, codigo);
+            
+            int result = pstmt.executeUpdate();
+            System.out.println("Produto excluído do banco: " + codigo + " - Linhas afetadas: " + result);
+            return result > 0;
+            
+        } catch (SQLException e) {
+            System.err.println("Erro ao excluir produto: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    public void show() {
+        frame.setVisible(true);
+    }
+    
+    // Classe de apoio
+    private static class Produto {
+        private String codigo;
+        private String descricao;
+        private double preco;
+        private int estoque;
+        private String categoria;
+        
+        public Produto(String codigo, String descricao, double preco, int estoque, String categoria) {
+            this.codigo = codigo;
+            this.descricao = descricao;
+            this.preco = preco;
+            this.estoque = estoque;
+            this.categoria = categoria;
+        }
+        
+        public String getCodigo() { return codigo; }
+        public String getDescricao() { return descricao; }
+        public double getPreco() { return preco; }
+        public int getEstoque() { return estoque; }
+        public String getCategoria() { return categoria; }
+    }
+}

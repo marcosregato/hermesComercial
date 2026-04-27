@@ -4,9 +4,11 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import com.br.hermescomercial.util.DatabaseConfig;
 
 /**
  * Controller de Configurações do Sistema em SWING
@@ -401,10 +403,242 @@ public class PDVConfiguracoesSwingController {
     }
     
     private void configurarBancoDados(ActionEvent e) {
-        JOptionPane.showMessageDialog(frame, 
-            "Configuração de banco de dados em desenvolvimento.\n" +
-            "Suporte para MySQL, PostgreSQL e H2.",
-            "Banco de Dados", JOptionPane.INFORMATION_MESSAGE);
+        try {
+            // Criar diálogo de configuração de banco
+            JDialog configDialog = new JDialog(frame, "Configurar Conexão com Banco de Dados", true);
+            configDialog.setSize(500, 400);
+            configDialog.setLocationRelativeTo(frame);
+            
+            JPanel mainPanel = new JPanel(new BorderLayout());
+            mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+            mainPanel.setBackground(new Color(245, 245, 250));
+            
+            // Painel de configuração
+            JPanel configPanel = new JPanel(new GridBagLayout());
+            configPanel.setBackground(Color.WHITE);
+            configPanel.setBorder(BorderFactory.createTitledBorder("Parâmetros de Conexão"));
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.insets = new Insets(10, 10, 10, 10);
+            gbc.anchor = GridBagConstraints.WEST;
+            
+            // Tipo de banco
+            gbc.gridx = 0; gbc.gridy = 0;
+            configPanel.add(new JLabel("Tipo de Banco:"), gbc);
+            gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+            JComboBox<String> cbTipoBanco = new JComboBox<>(new String[]{"MySQL", "PostgreSQL", "H2"});
+            
+            // Carregar configurações salvas
+            String savedType = DatabaseConfig.getProperty("database.type");
+            if (savedType != null) {
+                cbTipoBanco.setSelectedItem(savedType);
+            }
+            configPanel.add(cbTipoBanco, gbc);
+            
+            // Host
+            gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+            configPanel.add(new JLabel("Host:"), gbc);
+            gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+            JTextField txtHost = new JTextField(DatabaseConfig.getProperty("database.host", "localhost"));
+            configPanel.add(txtHost, gbc);
+            
+            // Porta
+            gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+            configPanel.add(new JLabel("Porta:"), gbc);
+            gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+            String defaultPort = "5432"; // PostgreSQL padrão
+            if ("MySQL".equals(savedType)) defaultPort = "3306";
+            if ("H2".equals(savedType)) defaultPort = "9092";
+            JTextField txtPorta = new JTextField(DatabaseConfig.getProperty("database.port", defaultPort));
+            configPanel.add(txtPorta, gbc);
+            
+            // Database
+            gbc.gridx = 0; gbc.gridy = 3; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+            configPanel.add(new JLabel("Database:"), gbc);
+            gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+            JTextField txtDatabase = new JTextField(DatabaseConfig.getProperty("database.name", "hermes_comercial"));
+            configPanel.add(txtDatabase, gbc);
+            
+            // Usuário
+            gbc.gridx = 0; gbc.gridy = 4; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+            configPanel.add(new JLabel("Usuário:"), gbc);
+            gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+            String defaultUser = "postgres"; // PostgreSQL padrão
+            if ("MySQL".equals(savedType)) defaultUser = "root";
+            if ("H2".equals(savedType)) defaultUser = "sa";
+            JTextField txtUsuario = new JTextField(DatabaseConfig.getProperty("database.user", defaultUser));
+            configPanel.add(txtUsuario, gbc);
+            
+            // Senha
+            gbc.gridx = 0; gbc.gridy = 5; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+            configPanel.add(new JLabel("Senha:"), gbc);
+            gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1.0;
+            JPasswordField txtSenha = new JPasswordField(DatabaseConfig.getProperty("database.password", ""));
+            configPanel.add(txtSenha, gbc);
+            
+            // Botões
+            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            buttonPanel.setBackground(new Color(245, 245, 250));
+            
+            JButton btnTestar = createStyledButton("🔧 Testar Conexão", "Testar conexão com banco", null);
+            JButton btnSalvar = createStyledButton("💾 Salvar", "Salvar configurações", null);
+            JButton btnCancelar = createStyledButton("❌ Cancelar", "Cancelar configuração", null);
+            
+            btnTestar.addActionListener(ev -> {
+                String tipo = (String) cbTipoBanco.getSelectedItem();
+                String host = txtHost.getText().trim();
+                String porta = txtPorta.getText().trim();
+                String database = txtDatabase.getText().trim();
+                String usuario = txtUsuario.getText().trim();
+                String senha = new String(txtSenha.getPassword());
+                
+                // Validar campos
+                if (host.isEmpty() || porta.isEmpty() || database.isEmpty() || usuario.isEmpty()) {
+                    JOptionPane.showMessageDialog(configDialog, 
+                        "Preencha todos os campos obrigatórios!",
+                        "Campos Obrigatórios", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
+                // Mostrar diálogo de teste em andamento
+                JDialog testDialog = new JDialog(configDialog, "Testando Conexão...", true);
+                testDialog.setSize(300, 100);
+                testDialog.setLocationRelativeTo(configDialog);
+                
+                JPanel testPanel = new JPanel(new BorderLayout());
+                testPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+                testPanel.setBackground(new Color(245, 245, 250));
+                
+                JLabel lblTeste = new JLabel("🔄 Testando conexão...", JLabel.CENTER);
+                lblTeste.setFont(new Font("Arial", Font.BOLD, 14));
+                testPanel.add(lblTeste, BorderLayout.CENTER);
+                
+                testDialog.add(testPanel);
+                
+                // Executar teste em thread separada
+                SwingWorker<Boolean, Void> worker = new SwingWorker<Boolean, Void>() {
+                    @Override
+                    protected Boolean doInBackground() throws Exception {
+                        return DatabaseConfig.testConnectionWithFallback(tipo, host, porta, database, usuario, senha);
+                    }
+                    
+                    @Override
+                    protected void done() {
+                        testDialog.dispose();
+                        try {
+                            boolean sucesso = get();
+                            if (sucesso) {
+                                JOptionPane.showMessageDialog(configDialog, 
+                                    "✅ Conexão testada com sucesso!\n\n" +
+                                    "Banco: " + tipo + "\n" +
+                                    "Host: " + host + ":" + porta + "\n" +
+                                    "Database: " + database + "\n" +
+                                    "Usuário: " + usuario,
+                                    "Teste de Conexão", JOptionPane.INFORMATION_MESSAGE);
+                            } else {
+                                JOptionPane.showMessageDialog(configDialog, 
+                                    "❌ Falha na conexão!\n\n" +
+                                    "Verifique os parâmetros e tente novamente.\n" +
+                                    "Possíveis causas:\n" +
+                                    "• Servidor não está rodando\n" +
+                                    "• Credenciais incorretas\n" +
+                                    "• Banco não existe\n" +
+                                    "• Firewall bloqueando conexão",
+                                    "Falha na Conexão", JOptionPane.ERROR_MESSAGE);
+                            }
+                        } catch (Exception ex) {
+                            JOptionPane.showMessageDialog(configDialog, 
+                                "❌ Erro durante o teste: " + ex.getMessage(),
+                                "Erro no Teste", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                };
+                
+                worker.execute();
+                testDialog.setVisible(true);
+            });
+            
+            btnSalvar.addActionListener(ev -> {
+                String tipo = (String) cbTipoBanco.getSelectedItem();
+                String host = txtHost.getText().trim();
+                String porta = txtPorta.getText().trim();
+                String database = txtDatabase.getText().trim();
+                String usuario = txtUsuario.getText().trim();
+                String senha = new String(txtSenha.getPassword());
+                
+                // Validar campos
+                if (host.isEmpty() || porta.isEmpty() || database.isEmpty() || usuario.isEmpty()) {
+                    JOptionPane.showMessageDialog(configDialog, 
+                        "Preencha todos os campos obrigatórios!",
+                        "Campos Obrigatórios", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                
+                // Salvar configurações
+                DatabaseConfig.setProperty("database.type", tipo);
+                DatabaseConfig.setProperty("database.host", host);
+                DatabaseConfig.setProperty("database.port", porta);
+                DatabaseConfig.setProperty("database.name", database);
+                DatabaseConfig.setProperty("database.user", usuario);
+                DatabaseConfig.setProperty("database.password", senha);
+                DatabaseConfig.setProperty("database.description", 
+                    "Banco de dados " + tipo + " em " + host + ":" + porta);
+                
+                DatabaseConfig.saveConfig();
+                
+                JOptionPane.showMessageDialog(configDialog, 
+                    "✅ Configurações salvas com sucesso!\n\n" +
+                    "Banco: " + tipo + "\n" +
+                    "Host: " + host + ":" + porta + "\n" +
+                    "Database: " + database + "\n" +
+                    "Usuário: " + usuario + "\n\n" +
+                    "As configurações serão aplicadas ao reiniciar o sistema.",
+                    "Configurações Salvas", JOptionPane.INFORMATION_MESSAGE);
+                configDialog.dispose();
+            });
+            
+            btnCancelar.addActionListener(ev -> configDialog.dispose());
+            
+            buttonPanel.add(btnTestar);
+            buttonPanel.add(btnSalvar);
+            buttonPanel.add(btnCancelar);
+            
+            mainPanel.add(configPanel, BorderLayout.CENTER);
+            mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+            
+            configDialog.add(mainPanel);
+            configDialog.setVisible(true);
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(frame, 
+                "Erro ao abrir configuração de banco: " + ex.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private JButton createStyledButton(String text, String tooltip, ActionListener action) {
+        JButton button = new JButton(text);
+        button.setBackground(new Color(41, 128, 185));
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Arial", Font.BOLD, 12));
+        button.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setToolTipText(tooltip);
+        if (action != null) {
+            button.addActionListener(action);
+        }
+        
+        // Efeito hover
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(52, 152, 219));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(new Color(41, 128, 185));
+            }
+        });
+        
+        return button;
     }
     
     private void selecionarPastaBackup(ActionEvent e) {
