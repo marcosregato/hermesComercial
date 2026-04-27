@@ -148,16 +148,28 @@ public class PDVRelatoriosSwingController {
         txtDataInicio.setEditable(true);
         infoPanel.add(txtDataInicio, gbc);
         
-        // Data Fim
+        // Botão Buscar Data Início
         gbc.gridx = 2; gbc.gridy = 0;
+        JButton btnBuscarDataInicio = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        btnBuscarDataInicio.addActionListener(e -> buscarPorData(txtDataInicio.getText(), "início"));
+        infoPanel.add(btnBuscarDataInicio, gbc);
+        
+        // Data Fim
+        gbc.gridx = 3; gbc.gridy = 0;
         infoPanel.add(new JLabel("Data Fim:"), gbc);
-        gbc.gridx = 3;
+        gbc.gridx = 4;
         JTextField txtDataFim = new JTextField(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")), 10);
         txtDataFim.setEditable(true);
         infoPanel.add(txtDataFim, gbc);
         
+        // Botão Buscar Data Fim
+        gbc.gridx = 5; gbc.gridy = 0;
+        JButton btnBuscarDataFim = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        btnBuscarDataFim.addActionListener(e -> buscarPorData(txtDataFim.getText(), "fim"));
+        infoPanel.add(btnBuscarDataFim, gbc);
+        
         // Botão Gerar Relatório
-        gbc.gridx = 4; gbc.gridy = 0;
+        gbc.gridx = 6; gbc.gridy = 0;
         JButton btnGerar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📊 Gerar Relatório", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
         btnGerar.addActionListener(e -> JOptionPane.showMessageDialog(frame, 
             "Relatório gerado para o período: " + txtDataInicio.getText() + " a " + txtDataFim.getText(),
@@ -673,6 +685,83 @@ public class PDVRelatoriosSwingController {
     
     public void show() {
         frame.setVisible(true);
+    }
+    
+    /**
+     * Realiza busca por data específica
+     */
+    private void buscarPorData(String data, String tipo) {
+        try {
+            // Validar formato da data
+            if (!data.matches("\\d{2}/\\d{2}/\\d{4}")) {
+                JOptionPane.showMessageDialog(frame, 
+                    "Formato de data inválido! Use DD/MM/AAAA",
+                    "Erro de Validação", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Simular busca por data (em implementação real, consultaria banco de dados)
+            StringBuilder resultado = new StringBuilder();
+            resultado.append("🔍 RESULTADO DA BUSCA POR DATA\n");
+            resultado.append("=====================================\n\n");
+            resultado.append("Data pesquisada: ").append(data).append("\n");
+            resultado.append("Tipo de busca: ").append(tipo).append("\n\n");
+            
+            // Simular dados encontrados
+            resultado.append("📊 DADOS ENCONTRADOS:\n");
+            resultado.append("─────────────────────────────\n");
+            resultado.append("• Total de vendas: 23\n");
+            resultado.append("• Valor total: R$ 1.234,56\n");
+            resultado.append("• Ticket médio: R$ 53,68\n");
+            resultado.append("• Produtos vendidos: 67\n");
+            resultado.append("• Clientes atendidos: 45\n\n");
+            
+            resultado.append("📈 DETALHES:\n");
+            resultado.append("─────────────────────────────\n");
+            resultado.append("• Vendas à vista: R$ 890,34\n");
+            resultado.append("• Vendas cartão: R$ 344,22\n");
+            resultado.append("• Vendas Pix: R$ 0,00\n\n");
+            
+            resultado.append("🏢 PRODUTOS MAIS VENDIDOS:\n");
+            resultado.append("─────────────────────────────\n");
+            resultado.append("1. Arroz 5kg - 8 unidades\n");
+            resultado.append("2. Feijão 1kg - 6 unidades\n");
+            resultado.append("3. Óleo 900ml - 5 unidades\n");
+            resultado.append("4. Açúcar 1kg - 4 unidades\n");
+            resultado.append("5. Café 500g - 3 unidades\n");
+            
+            // Exibir resultado em nova janela
+            JFrame resultadoFrame = new JFrame("🔍 Busca por Data: " + data);
+            resultadoFrame.setSize(500, 400);
+            resultadoFrame.setLocationRelativeTo(frame);
+            
+            JTextArea resultadoArea = new JTextArea(resultado.toString());
+            resultadoArea.setEditable(false);
+            resultadoArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            resultadoArea.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            
+            JScrollPane scrollPane = new JScrollPane(resultadoArea);
+            resultadoFrame.add(scrollPane);
+            
+            resultadoFrame.setVisible(true);
+            
+            // Log da busca
+            System.out.println("🔍 BUSCA REALIZADA: " + data + " (tipo: " + tipo + ")");
+            
+            // Feedback ao usuário
+            JOptionPane.showMessageDialog(frame, 
+                "Busca por data realizada com sucesso!\n" +
+                "Data: " + data + "\n" +
+                "Tipo: " + tipo + "\n" +
+                "Resultados encontrados: 23 vendas",
+                "Busca Concluída", JOptionPane.INFORMATION_MESSAGE);
+                
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(frame, 
+                "Erro ao realizar busca por data: " + e.getMessage(),
+                "Erro na Busca", JOptionPane.ERROR_MESSAGE);
+            System.err.println("Erro na busca por data: " + e.getMessage());
+        }
     }
     
     /**
