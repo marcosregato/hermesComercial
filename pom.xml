@@ -130,9 +130,12 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <version>9.22.3</version>
                 <configuration>
-                    <url>jdbc:postgresql://localhost:5432/hermescomercialdb</url>
-                    <user>hermesuser</user>
-                    <password>hermespass</password>
+                    <url>jdbc:sqlite:hermescomercial.db</url>
+                    <locations>
+                        <location>classpath:db/migration</location>
+                    </locations>
+                    <baselineOnMigrate>true</baselineOnMigrate>
+                    <validateOnMigrate>false</validateOnMigrate>
                 </configuration>
             </plugin>
             <plugin>

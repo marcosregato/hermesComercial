@@ -1,8 +1,9 @@
 package com.br.hermescomercial;
 
-import com.br.hermescomercial.controller.PDVLoginSwingController;
+import com.br.hermescomercial.pdv.controller.PDVLoginSwingController;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import com.br.hermescomercial.theme.ModernTheme;
 
 /**
  * Classe principal da aplicação Hermes Comercial PDV
@@ -29,7 +30,7 @@ public class MainApplication {
         // Configurar Look and Feel padrão e aplicar tema moderno
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            com.br.hermescomercial.theme.ModernTheme.applyModernTheme();
+            ModernTheme.applyModernTheme();
             System.out.println("Tema moderno aplicado com sucesso");
         } catch (Exception e) {
             System.out.println("Não foi possível configurar Look and Feel: " + e.getMessage());
