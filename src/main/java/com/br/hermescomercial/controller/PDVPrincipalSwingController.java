@@ -31,7 +31,7 @@ public class PDVPrincipalSwingController {
     private void initializeUI() {
         // Aplicar tema moderno
         com.br.hermescomercial.theme.ModernTheme.applyModernTheme();
-        mainFrame = new JFrame("Hermes Comercial PDV v2.1.0 - Premium");
+        mainFrame = new JFrame("Hermes Comercial PDV v2.3.0 - Premium");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1200, 800);
         mainFrame.setLocationRelativeTo(null);
@@ -68,6 +68,8 @@ public class PDVPrincipalSwingController {
         JMenu operationsMenu = new JMenu("Operações");
         operationsMenu.add(createMenuItem("📦 Gestão de Produtos", this::gerenciarProdutos));
         operationsMenu.add(createMenuItem("🔍 Consulta Rápida de Produtos", this::consultarProdutos));
+        operationsMenu.add(createMenuItem("📊 Dashboard", this::abrirDashboard));
+        operationsMenu.add(createMenuItem("🔔 Notificações", this::abrirNotificacoes));
         operationsMenu.add(createMenuItem("Clientes", this::gerenciarClientes));
         
         // Menu Relatórios
@@ -421,7 +423,7 @@ public class PDVPrincipalSwingController {
             contentPanel.setBackground(new Color(255, 255, 255));
             contentPanel.setBorder(BorderFactory.createTitledBorder(
             "<html><font color='#2C3E50' size='4'><b>📦 CONSULTA RÁPIDA DE PRODUTOS</b></font><br>" +
-            "<font color='#666666' size='2'>Sistema integrado v2.1.4 • Gestão completa • Relatórios detalhados • Interface segura</font></html>"
+            "<font color='#666666' size='2'>Sistema integrado v2.3.0 • Gestão completa • Relatórios detalhados • Interface segura</font></html>"
         ));
             contentPanel.add(scrollPane, BorderLayout.CENTER);
             
@@ -1084,5 +1086,33 @@ public class PDVPrincipalSwingController {
     
     public void show() {
         mainFrame.setVisible(true);
+    }
+    
+    /**
+     * Abre o Dashboard Analítico
+     */
+    private void abrirDashboard(ActionEvent e) {
+        try {
+            PDVDashboardSwingController.mostrarDashboard();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Dashboard: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Notificações
+     */
+    private void abrirNotificacoes(ActionEvent e) {
+        try {
+            // Usuário logado simulado - na implementação real, obter do sistema de autenticação
+            String usuarioLogado = "admin"; // ou obter do contexto de login
+            PDVNotificacoesSwingController.mostrarNotificacoes(usuarioLogado);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Notificações: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

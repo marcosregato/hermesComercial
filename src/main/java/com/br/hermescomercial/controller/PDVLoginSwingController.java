@@ -47,7 +47,7 @@ public class PDVLoginSwingController {
         // Frame principal
         loginFrame = new JFrame("Hermes Comercial PDV - Login");
         loginFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        loginFrame.setSize(480, 650);
+        loginFrame.setSize(550, 700);
         loginFrame.setLocationRelativeTo(null);
         loginFrame.setResizable(false);
         loginFrame.setUndecorated(true); // Remove borda padrão
@@ -172,15 +172,40 @@ public class PDVLoginSwingController {
                     g2d.drawString("Digite seu usuário", 8, getHeight() / 2 + 5);
                 }
             }
+            
+            @Override
+            protected void paintBorder(Graphics g) {
+                super.paintBorder(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Borda elegante com sombra sutil
+                if (isFocusOwner()) {
+                    g2d.setColor(new Color(52, 152, 219)); // Azul elegante quando focado
+                    g2d.setStroke(new BasicStroke(2.5f));
+                } else {
+                    g2d.setColor(new Color(149, 165, 166)); // Cinza suave quando sem foco
+                    g2d.setStroke(new BasicStroke(2.0f));
+                }
+                
+                // Desenhar borda arredondada
+                g2d.drawRoundRect(2, 2, getWidth() - 5, getHeight() - 5, 12, 12);
+                
+                // Sombra sutil
+                g2d.setColor(new Color(200, 200, 200, 50));
+                g2d.drawRoundRect(3, 3, getWidth() - 5, getHeight() - 5, 12, 12);
+            }
         };
-        txtUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-        txtUsuario.setPreferredSize(new Dimension(450, 45));
-        txtUsuario.setBackground(Color.WHITE);
-        txtUsuario.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(149, 165, 166), 2), // Cinza azulado suave
-            BorderFactory.createEmptyBorder(15, 20, 15, 20)
-        ));
+        txtUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtUsuario.setPreferredSize(new Dimension(520, 60));
+        txtUsuario.setMaximumSize(new Dimension(520, 60));
+        txtUsuario.setMinimumSize(new Dimension(520, 60));
+        txtUsuario.setBackground(new Color(255, 255, 255));
+        txtUsuario.setForeground(new Color(52, 73, 94));
         txtUsuario.setOpaque(true);
+        txtUsuario.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        txtUsuario.setCaretColor(new Color(52, 152, 219));
+        txtUsuario.setSelectionColor(new Color(52, 152, 219, 50));
         usuarioPanel.add(txtUsuario, BorderLayout.CENTER);
         
         cardGbc.gridy = 3;
@@ -209,15 +234,40 @@ public class PDVLoginSwingController {
                     g2d.drawString("Digite sua senha", 8, getHeight() / 2 + 5);
                 }
             }
+            
+            @Override
+            protected void paintBorder(Graphics g) {
+                super.paintBorder(g);
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Borda elegante com sombra sutil
+                if (isFocusOwner()) {
+                    g2d.setColor(new Color(52, 152, 219)); // Azul elegante quando focado
+                    g2d.setStroke(new BasicStroke(2.5f));
+                } else {
+                    g2d.setColor(new Color(149, 165, 166)); // Cinza suave quando sem foco
+                    g2d.setStroke(new BasicStroke(2.0f));
+                }
+                
+                // Desenhar borda arredondada
+                g2d.drawRoundRect(2, 2, getWidth() - 5, getHeight() - 5, 12, 12);
+                
+                // Sombra sutil
+                g2d.setColor(new Color(200, 200, 200, 50));
+                g2d.drawRoundRect(3, 3, getWidth() - 5, getHeight() - 5, 12, 12);
+            }
         };
-        txtSenha.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-        txtSenha.setPreferredSize(new Dimension(450, 45));
-        txtSenha.setBackground(Color.WHITE);
-        txtSenha.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(149, 165, 166), 2), // Cinza azulado suave
-            BorderFactory.createEmptyBorder(15, 20, 15, 20)
-        ));
+        txtSenha.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtSenha.setPreferredSize(new Dimension(520, 60));
+        txtSenha.setMaximumSize(new Dimension(520, 60));
+        txtSenha.setMinimumSize(new Dimension(520, 60));
+        txtSenha.setBackground(new Color(255, 255, 255));
+        txtSenha.setForeground(new Color(52, 73, 94));
         txtSenha.setOpaque(true);
+        txtSenha.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        txtSenha.setCaretColor(new Color(52, 152, 219));
+        txtSenha.setSelectionColor(new Color(52, 152, 219, 50));
         senhaPanel.add(txtSenha, BorderLayout.CENTER);
         
         cardGbc.gridy = 4;
