@@ -16,7 +16,7 @@ public class ERPUsuarioSwingController {
     
     private JFrame frame;
     private JPanel mainPanel;
-    private JTextField txtNome, txtEmail, txtUsuario, txtBusca;
+    private JTextField txtNome, txtEmail, txtUsuario, txtBusca, txtTelefone;
     private JPasswordField txtSenha, txtConfirmarSenha;
     private JComboBox<String> cbNivelAcesso, cbStatus;
     private JCheckBox ckAtivo, ckAlterarSenha;
@@ -133,7 +133,7 @@ public class ERPUsuarioSwingController {
         gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0.0;
         fieldsPanel.add(createLabel("Telefone:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        JTextField txtTelefone = createTelefoneField();
+        txtTelefone = createTelefoneField();
         fieldsPanel.add(txtTelefone, gbc);
         
         // Usuário
@@ -147,28 +147,14 @@ public class ERPUsuarioSwingController {
         gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0.0;
         fieldsPanel.add(createLabel("Senha:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtSenha = new JPasswordField();
-        txtSenha.setFont(HermesTheme.FONT_DEFAULT);
-        txtSenha.setForeground(HermesTheme.TEXT_PRIMARY);
-        txtSenha.setBackground(Color.WHITE);
-        txtSenha.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        txtSenha = createPasswordField();
         fieldsPanel.add(txtSenha, gbc);
         
         // Confirmar Senha
         gbc.gridx = 0; gbc.gridy = 5; gbc.weightx = 0.0;
         fieldsPanel.add(createLabel("Confirmar Senha:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtConfirmarSenha = new JPasswordField();
-        txtConfirmarSenha.setFont(HermesTheme.FONT_DEFAULT);
-        txtConfirmarSenha.setForeground(HermesTheme.TEXT_PRIMARY);
-        txtConfirmarSenha.setBackground(Color.WHITE);
-        txtConfirmarSenha.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        txtConfirmarSenha = createPasswordField();
         fieldsPanel.add(txtConfirmarSenha, gbc);
         
         // Nível de Acesso
@@ -375,6 +361,19 @@ public class ERPUsuarioSwingController {
         textField.setToolTipText("Formato: (XX) XXXXX-XXXX - Máximo 13 caracteres");
         
         return textField;
+    }
+    
+    private JPasswordField createPasswordField() {
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setFont(HermesTheme.FONT_DEFAULT);
+        passwordField.setForeground(HermesTheme.TEXT_PRIMARY);
+        passwordField.setBackground(Color.WHITE);
+        passwordField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+        
+        return passwordField;
     }
     
     private JTextField createEmailField() {

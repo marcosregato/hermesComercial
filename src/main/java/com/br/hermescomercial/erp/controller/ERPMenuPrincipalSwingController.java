@@ -2,13 +2,18 @@ package com.br.hermescomercial.erp.controller;
 
 import com.br.hermescomercial.theme.HermesTheme;
 import com.br.hermescomercial.pdv.controller.PDVDashboardSwingController;
+import com.br.hermescomercial.erp.controller.ERPProdutoSwingController;
+import com.br.hermescomercial.erp.controller.ERPFinanceiroSwingController;
+import com.br.hermescomercial.erp.controller.ERPRelatorioSwingController;
+import com.br.hermescomercial.erp.controller.ERPUsuarioSwingController;
+import com.br.hermescomercial.erp.controller.ERPConfiguracaoSwingController;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
  * Controller para menu principal de integração do sistema ERP
- * Versão 2.3.0 - Arquitetura Modular - Tema Padrão Hermes - Design Responsivo
+ * Versão 2.4.0 - Arquitetura Modular - Tema Padrão Hermes - Design Responsivo - Menu Categorizado
  */
 public class ERPMenuPrincipalSwingController {
     
@@ -392,5 +397,12 @@ public class ERPMenuPrincipalSwingController {
     public void show() {
         frame.setVisible(true);
         frame.toFront();
+    }
+    
+        
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new ERPMenuPrincipalSwingController().show();
+        });
     }
 }
