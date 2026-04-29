@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
-import com.br.hermescomercial.model.Despesa;
+import com.br.hermescomercial.erp.model.Despesa;
 
 /**
  * Testes unitários para a classe DespesaController
