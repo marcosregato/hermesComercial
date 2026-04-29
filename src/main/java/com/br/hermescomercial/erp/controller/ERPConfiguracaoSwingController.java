@@ -137,41 +137,7 @@ public class ERPConfiguracaoSwingController {
         cbIdioma.setPreferredSize(new Dimension(150, 30));
         formPanel.add(cbIdioma, gbc);
         
-        // Adicionar painel de checkboxes
-        JPanel checkboxPanel = createCheckboxPanel();
-        gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 2; gbc.weightx = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(checkboxPanel, gbc);
-        
         return formPanel;
-    }
-    
-    private JPanel createCheckboxPanel() {
-        JPanel checkboxPanel = new JPanel(new GridLayout(3, 1, 5, 5));
-        checkboxPanel.setOpaque(false);
-        checkboxPanel.setBorder(BorderFactory.createTitledBorder("Opções do Sistema"));
-        
-        // Inicializar checkboxes
-        ckSalvarAutomatico = new JCheckBox("Salvar automaticamente");
-        ckSalvarAutomatico.setFont(HermesTheme.FONT_DEFAULT);
-        ckSalvarAutomatico.setForeground(HermesTheme.TEXT_PRIMARY);
-        ckSalvarAutomatico.setBackground(HermesTheme.BACKGROUND_SECONDARY);
-        
-        ckNotificacoes = new JCheckBox("Habilitar notificações");
-        ckNotificacoes.setFont(HermesTheme.FONT_DEFAULT);
-        ckNotificacoes.setForeground(HermesTheme.TEXT_PRIMARY);
-        ckNotificacoes.setBackground(HermesTheme.BACKGROUND_SECONDARY);
-        
-        ckBackupAutomatico = new JCheckBox("Backup automático");
-        ckBackupAutomatico.setFont(HermesTheme.FONT_DEFAULT);
-        ckBackupAutomatico.setForeground(HermesTheme.TEXT_PRIMARY);
-        ckBackupAutomatico.setBackground(HermesTheme.BACKGROUND_SECONDARY);
-        
-        checkboxPanel.add(ckSalvarAutomatico);
-        checkboxPanel.add(ckNotificacoes);
-        checkboxPanel.add(ckBackupAutomatico);
-        
-        return checkboxPanel;
     }
     
     private JPanel createButtonPanel() {

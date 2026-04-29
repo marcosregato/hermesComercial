@@ -1,10 +1,10 @@
-package com.br.hermescomercial.business.impressao;
+package com.br.hermescomercial.shared.service;
 
-import com.br.hermescomercial.shared.model.ImpressoraNaoFiscal;
+import com.br.hermescomercial.model.ImpressoraNaoFiscal;
 import com.br.hermescomercial.pdv.model.VendaPDV;
 import com.br.hermescomercial.pdv.model.ItemVenda;
-import com.br.hermescomercial.shared.model.NotaFiscal;
-// import com.br.hermescomercial.model.Usuario; - não utilizado
+import com.br.hermescomercial.model.NotaFiscal;
+// import com.br.hermescomercial.erp.model.Usuario; - não utilizado
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -368,11 +368,11 @@ public class ImpressaoNaoFiscalService {
         imprimirSeparador();
     }
     
-    private void imprimirItensNotaFiscal(List<com.br.hermescomercial.shared.model.NotaFiscalItem> itens) throws IOException {
+    private void imprimirItensNotaFiscal(List<com.br.hermescomercial.model.NotaFiscalItem> itens) throws IOException {
         imprimirTexto("ITENS", BOLD_ON);
         imprimirSeparador();
         
-        for (com.br.hermescomercial.shared.model.NotaFiscalItem item : itens) {
+        for (com.br.hermescomercial.model.NotaFiscalItem item : itens) {
             String codigo = String.format("%-8s", item.getCodigoProduto());
             String descricao = item.getDescricao();
             String quantidade = String.format("%6s", item.getQuantidade().toString());
@@ -465,11 +465,11 @@ public class ImpressaoNaoFiscalService {
         imprimirSeparador();
     }
     
-    private void imprimirPagamentosNotaFiscal(List<com.br.hermescomercial.shared.model.NotaFiscalPagamentoItem> pagamentos) throws IOException {
+    private void imprimirPagamentosNotaFiscal(List<com.br.hermescomercial.model.NotaFiscalPagamentoItem> pagamentos) throws IOException {
         imprimirTexto("FORMAS DE PAGAMENTO", BOLD_ON);
         imprimirSeparador();
         
-        for (com.br.hermescomercial.shared.model.NotaFiscalPagamentoItem pagamento : pagamentos) {
+        for (com.br.hermescomercial.model.NotaFiscalPagamentoItem pagamento : pagamentos) {
             imprimirTexto(pagamento.getFormaPagamentoDescricao());
             imprimirTextoAlinhadoDireita("R$ " + String.format("%9.2f", pagamento.getValorPagamento()));
             imprimirLinhaEmBranco();
