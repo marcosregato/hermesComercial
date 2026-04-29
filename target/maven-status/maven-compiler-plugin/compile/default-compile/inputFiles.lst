@@ -73,7 +73,6 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/pdv/controller/PDVProdutosSwingController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/shared/service/ProdutoService.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/Repository/RepositoryAtributo.java
-/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/financeiro/CustoController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Usuario.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/pdv/dao/ItemVendaDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/exception/DataAccessException.java
@@ -114,7 +113,6 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/exception/SystemException.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/AtributoDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/connectionBD/ConnectionBD.java
-/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/pdv/controller/TestRelatorios.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/pdv/controller/PDVFecharCaixaSwingController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/exception/ValidationException.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/erp/controller/ERPFinanceiroSwingController.java
@@ -134,7 +132,6 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/shared/dao/LoginDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/erp/service/UsuarioServiceBasico.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/service/ClienteService.java
-/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/controller/produto/CadCategoriaController.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/model/Atributo.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/shared/service/ImpressaoNaoFiscalService.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/pdv/controller/PDVNotificacoesSwingController.java
