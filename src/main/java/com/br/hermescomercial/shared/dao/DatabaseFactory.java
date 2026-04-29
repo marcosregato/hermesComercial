@@ -4,7 +4,6 @@ import com.br.hermescomercial.config.DatabaseConfig;
 import com.br.hermescomercial.pdv.dao.VendaDao;
 import com.br.hermescomercial.pdv.dao.PagamentoDao;
 import com.br.hermescomercial.pdv.dao.ItemVendaDao;
-import com.br.hermescomercial.dao.ClienteDaoAdapter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

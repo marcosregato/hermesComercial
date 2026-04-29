@@ -66,6 +66,7 @@
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/shared/model/DashboardMetric.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/util/DatabaseConfig.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/exception/ExceptionHandler.java
+/home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/shared/dao/ClienteDaoAdapter.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/dao/ProdutoDao.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/repository/UsuarioRepository.java
 /home/marcos/workspace/hermesComercial/src/main/java/com/br/hermescomercial/shared/dao/ClienteDao.java
