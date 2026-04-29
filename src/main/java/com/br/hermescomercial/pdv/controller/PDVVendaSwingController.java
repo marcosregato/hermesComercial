@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,69 +48,272 @@ public class PDVVendaSwingController {
     
     private JPanel createMainPanel() {
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        mainPanel.setBackground(new Color(245, 245, 250));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBackground(new Color(248, 249, 250)); // Fundo moderno
         
-        // Header
+        // Header melhorado
         mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
         
-        // Center com layout melhorado
+        // Painel central com layout otimizado
         JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        centerPanel.setBackground(new Color(245, 245, 250));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
+        centerPanel.setOpaque(false);
         
-        // Painel superior com tabela
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBorder(BorderFactory.createTitledBorder("Itens da Venda"));
-        topPanel.setBackground(new Color(255, 255, 255));
-        topPanel.add(createProdutosPanel(), BorderLayout.CENTER);
+        // Painel de produtos com design moderno
+        JPanel produtosPanel = createEnhancedProdutosPanel();
+        centerPanel.add(produtosPanel, BorderLayout.CENTER);
         
-        // Painel inferior com inputs
-        JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.setBorder(BorderFactory.createTitledBorder("Adicionar Produto"));
-        bottomPanel.setBackground(new Color(255, 255, 255));
-        bottomPanel.add(createInputPanel(), BorderLayout.CENTER);
+        // Painel de entrada com design melhorado
+        JPanel inputPanel = createEnhancedInputPanel();
+        centerPanel.add(inputPanel, BorderLayout.SOUTH);
         
-        centerPanel.add(topPanel, BorderLayout.CENTER);
-        centerPanel.add(bottomPanel, BorderLayout.SOUTH);
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         
-        // Right com resumo
-        mainPanel.add(createSummaryPanel(), BorderLayout.EAST);
+        // Painel lateral com resumo e ações
+        JPanel sidePanel = createEnhancedSidePanel();
+        mainPanel.add(sidePanel, BorderLayout.EAST);
         
         return mainPanel;
     }
     
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         panel.setBackground(new Color(41, 128, 185));
-        panel.setPreferredSize(new Dimension(0, 80));
+        panel.setPreferredSize(new Dimension(0, 90));
         
-        // Título central
-        JLabel titleLabel = new JLabel("Nova Venda v2.1.0 - Premium", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
+        // Painel esquerdo com botão voltar
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.setOpaque(false);
         
-        // Botão voltar estilizado
         JButton btnVoltar = new JButton("← Voltar");
         btnVoltar.setBackground(new Color(255, 255, 255));
         btnVoltar.setForeground(new Color(41, 128, 185));
-        btnVoltar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnVoltar.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnVoltar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
         btnVoltar.setFocusPainted(false);
+        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.addActionListener(e -> frame.dispose());
         
-        // Data e hora atual
-        JLabel lblDataHora = new JLabel(java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), JLabel.RIGHT);
-        lblDataHora.setFont(new Font("Arial", Font.PLAIN, 12));
+        leftPanel.add(btnVoltar);
+        
+        // Painel central com título e subtítulo
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setOpaque(false);
+        
+        JLabel titleLabel = new JLabel("🛒 Nova Venda", JLabel.CENTER);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        titleLabel.setForeground(Color.WHITE);
+        
+        JLabel subtitleLabel = new JLabel("Sistema de Ponto de Venda", JLabel.CENTER);
+        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        subtitleLabel.setForeground(new Color(200, 220, 240));
+        
+        centerPanel.add(titleLabel, BorderLayout.NORTH);
+        centerPanel.add(subtitleLabel, BorderLayout.CENTER);
+        
+        // Painel direito com data e hora
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rightPanel.setOpaque(false);
+        
+        JLabel lblDataHora = new JLabel("🕒 " + java.time.LocalDateTime.now().format(
+            java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        lblDataHora.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblDataHora.setForeground(Color.WHITE);
         
-        panel.add(btnVoltar, BorderLayout.WEST);
-        panel.add(titleLabel, BorderLayout.CENTER);
-        panel.add(lblDataHora, BorderLayout.EAST);
+        rightPanel.add(lblDataHora);
+        
+        panel.add(leftPanel, BorderLayout.WEST);
+        panel.add(centerPanel, BorderLayout.CENTER);
+        panel.add(rightPanel, BorderLayout.EAST);
         
         return panel;
+    }
+    
+    private JPanel createEnhancedProdutosPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createTitledBorder("📦 Itens da Venda"),
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+        panel.setBackground(new Color(255, 255, 255));
+        
+        // Tabela de produtos com design melhorado
+        String[] columns = {"Código", "Descrição", "Qtd", "Unitário", "Total"};
+        tableModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+            
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 2) return Integer.class; // Quantidade
+                if (columnIndex == 3 || columnIndex == 4) return Double.class; // Valores
+                return String.class;
+            }
+        };
+        
+        produtosTable = new JTable(tableModel);
+        produtosTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        produtosTable.getTableHeader().setReorderingAllowed(false);
+        produtosTable.setRowHeight(28);
+        produtosTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        produtosTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        produtosTable.getTableHeader().setBackground(new Color(41, 128, 185));
+        produtosTable.getTableHeader().setForeground(Color.WHITE);
+        produtosTable.getTableHeader().setPreferredSize(new Dimension(0, 35));
+        
+        // Desabilitar edição da tabela
+        produtosTable.setDefaultEditor(Object.class, null);
+        produtosTable.setEnabled(false);
+        
+        // Configurar larguras das colunas
+        produtosTable.getColumnModel().getColumn(0).setPreferredWidth(80);
+        produtosTable.getColumnModel().getColumn(1).setPreferredWidth(350);
+        produtosTable.getColumnModel().getColumn(2).setPreferredWidth(60);
+        produtosTable.getColumnModel().getColumn(3).setPreferredWidth(100);
+        produtosTable.getColumnModel().getColumn(4).setPreferredWidth(100);
+        
+        // Scroll pane com bordas elegantes
+        JScrollPane scrollPane = new JScrollPane(produtosTable);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        scrollPane.setBackground(Color.WHITE);
+        scrollPane.setPreferredSize(new Dimension(0, 250));
+        panel.add(scrollPane, BorderLayout.CENTER);
+        
+        // Painel de botões com design moderno
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        buttonPanel.setBackground(new Color(248, 249, 250));
+        
+        JButton btnRemover = createActionButton("🗑️ Remover Item", new Color(231, 76, 60), this::removerItem);
+        JButton btnLimpar = createActionButton("🔄 Limpar Venda", new Color(241, 196, 15), this::limparVenda);
+        
+        buttonPanel.add(btnRemover);
+        buttonPanel.add(btnLimpar);
+        
+        panel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        return panel;
+    }
+    
+    private JPanel createEnhancedInputPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createTitledBorder("➕ Adicionar Produto"),
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+        panel.setBackground(new Color(255, 255, 255));
+        
+        // Campos de entrada com layout melhorado
+        JPanel inputPanel = new JPanel(new GridBagLayout());
+        inputPanel.setBackground(new Color(255, 255, 255));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        // Linha 1: Código e Quantidade
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.3;
+        inputPanel.add(createLabel("Código:"), gbc);
+        
+        gbc.gridx = 1; gbc.weightx = 0.7;
+        txtCodigo = createTextField(15);
+        inputPanel.add(txtCodigo, gbc);
+        
+        gbc.gridx = 2; gbc.weightx = 0.3;
+        inputPanel.add(createLabel("Quantidade:"), gbc);
+        
+        gbc.gridx = 3; gbc.weightx = 0.7;
+        txtQuantidade = createTextField(10);
+        txtQuantidade.setText("1");
+        inputPanel.add(txtQuantidade, gbc);
+        
+        // Linha 2: Descrição (readonly)
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0.3;
+        inputPanel.add(createLabel("Descrição:"), gbc);
+        
+        gbc.gridx = 1; gbc.gridwidth = 3; gbc.weightx = 2.0;
+        txtDescricao = createTextField(40);
+        txtDescricao.setEditable(false);
+        txtDescricao.setBackground(new Color(240, 240, 240));
+        inputPanel.add(txtDescricao, gbc);
+        
+        // Painel de botões de ação
+        JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        actionPanel.setBackground(new Color(248, 249, 250));
+        
+        JButton btnAdicionar = createActionButton("➕ Adicionar", new Color(46, 204, 113), this::adicionarProduto);
+        JButton btnBuscar = createActionButton("🔍 Buscar", new Color(52, 152, 219), e -> buscarProdutoPorCodigo(txtCodigo.getText().trim()));
+        
+        actionPanel.add(btnBuscar);
+        actionPanel.add(btnAdicionar);
+        
+        panel.add(inputPanel, BorderLayout.CENTER);
+        panel.add(actionPanel, BorderLayout.SOUTH);
+        
+        return panel;
+    }
+    
+    private JPanel createEnhancedSidePanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
+        panel.setOpaque(false);
+        panel.setPreferredSize(new Dimension(300, 0));
+        
+        // Painel de resumo
+        JPanel summaryPanel = createSummaryPanel();
+        panel.add(summaryPanel, BorderLayout.CENTER);
+        
+        return panel;
+    }
+    
+    // Métodos auxiliares para criação de componentes
+    private JButton createActionButton(String text, Color color, ActionListener action) {
+        JButton button = new JButton(text);
+        button.setBackground(color);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(color.darker(), 1),
+            BorderFactory.createEmptyBorder(10, 20, 10, 20)
+        ));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.addActionListener(action);
+        button.setOpaque(true);
+        
+        // Efeito hover
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(color.darker());
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(color);
+            }
+        });
+        
+        return button;
+    }
+    
+    private JLabel createLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        label.setForeground(new Color(52, 73, 94));
+        label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        return label;
+    }
+    
+    private JTextField createTextField(int columns) {
+        JTextField textField = new JTextField(columns);
+        textField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        textField.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
+        ));
+        textField.setBackground(Color.WHITE);
+        textField.setForeground(new Color(44, 62, 80));
+        return textField;
     }
     
     private JPanel createProdutosPanel() {

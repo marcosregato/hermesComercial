@@ -227,71 +227,114 @@ public class PDVPrincipalSwingController {
     }
     
     private void createMainPanel() {
-        // Painel principal com design moderno
+        // Painel principal com design moderno e responsivo
         mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-        mainPanel.setBackground(new Color(250, 250, 250)); // Cinza muito suave
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+        mainPanel.setBackground(new Color(248, 249, 250)); // Cinza muito suave moderno
         
         // Header padrão Nova Venda
         JPanel headerPanel = createHeaderPanel();
         mainPanel.add(headerPanel, BorderLayout.NORTH);
         
-        // Painel central com informações - efeito cardPanel elegante
-        JPanel centerPanel = new JPanel(new BorderLayout()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
-                // Fundo elegante com gradiente sutil
-                g2d.setColor(new Color(250, 252, 252)); // Branco suave
-                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 25, 25);
-                
-                // Borda elegante
-                g2d.setColor(new Color(189, 195, 199)); // Cinza suave
-                g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 25, 25);
-            }
-        };
+        // Painel central com painel de boas-vindas e informações
+        JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         
-        // Título do painel principal
-        JLabel titleLabel = new JLabel("🏪 HERMES COMERCIAL PDV", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(52, 73, 94)); // Azul suave profundo
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        titleLabel.setOpaque(true);
-        centerPanel.add(titleLabel, BorderLayout.NORTH);
+        // Painel de boas-vindas
+        JPanel welcomePanel = createWelcomePanel();
+        centerPanel.add(welcomePanel, BorderLayout.NORTH);
         
-        // Status label
-        statusLabel = new JLabel("Sistema pronto para uso");
-        statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // Fonte suave
-        statusLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        statusLabel.setBackground(new Color(236, 240, 241)); // Cinza suave claro
-        statusLabel.setForeground(new Color(52, 73, 94)); // Azul suave profundo
-        statusLabel.setOpaque(true);
-        centerPanel.add(statusLabel, BorderLayout.CENTER);
-        
-        produtosArea = new JTextArea();
-        produtosArea.setEditable(false);
-        produtosArea.setBackground(Color.WHITE);
-        produtosArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        JScrollPane scrollPane = new JScrollPane(produtosArea);
-        centerPanel.add(scrollPane, BorderLayout.CENTER);
+        // Painel de funcionalidades agrupadas
+        JPanel featuresPanel = createFeaturesPanel();
+        centerPanel.add(featuresPanel, BorderLayout.CENTER);
         
         mainPanel.add(centerPanel, BorderLayout.CENTER);
         
-        // Painel de botões principais com design moderno
-        JPanel buttonPanel = new JPanel(new GridLayout(3, 3, 20, 20));
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-        buttonPanel.setBackground(new Color(245, 245, 250));
+        // Painel de status e rodapé
+        JPanel footerPanel = createFooterPanel();
+        mainPanel.add(footerPanel, BorderLayout.SOUTH);
+    }
+    
+    private JPanel createWelcomePanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         
-        // Botões principais com design padrão Nova Venda
-        btnNovaVenda = createStyledButton("🛒 Nova Venda", "Iniciar nova venda", this::abrirNovaVenda);
-        btnConsultarProduto = createStyledButton("📦 Consultar Produtos", "Consultar produtos", this::consultarProdutos);
-        btnClientes = createStyledButton("👥 Clientes", "Gerenciar clientes", this::gerenciarClientes);
-        btnCaixa = createStyledButton("💰 Caixa", "Operações de caixa", e -> {
+        // Título principal
+        JLabel titleLabel = new JLabel("🏪 Bem-vindo ao Hermes Comercial PDV", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        titleLabel.setForeground(new Color(44, 62, 80)); // Azul escuro moderno
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
+        
+        // Subtítulo informativo
+        JLabel subtitleLabel = new JLabel("Sistema completo de gestão de ponto de venda", SwingConstants.CENTER);
+        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        subtitleLabel.setForeground(new Color(127, 140, 141)); // Cinza moderno
+        
+        // Painel de informações rápidas
+        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        infoPanel.setOpaque(false);
+        infoPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+        
+        JLabel infoLabel = new JLabel("📅 " + java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) + 
+                                   " | ⏰ " + java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")) +
+                                   " | 👤 Operador: Administrador");
+        infoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        infoLabel.setForeground(new Color(52, 73, 94)); // Azul suave
+        
+        infoPanel.add(infoLabel);
+        
+        JPanel titleContainer = new JPanel(new BorderLayout());
+        titleContainer.setOpaque(false);
+        titleContainer.add(titleLabel, BorderLayout.NORTH);
+        titleContainer.add(subtitleLabel, BorderLayout.CENTER);
+        titleContainer.add(infoPanel, BorderLayout.SOUTH);
+        
+        panel.add(titleContainer, BorderLayout.CENTER);
+        
+        return panel;
+    }
+    
+    private JPanel createFeaturesPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+        
+        // Título das funcionalidades
+        JLabel featuresTitle = new JLabel("🚀 Funcionalidades Principais", SwingConstants.CENTER);
+        featuresTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        featuresTitle.setForeground(new Color(44, 62, 80));
+        featuresTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
+        
+        // Painel de botões organizados por categorias
+        JPanel buttonsContainer = new JPanel(new BorderLayout());
+        buttonsContainer.setOpaque(false);
+        
+        // Painel de operações principais
+        JPanel mainOpsPanel = createMainOperationsPanel();
+        
+        // Painel de operações secundárias
+        JPanel secondaryOpsPanel = createSecondaryOperationsPanel();
+        
+        buttonsContainer.add(mainOpsPanel, BorderLayout.CENTER);
+        buttonsContainer.add(secondaryOpsPanel, BorderLayout.SOUTH);
+        
+        panel.add(featuresTitle, BorderLayout.NORTH);
+        panel.add(buttonsContainer, BorderLayout.CENTER);
+        
+        return panel;
+    }
+    
+    private JPanel createMainOperationsPanel() {
+        JPanel panel = new JPanel(new GridLayout(2, 3, 15, 15));
+        panel.setOpaque(false);
+        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+        
+        // Botões principais com design melhorado
+        btnNovaVenda = createEnhancedButton("🛒 Nova Venda", "Iniciar nova venda", new Color(46, 204, 113), this::abrirNovaVenda);
+        btnConsultarProduto = createEnhancedButton("📦 Consultar Produtos", "Consultar produtos", new Color(52, 152, 219), this::consultarProdutos);
+        btnClientes = createEnhancedButton("👥 Clientes", "Gerenciar clientes", new Color(155, 89, 182), this::gerenciarClientes);
+        btnCaixa = createEnhancedButton("💰 Caixa", "Operações de caixa", new Color(241, 196, 15), e -> {
             try {
                 PDVCaixaSwingController caixaController = new PDVCaixaSwingController();
                 caixaController.show();
@@ -302,17 +345,101 @@ public class PDVPrincipalSwingController {
                     "Caixa", JOptionPane.ERROR_MESSAGE);
             }
         });
-        btnRelatorios = createStyledButton("📊 Relatórios", "Gerar relatórios", this::verRelatorios);
-        btnConfiguracoes = createStyledButton("⚙️ Configurações", "Configurar sistema", this::abrirConfiguracoes);
+        btnRelatorios = createEnhancedButton("📊 Relatórios", "Gerar relatórios", new Color(230, 126, 34), this::verRelatorios);
+        btnConfiguracoes = createEnhancedButton("⚙️ Configurações", "Configurar sistema", new Color(149, 165, 166), this::abrirConfiguracoes);
         
-        buttonPanel.add(btnNovaVenda);
-        buttonPanel.add(btnConsultarProduto);
-        buttonPanel.add(btnClientes);
-        buttonPanel.add(btnCaixa);
-        buttonPanel.add(btnRelatorios);
-        buttonPanel.add(btnConfiguracoes);
+        panel.add(btnNovaVenda);
+        panel.add(btnConsultarProduto);
+        panel.add(btnClientes);
+        panel.add(btnCaixa);
+        panel.add(btnRelatorios);
+        panel.add(btnConfiguracoes);
         
-        mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+        return panel;
+    }
+    
+    private JPanel createSecondaryOperationsPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        panel.setOpaque(false);
+        
+        // Botões secundários
+        JButton btnDashboard = createEnhancedButton("📈 Dashboard", "Ver dashboard analítico", new Color(26, 188, 156), e -> abrirDashboard(e));
+        JButton btnNotificacoes = createEnhancedButton("🔔 Notificações", "Ver notificações", new Color(231, 76, 60), e -> abrirNotificacoes(e));
+        JButton btnAjuda = createEnhancedButton("❓ Ajuda", "Ajuda e suporte", new Color(52, 73, 94), this::mostrarSobre);
+        
+        panel.add(btnDashboard);
+        panel.add(btnNotificacoes);
+        panel.add(btnAjuda);
+        
+        return panel;
+    }
+    
+    private JPanel createFooterPanel() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setOpaque(false);
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+        
+        // Status label melhorado
+        statusLabel = new JLabel("✅ Sistema pronto para uso");
+        statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        statusLabel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(46, 204, 113), 1),
+            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+        statusLabel.setBackground(new Color(240, 255, 240));
+        statusLabel.setForeground(new Color(27, 94, 32));
+        statusLabel.setOpaque(true);
+        
+        // Painel de informações do sistema
+        JPanel systemInfoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        systemInfoPanel.setOpaque(false);
+        
+        JLabel versionLabel = new JLabel("Hermes Comercial PDV v2.3.0");
+        versionLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        versionLabel.setForeground(new Color(127, 140, 141));
+        
+        systemInfoPanel.add(versionLabel);
+        
+        panel.add(statusLabel, BorderLayout.WEST);
+        panel.add(systemInfoPanel, BorderLayout.EAST);
+        
+        return panel;
+    }
+    
+    private JButton createEnhancedButton(String text, String tooltip, Color color, ActionListener action) {
+        JButton button = new JButton(text);
+        button.setBackground(color);
+        button.setForeground(Color.WHITE);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(color.darker(), 1),
+            BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setToolTipText(tooltip);
+        button.addActionListener(action);
+        button.setOpaque(true);
+        
+        // Efeito hover melhorado
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(color.darker());
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(color.darker().darker(), 2),
+                    BorderFactory.createEmptyBorder(15, 20, 15, 20)
+                ));
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(color);
+                button.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(color.darker(), 1),
+                    BorderFactory.createEmptyBorder(15, 20, 15, 20)
+                ));
+            }
+        });
+        
+        return button;
     }
     
         
