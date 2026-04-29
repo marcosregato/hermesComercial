@@ -21,7 +21,6 @@ public class PDVPrincipalSwingController {
     private JFrame mainFrame;
     private JPanel mainPanel;
     private JLabel statusLabel;
-    private JTextArea produtosArea;
     private JButton btnNovaVenda;
     private JButton btnConsultarProduto;
     private JButton btnClientes;
@@ -190,42 +189,7 @@ public class PDVPrincipalSwingController {
         return panel;
     }
     
-    private JButton createStyledButton(String text, String tooltip, ActionListener action) {
-        JButton button = new JButton(text);
-        button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
-        button.setForeground(new Color(255, 255, 255)); // Branco elegante
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
-            BorderFactory.createEmptyBorder(12, 20, 12, 20)
-        ));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setToolTipText(tooltip);
-        button.addActionListener(action);
-        button.setOpaque(true);
         
-        // Efeito hover elegante
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(127, 140, 141)); // Cinza mais escuro suave
-                button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(108, 117, 125), 2), // Cinza ainda mais escuro
-                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
-                ));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
-                button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
-                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
-                ));
-            }
-        });
-        
-        return button;
-    }
-    
     private void createMainPanel() {
         // Painel principal com design moderno e responsivo
         mainPanel = new JPanel(new BorderLayout());
