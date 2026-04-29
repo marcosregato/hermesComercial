@@ -535,79 +535,8 @@ public class PDVVendaSwingController {
         return null;
     }
     
-    private Produto buscarProdutoPorDescricao(String descricao) {
-        // Busca case-insensitive por descrição
-        descricao = descricao.toLowerCase();
         
-        if ("produto exemplo 1".contains(descricao) || "exemplo 1".contains(descricao)) {
-            return new Produto("001", "Produto Exemplo 1", new BigDecimal("10.50"));
-        } else if ("produto exemplo 2".contains(descricao) || "exemplo 2".contains(descricao)) {
-            return new Produto("002", "Produto Exemplo 2", new BigDecimal("25.99"));
-        } else if ("produto exemplo 3".contains(descricao) || "exemplo 3".contains(descricao)) {
-            return new Produto("003", "Produto Exemplo 3", new BigDecimal("5.75"));
-        }
         
-        return null;
-    }
-    
-    // Busca por código (automática ao pressionar Enter)
-    private void buscarPorCodigo() {
-        String codigo = txtCodigo.getText().trim();
-        
-        if (codigo.isEmpty()) {
-            return;
-        }
-        
-        // Buscar produto por código (simulação)
-        Produto produto = buscarProdutoPorCodigo(codigo);
-        
-        if (produto != null) {
-            txtDescricao.setText(produto.getDescricao());
-            txtQuantidade.requestFocus();
-            txtQuantidade.selectAll();
-            
-            // Feedback visual sutil
-            frame.setTitle("PDV - Nova Venda v2.1.0 - Premium - Produto: " + produto.getDescricao());
-        } else {
-            JOptionPane.showMessageDialog(frame, 
-                "Produto não encontrado com o código: " + codigo,
-                "Produto Não Encontrado", JOptionPane.WARNING_MESSAGE);
-            txtCodigo.selectAll();
-            txtCodigo.requestFocus();
-        }
-    }
-    
-    // Busca por descrição
-    private void buscarPorDescricao(ActionEvent e) {
-        String descricao = txtDescricao.getText().trim();
-        
-        if (descricao.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, 
-                "Digite uma descrição para buscar o produto!",
-                "Busca de Produto", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        
-        // Buscar produto por descrição (simulação)
-        Produto produto = buscarProdutoPorDescricao(descricao);
-        
-        if (produto != null) {
-            txtCodigo.setText(produto.getCodigo());
-            txtDescricao.setText(produto.getDescricao());
-            txtQuantidade.requestFocus();
-            txtQuantidade.selectAll();
-            
-            // Feedback visual
-            JOptionPane.showMessageDialog(frame, 
-                "Produto encontrado: " + produto.getDescricao() + " (Código: " + produto.getCodigo() + ")",
-                "Produto Encontrado", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(frame, 
-                "Nenhum produto encontrado com a descrição: " + descricao,
-                "Produto Não Encontrado", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-    
     public void show() {
         frame.setVisible(true);
     }
