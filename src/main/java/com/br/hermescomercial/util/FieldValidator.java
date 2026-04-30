@@ -16,6 +16,7 @@ public class FieldValidator {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
     private static final Pattern TELEFONE_PATTERN = Pattern.compile("^\\d{10,11}$");
     private static final Pattern CODIGO_PATTERN = Pattern.compile("^[A-Za-z0-9]{3,20}$");
+    private static final Pattern DATA_PATTERN = Pattern.compile("^\\d{2}/\\d{2}/\\d{4}$");
     
     // Cores para feedback visual
     private static final Color COLOR_VALID = new Color(200, 255, 200); // Verde claro
@@ -66,7 +67,12 @@ public class FieldValidator {
      * Valida campo de senha
      */
     public static boolean validateSenha(JTextComponent field) {
-        String value = new String(((JPasswordField) field).getPassword()).trim();
+        String value;
+        if (field instanceof JPasswordField) {
+            value = new String(((JPasswordField) field).getPassword()).trim();
+        } else {
+            value = field.getText().trim();
+        }
         
         if (value.isEmpty()) {
             showError(field, "Senha é obrigatória!");
@@ -461,6 +467,332 @@ public class FieldValidator {
             case TELEFONE:
                 validateTelefone(field);
                 break;
+            case CPF_CNPJ:
+                validateCpfCnpj(field);
+                break;
+            case DATA:
+                validateData(field);
+                break;
+            case CODIGO_VENDA:
+                validateCodigoVenda(field);
+                break;
+            case QUANTIDADE_VENDA:
+                validateQuantidadeVenda(field);
+                break;
+            case NOME_CLIENTE:
+                validateNomeCliente(field);
+                break;
+        }
+    }
+    
+    /**
+     * Valida CPF/CNPJ
+     */
+    public static boolean validateCpfCnpj(JTextComponent field) {
+        String value = field.getText().trim();
+        
+        if (value.isEmpty()) {
+            showError(field, "CPF/CNPJ é obrigatório!");
+            return false;
+        }
+        
+        // Remove caracteres não numéricos
+        String numeros = value.replaceAll("[^0-9]", "");
+        
+        if (numeros.length() == 11) {
+            // Validar CPF
+            if (!isValidCPF(numeros)) {
+                showError(field, "CPF inválido!");
+                return false;
+            }
+        } else if (numeros.length() == 14) {
+            // Validar CNPJ
+            if (!isValidCNPJ(numeros)) {
+                showError(field, "CNPJ inválido!");
+                return false;
+            }
+        } else {
+            showError(field, "CPF deve ter 11 dígitos ou CNPJ deve ter 14 dígitos!");
+            return false;
+        }
+        
+        showValid(field);
+        return true;
+    }
+    
+    /**
+     * Valida data no formato dd/MM/yyyy
+     */
+    public static boolean validateData(JTextComponent field) {
+        String value = field.getText().trim();
+        
+        if (value.isEmpty()) {
+            showError(field, "Data é obrigatória!");
+            return false;
+        }
+        
+        if (!DATA_PATTERN.matcher(value).matches()) {
+            showError(field, "Data inválida! Use formato: dd/MM/yyyy");
+            return false;
+        }
+        
+        try {
+            String[] partes = value.split("/");
+            int dia = Integer.parseInt(partes[0]);
+            int mes = Integer.parseInt(partes[1]);
+            int ano = Integer.parseInt(partes[2]);
+            
+            // Validação básica
+            if (dia < 1 || dia > 31) {
+                showError(field, "Dia inválido! Use 1-31");
+                return false;
+            }
+            
+            if (mes < 1 || mes > 12) {
+                showError(field, "Mês inválido! Use 1-12");
+                return false;
+            }
+            
+            if (ano < 1900 || ano > 2100) {
+                showError(field, "Ano inválido! Use 1900-2100");
+                return false;
+            }
+            
+            // Validação de dias por mês
+            if (mes == 2) {
+                boolean bissexto = (ano % 4 == 0 && ano % 100 != 0) || (ano % 400 == 0);
+                int maxDias = bissexto ? 29 : 28;
+                if (dia > maxDias) {
+                    showError(field, "Fevereiro tem apenas " + maxDias + " dias!");
+                    return false;
+                }
+            } else if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && dia > 30) {
+                showError(field, "Este mês tem apenas 30 dias!");
+                return false;
+            }
+            
+        } catch (Exception e) {
+            showError(field, "Data inválida! Use formato: dd/MM/yyyy");
+            return false;
+        }
+        
+        showValid(field);
+        return true;
+    }
+    
+    /**
+     * Valida quantidade para vendas
+     */
+    public static boolean validateQuantidadeVenda(JTextComponent field) {
+        String value = field.getText().trim();
+        
+        if (value.isEmpty()) {
+            showError(field, "Quantidade é obrigatória!");
+            return false;
+        }
+        
+        try {
+            int quantidade = Integer.parseInt(value);
+            
+            if (quantidade <= 0) {
+                showError(field, "Quantidade deve ser maior que zero!");
+                return false;
+            }
+            
+            if (quantidade > 999) {
+                showError(field, "Quantidade muito alta! Máximo: 999");
+                return false;
+            }
+            
+            showValid(field);
+            return true;
+            
+        } catch (NumberFormatException e) {
+            showError(field, "Quantidade inválida! Use números inteiros.");
+            return false;
+        }
+    }
+    
+    /**
+     * Valida código de produto para vendas
+     */
+    public static boolean validateCodigoVenda(JTextComponent field) {
+        String value = field.getText().trim();
+        
+        if (value.isEmpty()) {
+            showError(field, "Código do produto é obrigatório!");
+            return false;
+        }
+        
+        if (!CODIGO_PATTERN.matcher(value).matches()) {
+            showError(field, "Código inválido! Use 3-20 caracteres alfanuméricos.");
+            return false;
+        }
+        
+        showValid(field);
+        return true;
+    }
+    
+    /**
+     * Valida nome de cliente
+     */
+    public static boolean validateNomeCliente(JTextComponent field) {
+        String value = field.getText().trim();
+        
+        if (value.isEmpty()) {
+            showError(field, "Nome do cliente é obrigatório!");
+            return false;
+        }
+        
+        if (value.length() < 3) {
+            showError(field, "Nome deve ter pelo menos 3 caracteres!");
+            return false;
+        }
+        
+        if (value.length() > 100) {
+            showError(field, "Nome deve ter no máximo 100 caracteres!");
+            return false;
+        }
+        
+        showValid(field);
+        return true;
+    }
+    
+    /**
+     * Valida período de datas (data início <= data fim)
+     */
+    public static boolean validatePeriodoDatas(JTextComponent dataInicioField, JTextComponent dataFimField) {
+        boolean dataInicioValid = validateData(dataInicioField);
+        boolean dataFimValid = validateData(dataFimField);
+        
+        if (!dataInicioValid || !dataFimValid) {
+            return false;
+        }
+        
+        try {
+            String inicioStr = dataInicioField.getText().trim();
+            String fimStr = dataFimField.getText().trim();
+            
+            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date dataInicio = sdf.parse(inicioStr);
+            java.util.Date dataFim = sdf.parse(fimStr);
+            
+            if (dataInicio.after(dataFim)) {
+                showError(dataFimField, "Data fim deve ser maior ou igual à data início!");
+                return false;
+            }
+            
+            // Validar período máximo (1 ano)
+            long diffMillis = dataFim.getTime() - dataInicio.getTime();
+            long diffDays = diffMillis / (1000 * 60 * 60 * 24);
+            
+            if (diffDays > 365) {
+                showError(dataFimField, "Período muito longo! Máximo: 365 dias");
+                return false;
+            }
+            
+        } catch (Exception e) {
+            showError(dataInicioField, "Erro ao validar datas!");
+            return false;
+        }
+        
+        showValid(dataInicioField);
+        showValid(dataFimField);
+        return true;
+    }
+    
+    /**
+     * Valida formulário completo de vendas
+     */
+    public static boolean validateVendaForm(JTextComponent codigoField, JTextComponent quantidadeField) {
+        boolean codigoValid = validateCodigoVenda(codigoField);
+        boolean quantidadeValid = validateQuantidadeVenda(quantidadeField);
+        
+        return codigoValid && quantidadeValid;
+    }
+    
+    /**
+     * Valida formulário completo de cliente
+     */
+    public static boolean validateClienteForm(JTextComponent nomeField, JTextComponent cpfCnpjField, 
+                                            JTextComponent telefoneField, JTextComponent emailField) {
+        boolean nomeValid = validateNomeCliente(nomeField);
+        boolean cpfCnpjValid = validateCpfCnpj(cpfCnpjField);
+        boolean telefoneValid = validateTelefone(telefoneField);
+        boolean emailValid = validateEmail(emailField);
+        
+        return nomeValid && cpfCnpjValid && telefoneValid && emailValid;
+    }
+    
+    /**
+     * Valida CPF (algoritmo de validação)
+     */
+    private static boolean isValidCPF(String cpf) {
+        if (cpf.length() != 11) return false;
+        
+        // Verificar se todos os dígitos são iguais
+        if (cpf.matches("(\\d)\\1{10}")) return false;
+        
+        try {
+            // Primeiro dígito verificador
+            int soma = 0;
+            for (int i = 0; i < 9; i++) {
+                soma += Character.getNumericValue(cpf.charAt(i)) * (10 - i);
+            }
+            int resto = soma % 11;
+            int digito1 = resto < 2 ? 0 : 11 - resto;
+            
+            if (digito1 != Character.getNumericValue(cpf.charAt(9))) return false;
+            
+            // Segundo dígito verificador
+            soma = 0;
+            for (int i = 0; i < 10; i++) {
+                soma += Character.getNumericValue(cpf.charAt(i)) * (11 - i);
+            }
+            resto = soma % 11;
+            int digito2 = resto < 2 ? 0 : 11 - resto;
+            
+            return digito2 == Character.getNumericValue(cpf.charAt(10));
+            
+        } catch (Exception e) {
+            return false;
+        }
+    }
+    
+    /**
+     * Valida CNPJ (algoritmo de validação)
+     */
+    private static boolean isValidCNPJ(String cnpj) {
+        if (cnpj.length() != 14) return false;
+        
+        // Verificar se todos os dígitos são iguais
+        if (cnpj.matches("(\\d)\\1{13}")) return false;
+        
+        try {
+            // Primeiro dígito verificador
+            int soma = 0;
+            int[] peso1 = {5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
+            for (int i = 0; i < 12; i++) {
+                soma += Character.getNumericValue(cnpj.charAt(i)) * peso1[i];
+            }
+            int resto = soma % 11;
+            int digito1 = resto < 2 ? 0 : 11 - resto;
+            
+            if (digito1 != Character.getNumericValue(cnpj.charAt(12))) return false;
+            
+            // Segundo dígito verificador
+            soma = 0;
+            int[] peso2 = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
+            for (int i = 0; i < 13; i++) {
+                soma += Character.getNumericValue(cnpj.charAt(i)) * peso2[i];
+            }
+            resto = soma % 11;
+            int digito2 = resto < 2 ? 0 : 11 - resto;
+            
+            return digito2 == Character.getNumericValue(cnpj.charAt(13));
+            
+        } catch (Exception e) {
+            return false;
         }
     }
     
@@ -470,6 +802,6 @@ public class FieldValidator {
     public enum ValidationType {
         USUARIO, SENHA, CODIGO_PRODUTO, NOME_PRODUTO, PRECO, 
         QUANTIDADE, ESTOQUE_MINIMO, ESTOQUE_MAXIMO, BUSCA, 
-        EMAIL, TELEFONE
+        EMAIL, TELEFONE, CPF_CNPJ, DATA, CODIGO_VENDA, QUANTIDADE_VENDA, NOME_CLIENTE
     }
 }
