@@ -82,18 +82,7 @@ public class NotificacaoService {
         }
     }
     
-    /**
-     * Lista notificações não lidas de um usuário
-     */
-    public List<com.br.hermescomercial.shared.model.Notificacao> listarNotificacoesNaoLidas(String usuario) {
-        try {
-            return notificacaoDAO.findByNaoLidas();
-        } catch (SQLException e) {
-            logger.error("Erro ao listar notificações não lidas para usuário: " + usuario, e);
-            throw new RuntimeException("Falha ao listar notificações não lidas", e);
-        }
-    }
-    
+        
     /**
      * Marca notificação como lida
      */
@@ -141,7 +130,7 @@ public class NotificacaoService {
     /**
      * Limpa notificações antigas (manutenção)
      */
-    public int limparNotificacoesAntigas() {
+    public int limparItensNotificacaoAntigas() {
         try {
             int excluidas = notificacaoDAO.deleteAntigas();
             logger.info("Limpeza de notificações antigas: {} registros excluídos", excluidas);

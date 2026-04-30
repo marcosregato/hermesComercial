@@ -16,7 +16,7 @@ public class ERPConfiguracaoSwingController {
     private JPanel mainPanel;
     private JTextField txtNomeEmpresa, txtCnpj, txtEndereco, txtTelefone, txtEmail;
     private JComboBox<String> cbTema, cbIdioma;
-    private JCheckBox ckSalvarAutomatico, ckNotificacoes, ckBackupAutomatico;
+    private JCheckBox ckSalvarAutomatico, ckNotificacao, ckBackupAutomatico;
     private JButton btnSalvar, btnCancelar, btnTestarConexao, btnRestaurarPadroes;
     
     public ERPConfiguracaoSwingController() {
@@ -136,6 +136,36 @@ public class ERPConfiguracaoSwingController {
         cbIdioma.setFont(HermesTheme.FONT_DEFAULT);
         cbIdioma.setPreferredSize(new Dimension(150, 30));
         formPanel.add(cbIdioma, gbc);
+        
+        // Salvar Automaticamente
+        gbc.gridx = 0; gbc.gridy = 7; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Salvar Automaticamente:"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        ckSalvarAutomatico = new JCheckBox("Salvar configurações automaticamente");
+        ckSalvarAutomatico.setFont(HermesTheme.FONT_DEFAULT);
+        ckSalvarAutomatico.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+        ckSalvarAutomatico.setForeground(HermesTheme.TEXT_PRIMARY);
+        formPanel.add(ckSalvarAutomatico, gbc);
+        
+        // Notificações
+        gbc.gridx = 0; gbc.gridy = 8; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Notificações:"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        ckNotificacao = new JCheckBox("Receber notificações do sistema");
+        ckNotificacao.setFont(HermesTheme.FONT_DEFAULT);
+        ckNotificacao.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+        ckNotificacao.setForeground(HermesTheme.TEXT_PRIMARY);
+        formPanel.add(ckNotificacao, gbc);
+        
+        // Backup Automático
+        gbc.gridx = 0; gbc.gridy = 9; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Backup Automático:"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        ckBackupAutomatico = new JCheckBox("Realizar backup automático");
+        ckBackupAutomatico.setFont(HermesTheme.FONT_DEFAULT);
+        ckBackupAutomatico.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+        ckBackupAutomatico.setForeground(HermesTheme.TEXT_PRIMARY);
+        formPanel.add(ckBackupAutomatico, gbc);
         
         return formPanel;
     }
@@ -304,7 +334,7 @@ public class ERPConfiguracaoSwingController {
         cbTema.setSelectedIndex(0);
         cbIdioma.setSelectedIndex(0);
         ckSalvarAutomatico.setSelected(true);
-        ckNotificacoes.setSelected(true);
+        ckNotificacao.setSelected(true);
         ckBackupAutomatico.setSelected(true);
     }
     
@@ -317,7 +347,7 @@ public class ERPConfiguracaoSwingController {
         String tema = (String) cbTema.getSelectedItem();
         String idioma = (String) cbIdioma.getSelectedItem();
         boolean salvarAuto = ckSalvarAutomatico.isSelected();
-        boolean notificacoes = ckNotificacoes.isSelected();
+        boolean notificacao = ckNotificacao.isSelected();
         boolean backupAuto = ckBackupAutomatico.isSelected();
         
         if (nomeEmpresa.isEmpty()) {
@@ -338,7 +368,7 @@ public class ERPConfiguracaoSwingController {
                 "Tema: " + tema + "\n" +
                 "Idioma: " + idioma + "\n" +
                 "Salvar Auto: " + (salvarAuto ? "Sim" : "Não") + "\n" +
-                "Notificações: " + (notificacoes ? "Sim" : "Não") + "\n" +
+                "Notificações: " + (notificacao ? "Sim" : "Não") + "\n" +
                 "Backup Auto: " + (backupAuto ? "Sim" : "Não"), 
                 "Sucesso", JOptionPane.INFORMATION_MESSAGE);
     }

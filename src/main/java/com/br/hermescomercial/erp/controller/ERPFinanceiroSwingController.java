@@ -26,6 +26,7 @@ public class ERPFinanceiroSwingController {
     private JButton btnNovo, btnEditar, btnExcluir, btnSalvar, btnCancelar;
     
     public ERPFinanceiroSwingController() {
+        df = new DecimalFormat("#,##0.00");
         initializeUI();
     }
     

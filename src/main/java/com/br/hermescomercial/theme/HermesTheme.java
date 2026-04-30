@@ -1,44 +1,49 @@
 package com.br.hermescomercial.theme;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 /**
- * Tema Visual Padrão Oficial do Sistema Hermes Comercial PDV
- * Versão 2.3.0 - Tema Corporativo Profissional
+ * Tema Visual Moderno do Sistema Hermes Comercial PDV
+ * Versão 2.4.0 - Tema Moderno e Atrativo
  * 
- * Este é o tema REALMENTE utilizado nas telas do sistema,
- * baseado nas cores e padrões visuais das telas antigas.
+ * Design moderno com cores vibrantes, gradientes e visual profissional
+ * inspirado nas melhores interfaces contemporâneas.
  */
 public class HermesTheme {
     
-    // ==================== CORES PRINCIPAIS (PADRÃO REAL) ====================
+    // ==================== CORES PRINCIPAIS (TEMA MODERNO) ====================
     
-    // Cores de Botões - Padrão Corporativo
-    public static final Color PRIMARY_COLOR = new Color(41, 128, 185);      // Azul corporativo
-    public static final Color SUCCESS_COLOR = new Color(40, 167, 69);        // Verde profissional
-    public static final Color WARNING_COLOR = new Color(255, 193, 7);        // Amarelo padrão
-    public static final Color DANGER_COLOR = new Color(220, 53, 69);         // Vermelho corporativo
-    public static final Color SECONDARY_COLOR = new Color(149, 165, 166);   // Cinza azulado suave
+    // Cores de Botões - Paleta Moderna Vibrante
+    public static final Color PRIMARY_COLOR = new Color(59, 130, 246);        // Azul moderno (Tailwind blue-500)
+    public static final Color SUCCESS_COLOR = new Color(34, 197, 94);         // Verde vibrante (Tailwind green-500)
+    public static final Color WARNING_COLOR = new Color(251, 146, 60);        // Laranja moderno (Tailwind orange-400)
+    public static final Color DANGER_COLOR = new Color(239, 68, 68);          // Vermelho vibrante (Tailwind red-500)
+    public static final Color SECONDARY_COLOR = new Color(107, 114, 128);    // Cinza moderno (Tailwind gray-500)
+    public static final Color INFO_COLOR = new Color(14, 165, 233);          // Azul info (Tailwind sky-500)
+    public static final Color PURPLE_COLOR = new Color(139, 92, 246);         // Roxo moderno (Tailwind violet-500)
     
-    // Cores de Fundo - Padrão Real das Telas
-    public static final Color BACKGROUND_PRIMARY = new Color(250, 250, 250);   // Cinza muito suave
-    public static final Color BACKGROUND_SECONDARY = new Color(250, 252, 252); // Branco suave
-    public static final Color BACKGROUND_CARD = new Color(255, 255, 255);     // Branco puro
-    public static final Color BACKGROUND_DARK = new Color(33, 37, 41);         // Cinza escuro profundo
+    // Cores de Fundo - Gradientes e Modernos
+    public static final Color BACKGROUND_PRIMARY = new Color(248, 250, 252);   // Slate-50 (cinza muito claro)
+    public static final Color BACKGROUND_SECONDARY = new Color(241, 245, 249); // Slate-100 (fundo suave)
+    public static final Color BACKGROUND_CARD = new Color(255, 255, 255);     // Branco puro para cards
+    public static final Color BACKGROUND_DARK = new Color(15, 23, 42);         // Slate-900 (fundo escuro moderno)
+    public static final Color GRADIENT_START = new Color(99, 102, 241);      // Indigo-500
+    public static final Color GRADIENT_END = new Color(139, 92, 246);        // Violet-500
     
-    // Cores de Texto - Padrão Real das Telas
-    public static final Color TEXT_PRIMARY = new Color(52, 73, 94);           // Azul suave profundo
-    public static final Color TEXT_SECONDARY = new Color(108, 117, 125);     // Texto secundário
-    public static final Color TEXT_WHITE = new Color(255, 255, 255);         // Texto branco
-    public static final Color TEXT_MUTED = new Color(173, 181, 189);         // Texto suave
+    // Cores de Texto - Hierarquia Moderna
+    public static final Color TEXT_PRIMARY = new Color(15, 23, 42);            // Slate-900 (texto principal)
+    public static final Color TEXT_SECONDARY = new Color(71, 85, 105);         // Slate-700 (texto secundário)
+    public static final Color TEXT_WHITE = new Color(255, 255, 255);          // Texto branco
+    public static final Color TEXT_MUTED = new Color(148, 163, 184);          // Slate-400 (texto suave)
+    public static final Color TEXT_ACCENT = new Color(99, 102, 241);          // Indigo-500 (texto de destaque)
     
-    // Cores de Borda - Padrão Real das Telas
-    public static final Color BORDER_LIGHT = new Color(189, 195, 199);         // Cinza suave
-    public static final Color BORDER_DARK = new Color(127, 140, 141);         // Cinza borda suave
-    public static final Color BORDER_FOCUS = new Color(108, 117, 125);         // Cinza foco
-    public static final Color BORDER_HOVER = new Color(127, 140, 141);        // Cinza hover
+    // Cores de Borda - Design Moderno
+    public static final Color BORDER_LIGHT = new Color(226, 232, 240);         // Slate-200 (borda suave)
+    public static final Color BORDER_DARK = new Color(148, 163, 184);          // Slate-400 (borda média)
+    public static final Color BORDER_FOCUS = new Color(99, 102, 241);          // Indigo-500 (foco)
+    public static final Color BORDER_HOVER = new Color(71, 85, 105);           // Slate-700 (hover)
+    public static final Color BORDER_CARD = new Color(203, 213, 225);          // Slate-300 (borda de cards)
     
     // ==================== FONTES (PADRÃO REAL) ====================
     
@@ -69,53 +74,63 @@ public class HermesTheme {
     // ==================== MÉTODOS UTILITÁRIOS ====================
     
     /**
-     * Aplica o tema padrão Hermes a um botão
+     * Aplica tema moderno a um botão com sombras e efeitos
      */
     public static void applyButtonTheme(JButton button, Color bgColor) {
-        button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave (padrão)
-        button.setForeground(new Color(255, 255, 255)); // Branco elegante
+        button.setBackground(bgColor);
+        button.setForeground(TEXT_WHITE);
         button.setFont(FONT_BUTTON);
         button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
-            BorderFactory.createEmptyBorder(12, 20, 12, 20)
+            BorderFactory.createLineBorder(BORDER_CARD, 1),
+            BorderFactory.createEmptyBorder(12, 24, 12, 24)
         ));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setOpaque(true);
         
-        // Efeito hover elegante (padrão das telas antigas)
+        // Efeitos modernos de hover e foco
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(127, 140, 141)); // Cinza mais escuro suave
+                button.setBackground(bgColor.brighter());
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(108, 117, 125), 2), // Cinza ainda mais escuro
-                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
+                    BorderFactory.createLineBorder(BORDER_FOCUS, 2),
+                    BorderFactory.createEmptyBorder(12, 24, 12, 24)
                 ));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
+                button.setBackground(bgColor);
                 button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
-                    BorderFactory.createEmptyBorder(12, 20, 12, 20)
+                    BorderFactory.createLineBorder(BORDER_CARD, 1),
+                    BorderFactory.createEmptyBorder(12, 24, 12, 24)
                 ));
             }
         });
     }
     
     /**
-     * Aplica o tema padrão Hermes a um campo de texto
+     * Cria um botão moderno com estilo aprimorado
      */
-    public static void applyTextFieldTheme(JTextField field) {
-        field.setFont(FONT_DEFAULT);
-        field.setBackground(Color.WHITE);
-        field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(BORDER_LIGHT),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+    public static JButton createModernButton(String text, Color bgColor) {
+        JButton button = new JButton(text);
+        applyButtonTheme(button, bgColor);
+        return button;
     }
     
     /**
-     * Aplica o tema padrão Hermes a um label
+     * Aplica tema moderno a um campo de texto
+     */
+    public static void applyTextFieldTheme(JTextField field) {
+        field.setFont(FONT_DEFAULT);
+        field.setBackground(BACKGROUND_CARD);
+        field.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(BORDER_LIGHT, 1),
+            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+        field.setForeground(TEXT_PRIMARY);
+    }
+    
+    /**
+     * Aplica tema moderno a um label
      */
     public static void applyLabelTheme(JLabel label) {
         label.setFont(FONT_DEFAULT);
@@ -123,28 +138,46 @@ public class HermesTheme {
     }
     
     /**
-     * Cria um painel com borda padrão
+     * Cria um card moderno com sombra e bordas suaves
      */
-    public static JPanel createBorderedPanel(String title) {
+    public static JPanel createModernCard() {
         JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createTitledBorder(
-            BorderFactory.createEtchedBorder(), 
-            title, 
-            TitledBorder.LEFT, 
-            TitledBorder.TOP, 
-            FONT_HEADER, 
-            TEXT_PRIMARY));
-        panel.setBackground(BACKGROUND_SECONDARY);
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(BORDER_CARD, 1),
+            BorderFactory.createEmptyBorder(SPACING_LG, SPACING_LG, SPACING_LG, SPACING_LG)
+        ));
+        panel.setBackground(BACKGROUND_CARD);
         return panel;
     }
     
     /**
-     * Cria um painel principal com fundo padrão
+     * Cria um painel principal com fundo moderno
      */
     public static JPanel createMainPanel() {
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(SPACING_XL, SPACING_XL, SPACING_XL, SPACING_XL));
         panel.setBackground(BACKGROUND_PRIMARY);
+        return panel;
+    }
+    
+    /**
+     * Cria um painel com gradiente moderno
+     */
+    public static JPanel createGradientPanel() {
+        JPanel panel = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gradient = new GradientPaint(
+                    0, 0, GRADIENT_START,
+                    getWidth(), getHeight(), GRADIENT_END
+                );
+                g2d.setPaint(gradient);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        panel.setOpaque(true);
         return panel;
     }
     

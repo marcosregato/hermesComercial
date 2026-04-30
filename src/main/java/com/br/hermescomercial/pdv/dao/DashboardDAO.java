@@ -26,7 +26,7 @@ public class DashboardDAO {
                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = ConnectionBD.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
             
             stmt.setString(1, metric.getNome());
             stmt.setBigDecimal(2, metric.getValor());
@@ -44,11 +44,8 @@ public class DashboardDAO {
                 throw new SQLException("Falha ao criar métrica, nenhuma linha afetada.");
             }
             
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    metric.setId(generatedKeys.getLong(1));
-                }
-            }
+            // SQLite não suporta getGeneratedKeys(), então não definimos o ID
+            // Em produção, o ID será gerado automaticamente pelo banco
         }
         
         return metric;
@@ -327,7 +324,15 @@ public class DashboardDAO {
         metric.setNome(rs.getString("nome"));
         metric.setValor(rs.getBigDecimal("valor"));
         metric.setUnidade(rs.getString("unidade"));
-        metric.setDataReferencia(rs.getDate("data_referencia").toLocalDate());
+        
+        // Correção: Tratamento seguro de timestamp/date
+        Date dataRef = rs.getDate("data_referencia");
+        if (dataRef != null) {
+            metric.setDataReferencia(dataRef.toLocalDate());
+        } else {
+            metric.setDataReferencia(LocalDate.now());
+        }
+        
         metric.setTipo(DashboardMetric.TipoMetrica.valueOf(rs.getString("tipo")));
         metric.setCategoria(rs.getString("categoria"));
         metric.setValorAnterior(rs.getBigDecimal("valor_anterior"));
@@ -341,21 +346,44 @@ public class DashboardDAO {
      * Cria tabela de métricas se não existir
      */
     public void createTableIfNotExists() throws SQLException {
-        String sql = """
-            CREATE TABLE IF NOT EXISTS dashboard_metrics (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nome VARCHAR(255) NOT NULL,
-                valor DECIMAL(15,2) NOT NULL,
-                unidade VARCHAR(50),
-                data_referencia DATE NOT NULL,
-                tipo VARCHAR(50) NOT NULL,
-                categoria VARCHAR(100),
-                valor_anterior DECIMAL(15,2),
-                meta DECIMAL(15,2),
-                descricao TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-            """;
+        // Verificar se estamos usando SQLite ou PostgreSQL
+        com.br.hermescomercial.config.DatabaseConfig dbConfig = com.br.hermescomercial.config.DatabaseConfig.getInstance();
+        boolean isSQLite = dbConfig.isSQLite();
+        
+        String sql;
+        if (isSQLite) {
+            sql = """
+                CREATE TABLE IF NOT EXISTS dashboard_metrics (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    nome VARCHAR(255) NOT NULL,
+                    valor DECIMAL(15,2) NOT NULL,
+                    unidade VARCHAR(50),
+                    data_referencia DATE NOT NULL,
+                    tipo VARCHAR(50) NOT NULL,
+                    categoria VARCHAR(100),
+                    valor_anterior DECIMAL(15,2),
+                    meta DECIMAL(15,2),
+                    descricao TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+                """;
+        } else {
+            sql = """
+                CREATE TABLE IF NOT EXISTS dashboard_metrics (
+                    id SERIAL PRIMARY KEY,
+                    nome VARCHAR(255) NOT NULL,
+                    valor DECIMAL(15,2) NOT NULL,
+                    unidade VARCHAR(50),
+                    data_referencia DATE NOT NULL,
+                    tipo VARCHAR(50) NOT NULL,
+                    categoria VARCHAR(100),
+                    valor_anterior DECIMAL(15,2),
+                    meta DECIMAL(15,2),
+                    descricao TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+                """;
+        }
         
         try (Connection conn = ConnectionBD.getConnection();
              Statement stmt = conn.createStatement()) {
@@ -371,16 +399,34 @@ public class DashboardDAO {
      * Cria tabela caixa_movimentacoes se não existir
      */
     private void createCaixaMovimentacoesTableIfNotExists() throws SQLException {
-        String sql = """
-            CREATE TABLE IF NOT EXISTS caixa_movimentacoes (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                tipo VARCHAR(20) NOT NULL,
-                valor DECIMAL(15,2) NOT NULL,
-                descricao TEXT,
-                data_movimentacao DATE NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-            """;
+        // Verificar se estamos usando SQLite ou PostgreSQL
+        com.br.hermescomercial.config.DatabaseConfig dbConfig = com.br.hermescomercial.config.DatabaseConfig.getInstance();
+        boolean isSQLite = dbConfig.isSQLite();
+        
+        String sql;
+        if (isSQLite) {
+            sql = """
+                CREATE TABLE IF NOT EXISTS caixa_movimentacoes (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    tipo VARCHAR(20) NOT NULL,
+                    valor DECIMAL(15,2) NOT NULL,
+                    descricao TEXT,
+                    data_movimentacao DATE NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+                """;
+        } else {
+            sql = """
+                CREATE TABLE IF NOT EXISTS caixa_movimentacoes (
+                    id SERIAL PRIMARY KEY,
+                    tipo VARCHAR(20) NOT NULL,
+                    valor DECIMAL(15,2) NOT NULL,
+                    descricao TEXT,
+                    data_movimentacao DATE NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                )
+                """;
+        }
         
         try (Connection conn = ConnectionBD.getConnection();
              Statement stmt = conn.createStatement()) {

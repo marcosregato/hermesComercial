@@ -481,7 +481,9 @@ public class PDVLoginSwingController {
     }
     
     private boolean autenticarUsuario(String usuario, String senha) {
-        String sql = "SELECT id, nome, login, perfil FROM usuario WHERE login = ? AND senha = ? AND ativo = TRUE";
+        String sql = "SELECT u.id, u.nome, l.login, 'ADMIN' as perfil FROM usuario u " +
+                    "INNER JOIN login l ON l.fk_usuario = u.id " +
+                    "WHERE l.login = ? AND l.senha = ? AND l.ativo = TRUE";
         
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

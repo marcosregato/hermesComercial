@@ -3,7 +3,7 @@
 -- Hermes Comercial PDV v2.3.0
 
 -- Inserir notificações adicionais para melhor demonstração
-INSERT INTO notificacoes (
+INSERT INTO notificacao (
     id, titulo, mensagem, tipo, data_criacao, lida, usuario_destino, prioridade
 ) VALUES 
 -- Notificações de sistema adicionais

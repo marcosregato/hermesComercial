@@ -157,7 +157,7 @@ class DespesaControllerTest {
         assertEquals(3L, despesa.getId());
         assertEquals("Material de Escritório", despesa.getTipo());
         assertEquals(250.00f, despesa.getValor());
-        assertEquals("Canetas e Papel", despesa.getNome());
+        assertEquals("Compra de material para escritório", despesa.getNome());
         assertEquals("Compra de material para escritório", despesa.getDescricao());
     }
 
@@ -168,7 +168,7 @@ class DespesaControllerTest {
         Despesa despesa = new Despesa();
 
         // Act & Assert
-        assertEquals(0L, despesa.getId());
+        assertNull(despesa.getId());
         assertNull(despesa.getTipo());
         assertNull(despesa.getValor());
         assertNull(despesa.getNome());

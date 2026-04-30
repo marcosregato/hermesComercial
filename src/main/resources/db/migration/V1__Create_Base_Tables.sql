@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS caixa_movimentacoes (
 );
 
 -- Criar tabela de notificações
-CREATE TABLE IF NOT EXISTS notificacoes (
+CREATE TABLE IF NOT EXISTS notificacao (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     titulo VARCHAR(255) NOT NULL,
     mensagem TEXT NOT NULL,
@@ -97,6 +97,6 @@ CREATE INDEX IF NOT EXISTS idx_dashboard_metrics_data ON dashboard_metrics(data_
 CREATE INDEX IF NOT EXISTS idx_dashboard_metrics_tipo ON dashboard_metrics(tipo);
 CREATE INDEX IF NOT EXISTS idx_caixa_movimentacoes_data ON caixa_movimentacoes(data_movimentacao);
 CREATE INDEX IF NOT EXISTS idx_caixa_movimentacoes_tipo ON caixa_movimentacoes(tipo);
-CREATE INDEX IF NOT EXISTS idx_notificacoes_data ON notificacoes(data_criacao);
-CREATE INDEX IF NOT EXISTS idx_notificacoes_usuario ON notificacoes(usuario_destino);
-CREATE INDEX IF NOT EXISTS idx_notificacoes_lida ON notificacoes(lida);
+CREATE INDEX IF NOT EXISTS idx_notificacao_data ON notificacao(data_criacao);
+CREATE INDEX IF NOT EXISTS idx_notificacao_usuario ON notificacao(usuario_destino);
+CREATE INDEX IF NOT EXISTS idx_notificacao_lida ON notificacao(lida);

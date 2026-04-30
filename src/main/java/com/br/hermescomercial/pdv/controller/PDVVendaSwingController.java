@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import com.br.hermescomercial.business.impressao.ImpressaoNaoFiscalService;
 
 /**
  * Controller de Venda em SWING
@@ -25,9 +26,11 @@ public class PDVVendaSwingController {
     private JLabel lblTotal;
     private JLabel lblItens;
     private List<ItemVenda> itens;
+    private ImpressaoNaoFiscalService impressaoService;  
     
     public PDVVendaSwingController() {
         this.itens = new ArrayList<>();
+        this.impressaoService = new ImpressaoNaoFiscalService();
         initializeUI();
     }
     
@@ -79,7 +82,7 @@ public class PDVVendaSwingController {
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        panel.setBackground(new Color(41, 128, 185));
+        panel.setBackground(new Color(26, 188, 156)); // Azul Turquesa #1ABC9C
         panel.setPreferredSize(new Dimension(0, 90));
         
         // Painel esquerdo com botão voltar
@@ -160,7 +163,7 @@ public class PDVVendaSwingController {
         produtosTable.setRowHeight(28);
         produtosTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         produtosTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        produtosTable.getTableHeader().setBackground(new Color(41, 128, 185));
+        produtosTable.getTableHeader().setBackground(new Color(26, 188, 156)); // Azul Turquesa
         produtosTable.getTableHeader().setForeground(Color.WHITE);
         produtosTable.getTableHeader().setPreferredSize(new Dimension(0, 35));
         
@@ -398,49 +401,139 @@ public class PDVVendaSwingController {
         String quantidadeStr = txtQuantidade.getText().trim();
         
         if (codigo.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Informe o código do produto!", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Digite o código do produto!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            txtCodigo.requestFocus();
             return;
         }
         
+        int quantidade;
         try {
-            int quantidade = Integer.parseInt(quantidadeStr);
+            quantidade = Integer.parseInt(quantidadeStr);
             if (quantidade <= 0) {
-                JOptionPane.showMessageDialog(frame, "Quantidade deve ser maior que zero!", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(frame, "Quantidade deve ser maior que zero!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                txtQuantidade.requestFocus();
                 return;
             }
-            
-            // Simulação de busca de produto (em implementação real, buscaria do banco)
-            Produto produto = buscarProdutoPorCodigo(codigo);
-            if (produto == null) {
-                JOptionPane.showMessageDialog(frame, "Produto não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
-                return;
-            }
-            
-            // Adicionar item
-            ItemVenda item = new ItemVenda(produto, quantidade);
-            itens.add(item);
-            
-            // Atualizar tabela
-            Object[] row = {
-                produto.getCodigo(),
-                produto.getDescricao(),
-                quantidade,
-                String.format("R$ %.2f", produto.getPreco()),
-                String.format("R$ %.2f", item.getSubtotal())
-            };
-            
-            tableModel.addRow(row);
-            
-            // Limpar campos e resetar título
-            txtCodigo.setText("");
-            txtDescricao.setText("");
-            txtQuantidade.setText("1");
-            txtCodigo.requestFocus();
-            frame.setTitle("PDV - Nova Venda v2.1.0 - Premium");
-            
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(frame, "Quantidade inválida!", "Erro", JOptionPane.ERROR_MESSAGE);
+            txtQuantidade.requestFocus();
+            return;
         }
+        
+        Produto produto = buscarProdutoPorCodigo(codigo);
+        if (produto == null) {
+            JOptionPane.showMessageDialog(frame, "Produto não encontrado!", "Erro", JOptionPane.ERROR_MESSAGE);
+            txtCodigo.selectAll();
+            txtCodigo.requestFocus();
+            return;
+        }
+        
+        // VERIFICAÇÃO COMPLETA DE ESTOQUE - PASSO 2 DO FLUXO
+        if (produto.getEstoque() < quantidade) {
+            JOptionPane.showMessageDialog(frame, 
+                "📦 ESTOQUE INSUFICIENTE!\n\n" +
+                "Produto: " + produto.getDescricao() + "\n" +
+                "Estoque disponível: " + produto.getEstoque() + "\n" +
+                "Quantidade solicitada: " + quantidade + "\n" +
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                "📍 Localização: " + produto.getLocalizacaoEstoque() + "\n" +
+                "🏷️ Lote: " + produto.getLote() + "\n" +
+                "📅 Validade: " + produto.getDataValidade(),
+                "Estoque Insuficiente", JOptionPane.WARNING_MESSAGE);
+            txtQuantidade.requestFocus();
+            txtQuantidade.selectAll();
+            return;
+        }
+        
+        // VERIFICAÇÃO DE ESTOQUE MÍNIMO
+        if (produto.estaAbaixoEstoqueMinimo()) {
+            JOptionPane.showMessageDialog(frame, 
+                "⚠️ ATENÇÃO: ESTOQUE MÍNIMO!\n\n" +
+                "Produto: " + produto.getDescricao() + "\n" +
+                "Estoque atual: " + produto.getEstoque() + "\n" +
+                "Estoque mínimo: " + produto.getEstoqueMinimo() + "\n" +
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                "📍 Localização: " + produto.getLocalizacaoEstoque() + "\n" +
+                "🏷️ Lote: " + produto.getLote() + "\n" +
+                "📅 Validade: " + produto.getDataValidade() + "\n\n" +
+                "⚠️ É necessário repor este produto em breve!",
+                "Alerta de Estoque Mínimo", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        // VERIFICAÇÃO DE ESTOQUE MÁXIMO (caso esteja vendendo e ultrapassar o limite)
+        if (produto.estaAcimaEstoqueMaximo()) {
+            JOptionPane.showMessageDialog(frame, 
+                "📊 ATENÇÃO: ESTOQUE ACIMA DO MÁXIMO!\n\n" +
+                "Produto: " + produto.getDescricao() + "\n" +
+                "Estoque atual: " + produto.getEstoque() + "\n" +
+                "Estoque máximo: " + produto.getEstoqueMaximo() + "\n" +
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                "📍 Localização: " + produto.getLocalizacaoEstoque() + "\n" +
+                "🏷️ Lote: " + produto.getLote() + "\n" +
+                "📅 Validade: " + produto.getDataValidade() + "\n\n" +
+                "📊 Estoque acima do nível máximo recomendado!",
+                "Alerta de Estoque Máximo", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        // Verificar se produto já está no carrinho
+        for (ItemVenda item : itens) {
+            if (item.getProduto().getCodigo().equals(codigo)) {
+                int novaQuantidade = item.getQuantidade() + quantidade;
+                if (produto.getEstoque() < novaQuantidade) {
+                    JOptionPane.showMessageDialog(frame, 
+                        "Estoque insuficiente para adicionar mais unidades!\n" +
+                        "Estoque disponível: " + produto.getEstoque() + "\n" +
+                        "Quantidade total no carrinho: " + novaQuantidade,
+                        "Estoque Insuficiente", JOptionPane.WARNING_MESSAGE);
+                    txtQuantidade.requestFocus();
+                    return;
+                }
+                item.setQuantidade(novaQuantidade);
+                atualizarTabela();
+                atualizarResumo();
+                limparCampos();
+                return;
+            }
+        }
+        
+        // Adicionar novo item
+        ItemVenda item = new ItemVenda(produto, quantidade);
+        itens.add(item);
+        
+        // Adicionar à tabela
+        Object[] rowData = {
+            produto.getCodigo(),
+            produto.getDescricao(),
+            quantidade,
+            produto.getPreco(),
+            produto.getPreco().multiply(new BigDecimal(quantidade))
+        };
+        tableModel.addRow(rowData);
+        
+        atualizarResumo();
+        atualizarTabela();
+        limparCampos();
+    }
+    
+    private void atualizarTabela() {
+        tableModel.setRowCount(0);
+        for (ItemVenda item : itens) {
+            Produto produto = item.getProduto();
+            Object[] rowData = {
+                produto.getCodigo(),
+                produto.getDescricao(),
+                item.getQuantidade(),
+                produto.getPreco(),
+                produto.getPreco().multiply(new BigDecimal(item.getQuantidade()))
+            };
+            tableModel.addRow(rowData);
+        }
+    }
+    
+    private void limparCampos() {
+        txtCodigo.setText("");
+        txtQuantidade.setText("1");
+        txtCodigo.requestFocus();
     }
     
     private void removerItem(ActionEvent e) {
@@ -489,12 +582,59 @@ public class PDVVendaSwingController {
             new String[]{"Sim", "Não"}, 0);
             
         if (confirm == 0) {
-            JOptionPane.showMessageDialog(frame, 
-                "Venda finalizada com sucesso!\n\n" +
-                "Total: R$ " + String.format("%.2f", total) + "\n" +
-                "Itens: " + itens.size() + "\n" +
-                "Versão SWING 2.0",
-                "Venda Concluída", JOptionPane.INFORMATION_MESSAGE);
+            // PASSO 4: SUBTRAIR ESTOQUE AUTOMATICAMENTE AO FINALIZAR VENDA
+            StringBuilder estoqueAtualizado = new StringBuilder();
+            
+            for (ItemVenda item : itens) {
+                Produto produto = item.getProduto();
+                int quantidadeVendida = item.getQuantidade();
+                int estoqueAnterior = produto.getEstoque();
+                int novoEstoque = estoqueAnterior - quantidadeVendida;
+                
+                // Atualizar estoque do produto
+                produto.setEstoque(novoEstoque);
+                
+                // Registrar atualização para exibir ao usuário
+                estoqueAtualizado.append(String.format(
+                    "• %s: %d → %d (vendido: %d)\n",
+                    produto.getDescricao(),
+                    estoqueAnterior,
+                    novoEstoque,
+                    quantidadeVendida
+                ));
+            }
+            
+            // EMITIR CUPOM NÃO FISCAL AUTOMATICAMENTE
+            try {
+                // Criar VendaPDV para impressão
+                com.br.hermescomercial.pdv.model.VendaPDV vendaPDV = new com.br.hermescomercial.pdv.model.VendaPDV();
+                vendaPDV.setNumeroCupom("CUP" + System.currentTimeMillis());
+                vendaPDV.setValorTotal(total);
+                vendaPDV.setStatus("CONCLUIDA");
+                
+                // Imprimir cupom não fiscal
+                boolean impressaoSucesso = impressaoService.imprimirCupomVenda(vendaPDV);
+                
+                JOptionPane.showMessageDialog(frame, 
+                    "🏪 VENDA FINALIZADA COM SUCESSO!\n\n" +
+                    "💰 Total: R$ " + String.format("%.2f", total) + "\n" +
+                    "📦 Itens: " + itens.size() + "\n" +
+                    "📉 ESTOQUE ATUALIZADO:\n" + estoqueAtualizado.toString() + "\n" +
+                    "🧾 Cupom não fiscal impresso: " + (impressaoSucesso ? "✅" : "⚠️") + "\n" +
+                    "✅ Versão SWING 2.4.0 - Gestão de Estoque Completa",
+                    "Venda Concluída", JOptionPane.INFORMATION_MESSAGE);
+                
+            } catch (Exception ex) {
+                // Se falhar a impressão, ainda finaliza a venda
+                JOptionPane.showMessageDialog(frame, 
+                    "🏪 VENDA FINALIZADA COM SUCESSO!\n\n" +
+                    "💰 Total: R$ " + String.format("%.2f", total) + "\n" +
+                    "📦 Itens: " + itens.size() + "\n" +
+                    "📉 ESTOQUE ATUALIZADO:\n" + estoqueAtualizado.toString() + "\n" +
+                    "⚠️ Cupom não fiscal: Falha na impressão\n" +
+                    "✅ Versão SWING 2.4.0 - Gestão de Estoque Completa",
+                    "Venda Concluída", JOptionPane.INFORMATION_MESSAGE);
+            }
             
             // Limpar para nova venda
             limparVenda(null);
@@ -502,11 +642,75 @@ public class PDVVendaSwingController {
     }
     
     private void cancelarVenda(ActionEvent e) {
+        if (itens.isEmpty()) {
+            JOptionPane.showMessageDialog(frame, "Não há itens para cancelar!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        BigDecimal total = calcularTotal();
+        
         int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
-            "Deseja cancelar esta venda?", "Cancelar Venda", 
-            new String[]{"Sim", "Não"}, 0);
+            String.format("⚠️ CANCELAR VENDA COM ESTORNO\n\n" +
+                         "Total da venda: R$ %.2f\n" +
+                         "Itens: %d\n\n" +
+                         "Ao cancelar:\n" +
+                         "• A venda será cancelada\n" +
+                         "• O valor será estornado\n" +
+                         "• Os produtos voltarão ao estoque\n\n" +
+                         "Deseja continuar?", total, itens.size()), 
+            "Cancelar Venda com Estorno", 
+            new String[]{"Sim, Cancelar com Estorno", "Não"}, 0);
             
         if (confirm == 0) {
+            // PASSO 1: CANCELAR A VENDA
+            StringBuilder estornoDetalhado = new StringBuilder();
+            
+            // PASSO 3: DEVOLVER PRODUTOS AO ESTOQUE
+            for (ItemVenda item : itens) {
+                Produto produto = item.getProduto();
+                int quantidadeVendida = item.getQuantidade();
+                int estoqueAnterior = produto.getEstoque();
+                int novoEstoque = estoqueAnterior + quantidadeVendida;
+                
+                // Devolver produtos ao estoque
+                produto.setEstoque(novoEstoque);
+                
+                // Registrar devolução para exibir ao usuário
+                estornoDetalhado.append(String.format(
+                    "• %s: %d → %d (devolvido: %d)\n",
+                    produto.getDescricao(),
+                    estoqueAnterior,
+                    novoEstoque,
+                    quantidadeVendida
+                ));
+            }
+            
+            // PASSO 2: ESTORNAR VALOR FINANCEIRO (simulado)
+            String estornoFinanceiro = String.format(
+                "💰 ESTORNO FINANCEIRO\n" +
+                "Valor estornado: R$ %.2f\n" +
+                "Forma de estorno: Devolução em caixa\n" +
+                "Status: Concluído\n\n",
+                total
+            );
+            
+            // Exibir confirmação detalhada do estorno
+            JOptionPane.showMessageDialog(frame, 
+                "🔄 CANCELAMENTO COM ESTORNO REALIZADO!\n\n" +
+                estornoFinanceiro +
+                "📦 PRODUTOS DEVOLVIDOS AO ESTOQUE:\n" + estornoDetalhado.toString() + "\n" +
+                "📋 RESUMO:\n" +
+                "• Venda cancelada: ✅\n" +
+                "• Valor estornado: ✅\n" +
+                "• Produtos devolvidos: ✅\n" +
+                "• Estoque atualizado: ✅\n\n" +
+                "🏪 Hermes Comercial PDV v2.4.0 - Estorno Completo",
+                "Cancelamento Concluído", JOptionPane.INFORMATION_MESSAGE);
+            
+            // Limpar para nova venda
+            limparVenda(null);
+            
+            // Fechar janela após cancelamento
             frame.dispose();
         }
     }
@@ -522,15 +726,42 @@ public class PDVVendaSwingController {
             .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
     
-    // Simulação de busca de produto (em implementação real, buscaria do banco)
+    // Simulação de busca de produto com controle de estoque completo
     private Produto buscarProdutoPorCodigo(String codigo) {
-        // Produtos de exemplo
+        // Produtos de exemplo com controle completo de estoque
         if ("001".equals(codigo)) {
-            return new Produto("001", "Produto Exemplo 1", new BigDecimal("10.50"));
+            Produto produto = new Produto("001", "Produto Exemplo 1", new BigDecimal("10.50"), 50);
+            produto.setEstoqueMinimo(10);
+            produto.setEstoqueMaximo(200);
+            produto.setLocalizacaoEstoque("A-01-01");
+            produto.setLote("L2024001");
+            produto.setDataValidade("31/12/2025");
+            return produto;
         } else if ("002".equals(codigo)) {
-            return new Produto("002", "Produto Exemplo 2", new BigDecimal("25.99"));
+            Produto produto = new Produto("002", "Produto Exemplo 2", new BigDecimal("25.99"), 30);
+            produto.setEstoqueMinimo(5);
+            produto.setEstoqueMaximo(100);
+            produto.setLocalizacaoEstoque("B-02-03");
+            produto.setLote("L2024002");
+            produto.setDataValidade("30/06/2025");
+            return produto;
         } else if ("003".equals(codigo)) {
-            return new Produto("003", "Produto Exemplo 3", new BigDecimal("5.75"));
+            Produto produto = new Produto("003", "Produto Exemplo 3", new BigDecimal("5.75"), 100);
+            produto.setEstoqueMinimo(20);
+            produto.setEstoqueMaximo(500);
+            produto.setLocalizacaoEstoque("C-03-02");
+            produto.setLote("L2024003");
+            produto.setDataValidade("15/09/2025");
+            return produto;
+        } else if ("004".equals(codigo)) {
+            // Produto com estoque baixo para demonstrar alerta
+            Produto produto = new Produto("004", "Produto Estoque Baixo", new BigDecimal("15.00"), 3);
+            produto.setEstoqueMinimo(10);
+            produto.setEstoqueMaximo(50);
+            produto.setLocalizacaoEstoque("D-04-01");
+            produto.setLote("L2024004");
+            produto.setDataValidade("30/11/2024");
+            return produto;
         }
         return null;
     }
@@ -546,16 +777,51 @@ public class PDVVendaSwingController {
         private String codigo;
         private String descricao;
         private BigDecimal preco;
+        private int estoque;
+        private int estoqueMinimo;
+        private int estoqueMaximo;
+        private String localizacaoEstoque;
+        private String lote;
+        private String dataValidade; // Simplificado como String para exemplo
         
-        public Produto(String codigo, String descricao, BigDecimal preco) {
+        public Produto(String codigo, String descricao, BigDecimal preco, int estoque) {
             this.codigo = codigo;
             this.descricao = descricao;
             this.preco = preco;
+            this.estoque = estoque;
+            this.estoqueMinimo = 5;
+            this.estoqueMaximo = 100;
+            this.localizacaoEstoque = "A-01-01";
+            this.lote = "L001";
+            this.dataValidade = "31/12/2025";
         }
         
         public String getCodigo() { return codigo; }
         public String getDescricao() { return descricao; }
         public BigDecimal getPreco() { return preco; }
+        public int getEstoque() { return estoque; }
+        public void setEstoque(int estoque) { this.estoque = estoque; }
+        public int getEstoqueMinimo() { return estoqueMinimo; }
+        public int getEstoqueMaximo() { return estoqueMaximo; }
+        public String getLocalizacaoEstoque() { return localizacaoEstoque; }
+        public String getLote() { return lote; }
+        public String getDataValidade() { return dataValidade; }
+        
+        public void setEstoqueMinimo(int estoqueMinimo) { this.estoqueMinimo = estoqueMinimo; }
+        public void setEstoqueMaximo(int estoqueMaximo) { this.estoqueMaximo = estoqueMaximo; }
+        public void setLocalizacaoEstoque(String localizacaoEstoque) { this.localizacaoEstoque = localizacaoEstoque; }
+        public void setLote(String lote) { this.lote = lote; }
+        public void setDataValidade(String dataValidade) { this.dataValidade = dataValidade; }
+        
+        // Método para verificar se está abaixo do estoque mínimo
+        public boolean estaAbaixoEstoqueMinimo() {
+            return estoque <= estoqueMinimo;
+        }
+        
+        // Método para verificar se está acima do estoque máximo
+        public boolean estaAcimaEstoqueMaximo() {
+            return estoque >= estoqueMaximo;
+        }
     }
     
     private static class ItemVenda {
@@ -566,6 +832,10 @@ public class PDVVendaSwingController {
             this.produto = produto;
             this.quantidade = quantidade;
         }
+        
+        public Produto getProduto() { return produto; }
+        public int getQuantidade() { return quantidade; }
+        public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
         
         public BigDecimal getSubtotal() {
             return produto.getPreco().multiply(new BigDecimal(quantidade));

@@ -16,16 +16,16 @@ import java.util.List;
  * Implementa injeção de dependências e validações adequadas
  * @author marcos
  */
-public class UsuarioServiceRefactored {
+public class UsuarioService {
     
-    private static final Logger logger = LogManager.getLogger(UsuarioServiceRefactored.class);
+    private static final Logger logger = LogManager.getLogger(UsuarioService.class);
     private final UsuarioRepository usuarioRepository;
     
     /**
      * Construtor com injeção de dependência
      * @param usuarioRepository Repository de usuários
      */
-    public UsuarioServiceRefactored(UsuarioRepository usuarioRepository) {
+    public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
         logger.info("UsuarioServiceRefactored inicializado com repository injetado");
     }
@@ -33,7 +33,7 @@ public class UsuarioServiceRefactored {
     /**
      * Construtor padrão usando container de dependências
      */
-    public UsuarioServiceRefactored() {
+    public UsuarioService() {
         this(DependencyContainer.getInstance().get(UsuarioRepository.class));
     }
     

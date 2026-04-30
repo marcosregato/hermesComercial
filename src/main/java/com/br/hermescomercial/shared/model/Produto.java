@@ -6,6 +6,7 @@ package com.br.hermescomercial.shared.model;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  *
@@ -24,6 +25,14 @@ public class Produto  {
     private String unidade;
     private BigDecimal precoVenda;
     private int estoque;
+    private int estoqueMinimo;
+    private int estoqueMaximo;
+    private String localizacaoEstoque;
+    private String lote;
+    private LocalDate dataValidade;
+    private String ncm; // Nomenclatura Comum do Mercosul
+    private String cfop; // Código Fiscal de Operações e Prestações
+    private MetodoControleEstoque metodoControleEstoque = MetodoControleEstoque.CUSTO_MEDIO; // Método padrão
     
     
 	public String getNome() {
@@ -102,6 +111,70 @@ public class Produto  {
 
     public void setEstoque(int estoque) {
         this.estoque = estoque;
+    }
+
+    public int getEstoqueMinimo() {
+        return estoqueMinimo;
+    }
+
+    public void setEstoqueMinimo(int estoqueMinimo) {
+        this.estoqueMinimo = estoqueMinimo;
+    }
+
+    public int getEstoqueMaximo() {
+        return estoqueMaximo;
+    }
+
+    public void setEstoqueMaximo(int estoqueMaximo) {
+        this.estoqueMaximo = estoqueMaximo;
+    }
+
+    public String getLocalizacaoEstoque() {
+        return localizacaoEstoque;
+    }
+
+    public void setLocalizacaoEstoque(String localizacaoEstoque) {
+        this.localizacaoEstoque = localizacaoEstoque;
+    }
+
+    public String getLote() {
+        return lote;
+    }
+
+    public void setLote(String lote) {
+        this.lote = lote;
+    }
+
+    public LocalDate getDataValidade() {
+        return dataValidade;
+    }
+
+    public void setDataValidade(LocalDate dataValidade) {
+        this.dataValidade = dataValidade;
+    }
+
+    public String getNcm() {
+        return ncm;
+    }
+
+    public void setNcm(String ncm) {
+        this.ncm = ncm;
+    }
+
+    public String getCfop() {
+        return cfop;
+    }
+
+    public void setCfop(String cfop) {
+        this.cfop = cfop;
+    }
+
+    public MetodoControleEstoque getMetodoControleEstoque() {
+        return metodoControleEstoque;
+    }
+
+    public void setMetodoControleEstoque(MetodoControleEstoque metodoControleEstoque) {
+        this.metodoControleEstoque = metodoControleEstoque != null ? metodoControleEstoque : MetodoControleEstoque.CUSTO_MEDIO;
     }
 
     // Métodos adicionais para compatibilidade

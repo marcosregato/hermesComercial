@@ -6,6 +6,7 @@ package com.br.hermescomercial.model;
 
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  *
@@ -24,6 +25,13 @@ public class Produto  {
     private String unidade;
     private BigDecimal precoVenda;
     private int estoque;
+    
+    // Campos de estoque adicionais
+    private int estoqueMinimo;
+    private int estoqueMaximo;
+    private String localizacaoEstoque;
+    private String lote;
+    private LocalDate dataValidade;
     
     
 	public String getNome() {
@@ -106,7 +114,7 @@ public class Produto  {
 
     // Métodos adicionais para compatibilidade
     public BigDecimal getPreco() {
-        return precoVenda;
+        return precoVenda != null ? precoVenda : BigDecimal.ZERO;
     }
 
     public int getQuantidadeEstoque() {
@@ -115,5 +123,67 @@ public class Produto  {
 
     public String getAcoes() {
         return "Ações"; // Placeholder para coluna de ações
+    }
+    
+    // Getters e Setters dos novos campos de estoque
+    public int getEstoqueMinimo() {
+        return estoqueMinimo;
+    }
+    
+    public void setEstoqueMinimo(int estoqueMinimo) {
+        this.estoqueMinimo = estoqueMinimo;
+    }
+    
+    public int getEstoqueMaximo() {
+        return estoqueMaximo;
+    }
+    
+    public void setEstoqueMaximo(int estoqueMaximo) {
+        this.estoqueMaximo = estoqueMaximo;
+    }
+    
+    public String getLocalizacaoEstoque() {
+        return localizacaoEstoque;
+    }
+    
+    public void setLocalizacaoEstoque(String localizacaoEstoque) {
+        this.localizacaoEstoque = localizacaoEstoque;
+    }
+    
+    public String getLote() {
+        return lote;
+    }
+    
+    public void setLote(String lote) {
+        this.lote = lote;
+    }
+    
+    public LocalDate getDataValidade() {
+        return dataValidade;
+    }
+    
+    public void setDataValidade(LocalDate dataValidade) {
+        this.dataValidade = dataValidade;
+    }
+    
+    // Métodos de utilidade para estoque
+    public boolean precisaReposicao() {
+        return estoque <= estoqueMinimo;
+    }
+    
+    public boolean estoqueExcedido() {
+        return estoque >= estoqueMaximo;
+    }
+    
+    public boolean proximoDaValidade(int dias) {
+        if (dataValidade == null) return false;
+        return dataValidade.isBefore(LocalDate.now().plusDays(dias));
+    }
+    
+    public String getStatusEstoque() {
+        if (estoque <= estoqueMinimo) return "CRÍTICO";
+        if (estoque <= estoqueMinimo * 1.5) return "BAIXO";
+        if (estoque >= estoqueMaximo) return "EXCESSO";
+        return "NORMAL";
     }
 }

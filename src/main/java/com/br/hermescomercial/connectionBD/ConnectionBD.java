@@ -40,10 +40,29 @@ public class ConnectionBD {
     public static void closeConnection(Connection connection) {
         if (connection != null) {
             try {
-                connection.close();
-                logger.info("Conexão com banco de dados fechada com sucesso");
+                if (!connection.isClosed()) {
+                    connection.close();
+                    logger.debug("Conexão com banco de dados fechada com sucesso");
+                }
             } catch (SQLException e) {
                 logger.error("Erro ao fechar conexão com banco de dados: " + e.getMessage(), e);
+            }
+        }
+    }
+    
+    /**
+     * Verifica se uma conexão está aberta e a fecha se necessário
+     * @param connection conexão a ser verificada
+     */
+    public static void ensureConnectionClosed(Connection connection) {
+        if (connection != null) {
+            try {
+                if (!connection.isClosed()) {
+                    logger.warn("Conexão não foi fechada automaticamente pelo try-with-resources. Fechando manualmente.");
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                logger.error("Erro ao verificar/fechar conexão: " + e.getMessage(), e);
             }
         }
     }

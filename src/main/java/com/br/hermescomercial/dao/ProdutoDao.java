@@ -30,11 +30,13 @@ public class ProdutoDao {
 
     private Produto mapResultSetToProduto(ResultSet rs) throws SQLException {
         Produto produto = new Produto();
-        produto.setNome(rs.getString("nome"));
+        // Usando coluna 'descricao' em vez de 'nome' que não existe na tabela
+        produto.setNome(rs.getString("descricao"));
         produto.setCategoria(rs.getString("categoria"));
         produto.setCodigo(rs.getString("codigo"));
-        produto.setMarca(rs.getString("marca"));
-        produto.setSubCategoria(rs.getString("subCategoria"));
+        produto.setMarca(rs.getString("observacoes")); // Usando observacoes como marca
+        // Removida referência a subCategoria pois a coluna não existe no banco
+        // produto.setSubCategoria(rs.getString("subCategoria"));
         // Removida referência a dataCompra pois a coluna não existe no banco
         // produto.setDataCompra(rs.getString("dataCompra"));
         return produto;
@@ -42,28 +44,28 @@ public class ProdutoDao {
 
 
     public boolean salvar(Produto produto) throws SQLException {
-        String query ="INSERT INTO produto (nome, categoria, subCategoria, codigo, marca) VALUES (?, ?, ?, ?, ?)";
+        String query ="INSERT INTO produto (codigo, descricao, preco, estoque, categoria, observacoes) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query)) {
 
-
-            ps.setString(1, produto.getNome());
-            ps.setString(2, produto.getCategoria());
-            ps.setString(3, produto.getSubCategoria());
-            ps.setString(4, produto.getCodigo());
-            ps.setString(5, produto.getMarca());
+            ps.setString(1, produto.getCodigo());
+            ps.setString(2, produto.getNome());
+            ps.setBigDecimal(3, new BigDecimal(String.valueOf(produto.getPreco())));
+            ps.setInt(4, produto.getEstoque());
+            ps.setString(5, produto.getCategoria());
+            ps.setString(6, produto.getMarca());
             // Removida dataCompra pois a coluna não existe no banco
-            // ps.setString(6, produto.getDataCompra());
+            // ps.setString(6, produto.getDataCompra()));
 
             ps.executeUpdate();
-
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            System.err.println("Erro ao salvar produto: " + e.getMessage());
+            return false;
         }
         return true;
     }
 
     public boolean remove(String nome) throws SQLException {
-        String query = "DELETE FROM produto WHERE nome=?";
+        String query = "DELETE FROM produto WHERE descricao=?";
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query)) {
 
             ps.setString(1, nome);
@@ -76,15 +78,12 @@ public class ProdutoDao {
     }
 
     public boolean update(Produto produto) throws SQLException {
-        String query = "UPDATE produto SET categoria = ?, subCategoria = ?, codigo = ?, marca = ? WHERE nome = ?";
+        String query = "UPDATE produto SET categoria = ?, codigo = ?, observacoes = ? WHERE descricao = ?";
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(query)) {
             ps.setString(1, produto.getCategoria());
-            ps.setString(2, produto.getSubCategoria());
-            ps.setString(3, produto.getCodigo());
-            ps.setString(4, produto.getMarca());
-            // Removida dataCompra pois a coluna não existe no banco
-            // ps.setString(5, produto.getDataCompra());
-            ps.setString(5, produto.getNome());
+            ps.setString(2, produto.getCodigo());
+            ps.setString(3, produto.getMarca());
+            ps.setString(4, produto.getNome());
             ps.executeUpdate();
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
@@ -93,7 +92,7 @@ public class ProdutoDao {
     }
 
     public List<Produto> buscar(String nome) throws SQLException {
-        String sql = "SELECT * FROM produto WHERE nome LIKE ?";
+        String sql = "SELECT * FROM produto WHERE descricao LIKE ?";
         List<Produto> lista = new ArrayList<>();
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, "%" + nome + "%");
@@ -104,7 +103,7 @@ public class ProdutoDao {
                 }
             }
         } catch (Exception e) {
-            logger.error("Erro ao buscar pessoa: " + e.getMessage());
+            logger.error("Erro ao buscar produto: " + e.getMessage());
         }
         return lista;
     }

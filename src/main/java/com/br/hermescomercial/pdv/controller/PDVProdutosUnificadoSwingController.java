@@ -2,6 +2,8 @@ package com.br.hermescomercial.pdv.controller;
 
 import com.br.hermescomercial.dao.ProdutoDao;
 import com.br.hermescomercial.util.DatabaseConfig;
+import com.br.hermescomercial.theme.OceanoTheme;
+import com.br.hermescomercial.theme.ModernLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -68,23 +70,32 @@ public class PDVProdutosUnificadoSwingController {
     
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
-        panel.setBackground(new Color(41, 128, 185));
-        panel.setPreferredSize(new Dimension(0, 80));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        panel.setBackground(new Color(26, 188, 156)); // Azul Turquesa igual Nova Venda
+        panel.setPreferredSize(new Dimension(0, 90)); // Altura igual Nova Venda
         
-        // Título central
-        JLabel titleLabel = new JLabel("📦 Gestão de Produtos v2.1.0 - Premium", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
+        // Painel esquerdo com botão voltar
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.setOpaque(false);
         
-        // Botão voltar estilizado
         JButton btnVoltar = new JButton("← Voltar");
         btnVoltar.setBackground(new Color(255, 255, 255));
         btnVoltar.setForeground(new Color(41, 128, 185));
-        btnVoltar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnVoltar.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12)); // Fonte igual Nova Venda
+        btnVoltar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Borda igual Nova Venda
         btnVoltar.setFocusPainted(false);
+        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.addActionListener(e -> frame.dispose());
+        
+        leftPanel.add(btnVoltar);
+        
+        // Painel central com título e subtítulo
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setOpaque(false);
+        
+        JLabel titleLabel = new JLabel("📦 Gestão de Produtos v2.8.0 - Premium", JLabel.CENTER);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24)); // Fonte igual Nova Venda
+        titleLabel.setForeground(Color.WHITE);
         
         // Data e hora atual
         JLabel lblDataHora = new JLabel(java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), JLabel.RIGHT);
@@ -162,8 +173,8 @@ public class PDVProdutosUnificadoSwingController {
         buscaPanel.add(lblBusca, BorderLayout.NORTH);
         buscaPanel.add(buscaInputPanel, BorderLayout.CENTER);
         
-        // Tabela de produtos
-        String[] columns = {"Código", "Descrição", "Preço", "Estoque", "Categoria"};
+        // Tabela de produtos com campos de estoque completos
+        String[] columns = {"Código", "Descrição", "Preço", "Estoque", "Estoque Mín", "Estoque Max", "Localização", "Lote", "Validade", "Categoria"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -176,38 +187,43 @@ public class PDVProdutosUnificadoSwingController {
         produtosTable = new JTable(tableModel);
         produtosTable.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // Fonte suave
         produtosTable.setRowHeight(28); // Altura suave aumentada
-        produtosTable.setSelectionBackground(new Color(189, 195, 199)); // Cinza suave para seleção
-        produtosTable.setSelectionForeground(new Color(52, 73, 94)); // Azul suave para texto selecionado
-        produtosTable.setGridColor(new Color(236, 240, 241)); // Grade suave
+        produtosTable.setSelectionBackground(OceanoTheme.TABLE_SELECTED); // Azul turquesa claro para seleção
+        produtosTable.setSelectionForeground(Color.WHITE); // Texto branco selecionado
+        produtosTable.setGridColor(OceanoTheme.TABLE_GRID); // Grade cinza claro
         produtosTable.setBackground(Color.WHITE);
         
         // Desabilitar edição da tabela
         produtosTable.setDefaultEditor(Object.class, null);
         produtosTable.setEnabled(false);
         
-        // Configurar header da tabela com cores suaves
-        produtosTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12)); // Fonte suave
-        produtosTable.getTableHeader().setBackground(new Color(149, 165, 166)); // Cinza azulado suave
+        // Configurar header da tabela com tema Oceano
+        produtosTable.getTableHeader().setFont(OceanoTheme.FONT_BODY);
+        produtosTable.getTableHeader().setBackground(OceanoTheme.TABLE_HEADER);
         produtosTable.getTableHeader().setForeground(Color.WHITE);
         
         // Configurar larguras das colunas
-        produtosTable.getColumnModel().getColumn(0).setPreferredWidth(80);
-        produtosTable.getColumnModel().getColumn(1).setPreferredWidth(300);
-        produtosTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-        produtosTable.getColumnModel().getColumn(3).setPreferredWidth(80);
-        produtosTable.getColumnModel().getColumn(4).setPreferredWidth(120);
+        produtosTable.getColumnModel().getColumn(0).setPreferredWidth(80);   // Código
+        produtosTable.getColumnModel().getColumn(1).setPreferredWidth(250);  // Descrição
+        produtosTable.getColumnModel().getColumn(2).setPreferredWidth(80);   // Preço
+        produtosTable.getColumnModel().getColumn(3).setPreferredWidth(70);   // Estoque
+        produtosTable.getColumnModel().getColumn(4).setPreferredWidth(70);   // Estoque Mín
+        produtosTable.getColumnModel().getColumn(5).setPreferredWidth(70);   // Estoque Max
+        produtosTable.getColumnModel().getColumn(6).setPreferredWidth(90);   // Localização
+        produtosTable.getColumnModel().getColumn(7).setPreferredWidth(80);   // Lote
+        produtosTable.getColumnModel().getColumn(8).setPreferredWidth(80);   // Validade
+        produtosTable.getColumnModel().getColumn(9).setPreferredWidth(100);  // Categoria
         
         JScrollPane scrollPane = new JScrollPane(produtosTable);
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        scrollPane.setBackground(new Color(250, 250, 250)); // Cinza muito suave
+        scrollPane.setBorder(OceanoTheme.BORDER_DEFAULT);
+        scrollPane.setBackground(OceanoTheme.BACKGROUND);
         scrollPane.getViewport().setBackground(Color.WHITE);
         
-        // Painel de botões
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        buttonPanel.setBackground(new Color(245, 245, 250));
-        JButton btnEditar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("✏️ Editar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-        JButton btnExcluir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🗑️ Excluir", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-        JButton btnExportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        // Painel de botões com layout moderno
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
+        buttonPanel.setBackground(OceanoTheme.BACKGROUND);
+        JButton btnEditar = ModernLayout.createModernButton("✏️ Editar Produto", OceanoTheme.PRIMARY);
+        JButton btnExcluir = ModernLayout.createModernButton("🗑️ Excluir Produto", OceanoTheme.ERROR);
+        JButton btnExportar = ModernLayout.createModernButton("📤 Exportar Lista", OceanoTheme.ACCENT);
         
         btnEditar.addActionListener(e -> editarProduto());
         btnExcluir.addActionListener(e -> excluirProduto());
@@ -375,14 +391,30 @@ public class PDVProdutosUnificadoSwingController {
             
             System.out.println("   ✅ Produtos carregados via DAO: " + produtosDoBanco.size());
             
-            // Converter para o formato usado na interface
+            // Converter para o formato usado na interface com campos de estoque completos
             for (com.br.hermescomercial.model.Produto produtoModel : produtosDoBanco) {
+                // Tratar preco nulo
+                double preco = 0.0;
+                if (produtoModel.getPrecoVenda() != null) {
+                    preco = produtoModel.getPrecoVenda().doubleValue();
+                } else if (produtoModel.getPreco() != null) {
+                    preco = produtoModel.getPreco().doubleValue();
+                }
+                
+                // Tratar nome/descricao
+                String descricao = produtoModel.getNome() != null ? produtoModel.getNome() : "Sem descrição";
+                
                 Produto produto = new Produto(
                     produtoModel.getCodigo(),
-                    produtoModel.getNome(),
-                    produtoModel.getPrecoVenda().doubleValue(),
+                    descricao,
+                    preco,
                     produtoModel.getEstoque(),
-                    produtoModel.getCategoria()
+                    produtoModel.getCategoria(),
+                    produtoModel.getEstoqueMinimo(),
+                    produtoModel.getEstoqueMaximo(),
+                    produtoModel.getLocalizacaoEstoque(),
+                    produtoModel.getLote(),
+                    produtoModel.getDataValidade() != null ? produtoModel.getDataValidade().toString() : ""
                 );
                 produtos.add(produto);
             }
@@ -408,6 +440,11 @@ public class PDVProdutosUnificadoSwingController {
                 produto.getDescricao(),
                 produto.getPreco(),
                 produto.getEstoque(),
+                produto.getEstoqueMinimo(),
+                produto.getEstoqueMaximo(),
+                produto.getLocalizacaoEstoque(),
+                produto.getLote(),
+                produto.getDataValidade(),
                 produto.getCategoria()
             };
             tableModel.addRow(row);
@@ -767,7 +804,7 @@ public class PDVProdutosUnificadoSwingController {
     }
     
     private boolean salvarProdutoNoBanco(String codigo, String descricao, double preco, int estoque, String categoria) {
-        String sql = "INSERT INTO produto (codigo, descricao, preco, estoque, categoria) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO produto (codigo, descricao, preco, estoque, categoria, observacoes) VALUES (?, ?, ?, ?, ?, ?)";
         
         try (Connection conn = DatabaseConfig.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -777,6 +814,7 @@ public class PDVProdutosUnificadoSwingController {
             pstmt.setDouble(3, preco);
             pstmt.setInt(4, estoque);
             pstmt.setString(5, categoria);
+            pstmt.setString(6, "Produto cadastrado via PDV");
             
             int result = pstmt.executeUpdate();
             System.out.println("Produto salvo no banco: " + codigo + " - Linhas afetadas: " + result);
@@ -844,26 +882,57 @@ public class PDVProdutosUnificadoSwingController {
         frame.setVisible(true);
     }
     
-    // Classe de apoio
+    // Classe de apoio com campos de estoque completos
     private static class Produto {
         private String codigo;
         private String descricao;
         private double preco;
         private int estoque;
+        private int estoqueMinimo;
+        private int estoqueMaximo;
+        private String localizacaoEstoque;
+        private String lote;
+        private String dataValidade;
         private String categoria;
         
+        // Construtor antigo para compatibilidade
         public Produto(String codigo, String descricao, double preco, int estoque, String categoria) {
             this.codigo = codigo;
             this.descricao = descricao;
             this.preco = preco;
             this.estoque = estoque;
             this.categoria = categoria;
+            this.estoqueMinimo = 5;
+            this.estoqueMaximo = 100;
+            this.localizacaoEstoque = "A-01-01";
+            this.lote = "";
+            this.dataValidade = "";
+        }
+        
+        // Construtor completo com campos de estoque
+        public Produto(String codigo, String descricao, double preco, int estoque, String categoria, 
+                      int estoqueMinimo, int estoqueMaximo, String localizacaoEstoque, String lote, String dataValidade) {
+            this.codigo = codigo;
+            this.descricao = descricao;
+            this.preco = preco;
+            this.estoque = estoque;
+            this.categoria = categoria;
+            this.estoqueMinimo = estoqueMinimo;
+            this.estoqueMaximo = estoqueMaximo;
+            this.localizacaoEstoque = localizacaoEstoque;
+            this.lote = lote;
+            this.dataValidade = dataValidade;
         }
         
         public String getCodigo() { return codigo; }
         public String getDescricao() { return descricao; }
         public double getPreco() { return preco; }
         public int getEstoque() { return estoque; }
+        public int getEstoqueMinimo() { return estoqueMinimo; }
+        public int getEstoqueMaximo() { return estoqueMaximo; }
+        public String getLocalizacaoEstoque() { return localizacaoEstoque; }
+        public String getLote() { return lote; }
+        public String getDataValidade() { return dataValidade; }
         public String getCategoria() { return categoria; }
     }
     

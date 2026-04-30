@@ -73,7 +73,7 @@ public class DataSourceConfig {
             config.setConnectionTimeout(EnvironmentConfig.getDbPoolTimeout());
             config.setIdleTimeout(600000); // 10 minutos
             config.setMaxLifetime(1800000); // 30 minutos
-            config.setLeakDetectionThreshold(60000); // 1 minuto
+            config.setLeakDetectionThreshold(180000); // 3 minutos
             
             // Configurações de performance
             config.setPoolName("HermesComercial-Pool");

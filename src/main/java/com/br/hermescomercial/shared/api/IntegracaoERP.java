@@ -91,7 +91,7 @@ public interface IntegracaoERP {
     /**
      * Busca notificações do ERP
      */
-    List<NotificacaoDTO> buscarNotificacoes(String usuarioDestino);
+    List<NotificacaoDTO> buscarNotificacao(String usuarioDestino);
     
     // ==================== DTOs ====================
     

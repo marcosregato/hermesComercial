@@ -10,6 +10,8 @@ import com.br.hermescomercial.erp.controller.ERPClienteSwingController;
 import com.br.hermescomercial.erp.controller.ERPFinanceiroSwingController;
 import com.br.hermescomercial.erp.controller.ERPRelatorioSwingController;
 import com.br.hermescomercial.theme.ModernTheme;
+import com.br.hermescomercial.theme.OceanoTheme;
+import com.br.hermescomercial.theme.ModernLayout;
 
 /**
  * Controller principal do PDV em SWING
@@ -29,6 +31,8 @@ public class PDVPrincipalSwingController {
     private JButton btnConfiguracoes;
     
     public PDVPrincipalSwingController() {
+        // Aplicar tema Oceano
+        OceanoTheme.applyTheme();
         initializeUI();
     }
     
@@ -73,12 +77,13 @@ public class PDVPrincipalSwingController {
         operationsMenu.add(createMenuItem("📦 Gestão de Produtos", e -> gerenciarProdutos(e)));
         operationsMenu.add(createMenuItem("🔍 Consulta Rápida de Produtos", e -> consultarProdutos(e)));
         operationsMenu.add(createMenuItem("📊 Dashboard", e -> abrirDashboard(e)));
-        operationsMenu.add(createMenuItem("🔔 Notificações", e -> abrirNotificacoes(e)));
+        operationsMenu.add(createMenuItem("🔔 Notificações", e -> abrirNotificacao(e)));
         operationsMenu.add(createMenuItem("Clientes", e -> gerenciarClientes(e)));
         operationsMenu.add(createMenuItem("🏢 Gestão de Produtos (ERP)", e -> gerenciarProdutosERP(e)));
         operationsMenu.add(createMenuItem("👥 Gestão de Clientes (ERP)", e -> gerenciarClientesERP(e)));
         operationsMenu.add(createMenuItem("💰 Gestão Financeira (ERP)", e -> gerenciarFinanceiroERP(e)));
         operationsMenu.add(createMenuItem("📊 Relatórios (ERP)", e -> gerenciarRelatoriosERP(e)));
+        operationsMenu.add(createMenuItem("📦 Controle de Estoque", e -> gerenciarEstoque(e)));
         
         // Menu Relatórios
         JMenu reportsMenu = new JMenu("Relatórios");
@@ -113,7 +118,7 @@ public class PDVPrincipalSwingController {
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(8, 12, 12, 12));
-        panel.setBackground(new Color(41, 128, 185));
+        panel.setBackground(OceanoTheme.PRIMARY);
         panel.setPreferredSize(new Dimension(0, 75));
         
         // Logo da empresa à esquerda
@@ -127,19 +132,17 @@ public class PDVPrincipalSwingController {
             // Se não conseguir carregar o logo, continua sem ele
         }
         
-        // Título central elegante
-        JLabel titleLabel = new JLabel("Hermes Comercial PDV v2.1.0 - Premium", JLabel.CENTER);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        titleLabel.setForeground(new Color(255, 255, 255)); // Branco elegante
+        // Título central elegante com tema Oceano
+        JLabel titleLabel = new JLabel(" Hermes Comercial PDV v2.8.0 - Oceano", JLabel.CENTER);
+        titleLabel.setFont(OceanoTheme.FONT_TITLE);
+        titleLabel.setForeground(Color.WHITE);
         titleLabel.setOpaque(true);
+        titleLabel.setBackground(new Color(26, 188, 156)); // Azul Turquesa igual ao painel
         
-        // Botão elegante
-        JButton btnInfo = new JButton("ℹ️ Info");
-        btnInfo.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
-        btnInfo.setForeground(new Color(255, 255, 255)); // Branco elegante
-        btnInfo.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        // Botão elegante com tema Oceano e ícone
+        JButton btnInfo = OceanoTheme.createOceanoButton("ℹ️ Informações", OceanoTheme.ACCENT);
         btnInfo.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
+            BorderFactory.createLineBorder(OceanoTheme.ACCENT, 2),
             BorderFactory.createEmptyBorder(8, 16, 8, 16)
         ));
         btnInfo.setFocusPainted(false);
@@ -328,11 +331,11 @@ public class PDVPrincipalSwingController {
         
         // Botões secundários
         JButton btnDashboard = createEnhancedButton("📈 Dashboard", "Ver dashboard analítico", new Color(26, 188, 156), e -> abrirDashboard(e));
-        JButton btnNotificacoes = createEnhancedButton("🔔 Notificações", "Ver notificações", new Color(231, 76, 60), e -> abrirNotificacoes(e));
+        JButton btnNotificacao = createEnhancedButton("🔔 Notificações", "Ver notificações", new Color(231, 76, 60), e -> abrirNotificacao(e));
         JButton btnAjuda = createEnhancedButton("❓ Ajuda", "Ajuda e suporte", new Color(52, 73, 94), this::mostrarSobre);
         
         panel.add(btnDashboard);
-        panel.add(btnNotificacoes);
+        panel.add(btnNotificacao);
         panel.add(btnAjuda);
         
         return panel;
@@ -436,132 +439,29 @@ public class PDVPrincipalSwingController {
             // Header padrão Nova Venda
             JPanel headerPanel = createHeaderPanelForDialog(consultaFrame, "📦 Consulta de Produtos v2.1.0 - Premium");
             
-            // Painel principal com fundo padrão
+            // Painel principal com estrutura igual Nova Venda
             JPanel mainPanel = new JPanel(new BorderLayout());
-            mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-            mainPanel.setBackground(new Color(245, 245, 250));
+            mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Igual Nova Venda
+            mainPanel.setBackground(new Color(248, 249, 250)); // Fundo igual Nova Venda
             
-            // Painel de busca estilizado
-            JPanel buscaPanel = new JPanel(new BorderLayout());
-            buscaPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            buscaPanel.setBackground(new Color(255, 255, 255));
+            // Painel central com layout otimizado (igual Nova Venda)
+            JPanel centerPanel = new JPanel(new BorderLayout());
+            centerPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0)); // Igual Nova Venda
+            centerPanel.setOpaque(false);
             
-            JLabel lblBusca = new JLabel("🔍 Buscar Produto:");
-            lblBusca.setFont(new Font("Arial", Font.BOLD, 14));
-            lblBusca.setForeground(new Color(41, 128, 185));
+            // Painel de produtos com design moderno (igual Nova Venda)
+            JPanel produtosPanel = createProdutosPanelForConsulta();
+            centerPanel.add(produtosPanel, BorderLayout.CENTER);
             
-            JPanel buscaInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-            buscaInputPanel.setBackground(new Color(255, 255, 255));
-            JTextField txtBusca = new JTextField(25);
-            txtBusca.setFont(new Font("Arial", Font.PLAIN, 12));
-            txtBusca.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-            JButton btnBuscar = ModernTheme.createPastelButton("🔍 Buscar", ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-            JButton btnLimpar = ModernTheme.createPastelButton("🔄 Limpar", ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            // Painel de entrada com design melhorado (igual Nova Venda)
+            JPanel inputPanel = createInputPanelForConsulta();
+            centerPanel.add(inputPanel, BorderLayout.SOUTH);
             
-            buscaInputPanel.add(txtBusca);
-            buscaInputPanel.add(btnBuscar);
-            buscaInputPanel.add(btnLimpar);
+            mainPanel.add(centerPanel, BorderLayout.CENTER);
             
-            buscaPanel.add(lblBusca, BorderLayout.NORTH);
-            buscaPanel.add(buscaInputPanel, BorderLayout.CENTER);
-            
-            // Tabela de produtos com design melhorado
-            String[] columns = {"Código", "Descrição", "Preço", "Estoque", "Categoria"};
-            DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
-                @Override
-                public Class<?> getColumnClass(int columnIndex) {
-                    if (columnIndex == 2) return Double.class; // Preço
-                    if (columnIndex == 3) return Integer.class; // Estoque
-                    return String.class;
-                }
-            };
-            
-            JTable produtosTable = new JTable(tableModel);
-            produtosTable.setRowHeight(25);
-            produtosTable.setFont(new Font("Arial", Font.PLAIN, 12));
-            produtosTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-            produtosTable.getTableHeader().setBackground(new Color(41, 128, 185));
-            produtosTable.getTableHeader().setForeground(Color.WHITE);
-            
-            // Desabilitar edição da tabela
-            produtosTable.setDefaultEditor(Object.class, null);
-            produtosTable.setEnabled(false);
-            
-            // Configurar larguras das colunas
-            produtosTable.getColumnModel().getColumn(0).setPreferredWidth(80);
-            produtosTable.getColumnModel().getColumn(1).setPreferredWidth(350);
-            produtosTable.getColumnModel().getColumn(2).setPreferredWidth(100);
-            produtosTable.getColumnModel().getColumn(3).setPreferredWidth(80);
-            produtosTable.getColumnModel().getColumn(4).setPreferredWidth(120);
-            
-            // Dados de exemplo com tipos corretos
-            Object[][] dados = {
-                {"001", "Notebook Dell Inspire 15", 3500.00, 10, "Informática"},
-                {"002", "Mouse Wireless Logitech MX3", 89.90, 50, "Periféricos"},
-                {"003", "Teclado Mecânico RGB Gamer", 250.00, 25, "Periféricos"},
-                {"004", "Monitor 24\" LED Full HD", 899.00, 15, "Monitores"},
-                {"005", "Webcam HD 1080p com Microfone", 150.00, 30, "Acessórios"}
-            };
-            
-            // Adicionar dados à tabela
-            for (Object[] row : dados) {
-                tableModel.addRow(row);
-            }
-            
-            JScrollPane scrollPane = new JScrollPane(produtosTable);
-            scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-            scrollPane.setBackground(Color.WHITE);
-            
-            // Painel de botões estilizado
-            JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-            buttonPanel.setBackground(new Color(245, 245, 250));
-            JButton btnFechar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Fechar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-            buttonPanel.add(btnFechar);
-            
-            // Montar layout
-            JPanel contentPanel = new JPanel(new BorderLayout());
-            contentPanel.setBackground(new Color(255, 255, 255));
-            contentPanel.setBorder(BorderFactory.createTitledBorder(
-            "<html><font color='#2C3E50' size='4'><b>📦 CONSULTA RÁPIDA DE PRODUTOS</b></font><br>" +
-            "<font color='#666666' size='2'>Sistema integrado v2.3.0 • Gestão completa • Relatórios detalhados • Interface segura</font></html>"
-        ));
-            contentPanel.add(scrollPane, BorderLayout.CENTER);
-            
-            mainPanel.add(buscaPanel, BorderLayout.NORTH);
-            mainPanel.add(contentPanel, BorderLayout.CENTER);
-            mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-            
-            // Ação do botão buscar
-            btnBuscar.addActionListener(ev -> {
-                String textoBusca = txtBusca.getText().toLowerCase();
-                if (textoBusca.isEmpty()) {
-                    // Restaurar todos os dados
-                    tableModel.setRowCount(0);
-                    for (Object[] row : dados) {
-                        tableModel.addRow(row);
-                    }
-                } else {
-                    // Filtrar dados
-                    tableModel.setRowCount(0);
-                    for (Object[] row : dados) {
-                        for (Object cell : row) {
-                            if (cell.toString().toLowerCase().contains(textoBusca)) {
-                                tableModel.addRow(row);
-                                break;
-                            }
-                        }
-                    }
-                }
-            });
-            
-            // Ação do botão limpar
-            btnLimpar.addActionListener(ev -> {
-                txtBusca.setText("");
-                tableModel.setRowCount(0);
-                for (Object[] row : dados) {
-                    tableModel.addRow(row);
-                }
-            });
+            // Painel lateral com resumo e ações (igual Nova Venda)
+            JPanel sidePanel = createSidePanelForConsulta();
+            mainPanel.add(sidePanel, BorderLayout.EAST);
             
             consultaFrame.add(headerPanel, BorderLayout.NORTH);
             consultaFrame.add(mainPanel, BorderLayout.CENTER);
@@ -599,23 +499,32 @@ public class PDVPrincipalSwingController {
     
     private JPanel createHeaderPanelForDialog(JFrame frame, String title) {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
-        panel.setBackground(new Color(41, 128, 185));
-        panel.setPreferredSize(new Dimension(0, 80));
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20)); // Igual Nova Venda
+        panel.setBackground(new Color(26, 188, 156)); // Azul Turquesa igual Nova Venda
+        panel.setPreferredSize(new Dimension(0, 90)); // Altura igual Nova Venda
         
-        // Título central
-        JLabel titleLabel = new JLabel(title, JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
+        // Painel esquerdo com botão voltar
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.setOpaque(false);
         
-        // Botão voltar estilizado
         JButton btnVoltar = new JButton("← Voltar");
         btnVoltar.setBackground(new Color(255, 255, 255));
         btnVoltar.setForeground(new Color(41, 128, 185));
-        btnVoltar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnVoltar.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
+        btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12)); // Fonte igual Nova Venda
+        btnVoltar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20)); // Borda igual Nova Venda
         btnVoltar.setFocusPainted(false);
+        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnVoltar.addActionListener(e -> frame.dispose());
+        
+        leftPanel.add(btnVoltar);
+        
+        // Painel central com título e subtítulo
+        JPanel centerPanel = new JPanel(new BorderLayout());
+        centerPanel.setOpaque(false);
+        
+        JLabel titleLabel = new JLabel(title, JLabel.CENTER);
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24)); // Fonte igual Nova Venda
+        titleLabel.setForeground(Color.WHITE);
         
         // Data e hora atual
         JLabel lblDataHora = new JLabel(java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), JLabel.RIGHT);
@@ -936,6 +845,20 @@ public class PDVPrincipalSwingController {
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir relatório: " + ex.getMessage(),
                 "Relatórios", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    private void gerenciarEstoque(ActionEvent e) {
+        try {
+            System.out.println("Abrindo tela de controle de estoque...");
+            com.br.hermescomercial.erp.controller.ERPEstoqueSwingController estoqueController = new com.br.hermescomercial.erp.controller.ERPEstoqueSwingController();
+            // O frame já é setVisible(true) no construtor
+            statusLabel.setText("Controle de estoque aberto");
+        } catch (Exception ex) {
+            System.err.println("Erro ao abrir controle de estoque: " + ex.getMessage());
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir controle de estoque: " + ex.getMessage(),
+                "Controle de Estoque", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -1304,11 +1227,11 @@ public class PDVPrincipalSwingController {
     /**
      * Abre a tela de Notificações
      */
-    private void abrirNotificacoes(ActionEvent e) {
+    private void abrirNotificacao(ActionEvent e) {
         try {
             // Usuário logado simulado - na implementação real, obter do sistema de autenticação
             String usuarioLogado = "admin"; // ou obter do contexto de login
-            PDVNotificacoesSwingController.mostrarNotificacoes(usuarioLogado);
+            PDVNotificacaoSwingController.mostrarNotificacao(usuarioLogado);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir Notificações: " + ex.getMessage(), 
@@ -1370,5 +1293,180 @@ public class PDVPrincipalSwingController {
                 "Erro ao abrir relatórios: " + ex.getMessage(), 
                 "Erro", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    /**
+     * Cria painel de produtos para consulta (estrutura igual Nova Venda)
+     */
+    private JPanel createProdutosPanelForConsulta() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createTitledBorder("📦 Produtos Disponíveis"),
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+        panel.setBackground(new Color(255, 255, 255));
+        
+        // Painel de busca estilizado
+        JPanel buscaPanel = new JPanel(new BorderLayout());
+        buscaPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        buscaPanel.setBackground(new Color(255, 255, 255));
+        
+        JLabel lblBusca = new JLabel("🔍 Buscar Produto:");
+        lblBusca.setFont(new Font("Arial", Font.BOLD, 14));
+        lblBusca.setForeground(new Color(41, 128, 185));
+        
+        JPanel buscaInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
+        buscaInputPanel.setBackground(new Color(255, 255, 255));
+        JTextField txtBusca = new JTextField(25);
+        txtBusca.setFont(new Font("Arial", Font.PLAIN, 12));
+        txtBusca.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        JButton btnBuscar = ModernLayout.createModernButton("🔍 Buscar", OceanoTheme.PRIMARY);
+        JButton btnLimpar = ModernLayout.createModernButton("🔄 Limpar", OceanoTheme.ACCENT);
+        
+        buscaInputPanel.add(txtBusca);
+        buscaInputPanel.add(btnBuscar);
+        buscaInputPanel.add(btnLimpar);
+        
+        buscaPanel.add(lblBusca, BorderLayout.NORTH);
+        buscaPanel.add(buscaInputPanel, BorderLayout.CENTER);
+        
+        // Tabela de produtos
+        String[] columns = {"Código", "Descrição", "Preço", "Estoque", "Categoria"};
+        DefaultTableModel tableModel = new DefaultTableModel(columns, 0) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 2) return Double.class; // Preço
+                if (columnIndex == 3) return Integer.class; // Estoque
+                return String.class;
+            }
+        };
+        
+        JTable produtosTable = new JTable(tableModel);
+        produtosTable.setRowHeight(25);
+        produtosTable.setFont(new Font("Arial", Font.PLAIN, 12));
+        produtosTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        produtosTable.getTableHeader().setBackground(new Color(26, 188, 156)); // Azul Turquesa
+        produtosTable.getTableHeader().setForeground(Color.WHITE);
+        
+        // Desabilitar edição da tabela
+        produtosTable.setDefaultEditor(Object.class, null);
+        produtosTable.setEnabled(false);
+        
+        JScrollPane scrollPane = new JScrollPane(produtosTable);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        scrollPane.setBackground(Color.WHITE);
+        scrollPane.setPreferredSize(new Dimension(0, 250));
+        
+        panel.add(buscaPanel, BorderLayout.NORTH);
+        panel.add(scrollPane, BorderLayout.CENTER);
+        
+        return panel;
+    }
+    
+    /**
+     * Cria painel de entrada para consulta (estrutura igual Nova Venda)
+     */
+    private JPanel createInputPanelForConsulta() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createTitledBorder("➕ Detalhes do Produto"),
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+        panel.setBackground(new Color(255, 255, 255));
+        
+        // Campos de entrada
+        JPanel inputPanel = new JPanel(new GridBagLayout());
+        inputPanel.setBackground(new Color(255, 255, 255));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+        
+        // Código
+        gbc.gridx = 0; gbc.gridy = 0;
+        inputPanel.add(new JLabel("Código:"), gbc);
+        gbc.gridx = 1;
+        JTextField txtCodigo = new JTextField(15);
+        txtCodigo.setEditable(false);
+        txtCodigo.setBackground(new Color(240, 240, 240));
+        inputPanel.add(txtCodigo, gbc);
+        
+        // Descrição
+        gbc.gridx = 0; gbc.gridy = 1;
+        inputPanel.add(new JLabel("Descrição:"), gbc);
+        gbc.gridx = 1; gbc.gridwidth = 3; gbc.weightx = 2.0;
+        JTextField txtDescricao = new JTextField(40);
+        txtDescricao.setEditable(false);
+        txtDescricao.setBackground(new Color(240, 240, 240));
+        inputPanel.add(txtDescricao, gbc);
+        
+        // Preço
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 1; gbc.weightx = 0.0;
+        inputPanel.add(new JLabel("Preço:"), gbc);
+        gbc.gridx = 1;
+        JTextField txtPreco = new JTextField(15);
+        txtPreco.setEditable(false);
+        txtPreco.setBackground(new Color(240, 240, 240));
+        inputPanel.add(txtPreco, gbc);
+        
+        // Estoque
+        gbc.gridx = 2;
+        inputPanel.add(new JLabel("Estoque:"), gbc);
+        gbc.gridx = 3;
+        JTextField txtEstoque = new JTextField(10);
+        txtEstoque.setEditable(false);
+        txtEstoque.setBackground(new Color(240, 240, 240));
+        inputPanel.add(txtEstoque, gbc);
+        
+        panel.add(inputPanel, BorderLayout.CENTER);
+        
+        return panel;
+    }
+    
+    /**
+     * Cria painel lateral para consulta (estrutura igual Nova Venda)
+     */
+    private JPanel createSidePanelForConsulta() {
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        panel.setPreferredSize(new Dimension(250, 0));
+        panel.setBackground(new Color(248, 249, 250));
+        
+        // Resumo
+        JPanel resumoPanel = new JPanel(new BorderLayout());
+        resumoPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(26, 188, 156), 2),
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+        resumoPanel.setBackground(Color.WHITE);
+        
+        JLabel lblResumo = new JLabel("📊 Resumo da Consulta", JLabel.CENTER);
+        lblResumo.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lblResumo.setForeground(new Color(26, 188, 156));
+        
+        JLabel lblInfo = new JLabel("<html><center>" +
+            "<b>Total de Produtos:</b> 0<br>" +
+            "<b>Última Atualização:</b><br>" +
+            java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) +
+            "</center></html>", JLabel.CENTER);
+        lblInfo.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblInfo.setForeground(Color.DARK_GRAY);
+        
+        resumoPanel.add(lblResumo, BorderLayout.NORTH);
+        resumoPanel.add(lblInfo, BorderLayout.CENTER);
+        
+        // Botões de ação
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 10, 10));
+        buttonPanel.setBackground(new Color(248, 249, 250));
+        
+        JButton btnExportar = ModernLayout.createModernButton("📤 Exportar", OceanoTheme.ACCENT);
+        JButton btnFechar = ModernLayout.createModernButton("❌ Fechar", OceanoTheme.ERROR);
+        
+        buttonPanel.add(btnExportar);
+        buttonPanel.add(btnFechar);
+        
+        panel.add(resumoPanel, BorderLayout.NORTH);
+        panel.add(buttonPanel, BorderLayout.CENTER);
+        
+        return panel;
     }
 }

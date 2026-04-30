@@ -106,7 +106,7 @@ INSERT INTO caixa_movimentacoes (
 (42, 'SAIDA', 1500.00, 'Folha de pagamento', date('now', '-30 days'), datetime('now', '-30 days'));
 
 -- Inserir notificações de exemplo
-INSERT INTO notificacoes (
+INSERT INTO notificacao (
     id, titulo, mensagem, tipo, data_criacao, lida, usuario_destino, prioridade
 ) VALUES 
 -- Notificações do sistema

@@ -133,8 +133,9 @@ public class ERPMenuPrincipalSwingController {
         categoriasPanel.add(createCategoriaPanel("🏢 OPERAÇÕES PRINCIPAIS", 
             new JButton[]{
                 createMenuButton("📦 Gestão de Produtos", HermesTheme.PRIMARY_COLOR, e -> abrirProdutos()),
-                createMenuButton("💰 Gestão Financeira", HermesTheme.SUCCESS_COLOR, e -> abrirFinanceiro()),
-                createMenuButton("� Dashboard", HermesTheme.PRIMARY_COLOR, e -> abrirDashboard())
+                createMenuButton("📊 Gestão de Estoque", HermesTheme.WARNING_COLOR, e -> abrirEstoque()),
+                createMenuButton("� Gestão Financeira", HermesTheme.SUCCESS_COLOR, e -> abrirFinanceiro()),
+                createMenuButton(" Dashboard", HermesTheme.PRIMARY_COLOR, e -> abrirDashboard())
             }), gbc);
         
         // Categoria: Administração
@@ -149,7 +150,8 @@ public class ERPMenuPrincipalSwingController {
         gbc.gridy = 2;
         categoriasPanel.add(createCategoriaPanel("📊 RELATÓRIOS E ANÁLISES", 
             new JButton[]{
-                createMenuButton("� Relatórios", HermesTheme.WARNING_COLOR, e -> abrirRelatorios())
+                createMenuButton("📊 Relatórios", HermesTheme.WARNING_COLOR, e -> abrirRelatorios()),
+                createMenuButton("📈 Relatório Financeiro", HermesTheme.PRIMARY_COLOR, e -> abrirRelatorioFinanceiro())
             }), gbc);
         
         menuPanel.add(categoriasPanel, BorderLayout.CENTER);
@@ -358,6 +360,14 @@ public class ERPMenuPrincipalSwingController {
     private void abrirDashboard() {
         PDVDashboardSwingController dashboard = new PDVDashboardSwingController();
         dashboard.show();
+    }
+    
+    private void abrirEstoque() {
+        new ERPEstoqueSwingController();
+    }
+    
+    private void abrirRelatorioFinanceiro() {
+        new ERPRelatorioFinanceiroSwingController();
     }
     
     private void sairSistema() {

@@ -16,11 +16,11 @@ import java.util.List;
  * Controller para tela de notificações do sistema
  * Versão 2.2.0 - Sistema de notificações em tempo real
  */
-public class PDVNotificacoesSwingController {
+public class PDVNotificacaoSwingController {
     
     private JFrame frame;
     private JPanel mainPanel;
-    private JTable notificacoesTable;
+    private JTable notificacaoTable;
     private DefaultTableModel tableModel;
     private JLabel contadorLabel;
     private JButton btnMarcarLidas;
@@ -30,11 +30,11 @@ public class PDVNotificacoesSwingController {
     private NotificacaoService notificacaoService;
     private String usuarioLogado;
     
-    public PDVNotificacoesSwingController(String usuarioLogado) {
+    public PDVNotificacaoSwingController(String usuarioLogado) {
         this.usuarioLogado = usuarioLogado;
         this.notificacaoService = new NotificacaoService();
         initializeUI();
-        atualizarNotificacoes();
+        atualizarNotificacao();
     }
     
     private void initializeUI() {
@@ -103,30 +103,30 @@ public class PDVNotificacoesSwingController {
             }
         };
         
-        notificacoesTable = new JTable(tableModel);
-        notificacoesTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        notificacoesTable.setRowHeight(30);
-        notificacoesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        notificacoesTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        notificacoesTable.getTableHeader().setBackground(ModernTheme.BACKGROUND_SECONDARY);
+        notificacaoTable = new JTable(tableModel);
+        notificacaoTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        notificacaoTable.setRowHeight(30);
+        notificacaoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        notificacaoTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        notificacaoTable.getTableHeader().setBackground(ModernTheme.BACKGROUND_SECONDARY);
         
         // Configurar largura das colunas
-        notificacoesTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
-        notificacoesTable.getColumnModel().getColumn(1).setPreferredWidth(150); // Título
-        notificacoesTable.getColumnModel().getColumn(2).setPreferredWidth(250); // Mensagem
-        notificacoesTable.getColumnModel().getColumn(3).setPreferredWidth(80);  // Tipo
-        notificacoesTable.getColumnModel().getColumn(4).setPreferredWidth(80);  // Prioridade
-        notificacoesTable.getColumnModel().getColumn(5).setPreferredWidth(120); // Data
-        notificacoesTable.getColumnModel().getColumn(6).setPreferredWidth(80);  // Status
+        notificacaoTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
+        notificacaoTable.getColumnModel().getColumn(1).setPreferredWidth(150); // Título
+        notificacaoTable.getColumnModel().getColumn(2).setPreferredWidth(250); // Mensagem
+        notificacaoTable.getColumnModel().getColumn(3).setPreferredWidth(80);  // Tipo
+        notificacaoTable.getColumnModel().getColumn(4).setPreferredWidth(80);  // Prioridade
+        notificacaoTable.getColumnModel().getColumn(5).setPreferredWidth(120); // Data
+        notificacaoTable.getColumnModel().getColumn(6).setPreferredWidth(80);  // Status
         
         // Scroll pane
-        JScrollPane scrollPane = new JScrollPane(notificacoesTable);
+        JScrollPane scrollPane = new JScrollPane(notificacaoTable);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
         scrollPane.setBorder(BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1));
         
         // Double click para marcar como lida
-        notificacoesTable.addMouseListener(new MouseAdapter() {
+        notificacaoTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
@@ -151,9 +151,9 @@ public class PDVNotificacoesSwingController {
         btnFechar = createModernButton("❌ Fechar", ModernTheme.DANGER_COLOR);
         
         // Eventos
-        btnAtualizar.addActionListener(e -> atualizarNotificacoes());
+        btnAtualizar.addActionListener(e -> atualizarNotificacao());
         btnMarcarLidas.addActionListener(e -> marcarTodasComoLidas());
-        btnLimparAntigas.addActionListener(e -> limparNotificacoesAntigas());
+        btnLimparAntigas.addActionListener(e -> limparNotificacaoAntigas());
         btnFechar.addActionListener(e -> fecharJanela());
         
         buttonPanel.add(btnAtualizar);
@@ -186,9 +186,9 @@ public class PDVNotificacoesSwingController {
         return button;
     }
     
-    private void atualizarNotificacoes() {
+    private void atualizarNotificacao() {
         try {
-            List<Notificacao> notificacoes = notificacaoService.listarNotificacoes(usuarioLogado);
+            List<Notificacao> notificacao = notificacaoService.listarNotificacoes(usuarioLogado);
             
             // Limpar tabela
             tableModel.setRowCount(0);
@@ -196,15 +196,15 @@ public class PDVNotificacoesSwingController {
             // Preencher tabela
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm");
             
-            for (Notificacao notificacao : notificacoes) {
+            for (Notificacao notificacaoItem : notificacao) {
                 Object[] row = {
-                    notificacao.getId(),
-                    notificacao.getTitulo(),
-                    notificacao.getMensagem(),
-                    notificacao.getTipo().getDescricao(),
-                    notificacao.getPrioridade().getDescricao(),
-                    notificacao.getDataCriacao().format(formatter),
-                    notificacao.isLida() ? "✅ Lida" : "🔴 Não lida"
+                    notificacaoItem.getId(),
+                    notificacaoItem.getTitulo(),
+                    notificacaoItem.getMensagem(),
+                    notificacaoItem.getTipo().getDescricao(),
+                    notificacaoItem.getPrioridade().getDescricao(),
+                    notificacaoItem.getDataCriacao().format(formatter),
+                    notificacaoItem.isLida() ? "✅ Lida" : "🔴 Não lida"
                 };
                 tableModel.addRow(row);
             }
@@ -220,7 +220,7 @@ public class PDVNotificacoesSwingController {
     }
     
     private void marcarNotificacaoSelecionadaComoLida() {
-        int selectedRow = notificacoesTable.getSelectedRow();
+        int selectedRow = notificacaoTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(frame, "Selecione uma notificação para marcar como lida", 
                                           "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -233,7 +233,7 @@ public class PDVNotificacoesSwingController {
         if (sucesso) {
             JOptionPane.showMessageDialog(frame, "Notificação marcada como lida com sucesso!", 
                                           "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            atualizarNotificacoes();
+            atualizarNotificacao();
         } else {
             JOptionPane.showMessageDialog(frame, "Falha ao marcar notificação como lida", 
                                           "Erro", JOptionPane.ERROR_MESSAGE);
@@ -251,7 +251,7 @@ public class PDVNotificacoesSwingController {
             if (sucesso) {
                 JOptionPane.showMessageDialog(frame, "Todas as notificações foram marcadas como lidas!", 
                                               "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-                atualizarNotificacoes();
+                atualizarNotificacao();
             } else {
                 JOptionPane.showMessageDialog(frame, "Falha ao marcar notificações como lidas", 
                                               "Erro", JOptionPane.ERROR_MESSAGE);
@@ -259,18 +259,18 @@ public class PDVNotificacoesSwingController {
         }
     }
     
-    private void limparNotificacoesAntigas() {
+    private void limparNotificacaoAntigas() {
         int confirm = JOptionPane.showConfirmDialog(frame, 
                                                     "Deseja limpar notificações antigas (mais de 30 dias)?", 
                                                     "Confirmar", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            int excluidas = notificacaoService.limparNotificacoesAntigas();
+            int excluidas = notificacaoService.limparItensNotificacaoAntigas();
             
             JOptionPane.showMessageDialog(frame, 
                                         excluidas + " notificações antigas foram excluídas!", 
                                         "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            atualizarNotificacoes();
+            atualizarNotificacao();
         }
     }
     
@@ -283,9 +283,9 @@ public class PDVNotificacoesSwingController {
     }
     
     // Método estático para fácil acesso
-    public static void mostrarNotificacoes(String usuarioLogado) {
+    public static void mostrarNotificacao(String usuarioLogado) {
         SwingUtilities.invokeLater(() -> {
-            PDVNotificacoesSwingController controller = new PDVNotificacoesSwingController(usuarioLogado);
+            PDVNotificacaoSwingController controller = new PDVNotificacaoSwingController(usuarioLogado);
             controller.show();
         });
     }
