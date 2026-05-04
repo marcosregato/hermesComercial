@@ -1,5 +1,6 @@
 package com.br.hermescomercial.pdv.controller;
 
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -40,23 +41,22 @@ public class PDVCaixaSwingController {
     }
     
     private void initializeUI() {
-        frame = new JFrame("PDV - Operações de Caixa v2.1.0 - Premium");
+        frame = new JFrame("PDV - Operações de Caixa v2.8.3 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(900, 600);
         frame.setLocationRelativeTo(null);
         
-        // Configurar fundo padrão Nova Venda
-        frame.getContentPane().setBackground(new Color(245, 245, 250));
+        // Configurar fundo com LayoutPadrao
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         frame.add(createMainPanel());
     }
     
     private JPanel createMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        mainPanel.setBackground(new Color(245, 245, 250));
+        JPanel mainPanel = LayoutPadrao.criarPainelComMargem(15);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        // Header padrão Nova Venda
+        // Header com LayoutPadrao
         mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
         
         // Center - Status e Movimentações
@@ -74,27 +74,23 @@ public class PDVCaixaSwingController {
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
-        panel.setBackground(new Color(41, 128, 185));
+        panel.setBackground(LayoutPadrao.COR_PRIMARIA);
         panel.setPreferredSize(new Dimension(0, 80));
         
-        // Título central
-        JLabel titleLabel = new JLabel("💰 Operações de Caixa v2.1.0 - Premium", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        // Título central com LayoutPadrao
+        JLabel titleLabel = LayoutPadrao.criarRotuloTitulo("💰 Operações de Caixa v2.8.3 - LayoutPadrao");
         titleLabel.setForeground(Color.WHITE);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         
-        // Botão voltar estilizado
-        JButton btnVoltar = new JButton("← Voltar");
-        btnVoltar.setBackground(new Color(255, 255, 255));
-        btnVoltar.setForeground(new Color(41, 128, 185));
-        btnVoltar.setFont(new Font("Arial", Font.BOLD, 12));
-        btnVoltar.setBorder(BorderFactory.createEmptyBorder(8, 15, 8, 15));
-        btnVoltar.setFocusPainted(false);
+        // Botão voltar com LayoutPadrao
+        JButton btnVoltar = LayoutPadrao.criarBotaoSecundario("← Voltar");
         btnVoltar.addActionListener(e -> frame.dispose());
         
-        // Data e hora atual
-        JLabel lblDataHora = new JLabel(java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), JLabel.RIGHT);
-        lblDataHora.setFont(new Font("Arial", Font.PLAIN, 12));
+        // Data e hora atual com LayoutPadrao
+        JLabel lblDataHora = LayoutPadrao.criarRotuloTexto(
+            java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
         lblDataHora.setForeground(Color.WHITE);
+        lblDataHora.setHorizontalAlignment(SwingConstants.RIGHT);
         
         panel.add(btnVoltar, BorderLayout.WEST);
         panel.add(titleLabel, BorderLayout.CENTER);
@@ -104,36 +100,46 @@ public class PDVCaixaSwingController {
     }
     
     private JPanel createStatusPanel() {
-        JPanel panel = new JPanel(new GridLayout(2, 2, 10, 10));
-        panel.setBorder(BorderFactory.createTitledBorder("Status do Caixa"));
+        JPanel panel = LayoutPadrao.criarPainelBranco();
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            LayoutPadrao.BORDA_PADRAO,
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+        panel.setLayout(new GridLayout(2, 2, 10, 10));
         
-        lblStatusCaixa = new JLabel("Fechado", JLabel.CENTER);
-        lblStatusCaixa.setFont(new Font("Arial", Font.BOLD, 16));
-        lblStatusCaixa.setForeground(Color.RED);
+        lblStatusCaixa = LayoutPadrao.criarRotuloTexto("Fechado");
+        lblStatusCaixa.setFont(LayoutPadrao.FONTE_SUBTITULO);
+        lblStatusCaixa.setForeground(LayoutPadrao.COR_PERIGO);
+        lblStatusCaixa.setHorizontalAlignment(SwingConstants.CENTER);
         lblStatusCaixa.setOpaque(true);
-        lblStatusCaixa.setBackground(Color.LIGHT_GRAY);
+        lblStatusCaixa.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        lblSaldoInicial = new JLabel("R$ 0,00", JLabel.CENTER);
-        lblSaldoInicial.setFont(new Font("Arial", Font.BOLD, 14));
+        lblSaldoInicial = LayoutPadrao.criarRotuloTexto("R$ 0,00");
+        lblSaldoInicial.setFont(LayoutPadrao.FONTE_ROTULO);
+        lblSaldoInicial.setHorizontalAlignment(SwingConstants.CENTER);
         
-        lblSaldoAtual = new JLabel("R$ 0,00", JLabel.CENTER);
-        lblSaldoAtual.setFont(new Font("Arial", Font.BOLD, 14));
+        lblSaldoAtual = LayoutPadrao.criarRotuloTexto("R$ 0,00");
+        lblSaldoAtual.setFont(LayoutPadrao.FONTE_ROTULO);
+        lblSaldoAtual.setHorizontalAlignment(SwingConstants.CENTER);
         
-        lblDataHora = new JLabel(LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")), JLabel.CENTER);
-        lblDataHora.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblDataHora = LayoutPadrao.criarRotuloTexto(
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+        lblDataHora.setHorizontalAlignment(SwingConstants.CENTER);
         
-        panel.add(new JLabel("Status:"));
-        panel.add(new JLabel("Saldo Inicial:"));
+        panel.add(LayoutPadrao.criarRotuloCampo("Status:"));
+        panel.add(LayoutPadrao.criarRotuloCampo("Saldo Inicial:"));
         panel.add(lblStatusCaixa);
         panel.add(lblSaldoInicial);
         
         JPanel bottomPanel = new JPanel(new GridLayout(1, 2, 10, 10));
-        bottomPanel.add(new JLabel("Saldo Atual:"));
-        bottomPanel.add(new JLabel("Data/Hora:"));
+        bottomPanel.setBackground(LayoutPadrao.COR_FUNDO);
+        bottomPanel.add(LayoutPadrao.criarRotuloCampo("Saldo Atual:"));
+        bottomPanel.add(LayoutPadrao.criarRotuloCampo("Data/Hora:"));
         bottomPanel.add(lblSaldoAtual);
         bottomPanel.add(lblDataHora);
         
         JPanel statusContainer = new JPanel(new BorderLayout());
+        statusContainer.setBackground(LayoutPadrao.COR_FUNDO);
         statusContainer.add(panel, BorderLayout.NORTH);
         statusContainer.add(bottomPanel, BorderLayout.SOUTH);
         
@@ -141,8 +147,12 @@ public class PDVCaixaSwingController {
     }
     
     private JPanel createMovimentacoesPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Movimentações"));
+        JPanel panel = LayoutPadrao.criarPainelBranco();
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            LayoutPadrao.BORDA_PADRAO,
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+        panel.setLayout(new BorderLayout());
         
         String[] columns = {"Data/Hora", "Tipo", "Descrição", "Valor", "Saldo"};
         tableModel = new DefaultTableModel(columns, 0) {
@@ -151,9 +161,9 @@ public class PDVCaixaSwingController {
                 return false; // Bloquear edição de todas as células
             }
         };
-        movimentacoesTable = new JTable(tableModel);
+        movimentacoesTable = LayoutPadrao.criarTabela();
         
-        JScrollPane scrollPane = new JScrollPane(movimentacoesTable);
+        JScrollPane scrollPane = LayoutPadrao.criarBarraRolagem(movimentacoesTable);
         panel.add(scrollPane, BorderLayout.CENTER);
         
         return panel;
@@ -161,20 +171,21 @@ public class PDVCaixaSwingController {
     
     private JPanel createButtonsPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        panel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        JButton btnAbrirCaixa = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔓 Abrir Caixa", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnAbrirCaixa = LayoutPadrao.criarBotaoSucesso("🔓 Abrir Caixa");
         btnAbrirCaixa.addActionListener(this::abrirCaixa);
         
-        JButton btnAdicionarFundos = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💰 Adicionar Fundos", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnAdicionarFundos = LayoutPadrao.criarBotaoPrimario("💰 Adicionar Fundos");
         btnAdicionarFundos.addActionListener(this::adicionarFundos);
         
-        JButton btnRetirarFundos = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💸 Retirar Fundos", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnRetirarFundos = LayoutPadrao.criarBotaoAlerta("💸 Retirar Fundos");
         btnRetirarFundos.addActionListener(this::retirarFundos);
         
-        JButton btnFecharCaixa = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔒 Fechar Caixa", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnFecharCaixa = LayoutPadrao.criarBotaoPerigo("🔒 Fechar Caixa");
         btnFecharCaixa.addActionListener(this::fecharCaixa);
         
-        JButton btnRelatorio = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📊 Relatório", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnRelatorio = LayoutPadrao.criarBotaoSecundario("📊 Relatório");
         btnRelatorio.addActionListener(e -> gerarRelatorio(e));
         
         panel.add(btnAbrirCaixa);
