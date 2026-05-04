@@ -1,6 +1,6 @@
 package com.br.hermescomercial.erp.controller;
 
-import com.br.hermescomercial.theme.HermesTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -37,7 +37,7 @@ public class ERPFinanceiroSwingController {
         frame.setLocationRelativeTo(null);
         
         // Aplicar tema moderno
-        frame.getContentPane().setBackground(HermesTheme.BACKGROUND_PRIMARY);
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         createMainPanel();
         frame.setVisible(true);
@@ -74,17 +74,17 @@ public class ERPFinanceiroSwingController {
         
         // Título
         JLabel titleLabel = new JLabel("💰 Gestão Financeira");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(HermesTheme.TEXT_PRIMARY);
+        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
+        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
         
         // Botões de ação
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false);
         
-        JButton btnRelatorio = createModernButton("📊 Relatórios", HermesTheme.SUCCESS_COLOR);
+        JButton btnRelatorio = LayoutPadrao.criarBotaoSucesso("📊 Relatórios");
         btnRelatorio.addActionListener(e -> gerarRelatorios());
         
-        JButton btnConciliar = createModernButton("🔄 Conciliar", HermesTheme.PRIMARY_COLOR);
+        JButton btnConciliar = LayoutPadrao.criarBotaoPrimario("🔄 Conciliar");
         btnConciliar.addActionListener(e -> conciliarLancamentos());
         
         buttonPanel.add(btnRelatorio);
@@ -182,11 +182,14 @@ public class ERPFinanceiroSwingController {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setOpaque(false);
         
-        btnNovo = createStyledButton("➕ Novo", HermesTheme.SUCCESS_COLOR, e -> limparFormulario());
+        btnNovo = LayoutPadrao.criarBotaoSucesso("➕ Novo");
+        btnNovo.addActionListener(e -> limparFormulario());
         
-        btnSalvar = createStyledButton("💾 Salvar", HermesTheme.PRIMARY_COLOR, e -> salvarLancamento());
+        btnSalvar = LayoutPadrao.criarBotaoPrimario("💾 Salvar");
+        btnSalvar.addActionListener(e -> salvarLancamento());
         
-        btnCancelar = createStyledButton("❌ Cancelar", HermesTheme.DANGER_COLOR, e -> limparFormulario());
+        btnCancelar = LayoutPadrao.criarBotaoPerigo("❌ Cancelar");
+        btnCancelar.addActionListener(e -> limparFormulario());
         
         buttonPanel.add(btnNovo);
         buttonPanel.add(btnSalvar);
@@ -204,16 +207,18 @@ public class ERPFinanceiroSwingController {
         
         // Título da tabela
         JLabel titleLabel = new JLabel("📋 Lançamentos Financeiros");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        titleLabel.setForeground(HermesTheme.TEXT_PRIMARY);
+        titleLabel.setFont(LayoutPadrao.FONTE_SUBTITULO);
+        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
         
         // Botões de ação da tabela
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setOpaque(false);
         
-        btnEditar = createStyledButton("✏️ Editar", HermesTheme.WARNING_COLOR, e -> editarLancamento());
+        btnEditar = LayoutPadrao.criarBotaoAlerta("✏️ Editar");
+        btnEditar.addActionListener(e -> editarLancamento());
         
-        btnExcluir = createStyledButton("🗑️ Excluir", HermesTheme.DANGER_COLOR, e -> excluirLancamento());
+        btnExcluir = LayoutPadrao.criarBotaoPerigo("🗑️ Excluir");
+        btnExcluir.addActionListener(e -> excluirLancamento());
         
         buttonPanel.add(btnEditar);
         buttonPanel.add(btnExcluir);
@@ -242,10 +247,10 @@ public class ERPFinanceiroSwingController {
         };
         
         lancamentosTable = new JTable(tableModel);
-        lancamentosTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lancamentosTable.setFont(LayoutPadrao.FONTE_TEXTO);
         lancamentosTable.setRowHeight(25);
-        lancamentosTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lancamentosTable.getTableHeader().setBackground(HermesTheme.PRIMARY_COLOR);
+        lancamentosTable.getTableHeader().setFont(LayoutPadrao.FONTE_TEXTO);
+        lancamentosTable.getTableHeader().setBackground(LayoutPadrao.COR_PRIMARIA);
         lancamentosTable.getTableHeader().setForeground(Color.WHITE);
         
         // Adicionar dados de exemplo
@@ -264,7 +269,7 @@ public class ERPFinanceiroSwingController {
         JScrollPane scrollPane = new JScrollPane(lancamentosTable);
         scrollPane.setPreferredSize(new Dimension(1150, 400));
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
             new EmptyBorder(5, 5, 5, 5)
         ));
         
@@ -279,62 +284,6 @@ public class ERPFinanceiroSwingController {
         return tablePanel;
     }
     
-    private JButton createStyledButton(String text, Color bgColor, java.awt.event.ActionListener actionListener) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(120, 35));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Efeito hover elegante (padrão das telas antigas)
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor.darker());
-            }
-            
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor);
-            }
-        });
-        
-        // Adicionar o action listener
-        if (actionListener != null) {
-            button.addActionListener(actionListener);
-        }
-        
-        return button;
-    }
-    
-    private JButton createModernButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(120, 35));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Efeito hover
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.darker());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
-        
-        return button;
-    }
     
     private void carregarDadosExemplo() {
         // Limpar tabela

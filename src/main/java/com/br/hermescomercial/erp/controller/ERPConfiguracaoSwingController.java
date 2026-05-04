@@ -4,7 +4,6 @@ import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 /**
  * Controller para tela de configuração do sistema ERP
