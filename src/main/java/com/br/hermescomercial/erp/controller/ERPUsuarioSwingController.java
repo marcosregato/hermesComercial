@@ -1,6 +1,6 @@
 package com.br.hermescomercial.erp.controller;
 
-import com.br.hermescomercial.theme.HermesTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -37,11 +37,11 @@ public class ERPUsuarioSwingController {
         frame.setLocationRelativeTo(null);
         
         // Aplicar tema padrão
-        frame.getContentPane().setBackground(HermesTheme.BACKGROUND_PRIMARY);
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainPanel.setBackground(HermesTheme.BACKGROUND_PRIMARY);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         frame.add(mainPanel);
         frame.add(createHeaderPanel(), BorderLayout.NORTH);
@@ -56,12 +56,12 @@ public class ERPUsuarioSwingController {
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         
         JLabel titleLabel = new JLabel("👥 Gestão de Usuários e Permissões");
-        titleLabel.setFont(HermesTheme.FONT_HEADER);
-        titleLabel.setForeground(HermesTheme.TEXT_PRIMARY);
+        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
+        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
         
         JLabel subtitleLabel = new JLabel("Gerenciamento de usuários, senhas e níveis de acesso ao sistema");
-        subtitleLabel.setFont(HermesTheme.FONT_DEFAULT);
-        subtitleLabel.setForeground(HermesTheme.TEXT_SECONDARY);
+        subtitleLabel.setFont(LayoutPadrao.FONTE_TEXTO);
+        subtitleLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         titlePanel.setOpaque(false);
@@ -96,8 +96,8 @@ public class ERPUsuarioSwingController {
         
         // Título do formulário
         JLabel formTitle = new JLabel("📝 Cadastro de Usuário");
-        formTitle.setFont(HermesTheme.FONT_HEADER);
-        formTitle.setForeground(HermesTheme.TEXT_PRIMARY);
+        formTitle.setFont(LayoutPadrao.FONTE_TITULO);
+        formTitle.setForeground(LayoutPadrao.COR_PRIMARIA);
         
         // Campos do formulário
         JPanel fieldsPanel = new JPanel(new GridBagLayout());
@@ -106,9 +106,9 @@ public class ERPUsuarioSwingController {
             "🔐 Dados do Usuário", 
             TitledBorder.LEFT, 
             TitledBorder.TOP, 
-            HermesTheme.FONT_HEADER, 
-            HermesTheme.TEXT_PRIMARY));
-        fieldsPanel.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+            LayoutPadrao.FONTE_SUBTITULO, 
+            LayoutPadrao.COR_PRIMARIA));
+        fieldsPanel.setBackground(LayoutPadrao.COR_FUNDO);
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -147,28 +147,14 @@ public class ERPUsuarioSwingController {
         gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0.0;
         fieldsPanel.add(createLabel("Senha:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtSenha = new JPasswordField();
-        txtSenha.setFont(HermesTheme.FONT_DEFAULT);
-        txtSenha.setForeground(HermesTheme.TEXT_PRIMARY);
-        txtSenha.setBackground(Color.WHITE);
-        txtSenha.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        txtSenha = LayoutPadrao.criarCampoSenha(15);
         fieldsPanel.add(txtSenha, gbc);
         
         // Confirmar Senha
         gbc.gridx = 0; gbc.gridy = 5; gbc.weightx = 0.0;
         fieldsPanel.add(createLabel("Confirmar Senha:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtConfirmarSenha = new JPasswordField();
-        txtConfirmarSenha.setFont(HermesTheme.FONT_DEFAULT);
-        txtConfirmarSenha.setForeground(HermesTheme.TEXT_PRIMARY);
-        txtConfirmarSenha.setBackground(Color.WHITE);
-        txtConfirmarSenha.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        txtConfirmarSenha = LayoutPadrao.criarCampoSenha(15);
         fieldsPanel.add(txtConfirmarSenha, gbc);
         
         // Nível de Acesso
@@ -176,7 +162,7 @@ public class ERPUsuarioSwingController {
         fieldsPanel.add(createLabel("Nível de Acesso:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         cbNivelAcesso = new JComboBox<>(new String[]{"Administrador", "Gerente", "Operador", "Visualizador"});
-        cbNivelAcesso.setFont(HermesTheme.FONT_DEFAULT);
+        cbNivelAcesso.setFont(LayoutPadrao.FONTE_CAMPO);
         cbNivelAcesso.setPreferredSize(new Dimension(150, 30));
         fieldsPanel.add(cbNivelAcesso, gbc);
         
@@ -185,7 +171,7 @@ public class ERPUsuarioSwingController {
         fieldsPanel.add(createLabel("Status:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         cbStatus = new JComboBox<>(new String[]{"Ativo", "Inativo", "Bloqueado"});
-        cbStatus.setFont(HermesTheme.FONT_DEFAULT);
+        cbStatus.setFont(LayoutPadrao.FONTE_CAMPO);
         cbStatus.setPreferredSize(new Dimension(150, 30));
         fieldsPanel.add(cbStatus, gbc);
         
@@ -195,13 +181,13 @@ public class ERPUsuarioSwingController {
         checkboxPanel.setOpaque(false);
         
         ckAtivo = new JCheckBox("Usuário Ativo");
-        ckAtivo.setFont(HermesTheme.FONT_DEFAULT);
-        ckAtivo.setForeground(HermesTheme.TEXT_PRIMARY);
+        ckAtivo.setFont(LayoutPadrao.FONTE_TEXTO);
+        ckAtivo.setForeground(LayoutPadrao.COR_TEXTO);
         ckAtivo.setSelected(true);
         
         ckAlterarSenha = new JCheckBox("Exigir alteração de senha no próximo login");
-        ckAlterarSenha.setFont(HermesTheme.FONT_DEFAULT);
-        ckAlterarSenha.setForeground(HermesTheme.TEXT_PRIMARY);
+        ckAlterarSenha.setFont(LayoutPadrao.FONTE_TEXTO);
+        ckAlterarSenha.setForeground(LayoutPadrao.COR_TEXTO);
         
         checkboxPanel.add(ckAtivo);
         checkboxPanel.add(ckAlterarSenha);
@@ -214,11 +200,16 @@ public class ERPUsuarioSwingController {
         JPanel formButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         formButtonPanel.setOpaque(false);
         
-        btnNovo = createStyledButton("➕ Novo", HermesTheme.SUCCESS_COLOR, e -> novoUsuario());
-        btnSalvar = createStyledButton("💾 Salvar", HermesTheme.PRIMARY_COLOR, e -> salvarUsuario());
-        btnCancelar = createStyledButton("❌ Cancelar", HermesTheme.DANGER_COLOR, e -> limparFormulario());
-        btnEditar = createStyledButton("✏️ Editar", HermesTheme.WARNING_COLOR, e -> editarUsuario());
-        btnExcluir = createStyledButton("🗑️ Excluir", HermesTheme.DANGER_COLOR, e -> excluirUsuario());
+        btnNovo = LayoutPadrao.criarBotaoSucesso("➕ Novo");
+        btnNovo.addActionListener(e -> novoUsuario());
+        btnSalvar = LayoutPadrao.criarBotaoPrimario("💾 Salvar");
+        btnSalvar.addActionListener(e -> salvarUsuario());
+        btnCancelar = LayoutPadrao.criarBotaoPerigo("❌ Cancelar");
+        btnCancelar.addActionListener(e -> limparFormulario());
+        btnEditar = LayoutPadrao.criarBotaoAlerta("✏️ Editar");
+        btnEditar.addActionListener(e -> editarUsuario());
+        btnExcluir = LayoutPadrao.criarBotaoPerigo("🗑️ Excluir");
+        btnExcluir.addActionListener(e -> excluirUsuario());
         
         formButtonPanel.add(btnNovo);
         formButtonPanel.add(btnSalvar);
@@ -256,9 +247,12 @@ public class ERPUsuarioSwingController {
         txtBusca.setPreferredSize(new Dimension(200, 30));
         searchFieldPanel.add(txtBusca);
         
-        btnBuscar = createStyledButton("🔍 Buscar", HermesTheme.PRIMARY_COLOR, e -> buscarUsuarios());
-        btnLimpar = createStyledButton("🗑️ Limpar", HermesTheme.WARNING_COLOR, e -> limparBusca());
-        btnAtualizar = createStyledButton("🔄 Atualizar", HermesTheme.SECONDARY_COLOR, e -> atualizarTabela());
+        btnBuscar = LayoutPadrao.criarBotaoPrimario("🔍 Buscar");
+        btnBuscar.addActionListener(e -> buscarUsuarios());
+        btnLimpar = LayoutPadrao.criarBotaoAlerta("🗑️ Limpar");
+        btnLimpar.addActionListener(e -> limparBusca());
+        btnAtualizar = LayoutPadrao.criarBotaoSecundario("🔄 Atualizar");
+        btnAtualizar.addActionListener(e -> atualizarTabela());
         
         searchFieldPanel.add(btnBuscar);
         searchFieldPanel.add(btnLimpar);
@@ -268,8 +262,8 @@ public class ERPUsuarioSwingController {
         
         // Título da tabela
         JLabel titleLabel = new JLabel("👥 Usuários Cadastrados");
-        titleLabel.setFont(HermesTheme.FONT_HEADER);
-        titleLabel.setForeground(HermesTheme.TEXT_PRIMARY);
+        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
+        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
         
         // Criar tabela
         String[] colunas = {"ID", "Nome", "Usuário", "E-mail", "Nível", "Status", "Último Acesso"};
@@ -289,10 +283,10 @@ public class ERPUsuarioSwingController {
         };
         
         usuariosTable = new JTable(tableModel);
-        usuariosTable.setFont(HermesTheme.FONT_DEFAULT);
+        usuariosTable = LayoutPadrao.criarTabela();
         usuariosTable.setRowHeight(25);
-        usuariosTable.getTableHeader().setFont(HermesTheme.FONT_DEFAULT);
-        usuariosTable.getTableHeader().setBackground(HermesTheme.PRIMARY_COLOR);
+        usuariosTable.getTableHeader().setFont(LayoutPadrao.FONTE_CAMPO);
+        usuariosTable.getTableHeader().setBackground(LayoutPadrao.COR_PRIMARIA);
         usuariosTable.getTableHeader().setForeground(Color.WHITE);
         
         // Evento de duplo clique para editar
@@ -307,10 +301,7 @@ public class ERPUsuarioSwingController {
         
         JScrollPane scrollPane = new JScrollPane(usuariosTable);
         scrollPane.setPreferredSize(new Dimension(700, 500));
-        scrollPane.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        scrollPane.setBorder(LayoutPadrao.BORDA_CAMPO);
         
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
@@ -325,32 +316,20 @@ public class ERPUsuarioSwingController {
     
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(HermesTheme.FONT_DEFAULT);
-        label.setForeground(HermesTheme.TEXT_PRIMARY);
+        label.setFont(LayoutPadrao.FONTE_TEXTO);
+        label.setForeground(LayoutPadrao.COR_TEXTO);
         return label;
     }
     
     private JTextField createTextField() {
         JTextField textField = new JTextField();
-        textField.setFont(HermesTheme.FONT_DEFAULT);
-        textField.setForeground(HermesTheme.TEXT_PRIMARY);
-        textField.setBackground(Color.WHITE);
-        textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        textField = LayoutPadrao.criarCampoTexto(15);
         return textField;
     }
     
     private JTextField createTelefoneField() {
         JTextField textField = new JTextField();
-        textField.setFont(HermesTheme.FONT_DEFAULT);
-        textField.setForeground(HermesTheme.TEXT_PRIMARY);
-        textField.setBackground(Color.WHITE);
-        textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        textField = LayoutPadrao.criarCampoTexto(15);
         
         // Limitar a 13 caracteres (formato: (XX) XXXXX-XXXX)
         textField.setDocument(new javax.swing.text.PlainDocument() {
@@ -379,13 +358,7 @@ public class ERPUsuarioSwingController {
     
     private JTextField createEmailField() {
         JTextField textField = new JTextField();
-        textField.setFont(HermesTheme.FONT_DEFAULT);
-        textField.setForeground(HermesTheme.TEXT_PRIMARY);
-        textField.setBackground(Color.WHITE);
-        textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        textField = LayoutPadrao.criarCampoTexto(15);
         
         // Adicionar tooltip com formato esperado
         textField.setToolTipText("Formato: usuario@dominio.com");
@@ -395,28 +368,16 @@ public class ERPUsuarioSwingController {
     
     private JButton createStyledButton(String text, Color bgColor, ActionListener actionListener) {
         JButton button = new JButton(text);
-        button.setFont(HermesTheme.FONT_BUTTON);
+        button.setFont(LayoutPadrao.FONTE_BOTAO);
         button.setBackground(bgColor);
         button.setForeground(Color.WHITE);
-        button.setBorderPainted(false);
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(bgColor.darker()),
+            BorderFactory.createEmptyBorder(8, 16, 8, 16)
+        ));
         button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(120, 35));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
-        // Efeito hover elegante (padrão das telas antigas)
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor.darker());
-            }
-            
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor);
-            }
-        });
-        
-        // Adicionar o action listener
         if (actionListener != null) {
             button.addActionListener(actionListener);
         }
