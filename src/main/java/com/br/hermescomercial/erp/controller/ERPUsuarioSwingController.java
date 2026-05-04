@@ -366,25 +366,6 @@ public class ERPUsuarioSwingController {
         return textField;
     }
     
-    private JButton createStyledButton(String text, Color bgColor, ActionListener actionListener) {
-        JButton button = new JButton(text);
-        button.setFont(LayoutPadrao.FONTE_BOTAO);
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(bgColor.darker()),
-            BorderFactory.createEmptyBorder(8, 16, 8, 16)
-        ));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        if (actionListener != null) {
-            button.addActionListener(actionListener);
-        }
-        
-        return button;
-    }
-    
     private void carregarDadosExemplo() {
         // Limpar tabela
         tableModel.setRowCount(0);
