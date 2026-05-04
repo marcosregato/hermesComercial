@@ -1,5 +1,6 @@
 package com.br.hermescomercial.util;
 
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
@@ -137,7 +138,7 @@ public class LogViewer extends JFrame {
         filterPanel.add(txtSearch, gbc);
         
         gbc.gridx = 3; gbc.gridwidth = 1;
-        JButton btnSearch = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CYAN, Color.BLACK);
+        JButton btnSearch = LayoutPadrao.criarBotaoPrimario("🔍 Buscar");
         btnSearch.addActionListener(e -> filterLogs());
         btnSearch.setPreferredSize(new Dimension(100, 30));
         filterPanel.add(btnSearch, gbc);
@@ -149,15 +150,15 @@ public class LogViewer extends JFrame {
         buttonPanel.setOpaque(false);
         
         // Botões
-        JButton btnRefresh = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Atualizar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, Color.BLACK);
+        JButton btnRefresh = LayoutPadrao.criarBotaoSecundario("🔄 Atualizar");
         btnRefresh.addActionListener(this::refreshLogs);
         buttonPanel.add(btnRefresh);
         
-        JButton btnClear = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🧹 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, Color.BLACK);
+        JButton btnClear = LayoutPadrao.criarBotaoAlerta("🧹 Limpar");
         btnClear.addActionListener(this::clearLogs);
         buttonPanel.add(btnClear);
         
-        JButton btnExport = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, Color.BLACK);
+        JButton btnExport = LayoutPadrao.criarBotaoSucesso("📤 Exportar");
         btnExport.addActionListener(this::exportLogs);
         buttonPanel.add(btnExport);
         
@@ -238,10 +239,10 @@ public class LogViewer extends JFrame {
     private void loadLogFiles() {
         File logDir = new File(LOG_DIR);
         if (!logDir.exists()) {
-            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+            JOptionPane.showMessageDialog(this, 
                 "Diretório de logs não encontrado: " + LOG_DIR, 
                 "Aviso", 
-                new String[]{"OK"}, 0);
+                JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -260,10 +261,10 @@ public class LogViewer extends JFrame {
         
         File logFile = new File(LOG_DIR, selectedFile);
         if (!logFile.exists()) {
-            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+            JOptionPane.showMessageDialog(this, 
                 "Arquivo de log não encontrado: " + selectedFile, 
                 "Aviso", 
-                new String[]{"OK"}, 0);
+                JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -274,10 +275,10 @@ public class LogViewer extends JFrame {
                 content.append(line).append("\n");
             }
         } catch (IOException e) {
-            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+            JOptionPane.showMessageDialog(this, 
                 "Erro ao ler arquivo de log: " + e.getMessage(), 
                 "Erro", 
-                new String[]{"OK"}, 0);
+                JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -412,9 +413,9 @@ public class LogViewer extends JFrame {
     private void refreshLogs(ActionEvent e) {
         loadLogFiles();
         loadLogContent();
-        com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+        JOptionPane.showMessageDialog(this, 
             "Logs atualizados com sucesso!", "Sucesso", 
-            new String[]{"OK"}, 0);
+            JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void clearLogs(ActionEvent e) {
@@ -426,9 +427,9 @@ public class LogViewer extends JFrame {
     private void exportLogs(ActionEvent e) {
         String content = txtLogContent.getText();
         if (content.isEmpty()) {
-            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+            JOptionPane.showMessageDialog(this, 
                 "Nenhum conteúdo para exportar!", "Aviso", 
-                new String[]{"OK"}, 0);
+                JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -444,15 +445,15 @@ public class LogViewer extends JFrame {
             
             try (java.io.FileWriter writer = new java.io.FileWriter(selectedFile)) {
                 writer.write(content);
-                com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+                JOptionPane.showMessageDialog(this, 
                     "Logs exportados com sucesso!\nArquivo: " + selectedFile.getAbsolutePath(), 
                     "Sucesso", 
-                    new String[]{"OK"}, 0);
+                    JOptionPane.INFORMATION_MESSAGE);
             } catch (IOException ex) {
-                com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(this, 
+                JOptionPane.showMessageDialog(this, 
                     "Erro ao exportar logs: " + ex.getMessage(), 
                     "Erro", 
-                    new String[]{"OK"}, 0);
+                    JOptionPane.ERROR_MESSAGE);
             }
         }
     }
