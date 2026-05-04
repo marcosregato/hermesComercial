@@ -207,6 +207,17 @@ public class PDVLoginSwingController {
         txtUsuario.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         txtUsuario.setCaretColor(new Color(52, 152, 219));
         txtUsuario.setSelectionColor(new Color(52, 152, 219, 50));
+        
+        // Limitar a 20 caracteres sem validação mínima
+        txtUsuario.setDocument(new javax.swing.text.PlainDocument() {
+            @Override
+            public void insertString(int offs, String str, javax.swing.text.AttributeSet a) throws javax.swing.text.BadLocationException {
+                if (str == null) return;
+                if (getLength() + str.length() <= 20) {
+                    super.insertString(offs, str, a);
+                }
+            }
+        });
         usuarioPanel.add(txtUsuario, BorderLayout.CENTER);
         
         cardGbc.gridy = 3;
@@ -397,7 +408,7 @@ public class PDVLoginSwingController {
             }
         });
         
-        // Enter nos campos
+        // Enter nos campos - SEM VALIDAÇÃO MÍNIMA
         txtUsuario.addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -410,7 +421,9 @@ public class PDVLoginSwingController {
             public void keyReleased(KeyEvent e) {}
             
             @Override
-            public void keyTyped(KeyEvent e) {}
+            public void keyTyped(KeyEvent e) {
+                // Permitir digitação livre - sem validação mínima
+            }
         });
         
         txtSenha.addKeyListener(new KeyListener() {
@@ -456,6 +469,13 @@ public class PDVLoginSwingController {
         if (usuario.isEmpty() || senha.isEmpty()) {
             lblStatus.setText("⚠️ Preencha usuário e senha!");
             lblStatus.setForeground(Color.YELLOW);
+            return;
+        }
+        
+        if (usuario.length() > 20) {
+            lblStatus.setText("⚠️ Usuário deve ter no máximo 20 caracteres!");
+            lblStatus.setForeground(Color.YELLOW);
+            txtUsuario.requestFocus();
             return;
         }
         

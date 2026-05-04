@@ -8,8 +8,8 @@ import com.br.hermescomercial.theme.ModernTheme;
 
 /**
  * Classe principal da aplicação Hermes Comercial PDV
- * Versão SWING - Interface nativa Java
- * Com tela de login e autenticação
+ * Versão v2.8.3 - Production-Ready
+ * Interface SWING completa com todas as funcionalidades empresariais
  */
 public class MainApplication {
     
@@ -47,14 +47,14 @@ public class MainApplication {
             // Executar na thread de UI
             SwingUtilities.invokeLater(() -> {
                 try {
-                    System.out.println("Iniciando Hermes Comercial PDV v2.1.4");
+                    System.out.println("Iniciando Hermes Comercial PDV v2.8.3 - Production-Ready");
                     
                     // Testar conexão com banco de dados
                     System.out.println("Verificando conexão com banco de dados...");
                     
-                    // Iniciar com tela de login simplificada
+                    // Iniciar com tela de login moderna (sem validação em tempo real)
                     System.out.println("Abrindo tela de login...");
-                    PDVLoginSimpleController login = new PDVLoginSimpleController();
+                    PDVLoginSwingController login = new PDVLoginSwingController();
                     login.showFrame();
                     
                     System.out.println("Sistema iniciado com sucesso");

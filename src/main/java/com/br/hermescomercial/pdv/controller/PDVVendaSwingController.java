@@ -9,7 +9,10 @@ import java.awt.event.ActionListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import com.br.hermescomercial.business.impressao.ImpressaoNaoFiscalService;
+import com.br.hermescomercial.service.EstoqueService;
+import com.br.hermescomercial.service.VendaService;
 
 /**
  * Controller de Venda em SWING
@@ -26,11 +29,15 @@ public class PDVVendaSwingController {
     private JLabel lblTotal;
     private JLabel lblItens;
     private List<ItemVenda> itens;
-    private ImpressaoNaoFiscalService impressaoService;  
+    private ImpressaoNaoFiscalService impressaoService;
+    private EstoqueService estoqueService;
+    private VendaService vendaService;  
     
     public PDVVendaSwingController() {
         this.itens = new ArrayList<>();
         this.impressaoService = new ImpressaoNaoFiscalService();
+        this.estoqueService = new EstoqueService();
+        this.vendaService = new VendaService();
         initializeUI();
     }
     
@@ -428,7 +435,48 @@ public class PDVVendaSwingController {
             return;
         }
         
-        // VERIFICAÇÃO COMPLETA DE ESTOQUE - PASSO 2 DO FLUXO
+        // VALIDAÇÃO DE ESTOQUE COM SERVIÇO ESPECIALIZADO
+        EstoqueService.ResultadoValidacao validacaoEstoque = estoqueService.validarVenda(codigo, quantidade);
+        
+        switch (validacaoEstoque) {
+            case ESTOQUE_INSUFICIENTE:
+                EstoqueService.StatusEstoque status = estoqueService.getStatusEstoque(codigo);
+                String mensagemAlerta = estoqueService.getMensagemAlerta(status);
+                
+                JOptionPane.showMessageDialog(frame, 
+                    mensagemAlerta + "!\n\n" +
+                    "Produto: " + produto.getDescricao() + "\n" +
+                    "Estoque disponível: " + produto.getEstoque() + "\n" +
+                    "Quantidade solicitada: " + quantidade + "\n" +
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+                    "📍 Localização: " + produto.getLocalizacaoEstoque() + "\n" +
+                    "🏷️ Lote: " + produto.getLote() + "\n" +
+                    "📅 Validade: " + produto.getDataValidade() + "\n\n" +
+                    "💡 Sugestão de reposição: " + estoqueService.calcularSugestaoReposicao(codigo, 30) + " unidades",
+                    "⚠️ ESTOQUE INSUFICIENTE", 
+                    JOptionPane.WARNING_MESSAGE);
+                txtQuantidade.selectAll();
+                txtQuantidade.requestFocus();
+                return;
+                
+            case PRODUTO_INEXISTENTE:
+                JOptionPane.showMessageDialog(frame, "Produto não encontrado no sistema!", "Erro", JOptionPane.ERROR_MESSAGE);
+                txtCodigo.selectAll();
+                txtCodigo.requestFocus();
+                return;
+                
+            case QUANTIDADE_INVALIDA:
+                JOptionPane.showMessageDialog(frame, "Quantidade deve ser maior que zero!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                txtQuantidade.selectAll();
+                txtQuantidade.requestFocus();
+                return;
+                
+            case OK:
+                // Continuar com a venda
+                break;
+        }
+        
+        // VERIFICAÇÃO ADICIONAL (LEGACY)
         if (produto.getEstoque() < quantidade) {
             JOptionPane.showMessageDialog(frame, 
                 "📦 ESTOQUE INSUFICIENTE!\n\n" +
@@ -576,8 +624,58 @@ public class PDVVendaSwingController {
         
         BigDecimal total = calcularTotal();
         
+        // VALIDAÇÕES DE NEGÓCIO ANTES DE FINALIZAR
+        Map<String, VendaService.ResultadoValidacao> validacoes = vendaService.validarVendaCompleta(
+            total, 
+            BigDecimal.ZERO, // Sem desconto por enquanto
+            VendaService.TipoDesconto.VALOR_FIXO,
+            itens.size(),
+            java.time.LocalDateTime.now()
+        );
+        
+        // Verificar se há validações reprovadas
+        StringBuilder errosValidacao = new StringBuilder();
+        boolean precisaAutorizacao = false;
+        
+        for (Map.Entry<String, VendaService.ResultadoValidacao> entry : validacoes.entrySet()) {
+            if (entry.getValue() != VendaService.ResultadoValidacao.OK) {
+                errosValidacao.append("• ").append(vendaService.getMensagemErro(entry.getValue())).append("\n\n");
+                if (vendaService.precisaAutorizacaoGerente(entry.getValue())) {
+                    precisaAutorizacao = true;
+                }
+            }
+        }
+        
+        if (errosValidacao.length() > 0) {
+            String titulo = precisaAutorizacao ? "⚠️ REGRAS DE NEGÓCIO - AUTORIZAÇÃO NECESSÁRIA" : "🚫 REGRAS DE NEGÓCIO - VENDA BLOQUEADA";
+            
+            if (precisaAutorizacao) {
+                errosValidacao.insert(0, "📋 VALIDAÇÕES ENCONTRADAS:\n\n");
+                errosValidacao.append("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
+                errosValidacao.append("👤 CONTATE O GERENTE PARA AUTORIZAÇÃO\n");
+                
+                JOptionPane.showMessageDialog(frame, errosValidacao.toString(), titulo, JOptionPane.WARNING_MESSAGE);
+                return;
+            } else {
+                JOptionPane.showMessageDialog(frame, errosValidacao.toString(), titulo, JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        }
+        
+        // Adicionar informações de risco na confirmação
+        String nivelRisco = vendaService.getNivelRisco(total, itens.size());
+        String mensagemConfirmacao = String.format(
+            "Confirmar finalização da venda?\n\n" +
+            "📊 Total: R$ %.2f\n" +
+            "🛒 Itens: %d\n" +
+            "⚠️ Nível de Risco: %s\n\n" +
+            "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" +
+            "✅ Todas as validações aprovadas",
+            total, itens.size(), nivelRisco
+        );
+        
         int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
-            String.format("Confirmar finalização da venda?\n\nTotal: R$ %.2f", total), 
+            mensagemConfirmacao, 
             "Confirmar Venda", 
             new String[]{"Sim", "Não"}, 0);
             

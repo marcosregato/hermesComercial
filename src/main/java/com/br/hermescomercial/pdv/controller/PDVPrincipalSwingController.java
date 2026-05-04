@@ -72,36 +72,67 @@ public class PDVPrincipalSwingController {
         fileMenu.addSeparator();
         fileMenu.add(createMenuItem("Sair", e -> System.exit(0)));
         
+        // Menu Cadastros
+        JMenu cadastrosMenu = new JMenu("📋 Cadastros");
+        cadastrosMenu.add(createMenuItem("🏢 Fornecedores", e -> abrirFornecedores(e)));
+        cadastrosMenu.add(createMenuItem("� Clientes", e -> gerenciarClientes(e)));
+        cadastrosMenu.add(createMenuItem("📦 Produtos", e -> gerenciarProdutos(e)));
+        cadastrosMenu.add(createMenuItem("🔍 Consulta Rápida de Produtos", e -> consultarProdutos(e)));
+        
         // Menu Operações
-        JMenu operationsMenu = new JMenu("Operações");
-        operationsMenu.add(createMenuItem("📦 Gestão de Produtos", e -> gerenciarProdutos(e)));
-        operationsMenu.add(createMenuItem("🔍 Consulta Rápida de Produtos", e -> consultarProdutos(e)));
-        operationsMenu.add(createMenuItem("📊 Dashboard", e -> abrirDashboard(e)));
+        JMenu operationsMenu = new JMenu("💳 Operações");
+        operationsMenu.add(createMenuItem("💰 Nova Venda", e -> abrirVenda(e)));
+        operationsMenu.add(createMenuItem("💵 Caixa", e -> abrirCaixa(e)));
+        operationsMenu.add(createMenuItem("🏪 Fechar Caixa", e -> fecharCaixa(e)));
+        operationsMenu.add(createMenuItem("📊 Dashboard Analytics", e -> abrirDashboard(e)));
         operationsMenu.add(createMenuItem("🔔 Notificações", e -> abrirNotificacao(e)));
-        operationsMenu.add(createMenuItem("Clientes", e -> gerenciarClientes(e)));
-        operationsMenu.add(createMenuItem("🏢 Gestão de Produtos (ERP)", e -> gerenciarProdutosERP(e)));
-        operationsMenu.add(createMenuItem("👥 Gestão de Clientes (ERP)", e -> gerenciarClientesERP(e)));
-        operationsMenu.add(createMenuItem("💰 Gestão Financeira (ERP)", e -> gerenciarFinanceiroERP(e)));
-        operationsMenu.add(createMenuItem("📊 Relatórios (ERP)", e -> gerenciarRelatoriosERP(e)));
-        operationsMenu.add(createMenuItem("📦 Controle de Estoque", e -> gerenciarEstoque(e)));
+        
+        // Menu Financeiro
+        JMenu financeiroMenu = new JMenu("💰 Financeiro");
+        financeiroMenu.add(createMenuItem("💳 Gestão Financeira (ERP)", e -> gerenciarFinanceiroERP(e)));
+        financeiroMenu.add(createMenuItem("📊 Relatórios Financeiros", e -> relatorioFinanceiro(e)));
+        financeiroMenu.add(createMenuItem("💸 Contas a Pagar", e -> mostrarEmDesenvolvimento(e, "Contas a Pagar")));
+        financeiroMenu.add(createMenuItem("💵 Contas a Receber", e -> mostrarEmDesenvolvimento(e, "Contas a Receber")));
+        financeiroMenu.add(createMenuItem("📈 Fluxo de Caixa", e -> mostrarEmDesenvolvimento(e, "Fluxo de Caixa")));
+        
+        // Menu Estoque
+        JMenu estoqueMenu = new JMenu("📦 Estoque");
+        estoqueMenu.add(createMenuItem("📋 Controle de Estoque", e -> gerenciarEstoque(e)));
+        estoqueMenu.add(createMenuItem("📦 Gestão de Produtos (ERP)", e -> gerenciarProdutosERP(e)));
+        estoqueMenu.add(createMenuItem("📊 Relatório de Estoque", e -> mostrarEmDesenvolvimento(e, "Relatório de Estoque")));
+        estoqueMenu.add(createMenuItem("⚠️ Estoque Baixo", e -> mostrarEmDesenvolvimento(e, "Estoque Baixo")));
+        estoqueMenu.add(createMenuItem("🔄 Movimentação", e -> mostrarEmDesenvolvimento(e, "Movimentação de Estoque")));
         
         // Menu Relatórios
-        JMenu reportsMenu = new JMenu("Relatórios");
-        reportsMenu.add(createMenuItem("Vendas do Dia", this::relatorioVendasDia));
-        reportsMenu.add(createMenuItem("Produtos", this::relatorioProdutos));
-        reportsMenu.add(createMenuItem("Financeiro", this::relatorioFinanceiro));
+        JMenu reportsMenu = new JMenu("📊 Relatórios");
+        reportsMenu.add(createMenuItem("📋 Templates de Relatórios", e -> abrirTemplatesRelatorio(e)));
+        reportsMenu.add(createMenuItem("📤 Exportar Dados", e -> abrirExportImport(e)));
+        reportsMenu.addSeparator();
+        reportsMenu.add(createMenuItem("💰 Vendas do Dia", this::relatorioVendasDia));
+        reportsMenu.add(createMenuItem("📦 Produtos", this::relatorioProdutos));
+        reportsMenu.add(createMenuItem("📊 Financeiro", this::relatorioFinanceiro));
+        reportsMenu.add(createMenuItem("👥 Clientes", this::relatorioClientes));
+        reportsMenu.add(createMenuItem("📦 Estoque", this::relatorioEstoque));
         
         // Menu Ferramentas
-        JMenu toolsMenu = new JMenu("Ferramentas");
-        toolsMenu.add(createMenuItem("Visualizar Logs", e -> verLogs(e)));
-        toolsMenu.add(createMenuItem("Limpar Logs Antigos", e -> limparLogs(e)));
+        JMenu toolsMenu = new JMenu("🔧 Ferramentas");
+        toolsMenu.add(createMenuItem("🔍 Busca Avançada", e -> abrirBuscaAvancada(e)));
+        toolsMenu.add(createMenuItem("💳 Pagamentos API", e -> abrirPagamentosAPI(e)));
+        toolsMenu.add(createMenuItem("⚡ Configuração de Cache", e -> abrirCacheConfig(e)));
+        toolsMenu.add(createMenuItem("⚙️ Configurações do Sistema", e -> abrirSistemaConfig(e)));
+        toolsMenu.addSeparator();
+        toolsMenu.add(createMenuItem("📜 Visualizar Logs", e -> verLogs(e)));
+        toolsMenu.add(createMenuItem("🗑️ Limpar Logs Antigos", e -> limparLogs(e)));
         
         // Menu Ajuda
         JMenu helpMenu = new JMenu("Ajuda");
         helpMenu.add(createMenuItem("Sobre", this::mostrarSobre));
         
         menuBar.add(fileMenu);
+        menuBar.add(cadastrosMenu);
         menuBar.add(operationsMenu);
+        menuBar.add(financeiroMenu);
+        menuBar.add(estoqueMenu);
         menuBar.add(reportsMenu);
         menuBar.add(toolsMenu);
         menuBar.add(helpMenu);
@@ -851,7 +882,7 @@ public class PDVPrincipalSwingController {
     private void gerenciarEstoque(ActionEvent e) {
         try {
             System.out.println("Abrindo tela de controle de estoque...");
-            com.br.hermescomercial.erp.controller.ERPEstoqueSwingController estoqueController = new com.br.hermescomercial.erp.controller.ERPEstoqueSwingController();
+            new com.br.hermescomercial.erp.controller.ERPEstoqueSwingController();
             // O frame já é setVisible(true) no construtor
             statusLabel.setText("Controle de estoque aberto");
         } catch (Exception ex) {
@@ -1216,7 +1247,8 @@ public class PDVPrincipalSwingController {
      */
     private void abrirDashboard(ActionEvent e) {
         try {
-            PDVDashboardSwingController.mostrarDashboard();
+            PDVDashboardAnalyticsController dashboard = new PDVDashboardAnalyticsController();
+            dashboard.showDashboard();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir Dashboard: " + ex.getMessage(), 
@@ -1468,5 +1500,183 @@ public class PDVPrincipalSwingController {
         panel.add(buttonPanel, BorderLayout.CENTER);
         
         return panel;
+    }
+    
+    /**
+     * Abre a tela de Fornecedores
+     */
+    private void abrirFornecedores(ActionEvent e) {
+        try {
+            FornecedorSwingController controller = new FornecedorSwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Fornecedores: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Nova Venda
+     */
+    private void abrirVenda(ActionEvent e) {
+        try {
+            PDVVendaSwingController controller = new PDVVendaSwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Nova Venda: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Caixa
+     */
+    private void abrirCaixa(ActionEvent e) {
+        try {
+            PDVCaixaSwingController controller = new PDVCaixaSwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Caixa: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Fechar Caixa
+     */
+    private void fecharCaixa(ActionEvent e) {
+        try {
+            PDVFecharCaixaSwingController controller = new PDVFecharCaixaSwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Fechar Caixa: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Templates de Relatórios
+     */
+    private void abrirTemplatesRelatorio(ActionEvent e) {
+        try {
+            TemplateRelatorioSwingController controller = new TemplateRelatorioSwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Templates de Relatórios: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Export/Import
+     */
+    private void abrirExportImport(ActionEvent e) {
+        try {
+            ExportImportSwingController controller = new ExportImportSwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Export/Import: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Busca Avançada
+     */
+    private void abrirBuscaAvancada(ActionEvent e) {
+        try {
+            BuscaAvancadaSwingController controller = new BuscaAvancadaSwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Busca Avançada: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Pagamentos API
+     */
+    private void abrirPagamentosAPI(ActionEvent e) {
+        try {
+            PagamentoAPISwingController controller = new PagamentoAPISwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Pagamentos API: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Configuração de Cache
+     */
+    private void abrirCacheConfig(ActionEvent e) {
+        try {
+            CacheConfigSwingController controller = new CacheConfigSwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Configuração de Cache: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Abre a tela de Configurações do Sistema
+     */
+    private void abrirSistemaConfig(ActionEvent e) {
+        try {
+            SistemaConfigSwingController controller = new SistemaConfigSwingController();
+            controller.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir Configurações do Sistema: " + ex.getMessage(), 
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Mostra mensagem de funcionalidade em desenvolvimento
+     */
+    private void mostrarEmDesenvolvimento(ActionEvent e, String funcionalidade) {
+        JOptionPane.showMessageDialog(mainFrame, 
+            funcionalidade + " em desenvolvimento...\n\n" +
+            "Esta funcionalidade estará disponível em breve!", 
+            "Em Desenvolvimento", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    /**
+     * Relatório de Clientes
+     */
+    private void relatorioClientes(ActionEvent e) {
+        try {
+            PDVRelatoriosSwingController relatoriosController = new PDVRelatoriosSwingController();
+            relatoriosController.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir relatório de clientes: " + ex.getMessage(), 
+                "Relatórios", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Relatório de Estoque
+     */
+    private void relatorioEstoque(ActionEvent e) {
+        try {
+            PDVRelatoriosSwingController relatoriosController = new PDVRelatoriosSwingController();
+            relatoriosController.show();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Erro ao abrir relatório de estoque: " + ex.getMessage(), 
+                "Relatórios", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }
