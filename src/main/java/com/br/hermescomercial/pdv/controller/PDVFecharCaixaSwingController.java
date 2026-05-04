@@ -269,6 +269,7 @@ public class PDVFecharCaixaSwingController {
             "Saldo Final: " + lblSaldoFinal.getText() + "\n" +
             "Total de Movimentações: " + movimentacoes.size() +
             "\n\nConfirmar Fechamento", 
+            "Confirmar Fechamento",
             JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
         if (confirm == 0) {

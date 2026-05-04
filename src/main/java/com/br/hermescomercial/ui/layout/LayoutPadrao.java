@@ -2,9 +2,7 @@ package com.br.hermescomercial.ui.layout;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -391,7 +389,7 @@ public class LayoutPadrao {
      * Cria um painel com espaçamento padrão
      */
     public static JPanel criarPainelComEspacamento(int espacamento) {
-        JPanel painel = new JPanel(new BorderLayout(espacimento, espacimento));
+        JPanel painel = new JPanel(new BorderLayout(espacamento, espacamento));
         painel.setBackground(COR_FUNDO);
         return painel;
     }
