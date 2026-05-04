@@ -33,6 +33,11 @@ public class LayoutPadrao {
     public static final Color COR_HOVER = new Color(230, 240, 250);          // Hover azul
     public static final Color COR_PRESSED = new Color(35, 115, 165);         // Pressed azul
     
+    // ===== CORES ESPECÍFICAS PARA HEADERS =====
+    public static final Color COR_HEADER_PDV = new Color(41, 128, 185);       // Azul turquesa (PDV)
+    public static final Color COR_HEADER_ERP = new Color(142, 68, 173);        // Roxo (ERP)
+    public static final Color COR_TEXTO_HEADER = Color.WHITE;                  // Texto branco para headers
+    
     // ===== FONTES =====
     public static final Font FONTE_TITULO = new Font("Segoe UI", Font.BOLD, 18);
     public static final Font FONTE_SUBTITULO = new Font("Segoe UI", Font.BOLD, 14);
@@ -449,18 +454,18 @@ public class LayoutPadrao {
      */
     public static JPanel criarHeaderERP(String titulo, String subtitulo, String nomeUsuario, String perfilUsuario) {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(COR_PRIMARIA);
+        headerPanel.setBackground(COR_HEADER_ERP);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 80));
         
         // Painel esquerdo - Títulos
         JPanel painelEsquerdo = new JPanel(new BorderLayout(0, 5));
-        painelEsquerdo.setBackground(COR_PRIMARIA);
+        painelEsquerdo.setBackground(COR_HEADER_ERP);
         painelEsquerdo.setOpaque(false);
         
         JLabel lblTitulo = new JLabel(titulo);
         lblTitulo.setFont(FONTE_TITULO);
-        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setForeground(COR_TEXTO_HEADER);
         
         JLabel lblSubtitulo = new JLabel(subtitulo);
         lblSubtitulo.setFont(FONTE_TEXTO);
@@ -471,12 +476,12 @@ public class LayoutPadrao {
         
         // Painel direito - Informações do usuário
         JPanel painelDireito = new JPanel(new BorderLayout(0, 5));
-        painelDireito.setBackground(COR_PRIMARIA);
+        painelDireito.setBackground(COR_HEADER_ERP);
         painelDireito.setOpaque(false);
         
         JLabel lblUsuario = new JLabel(nomeUsuario);
         lblUsuario.setFont(FONTE_SUBTITULO);
-        lblUsuario.setForeground(Color.WHITE);
+        lblUsuario.setForeground(COR_TEXTO_HEADER);
         lblUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
         
         JLabel lblPerfil = new JLabel(perfilUsuario);
@@ -511,13 +516,13 @@ public class LayoutPadrao {
      */
     public static JPanel criarHeaderERPSimples(String titulo) {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(COR_PRIMARIA);
+        headerPanel.setBackground(COR_HEADER_ERP);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 60));
         
         JLabel lblTitulo = new JLabel(titulo);
         lblTitulo.setFont(FONTE_TITULO);
-        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setForeground(COR_TEXTO_HEADER);
         
         headerPanel.add(lblTitulo, BorderLayout.WEST);
         
@@ -549,14 +554,14 @@ public class LayoutPadrao {
         if (botoesAcao != null && botoesAcao.length > 0) {
             // Painel central para botões
             JPanel painelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-            painelCentral.setBackground(COR_PRIMARIA);
+            painelCentral.setBackground(COR_HEADER_ERP);
             painelCentral.setOpaque(false);
             
             for (JButton botao : botoesAcao) {
                 // Estiliza botões para o header
                 botao.setFont(FONTE_ROTULO);
                 botao.setBackground(new Color(255, 255, 255, 30)); // Branco com transparência
-                botao.setForeground(Color.WHITE);
+                botao.setForeground(COR_TEXTO_HEADER);
                 botao.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1),
                     BorderFactory.createEmptyBorder(8, 15, 8, 15)
@@ -606,14 +611,14 @@ public class LayoutPadrao {
      */
     public static JPanel criarHeaderERPSistema(String titulo, String infoSistema) {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(COR_PRIMARIA);
+        headerPanel.setBackground(COR_HEADER_ERP);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 70));
         
         // Painel esquerdo - Título
         JLabel lblTitulo = new JLabel(titulo);
         lblTitulo.setFont(FONTE_TITULO);
-        lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setForeground(COR_TEXTO_HEADER);
         
         // Painel direito - Informações do sistema
         JLabel lblInfoSistema = new JLabel(infoSistema);
@@ -623,6 +628,103 @@ public class LayoutPadrao {
         
         headerPanel.add(lblTitulo, BorderLayout.WEST);
         headerPanel.add(lblInfoSistema, BorderLayout.EAST);
+        
+        // Adiciona separador na parte inferior
+        JSeparator separador = new JSeparator(SwingConstants.HORIZONTAL);
+        separador.setForeground(COR_SECUNDARIA);
+        separador.setBackground(COR_SECUNDARIA);
+        
+        JPanel containerCompleto = new JPanel(new BorderLayout());
+        containerCompleto.setBackground(Color.WHITE);
+        containerCompleto.add(headerPanel, BorderLayout.NORTH);
+        containerCompleto.add(separador, BorderLayout.CENTER);
+        
+        return containerCompleto;
+    }
+    
+    // ===== MÉTODOS PARA HEADER PDV =====
+    
+    /**
+     * Cria um header padrão para telas do sistema PDV
+     * @param titulo - Título da tela
+     * @param subtitulo - Subtítulo/descrição da tela
+     * @param nomeUsuario - Nome do usuário logado
+     * @param perfilUsuario - Perfil/cargo do usuário
+     * @return JPanel - Header completo estilizado
+     */
+    public static JPanel criarHeaderPDV(String titulo, String subtitulo, String nomeUsuario, String perfilUsuario) {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(COR_HEADER_PDV);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 80));
+        
+        // Painel esquerdo - Títulos
+        JPanel painelEsquerdo = new JPanel(new BorderLayout(0, 5));
+        painelEsquerdo.setBackground(COR_HEADER_PDV);
+        painelEsquerdo.setOpaque(false);
+        
+        JLabel lblTitulo = new JLabel(titulo);
+        lblTitulo.setFont(FONTE_TITULO);
+        lblTitulo.setForeground(COR_TEXTO_HEADER);
+        
+        JLabel lblSubtitulo = new JLabel(subtitulo);
+        lblSubtitulo.setFont(FONTE_TEXTO);
+        lblSubtitulo.setForeground(new Color(255, 255, 255, 200)); // Branco com transparência
+        
+        painelEsquerdo.add(lblTitulo, BorderLayout.NORTH);
+        painelEsquerdo.add(lblSubtitulo, BorderLayout.CENTER);
+        
+        // Painel direito - Informações do usuário
+        JPanel painelDireito = new JPanel(new BorderLayout(0, 5));
+        painelDireito.setBackground(COR_HEADER_PDV);
+        painelDireito.setOpaque(false);
+        
+        JLabel lblUsuario = new JLabel(nomeUsuario);
+        lblUsuario.setFont(FONTE_SUBTITULO);
+        lblUsuario.setForeground(COR_TEXTO_HEADER);
+        lblUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
+        
+        JLabel lblPerfil = new JLabel(perfilUsuario);
+        lblPerfil.setFont(FONTE_ROTULO);
+        lblPerfil.setForeground(new Color(255, 255, 255, 180)); // Branco com transparência
+        lblPerfil.setHorizontalAlignment(SwingConstants.RIGHT);
+        
+        painelDireito.add(lblUsuario, BorderLayout.NORTH);
+        painelDireito.add(lblPerfil, BorderLayout.CENTER);
+        
+        // Adiciona painéis ao header
+        headerPanel.add(painelEsquerdo, BorderLayout.WEST);
+        headerPanel.add(painelDireito, BorderLayout.EAST);
+        
+        // Adiciona separador na parte inferior
+        JSeparator separador = new JSeparator(SwingConstants.HORIZONTAL);
+        separador.setForeground(COR_SECUNDARIA);
+        separador.setBackground(COR_SECUNDARIA);
+        
+        JPanel containerCompleto = new JPanel(new BorderLayout());
+        containerCompleto.setBackground(Color.WHITE);
+        containerCompleto.add(headerPanel, BorderLayout.NORTH);
+        containerCompleto.add(separador, BorderLayout.CENTER);
+        
+        return containerCompleto;
+    }
+    
+    /**
+     * Cria um header simplificado para telas do sistema PDV (apenas título)
+     * @param titulo - Título da tela
+     * @return JPanel - Header simplificado estilizado
+     */
+    public static JPanel criarHeaderPDVSimples(String titulo) {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(COR_HEADER_PDV);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 60));
+        
+        JLabel lblTitulo = new JLabel(titulo);
+        lblTitulo.setFont(FONTE_TITULO);
+        lblTitulo.setForeground(COR_TEXTO_HEADER);
+        
+        headerPanel.add(lblTitulo, BorderLayout.WEST);
         
         // Adiciona separador na parte inferior
         JSeparator separador = new JSeparator(SwingConstants.HORIZONTAL);
