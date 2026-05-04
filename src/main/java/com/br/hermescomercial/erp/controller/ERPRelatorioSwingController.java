@@ -1,6 +1,6 @@
 package com.br.hermescomercial.erp.controller;
 
-import com.br.hermescomercial.theme.HermesTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -35,12 +35,12 @@ public class ERPRelatorioSwingController {
         frame.setLocationRelativeTo(null);
         
         // Aplicar tema padrão Hermes
-        frame.getContentPane().setBackground(HermesTheme.BACKGROUND_PRIMARY);
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Painel principal
         mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(HermesTheme.SPACING_XL, HermesTheme.SPACING_XL, HermesTheme.SPACING_XL, HermesTheme.SPACING_XL));
-        mainPanel.setBackground(HermesTheme.BACKGROUND_PRIMARY);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Painel superior com opções
         JPanel opcoesPanel = criarPainelOpcoes();
@@ -67,9 +67,9 @@ public class ERPRelatorioSwingController {
             "⚙️ Opções do Relatório", 
             TitledBorder.LEFT, 
             TitledBorder.TOP, 
-            HermesTheme.FONT_HEADER, 
-            HermesTheme.TEXT_PRIMARY));
-        panel.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+            LayoutPadrao.FONTE_SUBTITULO, 
+            LayoutPadrao.COR_PRIMARIA));
+        panel.setBackground(LayoutPadrao.COR_FUNDO);
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -91,7 +91,7 @@ public class ERPRelatorioSwingController {
             "Faturamento Mensal",
             "Análise de Rentabilidade"
         });
-        cbTipoRelatorio.setFont(HermesTheme.FONT_DEFAULT);
+        cbTipoRelatorio.setFont(LayoutPadrao.FONTE_CAMPO);
         cbTipoRelatorio.setBackground(Color.WHITE);
         panel.add(cbTipoRelatorio, gbc);
         
@@ -100,12 +100,9 @@ public class ERPRelatorioSwingController {
         panel.add(createLabel("Data Início:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         txtDataInicio = new JTextField(15);
-        txtDataInicio.setFont(HermesTheme.FONT_DEFAULT);
+        txtDataInicio.setFont(LayoutPadrao.FONTE_CAMPO);
         txtDataInicio.setBackground(Color.WHITE);
-        txtDataInicio.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        txtDataInicio.setBorder(LayoutPadrao.BORDA_CAMPO);
         txtDataInicio.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         panel.add(txtDataInicio, gbc);
         
@@ -114,12 +111,9 @@ public class ERPRelatorioSwingController {
         panel.add(createLabel("Data Fim:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         txtDataFim = new JTextField(15);
-        txtDataFim.setFont(HermesTheme.FONT_DEFAULT);
+        txtDataFim.setFont(LayoutPadrao.FONTE_CAMPO);
         txtDataFim.setBackground(Color.WHITE);
-        txtDataFim.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT),
-            BorderFactory.createEmptyBorder(5, 5, 5, 5)
-        ));
+        txtDataFim.setBorder(LayoutPadrao.BORDA_CAMPO);
         txtDataFim.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
         panel.add(txtDataFim, gbc);
         
@@ -128,20 +122,20 @@ public class ERPRelatorioSwingController {
         panel.add(createLabel("Formato:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         JPanel formatosPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        formatosPanel.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+        formatosPanel.setBackground(LayoutPadrao.COR_FUNDO);
         
         ckResumido = new JCheckBox("Resumido");
-        ckResumido.setFont(HermesTheme.FONT_DEFAULT);
-        ckResumido.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+        ckResumido.setFont(LayoutPadrao.FONTE_CAMPO);
+        ckResumido.setBackground(LayoutPadrao.COR_FUNDO);
         ckResumido.setSelected(true);
         
         ckDetalhado = new JCheckBox("Detalhado");
-        ckDetalhado.setFont(HermesTheme.FONT_DEFAULT);
-        ckDetalhado.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+        ckDetalhado.setFont(LayoutPadrao.FONTE_CAMPO);
+        ckDetalhado.setBackground(LayoutPadrao.COR_FUNDO);
         
         ckGraficos = new JCheckBox("Com Gráficos");
-        ckGraficos.setFont(HermesTheme.FONT_DEFAULT);
-        ckGraficos.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+        ckGraficos.setFont(LayoutPadrao.FONTE_CAMPO);
+        ckGraficos.setBackground(LayoutPadrao.COR_FUNDO);
         
         formatosPanel.add(ckResumido);
         formatosPanel.add(ckDetalhado);
@@ -152,15 +146,19 @@ public class ERPRelatorioSwingController {
         // Botões de Ação
         gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2; gbc.weightx = 1.0;
         JPanel botoesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        botoesPanel.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+        botoesPanel.setBackground(LayoutPadrao.COR_FUNDO);
         
-        btnGerar = createStyledButton("🔄 Gerar Relatório", HermesTheme.PRIMARY_COLOR, e -> gerarRelatorio());
+        btnGerar = LayoutPadrao.criarBotaoPrimario("🔄 Gerar Relatório");
+        btnGerar.addActionListener(e -> gerarRelatorio());
         
-        btnExportar = createStyledButton("📥 Exportar", HermesTheme.SUCCESS_COLOR, e -> exportarRelatorio());
+        btnExportar = LayoutPadrao.criarBotaoSucesso("📥 Exportar");
+        btnExportar.addActionListener(e -> exportarRelatorio());
         
-        btnVisualizar = createStyledButton("👁️ Visualizar", HermesTheme.SECONDARY_COLOR, e -> visualizarRelatorio());
+        btnVisualizar = LayoutPadrao.criarBotaoSecundario("👁️ Visualizar");
+        btnVisualizar.addActionListener(e -> visualizarRelatorio());
         
-        btnLimpar = createStyledButton("🗑️ Limpar", HermesTheme.WARNING_COLOR, e -> limparCampos());
+        btnLimpar = LayoutPadrao.criarBotaoAlerta("🗑️ Limpar");
+        btnLimpar.addActionListener(e -> limparCampos());
         
         botoesPanel.add(btnGerar);
         botoesPanel.add(btnExportar);
@@ -179,18 +177,15 @@ public class ERPRelatorioSwingController {
             "📋 Pré-visualização do Relatório", 
             TitledBorder.LEFT, 
             TitledBorder.TOP, 
-            HermesTheme.FONT_HEADER, 
-            HermesTheme.TEXT_PRIMARY));
-        panel.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+            LayoutPadrao.FONTE_SUBTITULO, 
+            LayoutPadrao.COR_PRIMARIA));
+        panel.setBackground(LayoutPadrao.COR_FUNDO);
         
         // Área de preview
         txtPreview = new JTextArea();
         txtPreview.setFont(new Font("Consolas", Font.PLAIN, 12));
         txtPreview.setBackground(Color.WHITE);
-        txtPreview.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT),
-            BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+        txtPreview.setBorder(LayoutPadrao.BORDA_CAMPO);
         txtPreview.setEditable(false);
         
         JScrollPane scrollPane = new JScrollPane(txtPreview);
@@ -205,11 +200,11 @@ public class ERPRelatorioSwingController {
     
     private JPanel criarPainelStatus() {
         JPanel panel = new JPanel(new BorderLayout(10, 0));
-        panel.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+        panel.setBackground(LayoutPadrao.COR_FUNDO);
         
         lblStatus = new JLabel("🔍 Pronto para gerar relatórios");
-        lblStatus.setFont(HermesTheme.FONT_DEFAULT);
-        lblStatus.setForeground(HermesTheme.TEXT_SECONDARY);
+        lblStatus.setFont(LayoutPadrao.FONTE_TEXTO);
+        lblStatus.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         panel.add(lblStatus, BorderLayout.CENTER);
         
@@ -218,14 +213,14 @@ public class ERPRelatorioSwingController {
     
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(HermesTheme.FONT_DEFAULT);
-        label.setForeground(HermesTheme.TEXT_PRIMARY);
+        label.setFont(LayoutPadrao.FONTE_TEXTO);
+        label.setForeground(LayoutPadrao.COR_TEXTO);
         return label;
     }
     
     private JButton createStyledButton(String text, Color bgColor, ActionListener action) {
         JButton button = new JButton(text);
-        button.setFont(HermesTheme.FONT_BUTTON);
+        button.setFont(LayoutPadrao.FONTE_BOTAO);
         button.setBackground(bgColor);
         button.setForeground(Color.WHITE);
         button.setBorder(BorderFactory.createCompoundBorder(
@@ -251,7 +246,7 @@ public class ERPRelatorioSwingController {
         }
         
         lblStatus.setText("⏳ Gerando relatório...");
-        lblStatus.setForeground(HermesTheme.WARNING_COLOR);
+        lblStatus.setForeground(LayoutPadrao.COR_ALERTA);
         
         // Simular geração do relatório
         SwingUtilities.invokeLater(() -> {
@@ -264,11 +259,11 @@ public class ERPRelatorioSwingController {
                 txtPreview.setCaretPosition(0);
                 
                 lblStatus.setText("✅ Relatório gerado com sucesso!");
-                lblStatus.setForeground(HermesTheme.SUCCESS_COLOR);
+                lblStatus.setForeground(LayoutPadrao.COR_SUCESSO);
                 
             } catch (Exception e) {
                 lblStatus.setText("❌ Erro ao gerar relatório: " + e.getMessage());
-                lblStatus.setForeground(HermesTheme.DANGER_COLOR);
+                lblStatus.setForeground(LayoutPadrao.COR_PERIGO);
             }
         });
     }
@@ -380,7 +375,7 @@ public class ERPRelatorioSwingController {
                     "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 
                 lblStatus.setText("📁 Relatório exportado: " + fileToSave.getName());
-                lblStatus.setForeground(HermesTheme.SUCCESS_COLOR);
+                lblStatus.setForeground(LayoutPadrao.COR_SUCESSO);
                 
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(frame, 
@@ -414,7 +409,8 @@ public class ERPRelatorioSwingController {
         
         // Botão de impressão
         JPanel botoesPanel = new JPanel(new FlowLayout());
-        JButton btnImprimir = createStyledButton("🖨️ Imprimir", HermesTheme.PRIMARY_COLOR, e -> imprimirRelatorio(txtPreview.getText()));
+        JButton btnImprimir = LayoutPadrao.criarBotaoPrimario("🖨️ Imprimir");
+        btnImprimir.addActionListener(e -> imprimirRelatorio(txtPreview.getText()));
         botoesPanel.add(btnImprimir);
         
         visualizacaoFrame.add(botoesPanel, BorderLayout.SOUTH);
@@ -454,7 +450,7 @@ public class ERPRelatorioSwingController {
         txtPreview.setText("");
         
         lblStatus.setText("🔍 Pronto para gerar relatórios");
-        lblStatus.setForeground(HermesTheme.TEXT_SECONDARY);
+        lblStatus.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
     }
     
     // ==================== MÉTODOS PÚBLICOS ====================
