@@ -438,4 +438,204 @@ public class LayoutPadrao {
             componente.setBorder(BORDA_PADRAO);
         }
     }
+    
+    // ===== MÉTODOS PARA HEADER ERP =====
+    
+    /**
+     * Cria um header padrão para telas do sistema ERP
+     * @param titulo - Título da tela
+     * @param subtitulo - Subtítulo/descrição da tela
+     * @param nomeUsuario - Nome do usuário logado
+     * @param perfilUsuario - Perfil/cargo do usuário
+     * @return JPanel - Header completo estilizado
+     */
+    public static JPanel criarHeaderERP(String titulo, String subtitulo, String nomeUsuario, String perfilUsuario) {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(COR_PRIMARIA);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 80));
+        
+        // Painel esquerdo - Títulos
+        JPanel painelEsquerdo = new JPanel(new BorderLayout(0, 5));
+        painelEsquerdo.setBackground(COR_PRIMARIA);
+        painelEsquerdo.setOpaque(false);
+        
+        JLabel lblTitulo = new JLabel(titulo);
+        lblTitulo.setFont(FONTE_TITULO);
+        lblTitulo.setForeground(Color.WHITE);
+        
+        JLabel lblSubtitulo = new JLabel(subtitulo);
+        lblSubtitulo.setFont(FONTE_TEXTO);
+        lblSubtitulo.setForeground(new Color(255, 255, 255, 200)); // Branco com transparência
+        
+        painelEsquerdo.add(lblTitulo, BorderLayout.NORTH);
+        painelEsquerdo.add(lblSubtitulo, BorderLayout.CENTER);
+        
+        // Painel direito - Informações do usuário
+        JPanel painelDireito = new JPanel(new BorderLayout(0, 5));
+        painelDireito.setBackground(COR_PRIMARIA);
+        painelDireito.setOpaque(false);
+        
+        JLabel lblUsuario = new JLabel(nomeUsuario);
+        lblUsuario.setFont(FONTE_SUBTITULO);
+        lblUsuario.setForeground(Color.WHITE);
+        lblUsuario.setHorizontalAlignment(SwingConstants.RIGHT);
+        
+        JLabel lblPerfil = new JLabel(perfilUsuario);
+        lblPerfil.setFont(FONTE_ROTULO);
+        lblPerfil.setForeground(new Color(255, 255, 255, 180)); // Branco com transparência
+        lblPerfil.setHorizontalAlignment(SwingConstants.RIGHT);
+        
+        painelDireito.add(lblUsuario, BorderLayout.NORTH);
+        painelDireito.add(lblPerfil, BorderLayout.CENTER);
+        
+        // Adiciona painéis ao header
+        headerPanel.add(painelEsquerdo, BorderLayout.WEST);
+        headerPanel.add(painelDireito, BorderLayout.EAST);
+        
+        // Adiciona separador na parte inferior
+        JSeparator separador = new JSeparator(SwingConstants.HORIZONTAL);
+        separador.setForeground(COR_SECUNDARIA);
+        separador.setBackground(COR_SECUNDARIA);
+        
+        JPanel containerCompleto = new JPanel(new BorderLayout());
+        containerCompleto.setBackground(Color.WHITE);
+        containerCompleto.add(headerPanel, BorderLayout.NORTH);
+        containerCompleto.add(separador, BorderLayout.CENTER);
+        
+        return containerCompleto;
+    }
+    
+    /**
+     * Cria um header simplificado para telas do sistema ERP (apenas título)
+     * @param titulo - Título da tela
+     * @return JPanel - Header simplificado estilizado
+     */
+    public static JPanel criarHeaderERPSimples(String titulo) {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(COR_PRIMARIA);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 60));
+        
+        JLabel lblTitulo = new JLabel(titulo);
+        lblTitulo.setFont(FONTE_TITULO);
+        lblTitulo.setForeground(Color.WHITE);
+        
+        headerPanel.add(lblTitulo, BorderLayout.WEST);
+        
+        // Adiciona separador na parte inferior
+        JSeparator separador = new JSeparator(SwingConstants.HORIZONTAL);
+        separador.setForeground(COR_SECUNDARIA);
+        separador.setBackground(COR_SECUNDARIA);
+        
+        JPanel containerCompleto = new JPanel(new BorderLayout());
+        containerCompleto.setBackground(Color.WHITE);
+        containerCompleto.add(headerPanel, BorderLayout.NORTH);
+        containerCompleto.add(separador, BorderLayout.CENTER);
+        
+        return containerCompleto;
+    }
+    
+    /**
+     * Cria um header com botões de ação para telas do sistema ERP
+     * @param titulo - Título da tela
+     * @param subtitulo - Subtítulo/descrição da tela
+     * @param nomeUsuario - Nome do usuário logado
+     * @param perfilUsuario - Perfil/cargo do usuário
+     * @param botoesAcao - Array de botões de ação
+     * @return JPanel - Header completo com botões estilizado
+     */
+    public static JPanel criarHeaderERPComBotoes(String titulo, String subtitulo, String nomeUsuario, String perfilUsuario, JButton... botoesAcao) {
+        JPanel headerPrincipal = criarHeaderERP(titulo, subtitulo, nomeUsuario, perfilUsuario);
+        
+        if (botoesAcao != null && botoesAcao.length > 0) {
+            // Painel central para botões
+            JPanel painelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+            painelCentral.setBackground(COR_PRIMARIA);
+            painelCentral.setOpaque(false);
+            
+            for (JButton botao : botoesAcao) {
+                // Estiliza botões para o header
+                botao.setFont(FONTE_ROTULO);
+                botao.setBackground(new Color(255, 255, 255, 30)); // Branco com transparência
+                botao.setForeground(Color.WHITE);
+                botao.setBorder(BorderFactory.createCompoundBorder(
+                    BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1),
+                    BorderFactory.createEmptyBorder(8, 15, 8, 15)
+                ));
+                botao.setFocusPainted(false);
+                botao.setOpaque(true);
+                
+                // Adiciona efeito hover
+                botao.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseEntered(MouseEvent e) {
+                        botao.setBackground(new Color(255, 255, 255, 50));
+                    }
+                    
+                    @Override
+                    public void mouseExited(MouseEvent e) {
+                        botao.setBackground(new Color(255, 255, 255, 30));
+                    }
+                    
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        botao.setBackground(new Color(255, 255, 255, 70));
+                    }
+                    
+                    @Override
+                    public void mouseReleased(MouseEvent e) {
+                        botao.setBackground(new Color(255, 255, 255, 50));
+                    }
+                });
+                
+                painelCentral.add(botao);
+            }
+            
+            // Insere painel central no header
+            JPanel headerPanel = (JPanel) headerPrincipal.getComponent(0);
+            headerPanel.add(painelCentral, BorderLayout.CENTER);
+        }
+        
+        return headerPrincipal;
+    }
+    
+    /**
+     * Cria um header com informações do sistema
+     * @param titulo - Título da tela
+     * @param infoSistema - Informações do sistema (versão, data, etc)
+     * @return JPanel - Header com informações do sistema
+     */
+    public static JPanel criarHeaderERPSistema(String titulo, String infoSistema) {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(COR_PRIMARIA);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 70));
+        
+        // Painel esquerdo - Título
+        JLabel lblTitulo = new JLabel(titulo);
+        lblTitulo.setFont(FONTE_TITULO);
+        lblTitulo.setForeground(Color.WHITE);
+        
+        // Painel direito - Informações do sistema
+        JLabel lblInfoSistema = new JLabel(infoSistema);
+        lblInfoSistema.setFont(FONTE_PEQUENA);
+        lblInfoSistema.setForeground(new Color(255, 255, 255, 150)); // Branco com transparência
+        lblInfoSistema.setHorizontalAlignment(SwingConstants.RIGHT);
+        
+        headerPanel.add(lblTitulo, BorderLayout.WEST);
+        headerPanel.add(lblInfoSistema, BorderLayout.EAST);
+        
+        // Adiciona separador na parte inferior
+        JSeparator separador = new JSeparator(SwingConstants.HORIZONTAL);
+        separador.setForeground(COR_SECUNDARIA);
+        separador.setBackground(COR_SECUNDARIA);
+        
+        JPanel containerCompleto = new JPanel(new BorderLayout());
+        containerCompleto.setBackground(Color.WHITE);
+        containerCompleto.add(headerPanel, BorderLayout.NORTH);
+        containerCompleto.add(separador, BorderLayout.CENTER);
+        
+        return containerCompleto;
+    }
 }
