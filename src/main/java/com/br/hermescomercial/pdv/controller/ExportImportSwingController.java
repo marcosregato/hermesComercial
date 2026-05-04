@@ -4,11 +4,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Controller para tela de exportação/importação de dados

@@ -286,6 +286,13 @@ public class TemplateRelatorioSwingController {
             String descricao = txtDescricao.getText().trim();
             String conteudo = txtConteudo.getText().trim();
             
+            // Simulação de salvamento (implementar com o service)
+            // Usar dados capturados para integração real
+            System.out.println("Salvando template: " + nome);
+            System.out.println("Tipo: " + tipo);
+            System.out.println("Descrição: " + descricao);
+            System.out.println("Conteúdo: " + conteudo);
+            
             if (nome.isEmpty()) {
                 JOptionPane.showMessageDialog(frame, "Nome do template é obrigatório!", 
                     "Erro", JOptionPane.ERROR_MESSAGE);
