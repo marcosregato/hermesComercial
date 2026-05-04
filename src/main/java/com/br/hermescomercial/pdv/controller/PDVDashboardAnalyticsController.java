@@ -4,8 +4,7 @@ import com.br.hermescomercial.service.DashboardService;
 import com.br.hermescomercial.ui.chart.BarChartPanel;
 import com.br.hermescomercial.ui.chart.LineChartPanel;
 import com.br.hermescomercial.ui.kpi.KPIPanel;
-import com.br.hermescomercial.theme.OceanoTheme;
-import com.br.hermescomercial.theme.ModernLayout;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -67,16 +66,15 @@ public class PDVDashboardAnalyticsController {
     
     private void initializeComponents() {
         // Frame principal
-        dashboardFrame = new JFrame("📊 Dashboard Analytics - Hermes Comercial");
+        dashboardFrame = new JFrame("📊 Dashboard Analytics v2.8.3 - LayoutPadrao");
         dashboardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         dashboardFrame.setSize(1200, 800);
         dashboardFrame.setLocationRelativeTo(null);
         dashboardFrame.setExtendedState(JFrame.MAXIMIZED_HORIZ);
         
-        // Painel principal
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(OceanoTheme.BACKGROUND);
-        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        // Painel principal com LayoutPadrao
+        mainPanel = LayoutPadrao.criarPainelComMargem(20);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Header
         createHeaderPanel();
@@ -96,19 +94,17 @@ public class PDVDashboardAnalyticsController {
     
     private void createHeaderPanel() {
         headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(OceanoTheme.PRIMARY);
+        headerPanel.setBackground(LayoutPadrao.COR_PRIMARIA);
         headerPanel.setBorder(new EmptyBorder(15, 20, 15, 20));
         headerPanel.setPreferredSize(new Dimension(0, 80));
         
-        // Título
-        JLabel titleLabel = new JLabel("📊 Dashboard Analytics");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        // Título com LayoutPadrao
+        JLabel titleLabel = LayoutPadrao.criarRotuloTitulo("📊 Dashboard Analytics");
         titleLabel.setForeground(Color.WHITE);
         
-        // Subtítulo
-        JLabel subtitleLabel = new JLabel("Análise de vendas e métricas de negócio");
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        subtitleLabel.setForeground(new Color(255, 255, 255, 200));
+        // Subtítulo com LayoutPadrao
+        JLabel subtitleLabel = LayoutPadrao.criarRotuloTexto("Análise de vendas e métricas de negócio");
+        subtitleLabel.setForeground(new Color(200, 220, 240));
         
         // Painel de título
         JPanel titlePanel = new JPanel(new BorderLayout());
@@ -120,34 +116,23 @@ public class PDVDashboardAnalyticsController {
         JPanel filterHeaderPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
         filterHeaderPanel.setOpaque(false);
         
-        // Período
+        // Período com LayoutPadrao
         String[] periodos = {"Hoje", "Últimos 7 dias", "Últimos 30 dias", "Este mês", "Últimos 3 meses", "Este ano"};
-        cbPeriodo = new JComboBox<>(periodos);
-        cbPeriodo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        cbPeriodo.setBackground(Color.WHITE);
-        cbPeriodo.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1),
-            BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
+        cbPeriodo = LayoutPadrao.criarComboBox(periodos);
         
-        // Ano
+        // Ano com LayoutPadrao
         String[] anos = {"2024", "2023", "2022", "2021", "2020"};
-        cbAno = new JComboBox<>(anos);
-        cbAno.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        cbAno.setBackground(Color.WHITE);
-        cbAno.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1),
-            BorderFactory.createEmptyBorder(5, 10, 5, 10)
-        ));
+        cbAno = LayoutPadrao.criarComboBox(anos);
         cbAno.setSelectedItem("2024");
         
-        // Botões
-        btnAtualizar = ModernLayout.createModernButton("🔄 Atualizar", new Color(46, 204, 113));
-        btnExportar = ModernLayout.createModernButton("📥 Exportar", new Color(52, 152, 219));
+        // Botões com LayoutPadrao
+        btnAtualizar = LayoutPadrao.criarBotaoSucesso("🔄 Atualizar");
+        btnExportar = LayoutPadrao.criarBotaoPrimario("📥 Exportar");
         
-        filterHeaderPanel.add(new JLabel("Período:"));
+        // Rótulos com LayoutPadrao
+        filterHeaderPanel.add(LayoutPadrao.criarRotuloCampo("Período:"));
         filterHeaderPanel.add(cbPeriodo);
-        filterHeaderPanel.add(new JLabel("Ano:"));
+        filterHeaderPanel.add(LayoutPadrao.criarRotuloCampo("Ano:"));
         filterHeaderPanel.add(cbAno);
         filterHeaderPanel.add(btnAtualizar);
         filterHeaderPanel.add(btnExportar);
@@ -158,7 +143,7 @@ public class PDVDashboardAnalyticsController {
     
     private void createKPIPanel() {
         kpiPanel = new JPanel(new GridLayout(2, 3, 15, 15));
-        kpiPanel.setBackground(OceanoTheme.BACKGROUND);
+        kpiPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         kpiPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
         
         // Criar KPIs
@@ -179,12 +164,12 @@ public class PDVDashboardAnalyticsController {
     
     private void createChartsPanel() {
         chartsPanel = new JPanel(new BorderLayout());
-        chartsPanel.setBackground(OceanoTheme.BACKGROUND);
+        chartsPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Criar abas para diferentes visualizações
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        tabbedPane.setBackground(OceanoTheme.BACKGROUND);
+        tabbedPane.setFont(LayoutPadrao.FONTE_ROTULO);
+        tabbedPane.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Gráfico de vendas diárias
         JPanel dailyPanel = createDailySalesPanel();
@@ -203,7 +188,7 @@ public class PDVDashboardAnalyticsController {
     
     private JPanel createDailySalesPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(OceanoTheme.BACKGROUND);
+        panel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Gráfico de barras para vendas diárias
         dailySalesChart = new BarChartPanel("Vendas Diárias - Últimos 7 Dias", null);
@@ -214,7 +199,7 @@ public class PDVDashboardAnalyticsController {
     
     private JPanel createWeeklySalesPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(OceanoTheme.BACKGROUND);
+        panel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Gráfico de linhas para vendas semanais
         weeklySalesChart = new LineChartPanel("Vendas Semanais - Últimas 4 Semanas", null);
@@ -225,7 +210,7 @@ public class PDVDashboardAnalyticsController {
     
     private JPanel createMonthlySalesPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(OceanoTheme.BACKGROUND);
+        panel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Gráfico de barras para vendas mensais
         monthlySalesChart = new BarChartPanel("Vendas Mensais - 2024", null);
@@ -236,62 +221,56 @@ public class PDVDashboardAnalyticsController {
     
     private void createTopProductsPanel() {
         topProductsPanel = new JPanel(new BorderLayout());
-        topProductsPanel.setBackground(OceanoTheme.BACKGROUND);
+        topProductsPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         topProductsPanel.setBorder(new EmptyBorder(20, 0, 0, 0));
         
-        // Título
-        JLabel titleLabel = new JLabel("🏆 Top Produtos Mais Vendidos");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        // Título com LayoutPadrao
+        JLabel titleLabel = LayoutPadrao.criarRotuloSubtitulo("🏆 Top Produtos Mais Vendidos");
         titleLabel.setForeground(Color.WHITE);
         
         // Tabela de top produtos
         String[] columns = {"Código", "Produto", "Quantidade", "Valor Total"};
         Object[][] data = new Object[0][4];
         
-        JTable topProductsTable = new JTable(data, columns);
-        topProductsTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JTable topProductsTable = LayoutPadrao.criarTabela();
+        topProductsTable.setModel(new javax.swing.table.DefaultTableModel(data, columns));
         topProductsTable.setRowHeight(25);
-        topProductsTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        topProductsTable.getTableHeader().setBackground(OceanoTheme.PRIMARY);
-        topProductsTable.getTableHeader().setForeground(Color.WHITE);
         
-        // Scroll pane
-        JScrollPane scrollPane = new JScrollPane(topProductsTable);
+        // Scroll pane com LayoutPadrao
+        JScrollPane scrollPane = LayoutPadrao.criarBarraRolagem(topProductsTable);
         scrollPane.setPreferredSize(new Dimension(0, 200));
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         
         topProductsPanel.add(titleLabel, BorderLayout.NORTH);
         topProductsPanel.add(scrollPane, BorderLayout.CENTER);
     }
     
     private void createFilterPanel() {
-        // Painel de informações
+        // Painel de informações com LayoutPadrao
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        infoPanel.setBackground(OceanoTheme.BACKGROUND);
+        infoPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        lblUltimaAtualizacao = new JLabel("Última atualização: " + 
+        lblUltimaAtualizacao = LayoutPadrao.criarRotuloTexto("Última atualização: " + 
             LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-        lblUltimaAtualizacao.setFont(new Font("Segoe UI", Font.ITALIC, 11));
-        lblUltimaAtualizacao.setForeground(Color.GRAY);
+        lblUltimaAtualizacao.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         infoPanel.add(lblUltimaAtualizacao);
         
         // Adicionar ao painel principal
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.setBackground(OceanoTheme.BACKGROUND);
+        bottomPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         bottomPanel.add(infoPanel, BorderLayout.WEST);
         
         mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
     
     private void setupLayout() {
-        // Montar layout principal
+        // Montar layout principal com LayoutPadrao
         JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBackground(OceanoTheme.BACKGROUND);
+        contentPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Painel superior com KPIs e gráficos
         JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(OceanoTheme.BACKGROUND);
+        topPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         topPanel.add(kpiPanel, BorderLayout.NORTH);
         topPanel.add(chartsPanel, BorderLayout.CENTER);
         
