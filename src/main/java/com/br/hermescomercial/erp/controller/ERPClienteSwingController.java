@@ -82,7 +82,7 @@ public class ERPClienteSwingController {
         btnExportar.addActionListener(e -> exportarClientesPDV());
         
         JButton btnRelatorio = LayoutPadrao.criarBotaoSecundario("📊 Relatório");
-        btnRelatorio.addActionListener(e -> gerarRelatorio());
+        btnRelatorio.addActionListener(e -> mostrarEmDesenvolvimento());
         
         buttonPanel.add(btnImportar);
         buttonPanel.add(btnExportar);
@@ -110,7 +110,7 @@ public class ERPClienteSwingController {
         gbc.gridwidth = 2;
         formPanel.add(LayoutPadrao.criarRotuloCampo("🔍 Busca:"), gbc);
         
-        txtBusca = LayoutPadrao.criarCampoTexto();
+        txtBusca = LayoutPadrao.criarCampoTexto(20);
         gbc.gridx = 2;
         gbc.weightx = 1.0;
         formPanel.add(txtBusca, gbc);
@@ -122,7 +122,7 @@ public class ERPClienteSwingController {
         gbc.weightx = 0.0;
         formPanel.add(LayoutPadrao.criarRotuloCampo("Nome:"), gbc);
         
-        txtNome = LayoutPadrao.criarCampoTexto();
+        txtNome = LayoutPadrao.criarCampoTexto(20);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         formPanel.add(txtNome, gbc);
@@ -132,7 +132,7 @@ public class ERPClienteSwingController {
         gbc.weightx = 0.0;
         formPanel.add(LayoutPadrao.criarRotuloCampo("CPF/CNPJ:"), gbc);
         
-        txtCpfCnpj = LayoutPadrao.criarCampoTexto();
+        txtCpfCnpj = LayoutPadrao.criarCampoTexto(20);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         formPanel.add(txtCpfCnpj, gbc);
@@ -142,7 +142,7 @@ public class ERPClienteSwingController {
         gbc.weightx = 0.0;
         formPanel.add(LayoutPadrao.criarRotuloCampo("Telefone:"), gbc);
         
-        txtTelefone = LayoutPadrao.criarCampoTexto();
+        txtTelefone = LayoutPadrao.criarCampoTexto(20);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         formPanel.add(txtTelefone, gbc);
@@ -152,7 +152,7 @@ public class ERPClienteSwingController {
         gbc.weightx = 0.0;
         formPanel.add(LayoutPadrao.criarRotuloCampo("Email:"), gbc);
         
-        txtEmail = LayoutPadrao.criarCampoTexto();
+        txtEmail = LayoutPadrao.criarCampoTexto(20);
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         formPanel.add(txtEmail, gbc);
@@ -448,6 +448,19 @@ public class ERPClienteSwingController {
                     "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+    
+    private void mostrarEmDesenvolvimento() {
+        JOptionPane.showMessageDialog(frame, 
+            "🚧 Funcionalidade em Desenvolvimento\n\n" +
+            "Relatório de Clientes:\n" +
+            "• Relatório de clientes cadastrados\n" +
+            "• Filtros por período e status\n" +
+            "• Exportação para PDF/Excel\n\n" +
+            "Esta funcionalidade estará disponível\n" +
+            "em versões futuras do sistema.", 
+            "Funcionalidade em Desenvolvimento", 
+            JOptionPane.INFORMATION_MESSAGE);
     }
     
     // ==================== MÉTODOS PÚBLICOS ====================
