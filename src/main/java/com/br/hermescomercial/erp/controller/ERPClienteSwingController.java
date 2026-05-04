@@ -1,6 +1,6 @@
 package com.br.hermescomercial.erp.controller;
 
-import com.br.hermescomercial.theme.ModernTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -27,22 +27,21 @@ public class ERPClienteSwingController {
     }
     
     private void initializeUI() {
-        frame = new JFrame("👥 Gestão de Clientes - ERP");
+        frame = new JFrame("👥 Gestão de Clientes v2.8.3 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(1200, 800);
+        frame.setSize(1000, 700);
         frame.setLocationRelativeTo(null);
         
-        // Aplicar tema moderno
-        frame.getContentPane().setBackground(ModernTheme.BACKGROUND_PRIMARY);
+        // Configurar fundo com LayoutPadrao
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         createMainPanel();
         frame.setVisible(true);
     }
     
     private void createMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setOpaque(false);
-        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        JPanel mainPanel = LayoutPadrao.criarPainelComMargem(20);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Header
         createHeaderPanel();
@@ -65,26 +64,29 @@ public class ERPClienteSwingController {
     
     private JPanel createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setOpaque(false);
+        headerPanel.setBackground(LayoutPadrao.COR_PRIMARIA);
         headerPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
         
-        // Título
-        JLabel titleLabel = new JLabel("👥 Gestão de Clientes");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        // Título com LayoutPadrao
+        JLabel titleLabel = LayoutPadrao.criarRotuloTitulo("👥 Gestão de Clientes");
+        titleLabel.setForeground(Color.WHITE);
         
         // Botões de ação
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false);
         
-        JButton btnImportar = createModernButton("📥 Importar do PDV", ModernTheme.SUCCESS_COLOR);
+        JButton btnImportar = LayoutPadrao.criarBotaoSucesso("📥 Importar do PDV");
         btnImportar.addActionListener(e -> importarClientesPDV());
         
-        JButton btnExportar = createModernButton("📤 Exportar para PDV", ModernTheme.PRIMARY_COLOR);
+        JButton btnExportar = LayoutPadrao.criarBotaoPrimario("📤 Exportar para PDV");
         btnExportar.addActionListener(e -> exportarClientesPDV());
+        
+        JButton btnRelatorio = LayoutPadrao.criarBotaoSecundario("📊 Relatório");
+        btnRelatorio.addActionListener(e -> gerarRelatorio());
         
         buttonPanel.add(btnImportar);
         buttonPanel.add(btnExportar);
+        buttonPanel.add(btnRelatorio);
         
         headerPanel.add(titleLabel, BorderLayout.WEST);
         headerPanel.add(buttonPanel, BorderLayout.EAST);
@@ -93,8 +95,7 @@ public class ERPClienteSwingController {
     }
     
     private JPanel createFormPanel() {
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setOpaque(false);
+        JPanel formPanel = LayoutPadrao.criarPainelBranco();
         formPanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -103,28 +104,25 @@ public class ERPClienteSwingController {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.weightx = 0.0;
         
-        // Campo de busca
+        // Campo de busca com LayoutPadrao
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
-        formPanel.add(new JLabel("🔍 Busca:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("🔍 Busca:"), gbc);
         
-        txtBusca = new JTextField(20);
-        txtBusca.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtBusca.setPreferredSize(new Dimension(200, 30));
+        txtBusca = LayoutPadrao.criarCampoTexto();
         gbc.gridx = 2;
         gbc.weightx = 1.0;
         formPanel.add(txtBusca, gbc);
         
-        // Dados do cliente
+        // Dados do cliente com LayoutPadrao
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.gridwidth = 1;
         gbc.weightx = 0.0;
-        formPanel.add(new JLabel("Nome:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("Nome:"), gbc);
         
-        txtNome = new JTextField(20);
-        txtNome.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtNome = LayoutPadrao.criarCampoTexto();
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         formPanel.add(txtNome, gbc);
@@ -132,10 +130,9 @@ public class ERPClienteSwingController {
         gbc.gridx = 0;
         gbc.gridy = 2;
         gbc.weightx = 0.0;
-        formPanel.add(new JLabel("CPF/CNPJ:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("CPF/CNPJ:"), gbc);
         
-        txtCpfCnpj = new JTextField(20);
-        txtCpfCnpj.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtCpfCnpj = LayoutPadrao.criarCampoTexto();
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         formPanel.add(txtCpfCnpj, gbc);
@@ -143,10 +140,9 @@ public class ERPClienteSwingController {
         gbc.gridx = 0;
         gbc.gridy = 3;
         gbc.weightx = 0.0;
-        formPanel.add(new JLabel("Telefone:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("Telefone:"), gbc);
         
-        txtTelefone = new JTextField(20);
-        txtTelefone.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtTelefone = LayoutPadrao.criarCampoTexto();
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         formPanel.add(txtTelefone, gbc);
@@ -154,10 +150,9 @@ public class ERPClienteSwingController {
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.weightx = 0.0;
-        formPanel.add(new JLabel("E-mail:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("Email:"), gbc);
         
-        txtEmail = new JTextField(20);
-        txtEmail.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        txtEmail = LayoutPadrao.criarCampoTexto();
         gbc.gridx = 1;
         gbc.weightx = 1.0;
         formPanel.add(txtEmail, gbc);
@@ -172,13 +167,13 @@ public class ERPClienteSwingController {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.setOpaque(false);
         
-        btnNovo = createModernButton("➕ Novo", ModernTheme.SUCCESS_COLOR);
+        btnNovo = LayoutPadrao.criarBotaoSucesso("➕ Novo");
         btnNovo.addActionListener(e -> limparFormulario());
         
-        btnSalvar = createModernButton("💾 Salvar", ModernTheme.PRIMARY_COLOR);
+        btnSalvar = LayoutPadrao.criarBotaoPrimario("💾 Salvar");
         btnSalvar.addActionListener(e -> salvarCliente());
         
-        btnCancelar = createModernButton("❌ Cancelar", ModernTheme.DANGER_COLOR);
+        btnCancelar = LayoutPadrao.criarBotaoPerigo("❌ Cancelar");
         btnCancelar.addActionListener(e -> limparFormulario());
         
         buttonPanel.add(btnNovo);
@@ -191,23 +186,21 @@ public class ERPClienteSwingController {
     }
     
     private JPanel createTablePanel() {
-        JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setOpaque(false);
+        JPanel tablePanel = LayoutPadrao.criarPainelBranco();
         tablePanel.setBorder(new EmptyBorder(10, 10, 10, 10));
         
-        // Título da tabela
-        JLabel titleLabel = new JLabel("📋 Lista de Clientes");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        titleLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        // Título da tabela com LayoutPadrao
+        JLabel titleLabel = LayoutPadrao.criarRotuloSubtitulo("📋 Lista de Clientes");
+        titleLabel.setForeground(LayoutPadrao.COR_TEXTO);
         
         // Botões de ação da tabela
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         buttonPanel.setOpaque(false);
         
-        btnEditar = createModernButton("✏️ Editar", ModernTheme.WARNING_COLOR);
+        btnEditar = LayoutPadrao.criarBotaoAlerta("✏️ Editar");
         btnEditar.addActionListener(e -> editarCliente());
         
-        btnExcluir = createModernButton("🗑️ Excluir", ModernTheme.DANGER_COLOR);
+        btnExcluir = LayoutPadrao.criarBotaoPerigo("🗑️ Excluir");
         btnExcluir.addActionListener(e -> excluirCliente());
         
         buttonPanel.add(btnEditar);
@@ -236,12 +229,9 @@ public class ERPClienteSwingController {
             }
         };
         
-        clientesTable = new JTable(tableModel);
-        clientesTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        clientesTable = LayoutPadrao.criarTabela();
+        clientesTable.setModel(tableModel);
         clientesTable.setRowHeight(25);
-        clientesTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        clientesTable.getTableHeader().setBackground(ModernTheme.PRIMARY_COLOR);
-        clientesTable.getTableHeader().setForeground(Color.WHITE);
         
         // Adicionar dados de exemplo
         carregarDadosExemplo();
@@ -256,10 +246,10 @@ public class ERPClienteSwingController {
             }
         });
         
-        JScrollPane scrollPane = new JScrollPane(clientesTable);
+        JScrollPane scrollPane = LayoutPadrao.criarBarraRolagem(clientesTable);
         scrollPane.setPreferredSize(new Dimension(1150, 350));
         scrollPane.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            LayoutPadrao.BORDA_PADRAO,
             new EmptyBorder(5, 5, 5, 5)
         ));
         
