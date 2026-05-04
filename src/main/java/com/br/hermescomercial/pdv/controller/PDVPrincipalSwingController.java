@@ -9,9 +9,7 @@ import com.br.hermescomercial.erp.controller.ERPProdutoSwingController;
 import com.br.hermescomercial.erp.controller.ERPClienteSwingController;
 import com.br.hermescomercial.erp.controller.ERPFinanceiroSwingController;
 import com.br.hermescomercial.erp.controller.ERPRelatorioSwingController;
-import com.br.hermescomercial.theme.ModernTheme;
-import com.br.hermescomercial.theme.OceanoTheme;
-import com.br.hermescomercial.theme.ModernLayout;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 /**
  * Controller principal do PDV em SWING
@@ -31,21 +29,19 @@ public class PDVPrincipalSwingController {
     private JButton btnConfiguracoes;
     
     public PDVPrincipalSwingController() {
-        // Aplicar tema Oceano
-        OceanoTheme.applyTheme();
+        // Usar LayoutPadrao - tema Oceano aplicado automaticamente
         initializeUI();
     }
     
     private void initializeUI() {
-        // Aplicar tema moderno
-        ModernTheme.applyModernTheme();
-        mainFrame = new JFrame("Hermes Comercial PDV v2.3.0 - Premium");
+        // Usar LayoutPadrao - tema consistente em todo sistema
+        mainFrame = new JFrame("Hermes Comercial PDV v2.8.3 - Production-Ready");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1200, 800);
         mainFrame.setLocationRelativeTo(null);
         
-        // Configurar fundo elegante - padrão Nova Venda
-        mainFrame.getContentPane().setBackground(ModernTheme.BACKGROUND_PRIMARY);
+        // Configurar fundo com LayoutPadrao
+        mainFrame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO);
         
         createMenuBar();
         createMainPanel();
@@ -148,59 +144,15 @@ public class PDVPrincipalSwingController {
     
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(8, 12, 12, 12));
-        panel.setBackground(OceanoTheme.PRIMARY);
-        panel.setPreferredSize(new Dimension(0, 75));
+        panel.setBackground(LayoutPadrao.COR_PRIMARIA);
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         
-        // Logo da empresa à esquerda
-        try {
-            ImageIcon logoIcon = new ImageIcon(getClass().getResource("/img/logo.png"));
-            Image scaledImage = logoIcon.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-            JLabel logoLabel = new JLabel(new ImageIcon(scaledImage));
-            logoLabel.setBorder(BorderFactory.createEmptyBorder(0, 8, 0, 8));
-            panel.add(logoLabel, BorderLayout.WEST);
-        } catch (Exception e) {
-            // Se não conseguir carregar o logo, continua sem ele
-        }
-        
-        // Título central elegante com tema Oceano
-        JLabel titleLabel = new JLabel(" Hermes Comercial PDV v2.8.0 - Oceano", JLabel.CENTER);
-        titleLabel.setFont(OceanoTheme.FONT_TITLE);
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setOpaque(true);
-        titleLabel.setBackground(new Color(26, 188, 156)); // Azul Turquesa igual ao painel
-        
-        // Botão elegante com tema Oceano e ícone
-        JButton btnInfo = OceanoTheme.createOceanoButton("ℹ️ Informações", OceanoTheme.ACCENT);
-        btnInfo.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(OceanoTheme.ACCENT, 2),
-            BorderFactory.createEmptyBorder(8, 16, 8, 16)
-        ));
-        btnInfo.setFocusPainted(false);
-        btnInfo.setOpaque(true);
-        btnInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Efeito hover elegante
-        btnInfo.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnInfo.setBackground(new Color(127, 140, 141)); // Cinza mais escuro suave
-                btnInfo.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(108, 117, 125), 2), // Cinza ainda mais escuro
-                    BorderFactory.createEmptyBorder(8, 16, 8, 16)
-                ));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnInfo.setBackground(new Color(149, 165, 166)); // Cinza azulado suave
-                btnInfo.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(127, 140, 141), 2), // Cinza borda suave
-                    BorderFactory.createEmptyBorder(8, 16, 8, 16)
-                ));
-            }
-        });
+        // Botão de informações com LayoutPadrao
+        JButton btnInfo = LayoutPadrao.criarBotaoSecundario("ℹ️");
         btnInfo.addActionListener(e -> {
             JOptionPane.showMessageDialog(mainFrame, 
-                "Hermes Comercial PDV v2.0 - Premium\n" +
-                "Sistema de Ponto de Venda Completo\n\n" +
+                "🏪 Hermes Comercial PDV v2.8.3\n" +
+                "Sistema de Gestão Comercial Professional\n\n" +
                 "Funcionalidades:\n" +
                 "• Gestão de Vendas\n" +
                 "• Controle de Caixa\n" +
@@ -210,10 +162,16 @@ public class PDVPrincipalSwingController {
                 "Sobre", JOptionPane.INFORMATION_MESSAGE);
         });
         
-        // Data e hora atual elegante
-        JLabel lblDataHora = new JLabel(java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")), JLabel.RIGHT);
-        lblDataHora.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        lblDataHora.setForeground(new Color(255, 255, 255)); // Branco elegante
+        // Título com LayoutPadrao
+        JLabel titleLabel = LayoutPadrao.criarRotuloTitulo("🏪 Hermes Comercial PDV - Sistema Principal");
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        // Data e hora com LayoutPadrao
+        JLabel lblDataHora = LayoutPadrao.criarRotuloTexto(
+            java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+        lblDataHora.setForeground(Color.WHITE);
+        lblDataHora.setHorizontalAlignment(SwingConstants.RIGHT);
         lblDataHora.setOpaque(true);
         
         panel.add(btnInfo, BorderLayout.WEST);
@@ -223,95 +181,23 @@ public class PDVPrincipalSwingController {
         return panel;
     }
     
-        
-    private void createMainPanel() {
-        // Painel principal com design moderno e responsivo
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
-        mainPanel.setBackground(new Color(248, 249, 250)); // Cinza muito suave moderno
-        
-        // Header padrão Nova Venda
-        JPanel headerPanel = createHeaderPanel();
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
-        
-        // Painel central com painel de boas-vindas e informações
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setOpaque(false);
-        centerPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-        
-        // Painel de boas-vindas
-        JPanel welcomePanel = createWelcomePanel();
-        centerPanel.add(welcomePanel, BorderLayout.NORTH);
-        
-        // Painel de funcionalidades agrupadas
-        JPanel featuresPanel = createFeaturesPanel();
-        centerPanel.add(featuresPanel, BorderLayout.CENTER);
-        
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-        
-        // Painel de status e rodapé
-        JPanel footerPanel = createFooterPanel();
-        mainPanel.add(footerPanel, BorderLayout.SOUTH);
-    }
-    
-    private JPanel createWelcomePanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setOpaque(false);
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
-        
-        // Título principal
-        JLabel titleLabel = new JLabel("🏪 Bem-vindo ao Hermes Comercial PDV", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        titleLabel.setForeground(new Color(44, 62, 80)); // Azul escuro moderno
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 5, 0));
-        
-        // Subtítulo informativo
-        JLabel subtitleLabel = new JLabel("Sistema completo de gestão de ponto de venda", SwingConstants.CENTER);
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        subtitleLabel.setForeground(new Color(127, 140, 141)); // Cinza moderno
-        
-        // Painel de informações rápidas
-        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        infoPanel.setOpaque(false);
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-        
-        JLabel infoLabel = new JLabel("📅 " + java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) + 
-                                   " | ⏰ " + java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm")) +
-                                   " | 👤 Operador: Administrador");
-        infoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        infoLabel.setForeground(new Color(52, 73, 94)); // Azul suave
-        
-        infoPanel.add(infoLabel);
-        
-        JPanel titleContainer = new JPanel(new BorderLayout());
-        titleContainer.setOpaque(false);
-        titleContainer.add(titleLabel, BorderLayout.NORTH);
-        titleContainer.add(subtitleLabel, BorderLayout.CENTER);
-        titleContainer.add(infoPanel, BorderLayout.SOUTH);
-        
-        panel.add(titleContainer, BorderLayout.CENTER);
-        
-        return panel;
-    }
-    
     private JPanel createFeaturesPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setOpaque(false);
+        JPanel panel = LayoutPadrao.criarPainelBranco();
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            LayoutPadrao.BORDA_PADRAO,
+            BorderFactory.createEmptyBorder(25, 25, 25, 25)
+        ));
+        panel.setLayout(new BorderLayout());
         
-        // Título das funcionalidades
-        JLabel featuresTitle = new JLabel("🚀 Funcionalidades Principais", SwingConstants.CENTER);
-        featuresTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        featuresTitle.setForeground(new Color(44, 62, 80));
+        JLabel featuresTitle = LayoutPadrao.criarRotuloSubtitulo("🚀 Funcionalidades Principais");
+        featuresTitle.setForeground(LayoutPadrao.COR_TEXTO);
         featuresTitle.setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 0));
         
-        // Painel de botões organizados por categorias
+        // Painel de botões
         JPanel buttonsContainer = new JPanel(new BorderLayout());
         buttonsContainer.setOpaque(false);
         
-        // Painel de operações principais
         JPanel mainOpsPanel = createMainOperationsPanel();
-        
-        // Painel de operações secundárias
         JPanel secondaryOpsPanel = createSecondaryOperationsPanel();
         
         buttonsContainer.add(mainOpsPanel, BorderLayout.CENTER);
@@ -323,16 +209,40 @@ public class PDVPrincipalSwingController {
         return panel;
     }
     
+    private JPanel createWelcomePanel() {
+        JPanel panel = LayoutPadrao.criarPainelBranco();
+        panel.setBorder(BorderFactory.createCompoundBorder(
+            LayoutPadrao.BORDA_PADRAO,
+            BorderFactory.createEmptyBorder(20, 25, 20, 25)
+        ));
+        
+        JLabel welcomeLabel = LayoutPadrao.criarRotuloSubtitulo(
+            "👋 Bem-vindo ao Hermes Comercial PDV!\n" +
+            "Sistema profissional de gestão comercial v2.8.3");
+        welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        welcomeLabel.setForeground(LayoutPadrao.COR_TEXTO);
+        
+        panel.add(welcomeLabel, BorderLayout.CENTER);
+        return panel;
+    }
+    
     private JPanel createMainOperationsPanel() {
         JPanel panel = new JPanel(new GridLayout(2, 3, 15, 15));
         panel.setOpaque(false);
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
         
-        // Botões principais com design melhorado
-        btnNovaVenda = createEnhancedButton("🛒 Nova Venda", "Iniciar nova venda", new Color(46, 204, 113), this::abrirNovaVenda);
-        btnConsultarProduto = createEnhancedButton("📦 Consultar Produtos", "Consultar produtos", new Color(52, 152, 219), this::consultarProdutos);
-        btnClientes = createEnhancedButton("👥 Clientes", "Gerenciar clientes", new Color(155, 89, 182), this::gerenciarClientes);
-        btnCaixa = createEnhancedButton("💰 Caixa", "Operações de caixa", new Color(241, 196, 15), e -> {
+        // Botões com LayoutPadrao
+        btnNovaVenda = LayoutPadrao.criarBotaoSucesso("🛒 Nova Venda");
+        btnNovaVenda.addActionListener(this::abrirNovaVenda);
+        
+        btnConsultarProduto = LayoutPadrao.criarBotaoPrimario("📦 Consultar Produtos");
+        btnConsultarProduto.addActionListener(this::consultarProdutos);
+        
+        btnClientes = LayoutPadrao.criarBotaoSecundario("👥 Clientes");
+        btnClientes.addActionListener(this::gerenciarClientes);
+        
+        btnCaixa = LayoutPadrao.criarBotaoAlerta("💰 Caixa");
+        btnCaixa.addActionListener(e -> {
             try {
                 PDVCaixaSwingController caixaController = new PDVCaixaSwingController();
                 caixaController.show();
@@ -343,8 +253,12 @@ public class PDVPrincipalSwingController {
                     "Caixa", JOptionPane.ERROR_MESSAGE);
             }
         });
-        btnRelatorios = createEnhancedButton("📊 Relatórios", "Gerar relatórios", new Color(230, 126, 34), this::verRelatorios);
-        btnConfiguracoes = createEnhancedButton("⚙️ Configurações", "Configurar sistema", new Color(149, 165, 166), this::abrirConfiguracoes);
+        
+        btnRelatorios = LayoutPadrao.criarBotaoPrimario("📊 Relatórios");
+        btnRelatorios.addActionListener(this::verRelatorios);
+        
+        btnConfiguracoes = LayoutPadrao.criarBotaoSecundario("⚙️ Configurações");
+        btnConfiguracoes.addActionListener(this::abrirConfiguracoes);
         
         panel.add(btnNovaVenda);
         panel.add(btnConsultarProduto);
@@ -374,27 +288,25 @@ public class PDVPrincipalSwingController {
     
     private JPanel createFooterPanel() {
         JPanel panel = new JPanel(new BorderLayout());
-        panel.setOpaque(false);
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+        panel.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        panel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        // Status label melhorado
-        statusLabel = new JLabel("✅ Sistema pronto para uso");
-        statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        // Status com LayoutPadrao
+        statusLabel = LayoutPadrao.criarRotuloTexto("🟢 Sistema pronto");
         statusLabel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(46, 204, 113), 1),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+            LayoutPadrao.BORDA_PADRAO,
+            BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
-        statusLabel.setBackground(new Color(240, 255, 240));
-        statusLabel.setForeground(new Color(27, 94, 32));
+        statusLabel.setBackground(LayoutPadrao.COR_FUNDO);
+        statusLabel.setForeground(LayoutPadrao.COR_SUCESSO);
         statusLabel.setOpaque(true);
         
         // Painel de informações do sistema
         JPanel systemInfoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         systemInfoPanel.setOpaque(false);
         
-        JLabel versionLabel = new JLabel("Hermes Comercial PDV v2.3.0");
-        versionLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
-        versionLabel.setForeground(new Color(127, 140, 141));
+        JLabel versionLabel = LayoutPadrao.criarRotuloTexto("Hermes Comercial PDV v2.8.3");
+        versionLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         systemInfoPanel.add(versionLabel);
         
@@ -404,43 +316,9 @@ public class PDVPrincipalSwingController {
         return panel;
     }
     
-    private JButton createEnhancedButton(String text, String tooltip, Color color, ActionListener action) {
-        JButton button = new JButton(text);
-        button.setBackground(color);
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(color.darker(), 1),
-            BorderFactory.createEmptyBorder(15, 20, 15, 20)
-        ));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.setToolTipText(tooltip);
-        button.addActionListener(action);
-        button.setOpaque(true);
-        
-        // Efeito hover melhorado
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(color.darker());
-                button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(color.darker().darker(), 2),
-                    BorderFactory.createEmptyBorder(15, 20, 15, 20)
-                ));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(color);
-                button.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(color.darker(), 1),
-                    BorderFactory.createEmptyBorder(15, 20, 15, 20)
-                ));
-            }
-        });
-        
-        return button;
-    }
+    // Método createEnhancedButton removido - usando LayoutPadrao
+    // LayoutPadrao já fornece botões com efeitos hover automáticos
     
-        
     // Métodos de ação
     private void abrirNovaVenda(ActionEvent e) {
         try {
@@ -805,7 +683,6 @@ public class PDVPrincipalSwingController {
         }
     }
     
-        
     private void abrirConfiguracoes(ActionEvent e) {
         try {
             System.out.println("Abrindo módulo de configurações");
