@@ -2,7 +2,7 @@ package com.br.hermescomercial.pdv.controller;
 
 import com.br.hermescomercial.shared.model.DashboardMetric;
 import com.br.hermescomercial.pdv.service.DashboardService;
-import com.br.hermescomercial.theme.ModernTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -54,33 +54,31 @@ public class PDVDashboardSwingController {
     }
     
     private void initializeUI() {
-        // Aplicar tema moderno
-        ModernTheme.applyModernTheme();
+        // Usar LayoutPadrao - tema consistente
         
-        frame = new JFrame("📊 Dashboard Analítico - Hermes Comercial PDV");
+        frame = new JFrame("📊 Dashboard Analítico v2.8.3 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1200, 800);
         frame.setLocationRelativeTo(null);
         
-        // Configurar fundo
-        frame.getContentPane().setBackground(ModernTheme.BACKGROUND_PRIMARY);
+        // Configurar fundo com LayoutPadrao
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         createMainPanel();
         frame.add(mainPanel);
     }
     
     private void createMainPanel() {
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setOpaque(false);
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        mainPanel = LayoutPadrao.criarPainelComMargem(20);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        // Header melhorado
+        // Header com LayoutPadrao
         createHeaderPanel();
         
         // Painel central com abas melhoradas
         JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        tabbedPane.setBackground(ModernTheme.BACKGROUND_PRIMARY);
+        tabbedPane.setFont(LayoutPadrao.FONTE_SUBTITULO);
+        tabbedPane.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         tabbedPane.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         
         // Aba KPIs com ícone melhorado
@@ -100,20 +98,18 @@ public class PDVDashboardSwingController {
     
     private void createHeaderPanel() {
         JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setOpaque(false);
+        headerPanel.setBackground(LayoutPadrao.COR_PRIMARIA);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
         
         // Painel esquerdo com título e subtítulo
         JPanel leftPanel = new JPanel(new BorderLayout());
         leftPanel.setOpaque(false);
         
-        JLabel titleLabel = new JLabel("📊 Dashboard Analítico");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        titleLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        JLabel titleLabel = LayoutPadrao.criarRotuloTitulo("📊 Dashboard Analítico");
+        titleLabel.setForeground(Color.WHITE);
         
-        JLabel subtitleLabel = new JLabel("Visão geral das métricas e desempenho do negócio");
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        subtitleLabel.setForeground(ModernTheme.TEXT_SECONDARY);
+        JLabel subtitleLabel = LayoutPadrao.criarRotuloTexto("Visão geral das métricas e desempenho do negócio");
+        subtitleLabel.setForeground(new Color(200, 220, 240));
         
         leftPanel.add(titleLabel, BorderLayout.NORTH);
         leftPanel.add(subtitleLabel, BorderLayout.CENTER);
@@ -127,13 +123,13 @@ public class PDVDashboardSwingController {
         infoPanel.setOpaque(false);
         
         // Data de atualização com ícone
-        JLabel dataLabel = new JLabel("🕒 " + java.time.LocalDateTime.now().format(
+        JLabel dataLabel = LayoutPadrao.criarRotuloTexto("🕒 " + 
+            java.time.LocalDateTime.now().format(
             java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        dataLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        dataLabel.setForeground(ModernTheme.TEXT_SECONDARY);
+        dataLabel.setForeground(new Color(200, 220, 240));
         
-        // Botão atualizar estilizado
-        JButton btnAtualizar = createModernButton("🔄 Atualizar", ModernTheme.PRIMARY_COLOR);
+        // Botão atualizar com LayoutPadrao
+        JButton btnAtualizar = LayoutPadrao.criarBotaoPrimario("🔄 Atualizar");
         btnAtualizar.addActionListener(e -> atualizarDashboard());
         btnAtualizar.setToolTipText("Atualizar dados do dashboard");
         
@@ -160,27 +156,26 @@ public class PDVDashboardSwingController {
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
         
-        // Adicionar KPIs reais
-        addKPICard(gbc, 0, 0, "💰", "Vendas Hoje", "R$ 18.450,00", ModernTheme.SUCCESS_COLOR);
-        addKPICard(gbc, 1, 0, "📦", "Produtos Vendidos", "127", ModernTheme.PRIMARY_COLOR);
-        addKPICard(gbc, 2, 0, "👥", "Novos Clientes", "8", ModernTheme.WARNING_COLOR);
-        addKPICard(gbc, 3, 0, "📈", "Taxa Conversão", "68%", ModernTheme.DANGER_COLOR);
+        // Adicionar KPIs reais com LayoutPadrao
+        addKPICard(gbc, 0, 0, "💰", "Vendas Hoje", "R$ 18.450,00", LayoutPadrao.COR_SUCESSO);
+        addKPICard(gbc, 1, 0, "📦", "Produtos Vendidos", "127", LayoutPadrao.COR_PRIMARIA);
+        addKPICard(gbc, 2, 0, "👥", "Novos Clientes", "8", LayoutPadrao.COR_ALERTA);
+        addKPICard(gbc, 3, 0, "📈", "Taxa Conversão", "68%", LayoutPadrao.COR_PERIGO);
         
         // Segunda linha de KPIs
-        addKPICard(gbc, 0, 1, "💳", "Ticket Médio", "R$ 145,28", ModernTheme.SUCCESS_COLOR);
-        addKPICard(gbc, 1, 1, "🎯", "Meta Mensal", "78%", ModernTheme.PRIMARY_COLOR);
-        addKPICard(gbc, 2, 1, "⭐", "Satisfação", "4.8/5", ModernTheme.WARNING_COLOR);
-        addKPICard(gbc, 3, 1, "🔄", "Taxa Retorno", "23%", ModernTheme.DANGER_COLOR);
+        addKPICard(gbc, 0, 1, "💳", "Ticket Médio", "R$ 145,28", LayoutPadrao.COR_SUCESSO);
+        addKPICard(gbc, 1, 1, "🎯", "Meta Mensal", "78%", LayoutPadrao.COR_PRIMARIA);
+        addKPICard(gbc, 2, 1, "⭐", "Satisfação", "4.8/5", LayoutPadrao.COR_ALERTA);
+        addKPICard(gbc, 3, 1, "🔄", "Taxa Retorno", "23%", LayoutPadrao.COR_PERIGO);
     }
     
     private void addKPICard(GridBagConstraints gbc, int x, int y, String icon, String title, String value, Color color) {
         gbc.gridx = x;
         gbc.gridy = y;
         
-        JPanel cardPanel = new JPanel(new BorderLayout());
-        cardPanel.setBackground(ModernTheme.BACKGROUND_CARD);
+        JPanel cardPanel = LayoutPadrao.criarPainelBranco();
         cardPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            LayoutPadrao.BORDA_PADRAO,
             new EmptyBorder(20, 20, 20, 20)
         ));
         
@@ -188,21 +183,19 @@ public class PDVDashboardSwingController {
         JPanel topPanel = new JPanel(new BorderLayout());
         topPanel.setOpaque(false);
         
-        JLabel iconLabel = new JLabel(icon);
+        JLabel iconLabel = LayoutPadrao.criarRotuloTexto(icon);
         iconLabel.setFont(new Font("Segoe UI", Font.PLAIN, 24));
         iconLabel.setForeground(color);
         
-        JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        titleLabel.setForeground(ModernTheme.TEXT_SECONDARY);
+        JLabel titleLabel = LayoutPadrao.criarRotuloCampo(title);
+        titleLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         topPanel.add(iconLabel, BorderLayout.WEST);
         topPanel.add(titleLabel, BorderLayout.EAST);
         
         // Valor principal
-        JLabel valueLabel = new JLabel(value);
-        valueLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        valueLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        JLabel valueLabel = LayoutPadrao.criarRotuloSubtitulo(value);
+        valueLabel.setForeground(LayoutPadrao.COR_TEXTO);
         
         cardPanel.add(topPanel, BorderLayout.NORTH);
         cardPanel.add(valueLabel, BorderLayout.CENTER);
@@ -210,14 +203,12 @@ public class PDVDashboardSwingController {
         // Efeito hover
         cardPanel.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                cardPanel.setBackground(new Color(ModernTheme.BACKGROUND_CARD.getRed(), 
-                                              ModernTheme.BACKGROUND_CARD.getGreen(), 
-                                              ModernTheme.BACKGROUND_CARD.getBlue() + 10));
-                cardPanel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                cardPanel.setBackground(new Color(LayoutPadrao.COR_FUNDO.getRed(), 
+                    LayoutPadrao.COR_FUNDO.getGreen(), 
+                    LayoutPadrao.COR_FUNDO.getBlue()));
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                cardPanel.setBackground(ModernTheme.BACKGROUND_CARD);
-                cardPanel.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+                cardPanel.setBackground(LayoutPadrao.COR_FUNDO);
             }
         });
         
@@ -253,17 +244,15 @@ public class PDVDashboardSwingController {
     }
     
     private JPanel createVendasPeriodoChart() {
-        JPanel chartPanel = new JPanel(new BorderLayout());
-        chartPanel.setBackground(ModernTheme.BACKGROUND_CARD);
+        JPanel chartPanel = LayoutPadrao.criarPainelBranco();
         chartPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            LayoutPadrao.BORDA_PADRAO,
             new EmptyBorder(15, 15, 15, 15)
         ));
         
-        // Título
-        JLabel titleLabel = new JLabel("📈 Vendas - Últimos 7 Dias");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        titleLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        // Título com LayoutPadrao
+        JLabel titleLabel = LayoutPadrao.criarRotuloSubtitulo("📈 Vendas - Últimos 7 Dias");
+        titleLabel.setForeground(LayoutPadrao.COR_TEXTO);
         chartPanel.add(titleLabel, BorderLayout.NORTH);
         
         // Painel do gráfico
@@ -289,7 +278,7 @@ public class PDVDashboardSwingController {
                 int maxValue = 20000;
                 
                 // Desenhar eixos
-                g2d.setColor(ModernTheme.TEXT_SECONDARY);
+                g2d.setColor(LayoutPadrao.COR_TEXTO_CLARO);
                 g2d.drawLine(padding, padding, padding, height - padding);
                 g2d.drawLine(padding, height - padding, width - padding, height - padding);
                 
@@ -302,17 +291,17 @@ public class PDVDashboardSwingController {
                     
                     // Cor da barra
                     if (valores[i] >= 17000) {
-                        g2d.setColor(ModernTheme.SUCCESS_COLOR);
+                        g2d.setColor(LayoutPadrao.COR_SUCESSO);
                     } else if (valores[i] >= 14000) {
-                        g2d.setColor(ModernTheme.WARNING_COLOR);
+                        g2d.setColor(LayoutPadrao.COR_ALERTA);
                     } else {
-                        g2d.setColor(ModernTheme.DANGER_COLOR);
+                        g2d.setColor(LayoutPadrao.COR_PERIGO);
                     }
                     
                     g2d.fillRect(x, y, barWidth, barHeight);
                     
                     // Valor no topo da barra
-                    g2d.setColor(ModernTheme.TEXT_PRIMARY);
+                    g2d.setColor(LayoutPadrao.COR_TEXTO);
                     g2d.setFont(new Font("Segoe UI", Font.BOLD, 10));
                     String valorText = "R$" + (valores[i] / 1000) + "k";
                     FontMetrics fm = g2d.getFontMetrics();
@@ -367,10 +356,10 @@ public class PDVDashboardSwingController {
                 String[] categorias = {"Vendas", "Financeiro", "Clientes", "Estoque"};
                 int[] valores = {45, 30, 15, 10};
                 Color[] cores = {
-                    ModernTheme.SUCCESS_COLOR,
-                    ModernTheme.PRIMARY_COLOR,
-                    ModernTheme.WARNING_COLOR,
-                    ModernTheme.DANGER_COLOR
+                    LayoutPadrao.COR_SUCESSO,
+                    LayoutPadrao.COR_PRIMARIA,
+                    LayoutPadrao.COR_ALERTA,
+                    LayoutPadrao.COR_PERIGO
                 };
                 
                 // Calcular total
@@ -395,7 +384,7 @@ public class PDVDashboardSwingController {
                     int labelX = centerX + (int) (Math.cos(Math.toRadians(currentAngle + arcAngle / 2 - 90)) * (radius + 20));
                     int labelY = centerY + (int) (Math.sin(Math.toRadians(currentAngle + arcAngle / 2 - 90)) * (radius + 20));
                     
-                    g2d.setColor(ModernTheme.TEXT_PRIMARY);
+                    g2d.setColor(LayoutPadrao.COR_TEXTO);
                     g2d.setFont(new Font("Segoe UI", Font.PLAIN, 10));
                     String label = categorias[i] + " (" + valores[i] + "%)";
                     FontMetrics fm = g2d.getFontMetrics();
@@ -452,23 +441,23 @@ public class PDVDashboardSwingController {
                 int maxProdutos = 600;
                 
                 // Desenhar eixos
-                g2d.setColor(ModernTheme.TEXT_SECONDARY);
+                g2d.setColor(LayoutPadrao.COR_TEXTO_CLARO);
                 g2d.drawLine(padding, padding, padding, height - padding);
                 g2d.drawLine(padding, height - padding, width - padding, height - padding);
                 
                 // Desenhar linhas
-                drawLine(g2d, vendas, maxVendas, graphWidth, graphHeight, padding, height, ModernTheme.SUCCESS_COLOR, "Vendas");
-                drawLine(g2d, clientes, maxClientes, graphWidth, graphHeight, padding, height, ModernTheme.PRIMARY_COLOR, "Clientes");
-                drawLine(g2d, produtos, maxProdutos, graphWidth, graphHeight, padding, height, ModernTheme.WARNING_COLOR, "Produtos");
+                drawLine(g2d, vendas, maxVendas, graphWidth, graphHeight, padding, height, LayoutPadrao.COR_SUCESSO, "Vendas");
+                drawLine(g2d, clientes, maxClientes, graphWidth, graphHeight, padding, height, LayoutPadrao.COR_PRIMARIA, "Clientes");
+                drawLine(g2d, produtos, maxProdutos, graphWidth, graphHeight, padding, height, LayoutPadrao.COR_ALERTA, "Produtos");
                 
                 // Legenda
                 g2d.setFont(new Font("Segoe UI", Font.PLAIN, 10));
                 int legendY = padding + 20;
-                g2d.setColor(ModernTheme.SUCCESS_COLOR);
+                g2d.setColor(LayoutPadrao.COR_SUCESSO);
                 g2d.drawString("━━ Vendas (R$)", width - 100, legendY);
-                g2d.setColor(ModernTheme.PRIMARY_COLOR);
+                g2d.setColor(LayoutPadrao.COR_PRIMARIA);
                 g2d.drawString("━━ Clientes", width - 100, legendY + 15);
-                g2d.setColor(ModernTheme.WARNING_COLOR);
+                g2d.setColor(LayoutPadrao.COR_ALERTA);
                 g2d.drawString("━━ Produtos", width - 100, legendY + 30);
             }
             
@@ -563,31 +552,27 @@ public class PDVDashboardSwingController {
     }
     
     private JPanel createKPICard(DashboardMetric metric) {
-        JPanel card = new JPanel(new BorderLayout());
-        card.setBackground(ModernTheme.BACKGROUND_CARD);
+        JPanel card = LayoutPadrao.criarPainelBranco();
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            LayoutPadrao.BORDA_PADRAO,
             new EmptyBorder(15, 15, 15, 15)
         ));
         
-        // Título
-        JLabel titleLabel = new JLabel(metric.getNome());
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        titleLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        // Título com LayoutPadrao
+        JLabel titleLabel = LayoutPadrao.criarRotuloSubtitulo(metric.getNome());
+        titleLabel.setForeground(LayoutPadrao.COR_TEXTO);
         
-        // Valor
-        JLabel valorLabel = new JLabel(metric.getValorFormatado());
+        // Valor com LayoutPadrao
+        JLabel valorLabel = LayoutPadrao.criarRotuloTexto(metric.getValorFormatado());
         valorLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        valorLabel.setForeground(metric.isPositiva() ? ModernTheme.SUCCESS_COLOR : ModernTheme.DANGER_COLOR);
+        valorLabel.setForeground(metric.isPositiva() ? LayoutPadrao.COR_SUCESSO : LayoutPadrao.COR_PERIGO);
         
-        // Variação
-        JLabel variacaoLabel = new JLabel(metric.getVariacaoFormatada());
-        variacaoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        variacaoLabel.setForeground(metric.isPositiva() ? ModernTheme.SUCCESS_COLOR : ModernTheme.DANGER_COLOR);
+        // Variação com LayoutPadrao
+        JLabel variacaoLabel = LayoutPadrao.criarRotuloTexto(metric.getVariacaoFormatada());
+        variacaoLabel.setForeground(metric.isPositiva() ? LayoutPadrao.COR_SUCESSO : LayoutPadrao.COR_PERIGO);
         
-        // Status
-        JLabel statusLabel = new JLabel(metric.getStatus().getDescricao());
-        statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 10));
+        // Status com LayoutPadrao
+        JLabel statusLabel = LayoutPadrao.criarRotuloTexto(metric.getStatus().getDescricao());
         statusLabel.setForeground(metric.getStatus().getCor());
         
         // Painel superior
@@ -669,20 +654,19 @@ public class PDVDashboardSwingController {
     }
     
     private JPanel createMetricasCalculadasCard() {
-        JPanel card = new JPanel(new GridBagLayout());
-        card.setBackground(ModernTheme.BACKGROUND_CARD);
+        JPanel card = LayoutPadrao.criarPainelBranco();
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            LayoutPadrao.BORDA_PADRAO,
             new EmptyBorder(15, 15, 15, 15)
         ));
         
         card.setBorder(new TitledBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            LayoutPadrao.BORDA_PADRAO,
             "📊 Métricas Calculadas",
             TitledBorder.LEFT,
             TitledBorder.TOP,
-            new Font("Segoe UI", Font.BOLD, 14),
-            ModernTheme.TEXT_PRIMARY
+            LayoutPadrao.FONTE_SUBTITULO,
+            LayoutPadrao.COR_TEXTO
         ));
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -693,67 +677,42 @@ public class PDVDashboardSwingController {
         BigDecimal ticketMedio = dashboardService.calcularTicketMedio();
         gbc.gridy = 0;
         gbc.gridx = 0;
-        JLabel ticketLabel = new JLabel("Ticket Médio:");
-        ticketLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        ticketLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        JLabel ticketLabel = LayoutPadrao.criarRotuloCampo("Ticket Médio:");
         card.add(ticketLabel, gbc);
         
         gbc.gridx = 1;
-        JLabel ticketValueLabel = new JLabel(currencyFormat.format(ticketMedio));
-        ticketValueLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        ticketValueLabel.setForeground(ModernTheme.TEXT_SECONDARY);
+        JLabel ticketValueLabel = LayoutPadrao.criarRotuloTexto(currencyFormat.format(ticketMedio));
         card.add(ticketValueLabel, gbc);
         
         // Margem de Lucro
         BigDecimal margemLucro = dashboardService.calcularMargemLucro();
         gbc.gridy = 1;
         gbc.gridx = 0;
-        JLabel margemLabel = new JLabel("Margem de Lucro:");
-        margemLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        margemLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        JLabel margemLabel = LayoutPadrao.criarRotuloCampo("Margem de Lucro:");
         card.add(margemLabel, gbc);
         
         gbc.gridx = 1;
-        JLabel margemValueLabel = new JLabel(percentFormat.format(margemLucro.divide(new BigDecimal("100"))));
-        margemValueLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JLabel margemValueLabel = LayoutPadrao.criarRotuloTexto(percentFormat.format(margemLucro.divide(new BigDecimal("100"))));
         margemValueLabel.setForeground(margemLucro.compareTo(BigDecimal.ZERO) >= 0 ? 
-                                     ModernTheme.SUCCESS_COLOR : ModernTheme.DANGER_COLOR);
+                                     LayoutPadrao.COR_SUCESSO : LayoutPadrao.COR_PERIGO);
+        
         card.add(margemValueLabel, gbc);
         
         return card;
-    }
-    
-    private JButton createModernButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Efeito hover
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor.brighter());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor);
-            }
-        });
-        
-        return button;
     }
     
     public void show() {
         frame.setVisible(true);
     }
     
-    // Método estático para fácil acesso
-    public static void mostrarDashboard() {
-        SwingUtilities.invokeLater(() -> {
-            PDVDashboardSwingController controller = new PDVDashboardSwingController();
-            controller.show();
-        });
+    public void dispose() {
+        frame.dispose();
     }
+}
+
+public static void mostrarDashboard() {
+    SwingUtilities.invokeLater(() -> {
+        PDVDashboardSwingController controller = new PDVDashboardSwingController();
+        controller.show();
+    });
 }
