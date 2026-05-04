@@ -6,9 +6,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import com.br.hermescomercial.erp.controller.ERPProdutoSwingController;
-import com.br.hermescomercial.erp.controller.ERPClienteSwingController;
-import com.br.hermescomercial.erp.controller.ERPFinanceiroSwingController;
-import com.br.hermescomercial.erp.controller.ERPRelatorioSwingController;
 import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 /**
