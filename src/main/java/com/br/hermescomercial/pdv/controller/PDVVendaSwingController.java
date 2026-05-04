@@ -259,7 +259,18 @@ public class PDVVendaSwingController {
         panel.setPreferredSize(new Dimension(300, 0));
         
         // Painel de resumo
-        JPanel summaryPanel = createSummaryPanel();
+        JPanel summaryPanel = LayoutPadrao.criarPainelBranco();
+        summaryPanel.setLayout(new BorderLayout());
+        summaryPanel.setBorder(BorderFactory.createTitledBorder("Resumo da Venda"));
+        
+        JLabel resumoLabel = new JLabel("<html><center>" +
+            "<b>Total: R$ 0,00</b><br>" +
+            "<small>0 itens</small>" +
+            "</center></html>", SwingConstants.CENTER);
+        resumoLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        resumoLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
+        
+        summaryPanel.add(resumoLabel, BorderLayout.CENTER);
         panel.add(summaryPanel, BorderLayout.CENTER);
         
         return panel;
@@ -456,9 +467,9 @@ public class PDVVendaSwingController {
             return;
         }
         
-        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(frame, 
             "Deseja remover este item?", "Confirmar", 
-            new String[]{"Sim", "Não"}, 0);
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
         if (confirm == 0) {
             itens.remove(selectedRow);
@@ -468,9 +479,9 @@ public class PDVVendaSwingController {
     }
     
     private void limparVenda(ActionEvent e) {
-        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(frame, 
             "Deseja limpar todos os itens da venda?", "Confirmar", 
-            new String[]{"Sim", "Não"}, 0);
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
         if (confirm == 0) {
             itens.clear();
@@ -539,10 +550,10 @@ public class PDVVendaSwingController {
             total, itens.size(), nivelRisco
         );
         
-        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(frame, 
             mensagemConfirmacao, 
             "Confirmar Venda", 
-            new String[]{"Sim", "Não"}, 0);
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
         if (confirm == 0) {
             // PASSO 4: SUBTRAIR ESTOQUE AUTOMATICAMENTE AO FINALIZAR VENDA
@@ -612,7 +623,7 @@ public class PDVVendaSwingController {
         
         BigDecimal total = calcularTotal();
         
-        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(frame, 
             String.format("⚠️ CANCELAR VENDA COM ESTORNO\n\n" +
                          "Total da venda: R$ %.2f\n" +
                          "Itens: %d\n\n" +
@@ -622,7 +633,7 @@ public class PDVVendaSwingController {
                          "• Os produtos voltarão ao estoque\n\n" +
                          "Deseja continuar?", total, itens.size()), 
             "Cancelar Venda com Estorno", 
-            new String[]{"Sim, Cancelar com Estorno", "Não"}, 0);
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
         if (confirm == 0) {
             // PASSO 1: CANCELAR A VENDA

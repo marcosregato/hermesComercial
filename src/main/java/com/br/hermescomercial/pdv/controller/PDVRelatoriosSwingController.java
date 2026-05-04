@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.print.PrinterJob;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import com.br.hermescomercial.util.LoggerUtil;
 import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 /**
