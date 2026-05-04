@@ -1284,49 +1284,6 @@ public class PDVPrincipalSwingController {
                 "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    /**
-     * Abre a tela de gestão de clientes do ERP
-     */
-    private void gerenciarClientesERP(ActionEvent e) {
-        try {
-            ERPClienteSwingController controller = new ERPClienteSwingController();
-            controller.show();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(mainFrame, 
-                "Erro ao abrir gestão de clientes: " + ex.getMessage(), 
-                "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    /**
-     * Abre a tela de gestão financeira do ERP
-     */
-    private void gerenciarFinanceiroERP(ActionEvent e) {
-        try {
-            ERPFinanceiroSwingController controller = new ERPFinanceiroSwingController();
-            controller.show();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(mainFrame, 
-                "Erro ao abrir gestão financeira: " + ex.getMessage(), 
-                "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    /**
-     * Abre a tela de relatórios do ERP
-     */
-    private void gerenciarRelatoriosERP(ActionEvent e) {
-        try {
-            ERPRelatorioSwingController controller = new ERPRelatorioSwingController();
-            controller.show();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(mainFrame, 
-                "Erro ao abrir relatórios: " + ex.getMessage(), 
-                "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
     /**
      * Cria painel de produtos para consulta (estrutura igual Nova Venda)
      */
