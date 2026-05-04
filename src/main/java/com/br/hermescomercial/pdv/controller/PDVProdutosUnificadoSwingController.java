@@ -696,12 +696,12 @@ public class PDVProdutosUnificadoSwingController {
         String codigo = (String) tableModel.getValueAt(selectedRow, 0);
         String descricao = (String) tableModel.getValueAt(selectedRow, 1);
         
-        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(frame, 
             "Deseja realmente excluir o produto?\n\n" +
             "Código: " + codigo + "\n" +
             "Descrição: " + descricao,
             "Confirmar Exclusão", 
-            new String[]{"Sim", "Não"}, 0);
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         
         if (confirm == 0) {
             // Tentar excluir do banco de dados
