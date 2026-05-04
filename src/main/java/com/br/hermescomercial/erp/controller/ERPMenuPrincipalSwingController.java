@@ -4,7 +4,6 @@ import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import com.br.hermescomercial.pdv.controller.PDVDashboardSwingController;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 /**
  * Controller para menu principal de integração do sistema ERP

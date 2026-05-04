@@ -1,6 +1,6 @@
 package com.br.hermescomercial.erp.controller;
 
-import com.br.hermescomercial.theme.HermesTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -94,8 +94,8 @@ public class ERPRelatorioFinanceiroSwingController {
         
         // Título
         JLabel titleLabel = new JLabel("📊 Relatórios Financeiros");
-        titleLabel.setFont(HermesTheme.FONT_TITLE);
-        titleLabel.setForeground(HermesTheme.TEXT_PRIMARY);
+        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
+        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
         
         // Painel de filtros
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -103,27 +103,27 @@ public class ERPRelatorioFinanceiroSwingController {
         
         filterPanel.add(new JLabel("Período:"));
         cbPeriodo = new JComboBox<>(new String[]{"Mês Atual", "Trimestre", "Semestre", "Ano", "Personalizado"});
-        cbPeriodo.setFont(HermesTheme.FONT_DEFAULT);
+        cbPeriodo.setFont(LayoutPadrao.FONTE_CAMPO);
         filterPanel.add(cbPeriodo);
         
         filterPanel.add(new JLabel("  Data Início:"));
         dcDataInicio = new JDateChooser();
-        dcDataInicio.setFont(HermesTheme.FONT_DEFAULT);
+        dcDataInicio.setFont(LayoutPadrao.FONTE_CAMPO);
         filterPanel.add(dcDataInicio);
         
         filterPanel.add(new JLabel("  Data Fim:"));
         dcDataFim = new JDateChooser();
-        dcDataFim.setFont(HermesTheme.FONT_DEFAULT);
+        dcDataFim.setFont(LayoutPadrao.FONTE_CAMPO);
         filterPanel.add(dcDataFim);
         
         // Botões de ação
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonPanel.setOpaque(false);
         
-        btnGerar = HermesTheme.createModernButton("🔄 Gerar Relatório", HermesTheme.PRIMARY_COLOR);
+        btnGerar = LayoutPadrao.criarBotaoPrimario("🔄 Gerar Relatório");
         btnGerar.addActionListener(e -> gerarRelatorios());
         
-        btnExportar = HermesTheme.createModernButton("📥 Exportar", HermesTheme.SUCCESS_COLOR);
+        btnExportar = LayoutPadrao.criarBotaoSucesso("📥 Exportar");
         btnExportar.addActionListener(e -> exportarRelatorios());
         
         buttonPanel.add(btnGerar);
@@ -138,7 +138,7 @@ public class ERPRelatorioFinanceiroSwingController {
     
     private void createTabbedPane() {
         tabbedPane = new JTabbedPane();
-        tabbedPane.setFont(HermesTheme.FONT_BOLD);
+        tabbedPane.setFont(LayoutPadrao.FONTE_BOTAO);
         tabbedPane.setBackground(PASTEL_GRAY);
         tabbedPane.setForeground(TEXT_PRIMARY);
         
@@ -206,7 +206,7 @@ public class ERPRelatorioFinanceiroSwingController {
     }
     
     private void createFluxoCaixaTab() {
-        JPanel fluxoPanel = HermesTheme.createMainPanel();
+        JPanel fluxoPanel = LayoutPadrao.criarPainelBranco();
         fluxoPanel.setLayout(new BorderLayout());
         
         // Painel de resumo Fluxo de Caixa
@@ -231,7 +231,7 @@ public class ERPRelatorioFinanceiroSwingController {
         };
         
         fluxoCaixaTable = new JTable(fluxoCaixaModel);
-        HermesTheme.applyTableTheme(fluxoCaixaTable);
+        fluxoCaixaTable = LayoutPadrao.criarTabela();
         fluxoCaixaTable.setRowHeight(30);
         
         // Renderizadores personalizados
@@ -250,7 +250,7 @@ public class ERPRelatorioFinanceiroSwingController {
     }
     
     private void createBalanceteTab() {
-        JPanel balancetePanel = HermesTheme.createMainPanel();
+        JPanel balancetePanel = LayoutPadrao.criarPainelBranco();
         balancetePanel.setLayout(new BorderLayout());
         
         // Tabela Balancete
@@ -271,7 +271,7 @@ public class ERPRelatorioFinanceiroSwingController {
         };
         
         balanceteTable = new JTable(balanceteModel);
-        HermesTheme.applyTableTheme(balanceteTable);
+        balanceteTable = LayoutPadrao.criarTabela();
         balanceteTable.setRowHeight(30);
         
         // Renderizadores personalizados
@@ -288,7 +288,7 @@ public class ERPRelatorioFinanceiroSwingController {
     }
     
     private void createContasTab() {
-        JPanel contasPanel = HermesTheme.createMainPanel();
+        JPanel contasPanel = LayoutPadrao.criarPainelBranco();
         contasPanel.setLayout(new BorderLayout());
         
         // Painel de resumo Contas
@@ -314,7 +314,7 @@ public class ERPRelatorioFinanceiroSwingController {
         };
         
         contasTable = new JTable(contasModel);
-        HermesTheme.applyTableTheme(contasTable);
+        contasTable = LayoutPadrao.criarTabela();
         contasTable.setRowHeight(30);
         
         // Renderizadores personalizados
@@ -385,11 +385,11 @@ public class ERPRelatorioFinanceiroSwingController {
         ));
         
         JLabel titleLabel = new JLabel(title);
-        titleLabel.setFont(HermesTheme.FONT_SMALL);
-        titleLabel.setForeground(HermesTheme.TEXT_MUTED);
+        titleLabel.setFont(LayoutPadrao.FONTE_PEQUENA);
+        titleLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         JLabel valueLabel = new JLabel(value);
-        valueLabel.setFont(HermesTheme.FONT_BOLD);
+        valueLabel.setFont(LayoutPadrao.FONTE_BOTAO);
         valueLabel.setForeground(color);
         
         panel.add(titleLabel, BorderLayout.NORTH);
@@ -575,7 +575,7 @@ public class ERPRelatorioFinanceiroSwingController {
         public CurrencyCellRenderer() {
             setOpaque(true);
             setHorizontalAlignment(JLabel.RIGHT);
-            setFont(HermesTheme.FONT_DEFAULT);
+            setFont(LayoutPadrao.FONTE_CAMPO);
         }
         
         @Override
@@ -583,7 +583,7 @@ public class ERPRelatorioFinanceiroSwingController {
             if (value instanceof BigDecimal) {
                 setText("R$ " + df.format(value));
                 setForeground(((BigDecimal) value).compareTo(BigDecimal.ZERO) >= 0 ? 
-                    HermesTheme.SUCCESS_COLOR : HermesTheme.DANGER_COLOR);
+                    LayoutPadrao.COR_SUCESSO : LayoutPadrao.COR_PERIGO);
             } else {
                 setText("");
             }
@@ -606,7 +606,7 @@ public class ERPRelatorioFinanceiroSwingController {
         public PercentageCellRenderer() {
             setOpaque(true);
             setHorizontalAlignment(JLabel.CENTER);
-            setFont(HermesTheme.FONT_DEFAULT);
+            setFont(LayoutPadrao.FONTE_CAMPO);
         }
         
         @Override
@@ -615,9 +615,9 @@ public class ERPRelatorioFinanceiroSwingController {
                 setText(df.format(value) + "%");
                 Double val = (Double) value;
                 if (val >= 0) {
-                    setForeground(HermesTheme.SUCCESS_COLOR);
+                    setForeground(LayoutPadrao.COR_SUCESSO);
                 } else {
-                    setForeground(HermesTheme.DANGER_COLOR);
+                    setForeground(LayoutPadrao.COR_PERIGO);
                 }
             } else {
                 setText("");
@@ -641,7 +641,7 @@ public class ERPRelatorioFinanceiroSwingController {
         public DateCellRenderer() {
             setOpaque(true);
             setHorizontalAlignment(JLabel.CENTER);
-            setFont(HermesTheme.FONT_DEFAULT);
+            setFont(LayoutPadrao.FONTE_CAMPO);
         }
         
         @Override
@@ -669,7 +669,7 @@ public class ERPRelatorioFinanceiroSwingController {
         public StatusCellRenderer() {
             setOpaque(true);
             setHorizontalAlignment(JLabel.CENTER);
-            setFont(HermesTheme.FONT_BOLD);
+            setFont(LayoutPadrao.FONTE_BOTAO);
         }
         
         @Override
@@ -680,15 +680,15 @@ public class ERPRelatorioFinanceiroSwingController {
             
             switch (status) {
                 case "Em Dia":
-                    setBackground(HermesTheme.SUCCESS_COLOR);
+                    setBackground(LayoutPadrao.COR_SUCESSO);
                     setForeground(Color.WHITE);
                     break;
                 case "Vencendo":
-                    setBackground(HermesTheme.WARNING_COLOR);
+                    setBackground(LayoutPadrao.COR_ALERTA);
                     setForeground(Color.WHITE);
                     break;
                 case "Atrasado":
-                    setBackground(HermesTheme.DANGER_COLOR);
+                    setBackground(LayoutPadrao.COR_PERIGO);
                     setForeground(Color.WHITE);
                     break;
                 default:
@@ -705,7 +705,7 @@ public class ERPRelatorioFinanceiroSwingController {
         public DiasAtrasoCellRenderer() {
             setOpaque(true);
             setHorizontalAlignment(JLabel.CENTER);
-            setFont(HermesTheme.FONT_BOLD);
+            setFont(LayoutPadrao.FONTE_BOTAO);
         }
         
         @Override
@@ -715,13 +715,13 @@ public class ERPRelatorioFinanceiroSwingController {
                 setText(dias.toString() + " dias");
                 
                 if (dias == 0) {
-                    setBackground(HermesTheme.SUCCESS_COLOR);
+                    setBackground(LayoutPadrao.COR_SUCESSO);
                     setForeground(Color.WHITE);
                 } else if (dias <= 5) {
-                    setBackground(HermesTheme.WARNING_COLOR);
+                    setBackground(LayoutPadrao.COR_ALERTA);
                     setForeground(Color.WHITE);
                 } else {
-                    setBackground(HermesTheme.DANGER_COLOR);
+                    setBackground(LayoutPadrao.COR_PERIGO);
                     setForeground(Color.WHITE);
                 }
             } else {
@@ -756,9 +756,9 @@ public class ERPRelatorioFinanceiroSwingController {
     private static class JDateChooser extends JTextField {
         public JDateChooser() {
             super(new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
-            setFont(HermesTheme.FONT_DEFAULT);
+            setFont(LayoutPadrao.FONTE_CAMPO);
             setPreferredSize(new Dimension(100, 30));
-            HermesTheme.applyTextFieldTheme(this);
+            setBorder(LayoutPadrao.BORDA_CAMPO);
         }
     }
 }
