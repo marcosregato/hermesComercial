@@ -2,7 +2,7 @@ package com.br.hermescomercial.pdv.controller;
 
 import com.br.hermescomercial.shared.model.Notificacao;
 import com.br.hermescomercial.pdv.service.NotificacaoService;
-import com.br.hermescomercial.theme.ModernTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -38,8 +38,7 @@ public class PDVNotificacaoSwingController {
     }
     
     private void initializeUI() {
-        // Aplicar tema moderno
-        ModernTheme.applyModernTheme();
+        // LayoutPadrao é aplicado diretamente nos componentes
         
         frame = new JFrame("🔔 Notificações - Hermes Comercial PDV");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -47,7 +46,7 @@ public class PDVNotificacaoSwingController {
         frame.setLocationRelativeTo(null);
         
         // Configurar fundo
-        frame.getContentPane().setBackground(ModernTheme.BACKGROUND_PRIMARY);
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO);
         
         createMainPanel();
         frame.add(mainPanel);
@@ -75,12 +74,12 @@ public class PDVNotificacaoSwingController {
         // Título
         JLabel titleLabel = new JLabel("🔔 Central de Notificações");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        titleLabel.setForeground(LayoutPadrao.COR_TEXTO);
         
         // Contador de não lidas
         contadorLabel = new JLabel("📬 Carregando...");
         contadorLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        contadorLabel.setForeground(ModernTheme.TEXT_SECONDARY);
+        contadorLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         contadorLabel.setHorizontalAlignment(SwingConstants.RIGHT);
         
         headerPanel.add(titleLabel, BorderLayout.WEST);
@@ -108,7 +107,7 @@ public class PDVNotificacaoSwingController {
         notificacaoTable.setRowHeight(30);
         notificacaoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         notificacaoTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        notificacaoTable.getTableHeader().setBackground(ModernTheme.BACKGROUND_SECONDARY);
+        notificacaoTable.getTableHeader().setBackground(LayoutPadrao.COR_SECUNDARIA);
         
         // Configurar largura das colunas
         notificacaoTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
@@ -123,7 +122,7 @@ public class PDVNotificacaoSwingController {
         JScrollPane scrollPane = new JScrollPane(notificacaoTable);
         scrollPane.setOpaque(false);
         scrollPane.getViewport().setOpaque(false);
-        scrollPane.setBorder(BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1));
+        scrollPane.setBorder(LayoutPadrao.BORDA_PADRAO);
         
         // Double click para marcar como lida
         notificacaoTable.addMouseListener(new MouseAdapter() {
@@ -145,10 +144,10 @@ public class PDVNotificacaoSwingController {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
         
         // Botões
-        btnAtualizar = createModernButton("🔄 Atualizar", ModernTheme.PRIMARY_COLOR);
-        btnMarcarLidas = createModernButton("✅ Marcar Lidas", ModernTheme.SUCCESS_COLOR);
-        btnLimparAntigas = createModernButton("🗑️ Limpar Antigas", ModernTheme.WARNING_COLOR);
-        btnFechar = createModernButton("❌ Fechar", ModernTheme.DANGER_COLOR);
+        btnAtualizar = LayoutPadrao.criarBotaoPrimario("🔄 Atualizar");
+        btnMarcarLidas = LayoutPadrao.criarBotaoSucesso("✅ Marcar Lidas");
+        btnLimparAntigas = LayoutPadrao.criarBotaoAlerta("🗑️ Limpar Antigas");
+        btnFechar = LayoutPadrao.criarBotaoPerigo("❌ Fechar");
         
         // Eventos
         btnAtualizar.addActionListener(e -> atualizarNotificacao());
@@ -162,28 +161,6 @@ public class PDVNotificacaoSwingController {
         buttonPanel.add(btnFechar);
         
         mainPanel.add(buttonPanel, BorderLayout.SOUTH);
-    }
-    
-    private JButton createModernButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Efeito hover
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor.brighter());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor);
-            }
-        });
-        
-        return button;
     }
     
     private void atualizarNotificacao() {

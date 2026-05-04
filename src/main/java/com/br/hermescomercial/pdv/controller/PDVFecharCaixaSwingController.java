@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 /**
  * Controller de Fechamento de Caixa em SWING
@@ -34,7 +35,7 @@ public class PDVFecharCaixaSwingController {
     
     public PDVFecharCaixaSwingController() {
         this.movimentacoes = new ArrayList<>(50); // Capacidade inicial para melhor performance
-        com.br.hermescomercial.theme.ModernTheme.applyModernTheme();
+        // LayoutPadrao é aplicado diretamente nos componentes
         initializeUI();
         carregarDadosExemplo();
     }
@@ -209,7 +210,7 @@ public class PDVFecharCaixaSwingController {
         btnRecalcular.setForeground(Color.WHITE);
         btnRecalcular.addActionListener(this::recalcular);
         
-        JButton btnImprimir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🖨️ Imprimir Relatório", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnImprimir = LayoutPadrao.criarBotaoSecundario("🖨️ Imprimir Relatório");
         btnImprimir.addActionListener(this::imprimirRelatorio);
         
         JButton btnConfirmar = new JButton("Confirmar Fechamento");
@@ -217,7 +218,7 @@ public class PDVFecharCaixaSwingController {
         btnConfirmar.setForeground(Color.WHITE);
         btnConfirmar.addActionListener(this::confirmarFechamento);
         
-        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnCancelar = LayoutPadrao.criarBotaoPerigo("❌ Cancelar");
         btnCancelar.addActionListener(e -> frame.dispose());
         
         panel.add(btnRecalcular);
@@ -263,12 +264,12 @@ public class PDVFecharCaixaSwingController {
     }
     
     private void confirmarFechamento(ActionEvent e) {
-        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(frame, 
             "Deseja confirmar o fechamento do caixa?\n\n" +
             "Saldo Final: " + lblSaldoFinal.getText() + "\n" +
-            "Total de Movimentações: " + movimentacoes.size(),
-            "Confirmar Fechamento", 
-            new String[]{"Sim", "Não"}, 0);
+            "Total de Movimentações: " + movimentacoes.size() +
+            "\n\nConfirmar Fechamento", 
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
         if (confirm == 0) {
             JOptionPane.showMessageDialog(frame, 
