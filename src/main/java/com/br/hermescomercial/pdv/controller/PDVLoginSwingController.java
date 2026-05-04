@@ -11,7 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import com.br.hermescomercial.util.DatabaseConfig;
-import com.br.hermescomercial.theme.ModernTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 /**
  * Controller de Login do Sistema PDV
@@ -135,14 +135,18 @@ public class PDVLoginSwingController {
         
         // Título elegante
         lblTitulo = new JLabel("HERMES COMERCIAL", SwingConstants.CENTER);
-        lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 28));
-        lblTitulo.setForeground(new Color(52, 73, 94)); // Azul suave profundo
-        lblTitulo.setOpaque(true);
-        cardGbc.gridy = 1;
-        cardGbc.insets = new Insets(0, 0, 6, 0);
-        cardPanel.add(lblTitulo, cardGbc);
+        lblTitulo.setFont(LayoutPadrao.FONTE_TITULO);
+        lblTitulo.setForeground(LayoutPadrao.COR_PRIMARIA);
+        lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
         
-        // Subtítulo elegante
+        lblUsuario = new JLabel("👤 Usuário");
+        lblUsuario.setFont(LayoutPadrao.FONTE_ROTULO);
+        lblUsuario.setForeground(LayoutPadrao.COR_TEXTO);
+        
+        lblSenha = new JLabel("🔒 Senha");
+        lblSenha.setFont(LayoutPadrao.FONTE_ROTULO);
+        lblSenha.setForeground(LayoutPadrao.COR_TEXTO);
+        
         JLabel lblSubtitulo = new JLabel("Sistema de Gestão Comercial", SwingConstants.CENTER);
         lblSubtitulo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblSubtitulo.setForeground(new Color(127, 140, 141)); // Cinza suave
@@ -155,69 +159,9 @@ public class PDVLoginSwingController {
         JPanel usuarioPanel = new JPanel(new BorderLayout());
         usuarioPanel.setOpaque(false);
         
-        lblUsuario = new JLabel("👤 Usuário");
-        lblUsuario.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lblUsuario.setForeground(new Color(149, 165, 166)); // Cinza azulado suave
-        lblUsuario.setOpaque(true);
         usuarioPanel.add(lblUsuario, BorderLayout.NORTH);
         
-        txtUsuario = new JTextField() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (getText().isEmpty()) {
-                    Graphics2D g2d = (Graphics2D) g;
-                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2d.setColor(new Color(189, 195, 199));
-                    g2d.setFont(getFont().deriveFont(Font.ITALIC));
-                    g2d.drawString("Digite seu usuário", 8, getHeight() / 2 + 5);
-                }
-            }
-            
-            @Override
-            protected void paintBorder(Graphics g) {
-                super.paintBorder(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
-                // Borda elegante com sombra sutil
-                if (isFocusOwner()) {
-                    g2d.setColor(new Color(52, 152, 219)); // Azul elegante quando focado
-                    g2d.setStroke(new BasicStroke(2.5f));
-                } else {
-                    g2d.setColor(new Color(149, 165, 166)); // Cinza suave quando sem foco
-                    g2d.setStroke(new BasicStroke(2.0f));
-                }
-                
-                // Desenhar borda arredondada
-                g2d.drawRoundRect(2, 2, getWidth() - 5, getHeight() - 5, 12, 12);
-                
-                // Sombra sutil
-                g2d.setColor(new Color(200, 200, 200, 50));
-                g2d.drawRoundRect(3, 3, getWidth() - 5, getHeight() - 5, 12, 12);
-            }
-        };
-        txtUsuario.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        txtUsuario.setPreferredSize(new Dimension(520, 60));
-        txtUsuario.setMaximumSize(new Dimension(520, 60));
-        txtUsuario.setMinimumSize(new Dimension(520, 60));
-        txtUsuario.setBackground(new Color(255, 255, 255));
-        txtUsuario.setForeground(new Color(52, 73, 94));
-        txtUsuario.setOpaque(true);
-        txtUsuario.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        txtUsuario.setCaretColor(new Color(52, 152, 219));
-        txtUsuario.setSelectionColor(new Color(52, 152, 219, 50));
-        
-        // Limitar a 20 caracteres sem validação mínima
-        txtUsuario.setDocument(new javax.swing.text.PlainDocument() {
-            @Override
-            public void insertString(int offs, String str, javax.swing.text.AttributeSet a) throws javax.swing.text.BadLocationException {
-                if (str == null) return;
-                if (getLength() + str.length() <= 20) {
-                    super.insertString(offs, str, a);
-                }
-            }
-        });
+        txtUsuario = LayoutPadrao.criarCampoTexto(20);
         usuarioPanel.add(txtUsuario, BorderLayout.CENTER);
         
         cardGbc.gridy = 3;
@@ -228,58 +172,9 @@ public class PDVLoginSwingController {
         JPanel senhaPanel = new JPanel(new BorderLayout());
         senhaPanel.setOpaque(false);
         
-        lblSenha = new JLabel("🔒 Senha");
-        lblSenha.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        lblSenha.setForeground(new Color(149, 165, 166)); // Cinza azulado suave
-        lblSenha.setOpaque(true);
         senhaPanel.add(lblSenha, BorderLayout.NORTH);
         
-        txtSenha = new JPasswordField() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (getPassword().length == 0) {
-                    Graphics2D g2d = (Graphics2D) g;
-                    g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2d.setColor(new Color(189, 195, 199));
-                    g2d.setFont(getFont().deriveFont(Font.ITALIC));
-                    g2d.drawString("Digite sua senha", 8, getHeight() / 2 + 5);
-                }
-            }
-            
-            @Override
-            protected void paintBorder(Graphics g) {
-                super.paintBorder(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
-                // Borda elegante com sombra sutil
-                if (isFocusOwner()) {
-                    g2d.setColor(new Color(52, 152, 219)); // Azul elegante quando focado
-                    g2d.setStroke(new BasicStroke(2.5f));
-                } else {
-                    g2d.setColor(new Color(149, 165, 166)); // Cinza suave quando sem foco
-                    g2d.setStroke(new BasicStroke(2.0f));
-                }
-                
-                // Desenhar borda arredondada
-                g2d.drawRoundRect(2, 2, getWidth() - 5, getHeight() - 5, 12, 12);
-                
-                // Sombra sutil
-                g2d.setColor(new Color(200, 200, 200, 50));
-                g2d.drawRoundRect(3, 3, getWidth() - 5, getHeight() - 5, 12, 12);
-            }
-        };
-        txtSenha.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        txtSenha.setPreferredSize(new Dimension(520, 60));
-        txtSenha.setMaximumSize(new Dimension(520, 60));
-        txtSenha.setMinimumSize(new Dimension(520, 60));
-        txtSenha.setBackground(new Color(255, 255, 255));
-        txtSenha.setForeground(new Color(52, 73, 94));
-        txtSenha.setOpaque(true);
-        txtSenha.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        txtSenha.setCaretColor(new Color(52, 152, 219));
-        txtSenha.setSelectionColor(new Color(52, 152, 219, 50));
+        txtSenha = LayoutPadrao.criarCampoSenha(20);
         senhaPanel.add(txtSenha, BorderLayout.CENTER);
         
         cardGbc.gridy = 4;
@@ -290,38 +185,8 @@ public class PDVLoginSwingController {
         JPanel buttonPanel = new JPanel(new GridLayout(1, 2, 30, 0));
         buttonPanel.setOpaque(false);
         
-        btnLogin = new JButton("🚀 Entrar");
-        btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnLogin.setBackground(new Color(106, 176, 76)); // Verde suave
-        btnLogin.setForeground(new Color(255, 255, 255)); // Branco elegante
-        btnLogin.setFocusPainted(false);
-        btnLogin.setOpaque(true);
-        btnLogin.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(85, 150, 60), 2), // Verde borda suave
-            BorderFactory.createEmptyBorder(12, 25, 12, 25)
-        ));
-        btnLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btnLogin.setOpaque(true);
-        
-        // Efeito hover elegante
-        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btnLogin.setBackground(new Color(85, 150, 60)); // Verde mais escuro suave
-                btnLogin.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(70, 130, 45), 2), // Verde ainda mais escuro
-                    BorderFactory.createEmptyBorder(12, 25, 12, 25)
-                ));
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btnLogin.setBackground(new Color(106, 176, 76)); // Verde suave
-                btnLogin.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(85, 150, 60), 2), // Verde borda suave
-                    BorderFactory.createEmptyBorder(12, 25, 12, 25)
-                ));
-            }
-        });
-        
-        btnSair = ModernTheme.createPastelButton("❌ Sair", ModernTheme.PASTEL_CORAL, ModernTheme.TEXT_PRIMARY);
+        btnLogin = LayoutPadrao.criarBotaoSucesso("🔐 Entrar");
+        btnSair = LayoutPadrao.criarBotaoPerigo("❌ Sair");
         
         buttonPanel.add(btnLogin);
         buttonPanel.add(btnSair);
@@ -331,11 +196,11 @@ public class PDVLoginSwingController {
         cardPanel.add(buttonPanel, cardGbc);
         
         // Status
-        lblStatus = new JLabel("Digite suas credenciais para acessar o sistema", SwingConstants.CENTER);
-        lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        lblStatus.setForeground(new Color(127, 140, 141)); // Cinza suave
+        lblStatus = LayoutPadrao.criarRotuloTexto("Digite suas credenciais para acessar o sistema");
+        lblStatus.setHorizontalAlignment(SwingConstants.CENTER);
         lblStatus.setOpaque(true);
-        lblStatus.setBackground(new Color(240, 240, 240)); // Cinza claro
+        lblStatus.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
+        lblStatus.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
         cardGbc.gridy = 6;
         cardGbc.insets = new Insets(15, 0, 0, 0);
         cardPanel.add(lblStatus, cardGbc);
@@ -468,24 +333,24 @@ public class PDVLoginSwingController {
         
         if (usuario.isEmpty() || senha.isEmpty()) {
             lblStatus.setText("⚠️ Preencha usuário e senha!");
-            lblStatus.setForeground(Color.YELLOW);
+            lblStatus.setForeground(LayoutPadrao.COR_ALERTA);
             return;
         }
         
         if (usuario.length() > 20) {
             lblStatus.setText("⚠️ Usuário deve ter no máximo 20 caracteres!");
-            lblStatus.setForeground(Color.YELLOW);
+            lblStatus.setForeground(LayoutPadrao.COR_ALERTA);
             txtUsuario.requestFocus();
             return;
         }
         
         lblStatus.setText("🔄 Autenticando...");
-        lblStatus.setForeground(Color.WHITE);
+        lblStatus.setForeground(LayoutPadrao.COR_SUCESSO);
         
         // Validar no banco de dados
         if (autenticarUsuario(usuario, senha)) {
             lblStatus.setText("✅ Login realizado com sucesso!");
-            lblStatus.setForeground(new Color(76, 175, 80));
+            lblStatus.setForeground(LayoutPadrao.COR_SUCESSO);
             
             // Abrir sistema principal
             SwingUtilities.invokeLater(() -> {
@@ -494,7 +359,7 @@ public class PDVLoginSwingController {
             });
         } else {
             lblStatus.setText("❌ Usuário ou senha inválidos!");
-            lblStatus.setForeground(Color.RED);
+            lblStatus.setForeground(LayoutPadrao.COR_PERIGO);
             txtSenha.setText("");
             txtSenha.requestFocus();
         }
