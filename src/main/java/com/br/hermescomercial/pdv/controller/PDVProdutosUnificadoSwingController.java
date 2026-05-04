@@ -2,8 +2,7 @@ package com.br.hermescomercial.pdv.controller;
 
 import com.br.hermescomercial.dao.ProdutoDao;
 import com.br.hermescomercial.util.DatabaseConfig;
-import com.br.hermescomercial.theme.OceanoTheme;
-import com.br.hermescomercial.theme.ModernLayout;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -46,21 +45,21 @@ public class PDVProdutosUnificadoSwingController {
     }
     
     private void initializeUI() {
-        frame = new JFrame("📦 Gestão de Produtos v2.1.0 - Premium");
+        frame = new JFrame("📦 Gestão de Produtos v2.8.3 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(950, 650);
         frame.setLocationRelativeTo(null);
         
-        // Configurar fundo padrão Nova Venda
-        frame.getContentPane().setBackground(new Color(245, 245, 250));
+        // Configurar fundo com LayoutPadrao
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         frame.add(createMainPanel());
     }
     
     private JPanel createMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        mainPanel.setBackground(new Color(245, 245, 250));
+        // Main panel com LayoutPadrao
+        JPanel mainPanel = LayoutPadrao.criarPainelComMargem(15);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
         mainPanel.add(createTabbedPane(), BorderLayout.CENTER);
@@ -152,18 +151,16 @@ public class PDVProdutosUnificadoSwingController {
         buscaPanel.setOpaque(false);
         buscaPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         
-        JLabel lblBusca = new JLabel("🔍 Buscar Produto:");
-        lblBusca.setFont(new Font("Arial", Font.BOLD, 14));
-        lblBusca.setForeground(new Color(41, 128, 185));
+        JLabel lblBusca = LayoutPadrao.criarRotuloCampo("🔍 Buscar Produto:");
+        lblBusca.setFont(LayoutPadrao.FONTE_SUBTITULO);
         
-        JPanel buscaInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
-        buscaInputPanel.setBackground(new Color(255, 255, 255));
-        txtBuscaConsulta = new JTextField(30);
-        txtBuscaConsulta.setFont(new Font("Arial", Font.PLAIN, 12));
-        txtBuscaConsulta.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        JButton btnBuscar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-        JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-        JButton btnAtualizar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Atualizar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CYAN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JPanel buscaInputPanel = LayoutPadrao.criarPainelBranco();
+        buscaInputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        txtBuscaConsulta = LayoutPadrao.criarCampoTexto(30);
+        JButton btnBuscar = LayoutPadrao.criarBotaoPrimario("🔍 Buscar");
+        JButton btnLimpar = LayoutPadrao.criarBotaoAlerta("🔄 Limpar");
+        JButton btnAtualizar = LayoutPadrao.criarBotaoSecundario("🔄 Atualizar");
         
         buscaInputPanel.add(txtBuscaConsulta);
         buscaInputPanel.add(btnBuscar);
@@ -184,22 +181,10 @@ public class PDVProdutosUnificadoSwingController {
             }
         };
         
-        produtosTable = new JTable(tableModel);
-        produtosTable.setFont(new Font("Segoe UI", Font.PLAIN, 12)); // Fonte suave
-        produtosTable.setRowHeight(28); // Altura suave aumentada
-        produtosTable.setSelectionBackground(OceanoTheme.TABLE_SELECTED); // Azul turquesa claro para seleção
-        produtosTable.setSelectionForeground(Color.WHITE); // Texto branco selecionado
-        produtosTable.setGridColor(OceanoTheme.TABLE_GRID); // Grade cinza claro
-        produtosTable.setBackground(Color.WHITE);
-        
-        // Desabilitar edição da tabela
+        produtosTable = LayoutPadrao.criarTabela();
+        produtosTable.setRowHeight(28);
         produtosTable.setDefaultEditor(Object.class, null);
         produtosTable.setEnabled(false);
-        
-        // Configurar header da tabela com tema Oceano
-        produtosTable.getTableHeader().setFont(OceanoTheme.FONT_BODY);
-        produtosTable.getTableHeader().setBackground(OceanoTheme.TABLE_HEADER);
-        produtosTable.getTableHeader().setForeground(Color.WHITE);
         
         // Configurar larguras das colunas
         produtosTable.getColumnModel().getColumn(0).setPreferredWidth(80);   // Código
@@ -213,17 +198,16 @@ public class PDVProdutosUnificadoSwingController {
         produtosTable.getColumnModel().getColumn(8).setPreferredWidth(80);   // Validade
         produtosTable.getColumnModel().getColumn(9).setPreferredWidth(100);  // Categoria
         
-        JScrollPane scrollPane = new JScrollPane(produtosTable);
-        scrollPane.setBorder(OceanoTheme.BORDER_DEFAULT);
-        scrollPane.setBackground(OceanoTheme.BACKGROUND);
-        scrollPane.getViewport().setBackground(Color.WHITE);
+        JScrollPane scrollPane = LayoutPadrao.criarBarraRolagem(produtosTable);
+        scrollPane.setPreferredSize(new Dimension(scrollPane.getPreferredSize().width, 300));
         
-        // Painel de botões com layout moderno
+        // Painel de botões com LayoutPadrao
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
-        buttonPanel.setBackground(OceanoTheme.BACKGROUND);
-        JButton btnEditar = ModernLayout.createModernButton("✏️ Editar Produto", OceanoTheme.PRIMARY);
-        JButton btnExcluir = ModernLayout.createModernButton("🗑️ Excluir Produto", OceanoTheme.ERROR);
-        JButton btnExportar = ModernLayout.createModernButton("📤 Exportar Lista", OceanoTheme.ACCENT);
+        buttonPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
+        
+        JButton btnEditar = LayoutPadrao.criarBotaoPrimario("✏️ Editar Produto");
+        JButton btnExcluir = LayoutPadrao.criarBotaoPerigo("🗑️ Excluir Produto");
+        JButton btnExportar = LayoutPadrao.criarBotaoSecundario("📤 Exportar Lista");
         
         btnEditar.addActionListener(e -> editarProduto());
         btnExcluir.addActionListener(e -> excluirProduto());
@@ -274,66 +258,41 @@ public class PDVProdutosUnificadoSwingController {
         
         // Código
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0;
-        formPanel.add(new JLabel("Código:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("Código:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtCodigo = new JTextField();
-        txtCodigo.setFont(new Font("Arial", Font.PLAIN, 12));
-        txtCodigo.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtCodigo = LayoutPadrao.criarCampoTexto(20);
         txtCodigo.setToolTipText("Digite o código do produto");
         formPanel.add(txtCodigo, gbc);
         
         // Descrição
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0;
-        formPanel.add(new JLabel("Descrição:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("Descrição:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtDescricao = new JTextField();
-        txtDescricao.setFont(new Font("Arial", Font.PLAIN, 12));
-        txtDescricao.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtDescricao = LayoutPadrao.criarCampoTexto(30);
         txtDescricao.setToolTipText("Digite a descrição do produto");
         formPanel.add(txtDescricao, gbc);
         
         // Preço
         gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0;
-        formPanel.add(new JLabel("Preço (R$):"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("Preço:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtPreco = new JTextField() {
-            @Override
-            public void processKeyEvent(java.awt.event.KeyEvent e) {
-                char c = e.getKeyChar();
-                
-                // Permitir apenas números, vírgula, ponto, backspace, delete, e teclas de controle
-                if (Character.isDigit(c) || c == ',' || c == '.' || 
-                    c == java.awt.event.KeyEvent.VK_BACK_SPACE || c == java.awt.event.KeyEvent.VK_DELETE ||
-                    c == java.awt.event.KeyEvent.VK_LEFT || c == java.awt.event.KeyEvent.VK_RIGHT ||
-                    c == java.awt.event.KeyEvent.VK_HOME || c == java.awt.event.KeyEvent.VK_END) {
-                    super.processKeyEvent(e);
-                } else {
-                    e.consume(); // Ignorar outros caracteres
-                }
-            }
-        };
-        txtPreco.setFont(new Font("Arial", Font.PLAIN, 12));
-        txtPreco.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtPreco = LayoutPadrao.criarCampoTexto(15);
         txtPreco.setToolTipText("Digite o preço do produto (ex: 10,50 ou 100,00)");
         formPanel.add(txtPreco, gbc);
         
         // Estoque
         gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 0;
-        formPanel.add(new JLabel("Estoque:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("Estoque:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtEstoque = new JTextField();
-        txtEstoque.setFont(new Font("Arial", Font.PLAIN, 12));
-        txtEstoque.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtEstoque = LayoutPadrao.criarCampoTexto(10);
         txtEstoque.setToolTipText("Digite a quantidade em estoque");
         formPanel.add(txtEstoque, gbc);
         
         // Categoria
         gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0;
-        formPanel.add(new JLabel("Categoria:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("Categoria:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
-        txtCategoria = new JComboBox<>();
-        txtCategoria.setFont(new Font("Arial", Font.PLAIN, 12));
-        txtCategoria.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
+        txtCategoria = LayoutPadrao.criarComboBox(new String[]{"Selecione..."});
         txtCategoria.setToolTipText("Selecione a categoria do produto");
         formPanel.add(txtCategoria, gbc);
         
@@ -343,24 +302,21 @@ public class PDVProdutosUnificadoSwingController {
         // Observações
         gbc.gridx = 0; gbc.gridy = 5; gbc.weightx = 0;
         gbc.anchor = GridBagConstraints.NORTHWEST;
-        formPanel.add(new JLabel("Observações:"), gbc);
+        formPanel.add(LayoutPadrao.criarRotuloCampo("Observações:"), gbc);
         gbc.gridx = 1; gbc.gridy = 5; gbc.weightx = 1.0; gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
-        txtObservacoes = new JTextArea(3, 20);
-        txtObservacoes.setFont(new Font("Arial", Font.PLAIN, 12));
-        txtObservacoes.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        txtObservacoes.setBackground(Color.WHITE);
+        txtObservacoes = LayoutPadrao.criarAreaTexto(3, 20);
         txtObservacoes.setToolTipText("Digite observações adicionais (opcional)");
-        JScrollPane scrollPane = new JScrollPane(txtObservacoes);
+        JScrollPane scrollPane = LayoutPadrao.criarBarraRolagem(txtObservacoes);
         formPanel.add(scrollPane, gbc);
         
-        // Painel de botões
+        // Painel de botões com LayoutPadrao
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        buttonPanel.setBackground(new Color(245, 245, 250));
+        buttonPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-        JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Fechar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnLimpar = LayoutPadrao.criarBotaoAlerta("🔄 Limpar");
+        JButton btnSalvar = LayoutPadrao.criarBotaoSucesso("💾 Salvar");
+        JButton btnCancelar = LayoutPadrao.criarBotaoPerigo("❌ Fechar");
         
         btnLimpar.addActionListener(e -> limparCampos());
         btnSalvar.addActionListener(this::salvarProduto);
