@@ -1,6 +1,6 @@
 package com.br.hermescomercial.pdv.controller;
 
-import com.br.hermescomercial.theme.ModernTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -42,26 +42,24 @@ public class PDVVendaSwingController {
     }
     
     private void initializeUI() {
-        // Aplicar tema moderno
-        ModernTheme.applyModernTheme();
+        // Usar LayoutPadrao - tema consistente
         
-        frame = new JFrame("PDV - Nova Venda v2.1.0 - Premium");
+        frame = new JFrame("PDV - Nova Venda v2.8.3 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(900, 600);
         frame.setLocationRelativeTo(null);
         
-        // Configurar fundo elegante
-        frame.getContentPane().setBackground(ModernTheme.BACKGROUND_PRIMARY);
+        // Configurar fundo com LayoutPadrao
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         frame.add(createMainPanel());
     }
     
     private JPanel createMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainPanel.setBackground(new Color(248, 249, 250)); // Fundo moderno
+        JPanel mainPanel = LayoutPadrao.criarPainelComMargem(20);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        // Header melhorado
+        // Header com LayoutPadrao
         mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
         
         // Painel central com layout otimizado
@@ -88,21 +86,14 @@ public class PDVVendaSwingController {
     
     private JPanel createHeaderPanel() {
         JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(LayoutPadrao.COR_PRIMARIA);
         panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        panel.setBackground(new Color(26, 188, 156)); // Azul Turquesa #1ABC9C
-        panel.setPreferredSize(new Dimension(0, 90));
         
-        // Painel esquerdo com botão voltar
+        // Botão voltar com LayoutPadrao
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         leftPanel.setOpaque(false);
         
-        JButton btnVoltar = new JButton("← Voltar");
-        btnVoltar.setBackground(new Color(255, 255, 255));
-        btnVoltar.setForeground(new Color(41, 128, 185));
-        btnVoltar.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnVoltar.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
-        btnVoltar.setFocusPainted(false);
-        btnVoltar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        JButton btnVoltar = LayoutPadrao.criarBotaoSecundario("⬅️ Voltar");
         btnVoltar.addActionListener(e -> frame.dispose());
         
         leftPanel.add(btnVoltar);
@@ -111,13 +102,13 @@ public class PDVVendaSwingController {
         JPanel centerPanel = new JPanel(new BorderLayout());
         centerPanel.setOpaque(false);
         
-        JLabel titleLabel = new JLabel("🛒 Nova Venda", JLabel.CENTER);
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        JLabel titleLabel = LayoutPadrao.criarRotuloTitulo("🛒 Nova Venda");
         titleLabel.setForeground(Color.WHITE);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         
-        JLabel subtitleLabel = new JLabel("Sistema de Ponto de Venda", JLabel.CENTER);
-        subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        JLabel subtitleLabel = LayoutPadrao.criarRotuloTexto("Sistema de Ponto de Venda");
         subtitleLabel.setForeground(new Color(200, 220, 240));
+        subtitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         
         centerPanel.add(titleLabel, BorderLayout.NORTH);
         centerPanel.add(subtitleLabel, BorderLayout.CENTER);
@@ -126,9 +117,9 @@ public class PDVVendaSwingController {
         JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         rightPanel.setOpaque(false);
         
-        JLabel lblDataHora = new JLabel("🕒 " + java.time.LocalDateTime.now().format(
+        JLabel lblDataHora = LayoutPadrao.criarRotuloTexto("🕒 " + 
+            java.time.LocalDateTime.now().format(
             java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        lblDataHora.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         lblDataHora.setForeground(Color.WHITE);
         
         rightPanel.add(lblDataHora);
@@ -164,17 +155,10 @@ public class PDVVendaSwingController {
             }
         };
         
-        produtosTable = new JTable(tableModel);
+        produtosTable = LayoutPadrao.criarTabela();
         produtosTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         produtosTable.getTableHeader().setReorderingAllowed(false);
         produtosTable.setRowHeight(28);
-        produtosTable.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        produtosTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
-        produtosTable.getTableHeader().setBackground(new Color(26, 188, 156)); // Azul Turquesa
-        produtosTable.getTableHeader().setForeground(Color.WHITE);
-        produtosTable.getTableHeader().setPreferredSize(new Dimension(0, 35));
-        
-        // Desabilitar edição da tabela
         produtosTable.setDefaultEditor(Object.class, null);
         produtosTable.setEnabled(false);
         
@@ -185,19 +169,20 @@ public class PDVVendaSwingController {
         produtosTable.getColumnModel().getColumn(3).setPreferredWidth(100);
         produtosTable.getColumnModel().getColumn(4).setPreferredWidth(100);
         
-        // Scroll pane com bordas elegantes
-        JScrollPane scrollPane = new JScrollPane(produtosTable);
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        scrollPane.setBackground(Color.WHITE);
+        // Scroll pane com LayoutPadrao
+        JScrollPane scrollPane = LayoutPadrao.criarBarraRolagem(produtosTable);
         scrollPane.setPreferredSize(new Dimension(0, 250));
         panel.add(scrollPane, BorderLayout.CENTER);
         
-        // Painel de botões com design moderno
+        // Painel de botões com LayoutPadrao
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        buttonPanel.setBackground(new Color(248, 249, 250));
+        buttonPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        JButton btnRemover = createActionButton("🗑️ Remover Item", new Color(231, 76, 60), this::removerItem);
-        JButton btnLimpar = createActionButton("🔄 Limpar Venda", new Color(241, 196, 15), this::limparVenda);
+        JButton btnRemover = LayoutPadrao.criarBotaoPerigo("🗑️ Remover Item");
+        JButton btnLimpar = LayoutPadrao.criarBotaoAlerta("🔄 Limpar Venda");
+        
+        btnRemover.addActionListener(this::removerItem);
+        btnLimpar.addActionListener(this::limparVenda);
         
         buttonPanel.add(btnRemover);
         buttonPanel.add(btnLimpar);
@@ -215,9 +200,8 @@ public class PDVVendaSwingController {
         ));
         panel.setBackground(new Color(255, 255, 255));
         
-        // Campos de entrada com layout melhorado
-        JPanel inputPanel = new JPanel(new GridBagLayout());
-        inputPanel.setBackground(new Color(255, 255, 255));
+        // Campos de entrada com LayoutPadrao
+        JPanel inputPanel = LayoutPadrao.criarPainelBranco();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
@@ -225,36 +209,39 @@ public class PDVVendaSwingController {
         
         // Linha 1: Código e Quantidade
         gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.3;
-        inputPanel.add(createLabel("Código:"), gbc);
+        inputPanel.add(LayoutPadrao.criarRotuloCampo("Código:"), gbc);
         
         gbc.gridx = 1; gbc.weightx = 0.7;
-        txtCodigo = createTextField(15);
+        txtCodigo = LayoutPadrao.criarCampoTexto(15);
         inputPanel.add(txtCodigo, gbc);
         
         gbc.gridx = 2; gbc.weightx = 0.3;
-        inputPanel.add(createLabel("Quantidade:"), gbc);
+        inputPanel.add(LayoutPadrao.criarRotuloCampo("Quantidade:"), gbc);
         
         gbc.gridx = 3; gbc.weightx = 0.7;
-        txtQuantidade = createTextField(10);
+        txtQuantidade = LayoutPadrao.criarCampoTexto(10);
         txtQuantidade.setText("1");
         inputPanel.add(txtQuantidade, gbc);
         
         // Linha 2: Descrição (readonly)
         gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0.3;
-        inputPanel.add(createLabel("Descrição:"), gbc);
+        inputPanel.add(LayoutPadrao.criarRotuloCampo("Descrição:"), gbc);
         
         gbc.gridx = 1; gbc.gridwidth = 3; gbc.weightx = 2.0;
-        txtDescricao = createTextField(40);
+        txtDescricao = LayoutPadrao.criarCampoTexto(40);
         txtDescricao.setEditable(false);
-        txtDescricao.setBackground(new Color(240, 240, 240));
+        txtDescricao.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         inputPanel.add(txtDescricao, gbc);
         
         // Painel de botões de ação
         JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
-        actionPanel.setBackground(new Color(248, 249, 250));
+        actionPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        JButton btnAdicionar = createActionButton("➕ Adicionar", new Color(46, 204, 113), this::adicionarProduto);
-        JButton btnBuscar = createActionButton("🔍 Buscar", new Color(52, 152, 219), e -> buscarProdutoPorCodigo(txtCodigo.getText().trim()));
+        JButton btnAdicionar = LayoutPadrao.criarBotaoSucesso("➕ Adicionar");
+        JButton btnBuscar = LayoutPadrao.criarBotaoPrimario("🔍 Buscar");
+        
+        btnAdicionar.addActionListener(this::adicionarProduto);
+        btnBuscar.addActionListener(e -> buscarProdutoPorCodigo(txtCodigo.getText().trim()));
         
         actionPanel.add(btnBuscar);
         actionPanel.add(btnAdicionar);
@@ -278,130 +265,8 @@ public class PDVVendaSwingController {
         return panel;
     }
     
-    // Métodos auxiliares para criação de componentes
-    private JButton createActionButton(String text, Color color, ActionListener action) {
-        JButton button = new JButton(text);
-        button.setBackground(color);
-        button.setForeground(Color.WHITE);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(color.darker(), 1),
-            BorderFactory.createEmptyBorder(10, 20, 10, 20)
-        ));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.addActionListener(action);
-        button.setOpaque(true);
-        
-        // Efeito hover
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(color.darker());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(color);
-            }
-        });
-        
-        return button;
-    }
-    
-    private JLabel createLabel(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        label.setForeground(new Color(52, 73, 94));
-        label.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        return label;
-    }
-    
-    private JTextField createTextField(int columns) {
-        JTextField textField = new JTextField(columns);
-        textField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
-            BorderFactory.createEmptyBorder(8, 10, 8, 10)
-        ));
-        textField.setBackground(Color.WHITE);
-        textField.setForeground(new Color(44, 62, 80));
-        return textField;
-    }
-    
-        
-    private JPanel createSummaryPanel() {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        panel.setBackground(new Color(255, 255, 255));
-        panel.setPreferredSize(new Dimension(250, 0));
-        
-        // Título do resumo
-        JLabel titleLabel = new JLabel("💰 Resumo da Venda");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
-        titleLabel.setForeground(new Color(41, 128, 185));
-        titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(titleLabel);
-        panel.add(Box.createVerticalStrut(20));
-        
-        // Painel de informações
-        JPanel infoPanel = new JPanel();
-        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
-        infoPanel.setBackground(new Color(245, 245, 250));
-        infoPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-        
-        // Itens
-        JPanel itensPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        itensPanel.setBackground(new Color(245, 245, 250));
-        JLabel lblItensIcon = new JLabel("📊");
-        lblItensIcon.setFont(new Font("Arial", Font.PLAIN, 14));
-        lblItens = new JLabel("0 itens");
-        lblItens.setFont(new Font("Arial", Font.BOLD, 14));
-        lblItens.setForeground(new Color(108, 117, 125));
-        itensPanel.add(lblItensIcon);
-        itensPanel.add(lblItens);
-        infoPanel.add(itensPanel);
-        
-        infoPanel.add(Box.createVerticalStrut(10));
-        
-        // Separador
-        JSeparator separator = new JSeparator();
-        separator.setForeground(new Color(200, 200, 200));
-        infoPanel.add(separator);
-        
-        infoPanel.add(Box.createVerticalStrut(10));
-        
-        // Total
-        JPanel totalPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        totalPanel.setBackground(new Color(245, 245, 250));
-        JLabel lblTotalIcon = new JLabel("💵");
-        lblTotalIcon.setFont(new Font("Arial", Font.PLAIN, 16));
-        lblTotal = new JLabel("R$ 0,00");
-        lblTotal.setFont(new Font("Arial", Font.BOLD, 18));
-        lblTotal.setForeground(new Color(40, 167, 69));
-        totalPanel.add(lblTotalIcon);
-        totalPanel.add(lblTotal);
-        infoPanel.add(totalPanel);
-        
-        panel.add(infoPanel);
-        panel.add(Box.createVerticalStrut(25));
-        
-        // Botões de ação
-        JButton btnFinalizar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("✅ Finalizar Venda", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-        btnFinalizar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnFinalizar.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnFinalizar.getPreferredSize().height));
-        btnFinalizar.addActionListener(this::finalizarVenda);
-        
-        panel.add(btnFinalizar);
-        panel.add(Box.createVerticalStrut(10));
-        
-        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar Venda", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-        btnCancelar.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnCancelar.setMaximumSize(new Dimension(Integer.MAX_VALUE, btnCancelar.getPreferredSize().height));
-        btnCancelar.addActionListener(this::cancelarVenda);
-        
-        panel.add(btnCancelar);
-        
-        return panel;
-    }
+    // Métodos auxiliares removidos - usando LayoutPadrao
+    // LayoutPadrao já fornece métodos para criar componentes estilizados
     
     private void adicionarProduto(ActionEvent e) {
         String codigo = txtCodigo.getText().trim();
