@@ -41,11 +41,11 @@ public class PDVLoginSimpleController {
         // Painel principal com tema Oceano
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainPanel.setBackground(OceanoTheme.BACKGROUND);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         // Painel de formulário com tema Oceano
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBackground(OceanoTheme.BACKGROUND);
+        formPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -53,8 +53,8 @@ public class PDVLoginSimpleController {
         // Título com tema Oceano
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
         JLabel lblTitulo = new JLabel("🌊 Hermes Comercial PDV", JLabel.CENTER);
-        lblTitulo.setFont(OceanoTheme.FONT_HEADER);
-        lblTitulo.setForeground(OceanoTheme.PRIMARY);
+        lblTitulo.setFont(LayoutPadrao.FONTE_TITULO);
+        lblTitulo.setForeground(LayoutPadrao.COR_PRIMARIA);
         formPanel.add(lblTitulo, gbc);
         
         // Espaçamento
@@ -66,8 +66,7 @@ public class PDVLoginSimpleController {
         JLabel lblUsuario = LayoutPadrao.criarRotuloCampo("Usuário:");
         formPanel.add(lblUsuario, gbc);
         gbc.gridx = 1;
-        txtUsuario = LayoutPadrao.criarCampoTexto();
-        txtUsuario.setColumns(15);
+        txtUsuario = LayoutPadrao.criarCampoTexto(15);
         formPanel.add(txtUsuario, gbc);
         
         // Senha com layout moderno
@@ -75,7 +74,7 @@ public class PDVLoginSimpleController {
         JLabel lblSenha = LayoutPadrao.criarRotuloCampo("Senha:");
         formPanel.add(lblSenha, gbc);
         gbc.gridx = 1;
-        txtSenha = LayoutPadrao.criarCampoSenha();
+        txtSenha = LayoutPadrao.criarCampoSenha(15);
         formPanel.add(txtSenha, gbc);
         
         // Status
