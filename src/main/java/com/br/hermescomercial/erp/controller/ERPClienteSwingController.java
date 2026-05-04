@@ -264,32 +264,6 @@ public class ERPClienteSwingController {
         return tablePanel;
     }
     
-    private JButton createModernButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(120, 35));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Efeito hover
-        button.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                button.setBackground(bgColor.darker());
-            }
-            
-            @Override
-            public void mouseExited(MouseEvent e) {
-                button.setBackground(bgColor);
-            }
-        });
-        
-        return button;
-    }
-    
     private void carregarDadosExemplo() {
         // Limpar tabela
         tableModel.setRowCount(0);
