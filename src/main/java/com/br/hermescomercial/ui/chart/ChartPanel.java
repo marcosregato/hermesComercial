@@ -4,7 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.List;
 import java.util.Map;
 
@@ -129,9 +130,9 @@ public abstract class ChartPanel extends JPanel {
         if (value.compareTo(BigDecimal.valueOf(1000)) < 0) {
             return currencyFormat.format(value);
         } else if (value.compareTo(BigDecimal.valueOf(1000000)) < 0) {
-            return "R$ " + value.divide(BigDecimal.valueOf(1000), 1, BigDecimal.ROUND_HALF_UP) + "K";
+            return "R$ " + value.divide(BigDecimal.valueOf(1000), 1, RoundingMode.HALF_UP) + "K";
         } else {
-            return "R$ " + value.divide(BigDecimal.valueOf(1000000), 1, BigDecimal.ROUND_HALF_UP) + "M";
+            return "R$ " + value.divide(BigDecimal.valueOf(1000000), 1, RoundingMode.HALF_UP) + "M";
         }
     }
     
