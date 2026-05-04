@@ -334,7 +334,7 @@ public class PDVDashboardSwingController {
         JPanel chartPanel = new JPanel(new BorderLayout());
         chartPanel.setBackground(LayoutPadrao.COR_FUNDO);
         chartPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(LayoutPadrao.BORDA_PADRAO, 1),
+            LayoutPadrao.BORDA_PADRAO,
             new EmptyBorder(15, 15, 15, 15)
         ));
         
@@ -405,7 +405,7 @@ public class PDVDashboardSwingController {
         JPanel chartPanel = new JPanel(new BorderLayout());
         chartPanel.setBackground(LayoutPadrao.COR_FUNDO);
         chartPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(LayoutPadrao.BORDA_PADRAO, 1),
+            LayoutPadrao.BORDA_PADRAO,
             new EmptyBorder(15, 15, 15, 15)
         ));
         
@@ -615,12 +615,12 @@ public class PDVDashboardSwingController {
         JPanel card = new JPanel(new GridBagLayout());
         card.setBackground(LayoutPadrao.COR_FUNDO);
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(LayoutPadrao.BORDA_PADRAO, 1),
+            LayoutPadrao.BORDA_PADRAO,
             new EmptyBorder(15, 15, 15, 15)
         ));
         
         card.setBorder(new TitledBorder(
-            BorderFactory.createLineBorder(LayoutPadrao.BORDA_PADRAO, 1),
+            LayoutPadrao.BORDA_PADRAO,
             "💰 Resumo Financeiro Mensal",
             TitledBorder.LEFT,
             TitledBorder.TOP,
