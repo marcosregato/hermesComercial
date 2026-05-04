@@ -316,7 +316,7 @@ public class PDVDashboardSwingController {
                 
                 // Linha de meta
                 int metaY = height - padding - (int) ((double) 18000 / maxValue * graphHeight);
-                g2d.setColor(ModernTheme.PRIMARY_COLOR);
+                g2d.setColor(LayoutPadrao.COR_PRIMARIA);
                 g2d.setStroke(new BasicStroke(2, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{5, 5}, 0));
                 g2d.drawLine(padding, metaY, width - padding, metaY);
                 g2d.setStroke(new BasicStroke(1));
@@ -332,16 +332,16 @@ public class PDVDashboardSwingController {
     
     private JPanel createCategoriaChart() {
         JPanel chartPanel = new JPanel(new BorderLayout());
-        chartPanel.setBackground(ModernTheme.BACKGROUND_CARD);
+        chartPanel.setBackground(LayoutPadrao.COR_FUNDO);
         chartPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.BORDA_PADRAO, 1),
             new EmptyBorder(15, 15, 15, 15)
         ));
         
         // Título
         JLabel titleLabel = new JLabel("📊 Distribuição por Categoria");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        titleLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        titleLabel.setForeground(LayoutPadrao.COR_TEXTO);
         chartPanel.add(titleLabel, BorderLayout.NORTH);
         
         // Painel do gráfico de pizza
@@ -403,16 +403,16 @@ public class PDVDashboardSwingController {
     
     private JPanel createEvolucaoChart() {
         JPanel chartPanel = new JPanel(new BorderLayout());
-        chartPanel.setBackground(ModernTheme.BACKGROUND_CARD);
+        chartPanel.setBackground(LayoutPadrao.COR_FUNDO);
         chartPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.BORDA_PADRAO, 1),
             new EmptyBorder(15, 15, 15, 15)
         ));
         
         // Título
         JLabel titleLabel = new JLabel("📈 Evolução de Métricas - Últimos 30 Dias");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        titleLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+        titleLabel.setForeground(LayoutPadrao.COR_TEXTO);
         chartPanel.add(titleLabel, BorderLayout.NORTH);
         
         // Painel do gráfico de linhas
@@ -599,12 +599,12 @@ public class PDVDashboardSwingController {
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseEntered(MouseEvent e) {
-                card.setBackground(ModernTheme.BACKGROUND_HOVER);
+                card.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
             }
             
             @Override
             public void mouseExited(MouseEvent e) {
-                card.setBackground(ModernTheme.BACKGROUND_CARD);
+                card.setBackground(LayoutPadrao.COR_FUNDO);
             }
         });
         
@@ -613,19 +613,19 @@ public class PDVDashboardSwingController {
     
     private JPanel createResumoCard(List<DashboardMetric> resumo) {
         JPanel card = new JPanel(new GridBagLayout());
-        card.setBackground(ModernTheme.BACKGROUND_CARD);
+        card.setBackground(LayoutPadrao.COR_FUNDO);
         card.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.BORDA_PADRAO, 1),
             new EmptyBorder(15, 15, 15, 15)
         ));
         
         card.setBorder(new TitledBorder(
-            BorderFactory.createLineBorder(ModernTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.BORDA_PADRAO, 1),
             "💰 Resumo Financeiro Mensal",
             TitledBorder.LEFT,
             TitledBorder.TOP,
             new Font("Segoe UI", Font.BOLD, 14),
-            ModernTheme.TEXT_PRIMARY
+            LayoutPadrao.COR_TEXTO
         ));
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -638,13 +638,13 @@ public class PDVDashboardSwingController {
             gbc.gridx = 0;
             JLabel nameLabel = new JLabel(metric.getNome() + ":");
             nameLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
-            nameLabel.setForeground(ModernTheme.TEXT_PRIMARY);
+            nameLabel.setForeground(LayoutPadrao.COR_TEXTO);
             card.add(nameLabel, gbc);
             
             gbc.gridx = 1;
             JLabel valueLabel = new JLabel(metric.getValorFormatado());
             valueLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-            valueLabel.setForeground(ModernTheme.TEXT_SECONDARY);
+            valueLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
             card.add(valueLabel, gbc);
             
             row++;
@@ -708,11 +708,4 @@ public class PDVDashboardSwingController {
     public void dispose() {
         frame.dispose();
     }
-}
-
-public static void mostrarDashboard() {
-    SwingUtilities.invokeLater(() -> {
-        PDVDashboardSwingController controller = new PDVDashboardSwingController();
-        controller.show();
-    });
 }
