@@ -1,6 +1,6 @@
 package com.br.hermescomercial.erp.controller;
 
-import com.br.hermescomercial.theme.HermesTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import com.br.hermescomercial.pdv.controller.PDVDashboardSwingController;
 import javax.swing.*;
 import java.awt.*;
@@ -40,11 +40,11 @@ public class ERPMenuPrincipalSwingController {
         });
         
         // Aplicar tema padrão
-        frame.getContentPane().setBackground(HermesTheme.BACKGROUND_PRIMARY);
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainPanel.setBackground(HermesTheme.BACKGROUND_PRIMARY);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         frame.add(mainPanel);
         mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
@@ -83,12 +83,12 @@ public class ERPMenuPrincipalSwingController {
         titlePanel.setOpaque(false);
         
         JLabel titleLabel = new JLabel("🏢 Hermes Comercial ERP");
-        titleLabel.setFont(HermesTheme.FONT_HEADER);
-        titleLabel.setForeground(HermesTheme.TEXT_PRIMARY);
+        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
+        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
         
         JLabel subtitleLabel = new JLabel("Sistema Integrado de Gestão Empresarial");
-        subtitleLabel.setFont(HermesTheme.FONT_SMALL);
-        subtitleLabel.setForeground(HermesTheme.TEXT_SECONDARY);
+        subtitleLabel.setFont(LayoutPadrao.FONTE_TEXTO);
+        subtitleLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         titlePanel.add(titleLabel);
         
@@ -97,8 +97,8 @@ public class ERPMenuPrincipalSwingController {
         userPanel.setOpaque(false);
         
         lblUsuario = new JLabel("👤 Administrador");
-        lblUsuario.setFont(HermesTheme.FONT_DEFAULT);
-        lblUsuario.setForeground(HermesTheme.TEXT_PRIMARY);
+        lblUsuario.setFont(LayoutPadrao.FONTE_TEXTO);
+        lblUsuario.setForeground(LayoutPadrao.COR_PRIMARIA);
         
         userPanel.add(lblUsuario);
         
@@ -132,26 +132,26 @@ public class ERPMenuPrincipalSwingController {
         gbc.insets = new Insets(0, 0, 20, 0);
         categoriasPanel.add(createCategoriaPanel("🏢 OPERAÇÕES PRINCIPAIS", 
             new JButton[]{
-                createMenuButton("📦 Gestão de Produtos", HermesTheme.PRIMARY_COLOR, e -> abrirProdutos()),
-                createMenuButton("📊 Gestão de Estoque", HermesTheme.WARNING_COLOR, e -> abrirEstoque()),
-                createMenuButton("� Gestão Financeira", HermesTheme.SUCCESS_COLOR, e -> abrirFinanceiro()),
-                createMenuButton(" Dashboard", HermesTheme.PRIMARY_COLOR, e -> abrirDashboard())
+                LayoutPadrao.criarBotaoPrimario("🏢 Gestão de Produtos"),
+                LayoutPadrao.criarBotaoAlerta("📊 Gestão de Estoque"),
+                LayoutPadrao.criarBotaoSucesso("💰 Gestão Financeira"),
+                LayoutPadrao.criarBotaoPrimario(" Dashboard")
             }), gbc);
         
         // Categoria: Administração
         gbc.gridy = 1;
         categoriasPanel.add(createCategoriaPanel("⚙️ ADMINISTRAÇÃO", 
             new JButton[]{
-                createMenuButton("👥 Gestão de Usuários", HermesTheme.SECONDARY_COLOR, e -> abrirUsuarios()),
-                createMenuButton("⚙️ Configurações", HermesTheme.DANGER_COLOR, e -> abrirConfiguracao())
+                LayoutPadrao.criarBotaoSecundario("👥 Gestão de Usuários"),
+                LayoutPadrao.criarBotaoPerigo("⚙️ Configurações")
             }), gbc);
         
         // Categoria: Relatórios
         gbc.gridy = 2;
         categoriasPanel.add(createCategoriaPanel("📊 RELATÓRIOS E ANÁLISES", 
             new JButton[]{
-                createMenuButton("📊 Relatórios", HermesTheme.WARNING_COLOR, e -> abrirRelatorios()),
-                createMenuButton("📈 Relatório Financeiro", HermesTheme.PRIMARY_COLOR, e -> abrirRelatorioFinanceiro())
+                LayoutPadrao.criarBotaoAlerta("📊 Relatórios"),
+                LayoutPadrao.criarBotaoPrimario("📈 Relatório Financeiro")
             }), gbc);
         
         menuPanel.add(categoriasPanel, BorderLayout.CENTER);
@@ -165,8 +165,8 @@ public class ERPMenuPrincipalSwingController {
         
         // Título da categoria
         JLabel tituloLabel = new JLabel(titulo);
-        tituloLabel.setFont(HermesTheme.FONT_TITLE);
-        tituloLabel.setForeground(HermesTheme.TEXT_PRIMARY);
+        tituloLabel.setFont(LayoutPadrao.FONTE_SUBTITULO);
+        tituloLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
         tituloLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         
         // Painel de botões da categoria
@@ -206,12 +206,10 @@ public class ERPMenuPrincipalSwingController {
         JPanel contentPanel = new JPanel(new BorderLayout());
         contentPanel.setOpaque(false);
         contentPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
             BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
-        contentPanel.setBackground(new Color(HermesTheme.BACKGROUND_SECONDARY.getRed(), 
-                                         HermesTheme.BACKGROUND_SECONDARY.getGreen(), 
-                                         HermesTheme.BACKGROUND_SECONDARY.getBlue(), 50));
+        contentPanel.setBackground(LayoutPadrao.COR_FUNDO);
         
         contentPanel.add(tituloLabel, BorderLayout.NORTH);
         contentPanel.add(botoesPanel, BorderLayout.CENTER);
@@ -223,7 +221,7 @@ public class ERPMenuPrincipalSwingController {
     
     private JButton createMenuButton(String text, Color color, ActionListener actionListener) {
         JButton button = new JButton(text);
-        button.setFont(HermesTheme.FONT_BUTTON);
+        button.setFont(LayoutPadrao.FONTE_BOTAO);
         button.setBackground(color);
         button.setForeground(Color.WHITE);
         button.setBorderPainted(false);
@@ -275,16 +273,18 @@ public class ERPMenuPrincipalSwingController {
         
         lblDataHora = new JLabel("📅 " + java.time.LocalDateTime.now().format(
             java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-        lblDataHora.setFont(HermesTheme.FONT_SMALL);
-        lblDataHora.setForeground(HermesTheme.TEXT_SECONDARY);
+        lblDataHora.setFont(LayoutPadrao.FONTE_TEXTO_PEQUENO);
+        lblDataHora.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         dateTimePanel.add(lblDataHora);
         
         JPanel systemPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         systemPanel.setOpaque(false);
         
-        JButton btnSair = createStyledButton("🚪 Sair", HermesTheme.DANGER_COLOR, e -> sairSistema());
-        JButton btnSobre = createStyledButton("ℹ️ Sobre", HermesTheme.SECONDARY_COLOR, e -> mostrarSobre());
+        JButton btnSair = LayoutPadrao.criarBotaoPerigo("🚪 Sair");
+        btnSair.addActionListener(e -> sairSistema());
+        JButton btnSobre = LayoutPadrao.criarBotaoSecundario("ℹ️ Sobre");
+        btnSobre.addActionListener(e -> mostrarSobre());
         
         systemPanel.add(btnSobre);
         systemPanel.add(btnSair);
@@ -295,34 +295,6 @@ public class ERPMenuPrincipalSwingController {
         return footerPanel;
     }
     
-    private JButton createStyledButton(String text, Color bgColor, ActionListener actionListener) {
-        JButton button = new JButton(text);
-        button.setFont(HermesTheme.FONT_BUTTON);
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(100, 35));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor.darker());
-            }
-            
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor);
-            }
-        });
-        
-        if (actionListener != null) {
-            button.addActionListener(actionListener);
-        }
-        
-        return button;
-    }
     
     private void atualizarDataHora() {
         javax.swing.Timer timer = new javax.swing.Timer(1000, e -> {
