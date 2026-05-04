@@ -9,10 +9,7 @@ import java.awt.event.ActionEvent;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import com.br.hermescomercial.business.impressao.ImpressaoNaoFiscalService;
 import com.br.hermescomercial.service.EstoqueService;
-import com.br.hermescomercial.service.VendaService;
 
 /**
  * Controller de Venda em SWING
@@ -29,15 +26,12 @@ public class PDVVendaSwingController {
     private JLabel lblTotal;
     private JLabel lblItens;
     private List<ItemVenda> itens;
-    private ImpressaoNaoFiscalService impressaoService;
     private EstoqueService estoqueService;
-    private VendaService vendaService;  
+  
     
     public PDVVendaSwingController() {
         this.itens = new ArrayList<>();
-        this.impressaoService = new ImpressaoNaoFiscalService();
         this.estoqueService = new EstoqueService();
-        this.vendaService = new VendaService();
         initializeUI();
     }
     
@@ -578,7 +572,6 @@ public class PDVVendaSwingController {
         public String getDescricao() { return descricao; }
         public BigDecimal getPreco() { return preco; }
         public int getEstoque() { return estoque; }
-        public void setEstoque(int estoque) { this.estoque = estoque; }
         public int getEstoqueMinimo() { return estoqueMinimo; }
         public int getEstoqueMaximo() { return estoqueMaximo; }
         public String getLocalizacaoEstoque() { return localizacaoEstoque; }
