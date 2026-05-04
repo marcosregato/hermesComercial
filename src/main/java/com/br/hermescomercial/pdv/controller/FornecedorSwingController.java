@@ -20,10 +20,10 @@ public class FornecedorSwingController {
     private JTextArea txtObservacoes;
     private JTable fornecedoresTable;
     private DefaultTableModel tableModel;
-    private FornecedorService fornecedorService;
     
     public FornecedorSwingController() {
-        fornecedorService = new FornecedorService();
+        // Inicializar service quando implementado
+        // fornecedorService = new FornecedorService();
         initializeUI();
     }
     
