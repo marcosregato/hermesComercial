@@ -4,7 +4,6 @@ import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -218,20 +217,6 @@ public class ERPRelatorioSwingController {
         return label;
     }
     
-    private JButton createStyledButton(String text, Color bgColor, ActionListener action) {
-        JButton button = new JButton(text);
-        button.setFont(LayoutPadrao.FONTE_BOTAO);
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(bgColor.darker()),
-            BorderFactory.createEmptyBorder(8, 16, 8, 16)
-        ));
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        button.addActionListener(action);
-        return button;
-    }
     
     private void gerarRelatorio() {
         String tipoRelatorio = (String) cbTipoRelatorio.getSelectedItem();
