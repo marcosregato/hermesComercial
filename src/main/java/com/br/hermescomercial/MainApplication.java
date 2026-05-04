@@ -4,7 +4,6 @@ import com.br.hermescomercial.pdv.controller.PDVLoginSwingController;
 import com.br.hermescomercial.pdv.controller.PDVLoginSimpleController;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 /**
  * Classe principal da aplicação Hermes Comercial PDV
