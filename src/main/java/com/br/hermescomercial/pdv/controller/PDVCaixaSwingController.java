@@ -345,10 +345,10 @@ public class PDVCaixaSwingController {
                 return;
             }
             
-            int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+            int confirm = JOptionPane.showConfirmDialog(frame, 
                 "Deseja fechar o caixa?\n\nSaldo atual: R$ " + String.format("%.2f", saldoAtual), 
                 "Fechar Caixa", 
-                new String[]{"Sim", "Não"}, 0);
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 
             if (confirm == 0) {
                 caixaAberto = false;
