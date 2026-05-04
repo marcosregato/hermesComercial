@@ -1183,11 +1183,10 @@ public class PDVPrincipalSwingController {
         
         JPanel buscaInputPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         buscaInputPanel.setBackground(new Color(255, 255, 255));
-        JTextField txtBusca = new JTextField(25);
-        txtBusca.setFont(new Font("Arial", Font.PLAIN, 12));
-        txtBusca.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200), 1));
-        JButton btnBuscar = ModernLayout.createModernButton("🔍 Buscar", OceanoTheme.PRIMARY);
-        JButton btnLimpar = ModernLayout.createModernButton("🔄 Limpar", OceanoTheme.ACCENT);
+        JTextField txtBusca = LayoutPadrao.criarCampoTexto();
+        txtBusca.setColumns(25);
+        JButton btnBuscar = LayoutPadrao.criarBotaoPrimario("🔍 Buscar");
+        JButton btnLimpar = LayoutPadrao.criarBotaoSecundario("🔄 Limpar");
         
         buscaInputPanel.add(txtBusca);
         buscaInputPanel.add(btnBuscar);
@@ -1324,8 +1323,8 @@ public class PDVPrincipalSwingController {
         JPanel buttonPanel = new JPanel(new GridLayout(2, 1, 10, 10));
         buttonPanel.setBackground(new Color(248, 249, 250));
         
-        JButton btnExportar = ModernLayout.createModernButton("📤 Exportar", OceanoTheme.ACCENT);
-        JButton btnFechar = ModernLayout.createModernButton("❌ Fechar", OceanoTheme.ERROR);
+        JButton btnExportar = LayoutPadrao.criarBotaoSecundario("📤 Exportar");
+        JButton btnFechar = LayoutPadrao.criarBotaoPerigo("❌ Fechar");
         
         buttonPanel.add(btnExportar);
         buttonPanel.add(btnFechar);

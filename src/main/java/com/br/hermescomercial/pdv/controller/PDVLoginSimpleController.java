@@ -7,8 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import com.br.hermescomercial.util.DatabaseConfig;
 import com.br.hermescomercial.util.FieldValidator;
-import com.br.hermescomercial.theme.OceanoTheme;
-import com.br.hermescomercial.theme.ModernLayout;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 /**
  * Controller de Login Simplificado para Ambiente Headless
@@ -64,19 +63,19 @@ public class PDVLoginSimpleController {
         
         // Usuário com layout moderno
         gbc.gridy = 2; gbc.gridwidth = 1;
-        JLabel lblUsuario = ModernLayout.createModernSubtitle("Usuário:");
+        JLabel lblUsuario = LayoutPadrao.criarRotuloCampo("Usuário:");
         formPanel.add(lblUsuario, gbc);
         gbc.gridx = 1;
-        txtUsuario = ModernLayout.createModernTextField("Digite seu usuário");
+        txtUsuario = LayoutPadrao.criarCampoTexto();
         txtUsuario.setColumns(15);
         formPanel.add(txtUsuario, gbc);
         
         // Senha com layout moderno
         gbc.gridx = 0; gbc.gridy = 3;
-        JLabel lblSenha = ModernLayout.createModernSubtitle("Senha:");
+        JLabel lblSenha = LayoutPadrao.criarRotuloCampo("Senha:");
         formPanel.add(lblSenha, gbc);
         gbc.gridx = 1;
-        txtSenha = ModernLayout.createModernPasswordField();
+        txtSenha = LayoutPadrao.criarCampoSenha();
         formPanel.add(txtSenha, gbc);
         
         // Status
@@ -88,10 +87,10 @@ public class PDVLoginSimpleController {
         // Botões com layout moderno
         gbc.gridy = 5;
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        buttonPanel.setBackground(OceanoTheme.BACKGROUND);
+        buttonPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        btnLogin = ModernLayout.createModernButton("🌊 Entrar", OceanoTheme.PRIMARY);
-        btnSair = ModernLayout.createModernButton("Sair", OceanoTheme.ERROR);
+        btnLogin = LayoutPadrao.criarBotaoPrimario("🌊 Entrar");
+        btnSair = LayoutPadrao.criarBotaoPerigo("Sair");
         
         buttonPanel.add(btnLogin);
         buttonPanel.add(btnSair);
