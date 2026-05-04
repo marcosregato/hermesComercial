@@ -1,6 +1,6 @@
 package com.br.hermescomercial.erp.controller;
 
-import com.br.hermescomercial.theme.HermesTheme;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -30,11 +30,11 @@ public class ERPConfiguracaoSwingController {
         frame.setLocationRelativeTo(null);
         
         // Aplicar tema padrão
-        frame.getContentPane().setBackground(HermesTheme.BACKGROUND_PRIMARY);
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainPanel.setBackground(HermesTheme.BACKGROUND_PRIMARY);
+        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         frame.add(mainPanel);
         frame.add(createHeaderPanel(), BorderLayout.NORTH);
@@ -51,12 +51,12 @@ public class ERPConfiguracaoSwingController {
         headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
         
         JLabel titleLabel = new JLabel("⚙️ Configurações do Sistema");
-        titleLabel.setFont(HermesTheme.FONT_HEADER);
-        titleLabel.setForeground(HermesTheme.TEXT_PRIMARY);
+        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
+        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
         
         JLabel subtitleLabel = new JLabel("Configurações gerais e preferências do sistema");
-        subtitleLabel.setFont(HermesTheme.FONT_DEFAULT);
-        subtitleLabel.setForeground(HermesTheme.TEXT_SECONDARY);
+        subtitleLabel.setFont(LayoutPadrao.FONTE_TEXTO);
+        subtitleLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         titlePanel.setOpaque(false);
@@ -75,9 +75,9 @@ public class ERPConfiguracaoSwingController {
             "🏢 Configurações Gerais", 
             TitledBorder.LEFT, 
             TitledBorder.TOP, 
-            HermesTheme.FONT_HEADER, 
-            HermesTheme.TEXT_PRIMARY));
-        formPanel.setBackground(HermesTheme.BACKGROUND_SECONDARY);
+            LayoutPadrao.FONTE_SUBTITULO, 
+            LayoutPadrao.COR_PRIMARIA));
+        formPanel.setBackground(LayoutPadrao.COR_FUNDO);
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
@@ -124,7 +124,7 @@ public class ERPConfiguracaoSwingController {
         formPanel.add(createLabel("Tema:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         cbTema = new JComboBox<>(new String[]{"Hermes Padrão", "Moderno Claro", "Moderno Escuro"});
-        cbTema.setFont(HermesTheme.FONT_DEFAULT);
+        cbTema.setFont(LayoutPadrao.FONTE_CAMPO);
         cbTema.setPreferredSize(new Dimension(150, 30));
         formPanel.add(cbTema, gbc);
         
@@ -133,7 +133,7 @@ public class ERPConfiguracaoSwingController {
         formPanel.add(createLabel("Idioma:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         cbIdioma = new JComboBox<>(new String[]{"Português (Brasil)", "English", "Espanhol"});
-        cbIdioma.setFont(HermesTheme.FONT_DEFAULT);
+        cbIdioma.setFont(LayoutPadrao.FONTE_CAMPO);
         cbIdioma.setPreferredSize(new Dimension(150, 30));
         formPanel.add(cbIdioma, gbc);
         
@@ -142,9 +142,9 @@ public class ERPConfiguracaoSwingController {
         formPanel.add(createLabel("Salvar Automaticamente:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         ckSalvarAutomatico = new JCheckBox("Salvar configurações automaticamente");
-        ckSalvarAutomatico.setFont(HermesTheme.FONT_DEFAULT);
-        ckSalvarAutomatico.setBackground(HermesTheme.BACKGROUND_SECONDARY);
-        ckSalvarAutomatico.setForeground(HermesTheme.TEXT_PRIMARY);
+        ckSalvarAutomatico.setFont(LayoutPadrao.FONTE_CAMPO);
+        ckSalvarAutomatico.setBackground(LayoutPadrao.COR_FUNDO);
+        ckSalvarAutomatico.setForeground(LayoutPadrao.COR_TEXTO);
         formPanel.add(ckSalvarAutomatico, gbc);
         
         // Notificações
@@ -152,9 +152,9 @@ public class ERPConfiguracaoSwingController {
         formPanel.add(createLabel("Notificações:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         ckNotificacao = new JCheckBox("Receber notificações do sistema");
-        ckNotificacao.setFont(HermesTheme.FONT_DEFAULT);
-        ckNotificacao.setBackground(HermesTheme.BACKGROUND_SECONDARY);
-        ckNotificacao.setForeground(HermesTheme.TEXT_PRIMARY);
+        ckNotificacao.setFont(LayoutPadrao.FONTE_CAMPO);
+        ckNotificacao.setBackground(LayoutPadrao.COR_FUNDO);
+        ckNotificacao.setForeground(LayoutPadrao.COR_TEXTO);
         formPanel.add(ckNotificacao, gbc);
         
         // Backup Automático
@@ -162,9 +162,9 @@ public class ERPConfiguracaoSwingController {
         formPanel.add(createLabel("Backup Automático:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         ckBackupAutomatico = new JCheckBox("Realizar backup automático");
-        ckBackupAutomatico.setFont(HermesTheme.FONT_DEFAULT);
-        ckBackupAutomatico.setBackground(HermesTheme.BACKGROUND_SECONDARY);
-        ckBackupAutomatico.setForeground(HermesTheme.TEXT_PRIMARY);
+        ckBackupAutomatico.setFont(LayoutPadrao.FONTE_CAMPO);
+        ckBackupAutomatico.setBackground(LayoutPadrao.COR_FUNDO);
+        ckBackupAutomatico.setForeground(LayoutPadrao.COR_TEXTO);
         formPanel.add(ckBackupAutomatico, gbc);
         
         return formPanel;
@@ -175,10 +175,14 @@ public class ERPConfiguracaoSwingController {
         buttonPanel.setOpaque(false);
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        btnSalvar = createStyledButton("💾 Salvar", HermesTheme.SUCCESS_COLOR, e -> salvarConfiguracoes());
-        btnCancelar = createStyledButton("❌ Cancelar", HermesTheme.DANGER_COLOR, e -> fecharTela());
-        btnTestarConexao = createStyledButton("🔧 Testar Conexão", HermesTheme.WARNING_COLOR, e -> testarConexao());
-        btnRestaurarPadroes = createStyledButton("🔄 Restaurar Padrões", HermesTheme.SECONDARY_COLOR, e -> restaurarPadroes());
+        btnSalvar = LayoutPadrao.criarBotaoSucesso("💾 Salvar");
+        btnSalvar.addActionListener(e -> salvarConfiguracoes());
+        btnCancelar = LayoutPadrao.criarBotaoPerigo("❌ Cancelar");
+        btnCancelar.addActionListener(e -> fecharTela());
+        btnTestarConexao = LayoutPadrao.criarBotaoAlerta("🔧 Testar Conexão");
+        btnTestarConexao.addActionListener(e -> testarConexao());
+        btnRestaurarPadroes = LayoutPadrao.criarBotaoSecundario("🔄 Restaurar Padrões");
+        btnRestaurarPadroes.addActionListener(e -> restaurarPadroes());
         
         buttonPanel.add(btnSalvar);
         buttonPanel.add(btnCancelar);
@@ -190,18 +194,18 @@ public class ERPConfiguracaoSwingController {
     
     private JLabel createLabel(String text) {
         JLabel label = new JLabel(text);
-        label.setFont(HermesTheme.FONT_DEFAULT);
-        label.setForeground(HermesTheme.TEXT_PRIMARY);
+        label.setFont(LayoutPadrao.FONTE_ROTULO);
+        label.setForeground(LayoutPadrao.COR_TEXTO);
         return label;
     }
     
     private JTextField createTextField() {
         JTextField textField = new JTextField();
-        textField.setFont(HermesTheme.FONT_DEFAULT);
-        textField.setForeground(HermesTheme.TEXT_PRIMARY);
+        textField.setFont(LayoutPadrao.FONTE_CAMPO);
+        textField.setForeground(LayoutPadrao.COR_TEXTO);
         textField.setBackground(Color.WHITE);
         textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         return textField;
@@ -209,11 +213,11 @@ public class ERPConfiguracaoSwingController {
     
     private JTextField createTelefoneField() {
         JTextField textField = new JTextField();
-        textField.setFont(HermesTheme.FONT_DEFAULT);
-        textField.setForeground(HermesTheme.TEXT_PRIMARY);
+        textField.setFont(LayoutPadrao.FONTE_CAMPO);
+        textField.setForeground(LayoutPadrao.COR_TEXTO);
         textField.setBackground(Color.WHITE);
         textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         
@@ -244,11 +248,11 @@ public class ERPConfiguracaoSwingController {
     
     private JTextField createCnpjField() {
         JTextField textField = new JTextField();
-        textField.setFont(HermesTheme.FONT_DEFAULT);
-        textField.setForeground(HermesTheme.TEXT_PRIMARY);
+        textField.setFont(LayoutPadrao.FONTE_CAMPO);
+        textField.setForeground(LayoutPadrao.COR_TEXTO);
         textField.setBackground(Color.WHITE);
         textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         
@@ -279,11 +283,11 @@ public class ERPConfiguracaoSwingController {
     
     private JTextField createEmailField() {
         JTextField textField = new JTextField();
-        textField.setFont(HermesTheme.FONT_DEFAULT);
-        textField.setForeground(HermesTheme.TEXT_PRIMARY);
+        textField.setFont(LayoutPadrao.FONTE_CAMPO);
+        textField.setForeground(LayoutPadrao.COR_TEXTO);
         textField.setBackground(Color.WHITE);
         textField.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(HermesTheme.BORDER_LIGHT, 1),
+            BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
             BorderFactory.createEmptyBorder(5, 5, 5, 5)
         ));
         
@@ -293,36 +297,6 @@ public class ERPConfiguracaoSwingController {
         return textField;
     }
     
-    private JButton createStyledButton(String text, Color bgColor, ActionListener actionListener) {
-        JButton button = new JButton(text);
-        button.setFont(HermesTheme.FONT_BUTTON);
-        button.setBackground(bgColor);
-        button.setForeground(Color.WHITE);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setPreferredSize(new Dimension(140, 40));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Efeito hover elegante (padrão das telas antigas)
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor.darker());
-            }
-            
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(bgColor);
-            }
-        });
-        
-        // Adicionar o action listener
-        if (actionListener != null) {
-            button.addActionListener(actionListener);
-        }
-        
-        return button;
-    }
     
     private void carregarConfiguracoes() {
         // Simular carregamento de configurações
