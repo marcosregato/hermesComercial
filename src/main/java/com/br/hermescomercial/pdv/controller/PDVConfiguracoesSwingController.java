@@ -1,5 +1,6 @@
 package com.br.hermescomercial.pdv.controller;
 
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -319,14 +320,14 @@ public class PDVConfiguracoesSwingController {
         panel.add(cbBancoDados, gbc);
         
         gbc.gridx = 0; gbc.gridy = 8; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
-        JButton btnConfigDB = com.br.hermescomercial.theme.ModernTheme.createPastelButton("⚙️ Configurar Conexão", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnConfigDB = LayoutPadrao.criarBotaoPrimario("⚙️ Configurar Conexão");
         btnConfigDB.addActionListener(this::configurarBancoDados);
         panel.add(btnConfigDB, gbc);
         
         gbc.gridx = 0; gbc.gridy = 9;
         panel.add(new JLabel("Pasta de Backup:"), gbc);
         gbc.gridy = 10;
-        JButton btnPastaBackup = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📁 Selecionar Pasta", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnPastaBackup = LayoutPadrao.criarBotaoSecundario("📁 Selecionar Pasta");
         btnPastaBackup.addActionListener(this::selecionarPastaBackup);
         panel.add(btnPastaBackup, gbc);
         
@@ -352,19 +353,19 @@ public class PDVConfiguracoesSwingController {
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBorder(BorderFactory.createTitledBorder("Ações"));
         
-        JButton btnNovo = com.br.hermescomercial.theme.ModernTheme.createPastelButton("👤 Novo Usuário", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnNovo = LayoutPadrao.criarBotaoSucesso("👤 Novo Usuário");
         btnNovo.addActionListener(this::novoUsuario);
         buttonPanel.add(btnNovo);
         
-        JButton btnEditar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("✏️ Editar Usuário", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnEditar = LayoutPadrao.criarBotaoPrimario("✏️ Editar Usuário");
         btnEditar.addActionListener(this::editarUsuario);
         buttonPanel.add(btnEditar);
         
-        JButton btnExcluir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🗑️ Excluir Usuário", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnExcluir = LayoutPadrao.criarBotaoPerigo("🗑️ Excluir Usuário");
         btnExcluir.addActionListener(this::excluirUsuario);
         buttonPanel.add(btnExcluir);
         
-        JButton btnResetar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Resetar Senha", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnResetar = LayoutPadrao.criarBotaoAlerta("🔄 Resetar Senha");
         btnResetar.addActionListener(this::resetarSenha);
         buttonPanel.add(btnResetar);
         
@@ -377,19 +378,19 @@ public class PDVConfiguracoesSwingController {
         JPanel panel = new JPanel(new FlowLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Ações"));
         
-        JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar Configurações", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnSalvar = LayoutPadrao.criarBotaoSucesso("💾 Salvar Configurações");
         btnSalvar.addActionListener(this::salvarConfiguracoes);
         
-        JButton btnRestaurar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Restaurar Padrão", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnRestaurar = LayoutPadrao.criarBotaoAlerta("🔄 Restaurar Padrão");
         btnRestaurar.addActionListener(this::restaurarPadrao);
         
-        JButton btnImportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📥 Importar Config", com.br.hermescomercial.theme.ModernTheme.PASTEL_CYAN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnImportar = LayoutPadrao.criarBotaoSecundario("📥 Importar Config");
         btnImportar.addActionListener(this::importarConfiguracoes);
         
-        JButton btnExportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar Config", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnExportar = LayoutPadrao.criarBotaoSecundario("📤 Exportar Config");
         btnExportar.addActionListener(this::exportarConfiguracoes);
         
-        JButton btnSair = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Sair", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnSair = LayoutPadrao.criarBotaoPerigo("❌ Sair");
         btnSair.addActionListener(e -> frame.dispose());
         
         panel.add(btnSalvar);
@@ -493,9 +494,9 @@ public class PDVConfiguracoesSwingController {
             JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             buttonPanel.setBackground(new Color(245, 245, 250));
             
-            JButton btnTestar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔧 Testar Conexão", com.br.hermescomercial.theme.ModernTheme.PASTEL_CYAN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-            JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
-            JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+            JButton btnTestar = LayoutPadrao.criarBotaoPrimario("🔧 Testar Conexão");
+            JButton btnSalvar = LayoutPadrao.criarBotaoSucesso("💾 Salvar");
+            JButton btnCancelar = LayoutPadrao.criarBotaoPerigo("❌ Cancelar");
             
             btnTestar.addActionListener(ev -> {
                 String tipo = (String) cbTipoBanco.getSelectedItem();
@@ -683,7 +684,7 @@ public class PDVConfiguracoesSwingController {
         
         // Botões
         JPanel buttonPanel = new JPanel(new FlowLayout());
-        JButton btnSalvar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("💾 Salvar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnSalvar = LayoutPadrao.criarBotaoSucesso("💾 Salvar");
         btnSalvar.addActionListener(ev -> {
             String nome = txtNome.getText().trim();
             String login = txtLogin.getText().trim();
@@ -723,7 +724,7 @@ public class PDVConfiguracoesSwingController {
             dialog.dispose();
         });
         
-        JButton btnCancelar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Cancelar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnCancelar = LayoutPadrao.criarBotaoPerigo("❌ Cancelar");
         btnCancelar.addActionListener(ev -> dialog.dispose());
         
         buttonPanel.add(btnSalvar);
@@ -760,10 +761,10 @@ public class PDVConfiguracoesSwingController {
         
         Usuario usuario = usuarios.get(selectedRow);
         
-        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(frame, 
             "Deseja excluir o usuário:\n" + usuario.getNome() + "?",
             "Confirmar Exclusão", 
-            new String[]{"Sim", "Não"}, 0);
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
         if (confirm == 0) {
             usuarios.remove(selectedRow);
@@ -783,11 +784,11 @@ public class PDVConfiguracoesSwingController {
         
         Usuario usuario = usuarios.get(selectedRow);
         
-        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(frame, 
             "Deseja resetar a senha do usuário:\n" + usuario.getNome() + "?\n" +
             "Nova senha: 123456",
             "Resetar Senha", 
-            new String[]{"Sim", "Não"}, 0);
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
         if (confirm == 0) {
             JOptionPane.showMessageDialog(frame, "Senha resetada com sucesso!\nNova senha: 123456", 
@@ -806,11 +807,11 @@ public class PDVConfiguracoesSwingController {
     }
     
     private void restaurarPadrao(ActionEvent e) {
-        int confirm = com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(frame, 
             "Deseja restaurar as configurações padrão?\n" +
             "Todas as alterações serão perdidas.",
             "Restaurar Padrão", 
-            new String[]{"Sim", "Não"}, 0);
+            JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             
         if (confirm == 0) {
             carregarDadosExemplo();
