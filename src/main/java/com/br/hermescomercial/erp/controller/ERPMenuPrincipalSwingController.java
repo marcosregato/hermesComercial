@@ -130,29 +130,37 @@ public class ERPMenuPrincipalSwingController {
         // Categoria: Operações Principais
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.insets = new Insets(0, 0, 20, 0);
+        JButton btnProdutos = LayoutPadrao.criarBotaoPrimario("🏢 Gestão de Produtos");
+        btnProdutos.addActionListener(e -> abrirProdutos());
+        JButton btnEstoque = LayoutPadrao.criarBotaoAlerta("📊 Gestão de Estoque");
+        btnEstoque.addActionListener(e -> abrirEstoque());
+        JButton btnFinanceiro = LayoutPadrao.criarBotaoSucesso("💰 Gestão Financeira");
+        btnFinanceiro.addActionListener(e -> abrirFinanceiro());
+        JButton btnDashboard = LayoutPadrao.criarBotaoPrimario(" Dashboard");
+        btnDashboard.addActionListener(e -> abrirDashboard());
+        
         categoriasPanel.add(createCategoriaPanel("🏢 OPERAÇÕES PRINCIPAIS", 
-            new JButton[]{
-                LayoutPadrao.criarBotaoPrimario("🏢 Gestão de Produtos"),
-                LayoutPadrao.criarBotaoAlerta("📊 Gestão de Estoque"),
-                LayoutPadrao.criarBotaoSucesso("💰 Gestão Financeira"),
-                LayoutPadrao.criarBotaoPrimario(" Dashboard")
-            }), gbc);
+            new JButton[]{btnProdutos, btnEstoque, btnFinanceiro, btnDashboard}), gbc);
         
         // Categoria: Administração
         gbc.gridy = 1;
+        JButton btnUsuarios = LayoutPadrao.criarBotaoSecundario("👥 Gestão de Usuários");
+        btnUsuarios.addActionListener(e -> abrirUsuarios());
+        JButton btnConfiguracoes = LayoutPadrao.criarBotaoPerigo("⚙️ Configurações");
+        btnConfiguracoes.addActionListener(e -> abrirConfiguracao());
+        
         categoriasPanel.add(createCategoriaPanel("⚙️ ADMINISTRAÇÃO", 
-            new JButton[]{
-                LayoutPadrao.criarBotaoSecundario("👥 Gestão de Usuários"),
-                LayoutPadrao.criarBotaoPerigo("⚙️ Configurações")
-            }), gbc);
+            new JButton[]{btnUsuarios, btnConfiguracoes}), gbc);
         
         // Categoria: Relatórios
         gbc.gridy = 2;
+        JButton btnRelatorios = LayoutPadrao.criarBotaoAlerta("📊 Relatórios");
+        btnRelatorios.addActionListener(e -> abrirRelatorios());
+        JButton btnRelatorioFinanceiro = LayoutPadrao.criarBotaoPrimario("📈 Relatório Financeiro");
+        btnRelatorioFinanceiro.addActionListener(e -> abrirRelatorioFinanceiro());
+        
         categoriasPanel.add(createCategoriaPanel("📊 RELATÓRIOS E ANÁLISES", 
-            new JButton[]{
-                LayoutPadrao.criarBotaoAlerta("📊 Relatórios"),
-                LayoutPadrao.criarBotaoPrimario("📈 Relatório Financeiro")
-            }), gbc);
+            new JButton[]{btnRelatorios, btnRelatorioFinanceiro}), gbc);
         
         menuPanel.add(categoriasPanel, BorderLayout.CENTER);
         
@@ -219,49 +227,6 @@ public class ERPMenuPrincipalSwingController {
         return categoriaPanel;
     }
     
-    private JButton createMenuButton(String text, Color color, ActionListener actionListener) {
-        JButton button = new JButton(text);
-        button.setFont(LayoutPadrao.FONTE_BOTAO);
-        button.setBackground(color);
-        button.setForeground(Color.WHITE);
-        button.setBorderPainted(false);
-        button.setFocusPainted(false);
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        // Tamanho responsivo baseado no tamanho da tela
-        Dimension size = frame.getSize();
-        int width = size.width;
-        
-        if (width < 900) {
-            button.setPreferredSize(new Dimension(120, 60));
-        } else if (width < 1200) {
-            button.setPreferredSize(new Dimension(140, 70));
-        } else {
-            button.setPreferredSize(new Dimension(160, 80));
-        }
-        
-        // Efeito hover elegante
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(color.darker());
-            }
-            
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(color);
-            }
-            
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                if (actionListener != null) {
-                    actionListener.actionPerformed(null);
-                }
-            }
-        });
-        
-        return button;
-    }
     
     private JPanel createFooterPanel() {
         JPanel footerPanel = new JPanel(new BorderLayout());
@@ -273,7 +238,7 @@ public class ERPMenuPrincipalSwingController {
         
         lblDataHora = new JLabel("📅 " + java.time.LocalDateTime.now().format(
             java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-        lblDataHora.setFont(LayoutPadrao.FONTE_TEXTO_PEQUENO);
+        lblDataHora.setFont(LayoutPadrao.FONTE_PEQUENA);
         lblDataHora.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         dateTimePanel.add(lblDataHora);
