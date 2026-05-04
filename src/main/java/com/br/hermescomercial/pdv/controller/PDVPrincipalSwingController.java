@@ -89,7 +89,7 @@ public class PDVPrincipalSwingController {
         
         // Menu Financeiro
         JMenu financeiroMenu = new JMenu("💰 Financeiro");
-        financeiroMenu.add(createMenuItem("💳 Gestão Financeira (ERP)", e -> gerenciarFinanceiroERP(e)));
+        financeiroMenu.add(createMenuItem("💳 Gestão Financeira (ERP)", e -> mostrarEmDesenvolvimento(e, "Gestão Financeira ERP")));
         financeiroMenu.add(createMenuItem("📊 Relatórios Financeiros", e -> relatorioFinanceiro(e)));
         financeiroMenu.add(createMenuItem("💸 Contas a Pagar", e -> mostrarEmDesenvolvimento(e, "Contas a Pagar")));
         financeiroMenu.add(createMenuItem("💵 Contas a Receber", e -> mostrarEmDesenvolvimento(e, "Contas a Receber")));
