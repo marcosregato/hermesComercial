@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.print.PrinterJob;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import com.br.hermescomercial.util.LoggerUtil;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
 
 /**
  * Controller de Relatórios em SWING
@@ -150,7 +150,7 @@ public class PDVRelatoriosSwingController {
         
         // Botão Buscar Data Início
         gbc.gridx = 2; gbc.gridy = 0;
-        JButton btnBuscarDataInicio = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnBuscarDataInicio = LayoutPadrao.criarBotaoSucesso("🔍 Buscar");
         btnBuscarDataInicio.addActionListener(e -> buscarPorData(txtDataInicio.getText(), "início"));
         infoPanel.add(btnBuscarDataInicio, gbc);
         
@@ -164,13 +164,13 @@ public class PDVRelatoriosSwingController {
         
         // Botão Buscar Data Fim
         gbc.gridx = 5; gbc.gridy = 0;
-        JButton btnBuscarDataFim = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnBuscarDataFim = LayoutPadrao.criarBotaoSucesso("🔍 Buscar");
         btnBuscarDataFim.addActionListener(e -> buscarPorData(txtDataFim.getText(), "fim"));
         infoPanel.add(btnBuscarDataFim, gbc);
         
         // Botão Gerar Relatório
         gbc.gridx = 6; gbc.gridy = 0;
-        JButton btnGerar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📊 Gerar Relatório", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnGerar = LayoutPadrao.criarBotaoPrimario("📊 Gerar Relatório");
         btnGerar.addActionListener(e -> JOptionPane.showMessageDialog(frame, 
             "Relatório gerado para o período: " + txtDataInicio.getText() + " a " + txtDataFim.getText(),
             "Relatório Gerado", JOptionPane.INFORMATION_MESSAGE));
@@ -218,7 +218,7 @@ public class PDVRelatoriosSwingController {
         
         // Botão Buscar Data
         gbc.gridx = 2; gbc.gridy = 0;
-        JButton btnBuscarData = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Buscar", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnBuscarData = LayoutPadrao.criarBotaoSucesso("🔍 Buscar");
         btnBuscarData.addActionListener(e -> buscarPorData(txtData.getText(), "resumo"));
         infoPanel.add(btnBuscarData, gbc);
         
@@ -226,10 +226,10 @@ public class PDVRelatoriosSwingController {
         gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
         JPanel cardsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         
-        cardsPanel.add(createInfoBox("Total Vendas", "R$ 1.234,56", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN));
-        cardsPanel.add(createInfoBox("Total Pedidos", "45", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE));
-        cardsPanel.add(createInfoBox("Ticket Médio", "R$ 27,43", com.br.hermescomercial.theme.ModernTheme.PASTEL_YELLOW));
-        cardsPanel.add(createInfoBox("Saldo Líquido", "R$ 1.777,78", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE));
+        cardsPanel.add(createInfoBox("Total Vendas", "R$ 1.234,56", LayoutPadrao.COR_SUCESSO));
+        cardsPanel.add(createInfoBox("Total Pedidos", "45", LayoutPadrao.COR_PRIMARIA));
+        cardsPanel.add(createInfoBox("Ticket Médio", "R$ 27,43", LayoutPadrao.COR_ALERTA));
+        cardsPanel.add(createInfoBox("Saldo Líquido", "R$ 1.777,78", LayoutPadrao.COR_SECUNDARIA));
         
         infoPanel.add(cardsPanel, gbc);
         
@@ -294,7 +294,7 @@ public class PDVRelatoriosSwingController {
         filterPanel.add(txtDateFim, gbc);
         
         gbc.gridx = 6; gbc.gridy = 0;
-        JButton btnFiltrar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔍 Filtrar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnFiltrar = LayoutPadrao.criarBotaoPrimario("🔍 Filtrar");
         btnFiltrar.addActionListener(this::filtrarVendas);
         filterPanel.add(btnFiltrar, gbc);
         
@@ -435,16 +435,16 @@ public class PDVRelatoriosSwingController {
         JPanel panel = new JPanel(new FlowLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Ações"));
         
-        JButton btnGerarRelatorio = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📊 Gerar Relatório", com.br.hermescomercial.theme.ModernTheme.PASTEL_GREEN, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnGerarRelatorio = LayoutPadrao.criarBotaoSucesso("📊 Gerar Relatório");
         btnGerarRelatorio.addActionListener(this::gerarRelatorio);
         
-        JButton btnExportar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📤 Exportar PDF", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnExportar = LayoutPadrao.criarBotaoPrimario("📤 Exportar PDF");
         btnExportar.addActionListener(this::exportarPDF);
         
-        JButton btnImprimir = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🖨️ Imprimir", com.br.hermescomercial.theme.ModernTheme.PASTEL_PURPLE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnImprimir = LayoutPadrao.criarBotaoSecundario("🖨️ Imprimir");
         btnImprimir.addActionListener(this::imprimirRelatorio);
         
-        JButton btnLimpar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("🔄 Limpar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnLimpar = LayoutPadrao.criarBotaoPerigo("🔄 Limpar");
         btnLimpar.addActionListener(this::limparRelatorio);
         
         panel.add(btnGerarRelatorio);
@@ -559,18 +559,18 @@ public class PDVRelatoriosSwingController {
         // Painel de botões
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
         
-        JButton btnCopiar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("📋 Copiar", com.br.hermescomercial.theme.ModernTheme.PASTEL_BLUE, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnCopiar = LayoutPadrao.criarBotaoPrimario("📋 Copiar");
         btnCopiar.addActionListener(ev -> {
             String relatorioText = relatorio.toString();
             StringSelection selection = new StringSelection(relatorioText);
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
-            com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(relatorioFrame, 
+            JOptionPane.showMessageDialog(relatorioFrame, 
                 "Relatório copiado para área de transferência!", 
                 "Copiado", 
-                new String[]{"OK"}, 0);
+                JOptionPane.INFORMATION_MESSAGE);
         });
         
-        JButton btnFechar = com.br.hermescomercial.theme.ModernTheme.createPastelButton("❌ Fechar", com.br.hermescomercial.theme.ModernTheme.PASTEL_CORAL, com.br.hermescomercial.theme.ModernTheme.TEXT_PRIMARY);
+        JButton btnFechar = LayoutPadrao.criarBotaoPerigo("❌ Fechar");
         btnFechar.addActionListener(ev -> relatorioFrame.dispose());
         
         buttonPanel.add(btnCopiar);
@@ -580,12 +580,12 @@ public class PDVRelatoriosSwingController {
         relatorioFrame.setVisible(true);
         
         // Mensagem de confirmação
-        com.br.hermescomercial.theme.ModernTheme.showCustomConfirmDialog(frame, 
+        JOptionPane.showMessageDialog(frame, 
             "Relatório gerado com sucesso!\n" +
             "Tipo: " + tabTitle + "\n" +
             "Janela de relatório aberta para visualização.",
             "Relatório Gerado", 
-            new String[]{"OK"}, 0);
+            JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void exportarPDF(ActionEvent e) {
