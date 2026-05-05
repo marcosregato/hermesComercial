@@ -72,31 +72,8 @@ public class PDVCaixaSwingController {
     }
     
     private JPanel createHeaderPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
-        panel.setBackground(LayoutPadrao.COR_PRIMARIA);
-        panel.setPreferredSize(new Dimension(0, 80));
-        
-        // Título central com LayoutPadrao
-        JLabel titleLabel = LayoutPadrao.criarRotuloTitulo("💰 Operações de Caixa v2.8.3 - LayoutPadrao");
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        
-        // Botão voltar com LayoutPadrao
-        JButton btnVoltar = LayoutPadrao.criarBotaoSecundario("← Voltar");
-        btnVoltar.addActionListener(e -> frame.dispose());
-        
-        // Data e hora atual com LayoutPadrao
-        JLabel lblDataHora = LayoutPadrao.criarRotuloTexto(
-            java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        lblDataHora.setForeground(Color.WHITE);
-        lblDataHora.setHorizontalAlignment(SwingConstants.RIGHT);
-        
-        panel.add(btnVoltar, BorderLayout.WEST);
-        panel.add(titleLabel, BorderLayout.CENTER);
-        panel.add(lblDataHora, BorderLayout.EAST);
-        
-        return panel;
+        // Usando header PDV padrão do LayoutPadrao
+        return LayoutPadrao.criarHeaderPDVSimples("💰 Operações de Caixa - PDV");
     }
     
     private JPanel createStatusPanel() {

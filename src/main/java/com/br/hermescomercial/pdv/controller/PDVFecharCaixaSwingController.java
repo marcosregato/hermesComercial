@@ -56,7 +56,7 @@ public class PDVFecharCaixaSwingController {
         // Header
         mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
         
-        // Center
+        // Center (sem busca - apenas tabela)
         mainPanel.add(createContentPanel(), BorderLayout.CENTER);
         
         // South
@@ -97,7 +97,7 @@ public class PDVFecharCaixaSwingController {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Informações do Fechamento"));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(5,5,5,5);
         gbc.anchor = GridBagConstraints.WEST;
         
         // Data e Hora
@@ -171,7 +171,7 @@ public class PDVFecharCaixaSwingController {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("Resumo de Movimentações"));
         
-        // Tabela de resumo
+        // Tabela de resumo (sem busca - apenas tabela)
         String[] columns = {"Tipo", "Descrição", "Quantidade", "Valor Total", "Data/Hora"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override

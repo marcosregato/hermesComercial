@@ -102,8 +102,8 @@ public class ProdutoServiceRefactored {
             Validator.validarProduto(produto);
             
             // Verificar se produto existe
-            Produto existente = produtoRepository.buscarPorId(produto.getId());
-            if (existente == null) {
+            java.util.Optional<Produto> existente = produtoRepository.buscarPorId(produto.getId());
+            if (existente.isEmpty()) {
                 throw new BusinessException("Produto não encontrado para atualização");
             }
             
@@ -143,12 +143,13 @@ public class ProdutoServiceRefactored {
             }
             
             // Verificar se produto existe
-            Produto produto = produtoRepository.buscarPorId(id);
-            if (produto == null) {
+            java.util.Optional<Produto> produtoOpt = produtoRepository.buscarPorId(id);
+            if (produtoOpt.isEmpty()) {
                 throw new BusinessException("Produto não encontrado para exclusão");
             }
             
-            boolean resultado = produtoRepository.excluir(id);
+            Produto produto = produtoOpt.get();
+            boolean resultado = produtoRepository.remover(id);
             
             if (resultado) {
                 logger.info("Produto excluído com sucesso: {} (ID: {})", produto.getNome(), id);
@@ -290,15 +291,15 @@ public class ProdutoServiceRefactored {
                 return null;
             }
             
-            Produto produto = produtoRepository.buscarPorId(id);
+            java.util.Optional<Produto> produtoOpt = produtoRepository.buscarPorId(id);
             
-            if (produto != null) {
-                logger.debug("Produto encontrado por ID: {}", produto.getNome());
+            if (produtoOpt.isPresent()) {
+                logger.debug("Produto encontrado por ID: {}", produtoOpt.get().getNome());
+                return produtoOpt.get();
             } else {
                 logger.debug("Nenhum produto encontrado com ID: {}", id);
+                return null;
             }
-            
-            return produto;
             
         } catch (Exception e) {
             logger.error("Erro ao buscar produto por ID '{}': {}", id, e.getMessage(), e);

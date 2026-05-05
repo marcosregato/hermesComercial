@@ -42,7 +42,6 @@ public class ERPRelatorioFinanceiroSwingController {
     // Componentes de filtro
     private JComboBox<String> cbPeriodo;
     private JDateChooser dcDataInicio, dcDataFim;
-    private JButton btnGerar, btnExportar;
     
     // Tabelas
     private JTable dreTable, fluxoCaixaTable, balanceteTable, contasTable;
@@ -88,18 +87,33 @@ public class ERPRelatorioFinanceiroSwingController {
     }
     
     private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setOpaque(false);
-        headerPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
+        // Usando header ERP padrão do LayoutPadrao
+        JPanel headerPanel = LayoutPadrao.criarHeaderERPComBotoes(
+            "📊 Relatórios Financeiros", 
+            "Análise financeira e relatórios contábeis",
+            "Administrador", 
+            "Gerente Financeiro",
+            new JButton[]{
+                LayoutPadrao.criarBotaoPrimario("🔄 Gerar"),
+                LayoutPadrao.criarBotaoSucesso("📥 Exportar"),
+                LayoutPadrao.criarBotaoSecundario("📊 Dashboard")
+            }
+        );
         
-        // Título
-        JLabel titleLabel = new JLabel("📊 Relatórios Financeiros");
-        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
-        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
+        // Configurar ações dos botões
+        JPanel buttonPanel = (JPanel) headerPanel.getComponent(2);
+        JButton btnGerar = (JButton) buttonPanel.getComponent(0);
+        JButton btnExportar = (JButton) buttonPanel.getComponent(1);
+        JButton btnDashboard = (JButton) buttonPanel.getComponent(2);
         
-        // Painel de filtros
+        btnGerar.addActionListener(e -> gerarRelatorios());
+        btnExportar.addActionListener(e -> exportarRelatorios());
+        btnDashboard.addActionListener(e -> mostrarDashboardFinanceiro());
+        
+        // Adicionar filtros personalizados abaixo do header
         JPanel filterPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         filterPanel.setOpaque(false);
+        filterPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
         
         filterPanel.add(new JLabel("Período:"));
         cbPeriodo = new JComboBox<>(new String[]{"Mês Atual", "Trimestre", "Semestre", "Ano", "Personalizado"});
@@ -116,24 +130,26 @@ public class ERPRelatorioFinanceiroSwingController {
         dcDataFim.setFont(LayoutPadrao.FONTE_CAMPO);
         filterPanel.add(dcDataFim);
         
-        // Botões de ação
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.setOpaque(false);
+        // Combinar header com filtros
+        JPanel combinedPanel = new JPanel(new BorderLayout());
+        combinedPanel.setOpaque(false);
+        combinedPanel.add(headerPanel, BorderLayout.NORTH);
+        combinedPanel.add(filterPanel, BorderLayout.CENTER);
         
-        btnGerar = LayoutPadrao.criarBotaoPrimario("🔄 Gerar Relatório");
-        btnGerar.addActionListener(e -> gerarRelatorios());
-        
-        btnExportar = LayoutPadrao.criarBotaoSucesso("📥 Exportar");
-        btnExportar.addActionListener(e -> exportarRelatorios());
-        
-        buttonPanel.add(btnGerar);
-        buttonPanel.add(btnExportar);
-        
-        headerPanel.add(titleLabel, BorderLayout.WEST);
-        headerPanel.add(filterPanel, BorderLayout.CENTER);
-        headerPanel.add(buttonPanel, BorderLayout.EAST);
-        
-        return headerPanel;
+        return combinedPanel;
+    }
+    
+    private void mostrarDashboardFinanceiro() {
+        JOptionPane.showMessageDialog(frame, 
+            "📊 Dashboard Financeiro em desenvolvimento!\n\n" +
+            "Esta funcionalidade exibirá:\n" +
+            "• Gráficos de fluxo de caixa\n" +
+            "• Análise de receitas vs despesas\n" +
+            "• Indicadores financeiros em tempo real\n" +
+            "• Projeções e metas\n\n" +
+            "Disponível em versões futuras.",
+            "Dashboard Financeiro",
+            JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void createTabbedPane() {

@@ -41,6 +41,29 @@ public class ERPRelatorioSwingController {
         mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
+        // Header ERP padrão
+        JPanel headerPanel = LayoutPadrao.criarHeaderERPComBotoes(
+            "📊 Sistema de Relatórios", 
+            "Geração e visualização de relatórios empresariais",
+            "Administrador", 
+            "Gerente",
+            new JButton[]{
+                LayoutPadrao.criarBotaoSucesso("📄 Gerar"),
+                LayoutPadrao.criarBotaoPrimario("📤 Exportar"),
+                LayoutPadrao.criarBotaoSecundario("🖨️ Imprimir")
+            }
+        );
+        
+        // Configurar ações dos botões do header
+        JPanel buttonPanel = (JPanel) headerPanel.getComponent(2);
+        JButton btnGerar = (JButton) buttonPanel.getComponent(0);
+        JButton btnExportar = (JButton) buttonPanel.getComponent(1);
+        JButton btnImprimir = (JButton) buttonPanel.getComponent(2);
+        
+        btnGerar.addActionListener(e -> gerarRelatorio());
+        btnExportar.addActionListener(e -> exportarRelatorio());
+        btnImprimir.addActionListener(e -> imprimirRelatorio("Relatório do Sistema Hermes Comercial"));
+        
         // Painel superior com opções
         JPanel opcoesPanel = criarPainelOpcoes();
         
@@ -51,9 +74,16 @@ public class ERPRelatorioSwingController {
         JPanel statusPanel = criarPainelStatus();
         
         // Adicionar componentes ao painel principal
-        mainPanel.add(opcoesPanel, BorderLayout.NORTH);
-        mainPanel.add(previewPanel, BorderLayout.CENTER);
-        mainPanel.add(statusPanel, BorderLayout.SOUTH);
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        mainPanel.add(opcoesPanel, BorderLayout.CENTER);
+        
+        // Criar painel para conteúdo principal
+        JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.add(previewPanel, BorderLayout.CENTER);
+        contentPanel.add(statusPanel, BorderLayout.SOUTH);
+        contentPanel.setOpaque(false);
+        
+        mainPanel.add(contentPanel, BorderLayout.SOUTH);
         
         frame.add(mainPanel);
         frame.setVisible(true);

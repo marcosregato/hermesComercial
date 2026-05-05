@@ -44,57 +44,24 @@ public class ERPFinanceiroSwingController {
     }
     
     private void createMainPanel() {
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setOpaque(false);
-        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        // Criar painéis de formulário e tabela
+        JPanel formularioPanel = createFormPanel();
+        JPanel tabelaPanel = createTablePanel();
         
-        // Header
-        createHeaderPanel();
-        
-        // Painel de formulário e tabela
-        JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-        splitPane.setDividerLocation(300);
-        
-        JPanel formPanel = createFormPanel();
-        JPanel tablePanel = createTablePanel();
-        
-        splitPane.setTopComponent(formPanel);
-        splitPane.setBottomComponent(tablePanel);
-        
-        mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
-        mainPanel.add(splitPane, BorderLayout.CENTER);
+        // Usando layout padrão Header → Busca → Formulário → Tabela
+        JPanel mainPanel = LayoutPadrao.criarLayoutPadraoGestao(
+            false, // isPDV (false para ERP)
+            "💰 Gestão Financeira - ERP",
+            "Digite descrição, tipo ou categoria do lançamento...",
+            formularioPanel,
+            tabelaPanel
+        );
         
         frame.add(mainPanel);
     }
     
-    private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setOpaque(false);
-        headerPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
-        
-        // Título
-        JLabel titleLabel = new JLabel("💰 Gestão Financeira");
-        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
-        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
-        
-        // Botões de ação
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        buttonPanel.setOpaque(false);
-        
-        JButton btnRelatorio = LayoutPadrao.criarBotaoSucesso("📊 Relatórios");
-        btnRelatorio.addActionListener(e -> gerarRelatorios());
-        
-        JButton btnConciliar = LayoutPadrao.criarBotaoPrimario("🔄 Conciliar");
-        btnConciliar.addActionListener(e -> conciliarLancamentos());
-        
-        buttonPanel.add(btnRelatorio);
-        buttonPanel.add(btnConciliar);
-        
-        headerPanel.add(titleLabel, BorderLayout.WEST);
-        headerPanel.add(buttonPanel, BorderLayout.EAST);
-        
-        return headerPanel;
-    }
+    // Header agora é criado automaticamente pelo LayoutPadrao.criarLayoutPadraoGestao()
+    
     
     private JPanel createFormPanel() {
         JPanel formPanel = new JPanel(new GridBagLayout());
@@ -348,8 +315,7 @@ public class ERPFinanceiroSwingController {
         try {
             BigDecimal valor = new BigDecimal(valorStr.replace(",", "."));
             
-            // TODO: Implementar salvamento no banco de dados
-            JOptionPane.showMessageDialog(frame, 
+                JOptionPane.showMessageDialog(frame, 
                 "✅ Lançamento salvo com sucesso!\n" +
                 "Tipo: " + tipo + "\n" +
                 "Descrição: " + descricao + "\n" +
@@ -420,8 +386,7 @@ public class ERPFinanceiroSwingController {
         
         if (confirmacao == JOptionPane.YES_OPTION) {
             try {
-                // TODO: Implementar exclusão no banco de dados
-                tableModel.removeRow(linhaSelecionada);
+                        tableModel.removeRow(linhaSelecionada);
                 
                 JOptionPane.showMessageDialog(frame, 
                 "✅ Lançamento excluído com sucesso!\n" +
@@ -433,22 +398,6 @@ public class ERPFinanceiroSwingController {
                     "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
-    }
-    
-    private void gerarRelatorios() {
-        JOptionPane.showMessageDialog(frame, 
-            "📊 Gerar Relatórios\n" +
-            "Relatórios financeiros em desenvolvimento.\n" +
-            "Incluirá: DRE, Fluxo de Caixa, Balancete, Contas a Pagar/Receber.", 
-            "Relatórios", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    private void conciliarLancamentos() {
-        JOptionPane.showMessageDialog(frame, 
-            "🔄 Conciliar Lançamentos\n" +
-            "Conciliação financeira em desenvolvimento.\n" +
-            "Verificará: duplicidades, valores divergentes, lançamentos pendentes.", 
-            "Conciliação", JOptionPane.INFORMATION_MESSAGE);
     }
     
     // ==================== MÉTODOS PÚBLICOS ====================

@@ -29,7 +29,7 @@ public class LayoutPadrao {
     public static final Color COR_TEXTO = new Color(52, 73, 94);             // Cinza escuro
     public static final Color COR_TEXTO_CLARO = new Color(149, 165, 166);    // Cinza médio
     public static final Color COR_BORDA = new Color(200, 200, 200);         // Cinza borda
-    public static final Color COR_SOMBRA = new Color(0, 0, 0, 50);           // Sombra
+    public static final Color COR_SOMBRA = new Color(0, 0, 0, 255);           // Sombra
     public static final Color COR_HOVER = new Color(230, 240, 250);          // Hover azul
     public static final Color COR_PRESSED = new Color(35, 115, 165);         // Pressed azul
     
@@ -456,10 +456,10 @@ public class LayoutPadrao {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(COR_HEADER_ERP);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 80));
+        headerPanel.setPreferredSize(new Dimension(800, 80));
         
         // Painel esquerdo - Títulos
-        JPanel painelEsquerdo = new JPanel(new BorderLayout(0, 5));
+        JPanel painelEsquerdo = new JPanel(new BorderLayout(5, 5));
         painelEsquerdo.setBackground(COR_HEADER_ERP);
         painelEsquerdo.setOpaque(false);
         
@@ -469,13 +469,13 @@ public class LayoutPadrao {
         
         JLabel lblSubtitulo = new JLabel(subtitulo);
         lblSubtitulo.setFont(FONTE_TEXTO);
-        lblSubtitulo.setForeground(new Color(255, 255, 255, 200)); // Branco com transparência
+        lblSubtitulo.setForeground(new Color(255, 255, 255, 1)); // Branco com transparência
         
         painelEsquerdo.add(lblTitulo, BorderLayout.NORTH);
         painelEsquerdo.add(lblSubtitulo, BorderLayout.CENTER);
         
         // Painel direito - Informações do usuário
-        JPanel painelDireito = new JPanel(new BorderLayout(0, 5));
+        JPanel painelDireito = new JPanel(new BorderLayout(5, 5));
         painelDireito.setBackground(COR_HEADER_ERP);
         painelDireito.setOpaque(false);
         
@@ -486,7 +486,7 @@ public class LayoutPadrao {
         
         JLabel lblPerfil = new JLabel(perfilUsuario);
         lblPerfil.setFont(FONTE_ROTULO);
-        lblPerfil.setForeground(new Color(255, 255, 255, 180)); // Branco com transparência
+        lblPerfil.setForeground(new Color(255, 255, 255, 1)); // Branco com transparência
         lblPerfil.setHorizontalAlignment(SwingConstants.RIGHT);
         
         painelDireito.add(lblUsuario, BorderLayout.NORTH);
@@ -518,7 +518,7 @@ public class LayoutPadrao {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(COR_HEADER_ERP);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 60));
+        headerPanel.setPreferredSize(new Dimension(800, 60));
         
         JLabel lblTitulo = new JLabel(titulo);
         lblTitulo.setFont(FONTE_TITULO);
@@ -553,17 +553,17 @@ public class LayoutPadrao {
         
         if (botoesAcao != null && botoesAcao.length > 0) {
             // Painel central para botões
-            JPanel painelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+            JPanel painelCentral = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 5));
             painelCentral.setBackground(COR_HEADER_ERP);
             painelCentral.setOpaque(false);
             
             for (JButton botao : botoesAcao) {
                 // Estiliza botões para o header
                 botao.setFont(FONTE_ROTULO);
-                botao.setBackground(new Color(255, 255, 255, 30)); // Branco com transparência
+                botao.setBackground(new Color(255, 255, 255, 1)); // Branco com transparência
                 botao.setForeground(COR_TEXTO_HEADER);
                 botao.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(255, 255, 255, 100), 1),
+                    BorderFactory.createLineBorder(new Color(255, 255, 255, 1), 1),
                     BorderFactory.createEmptyBorder(8, 15, 8, 15)
                 ));
                 botao.setFocusPainted(false);
@@ -573,22 +573,22 @@ public class LayoutPadrao {
                 botao.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
-                        botao.setBackground(new Color(255, 255, 255, 50));
+                        botao.setBackground(new Color(255, 255, 255, 1));
                     }
                     
                     @Override
                     public void mouseExited(MouseEvent e) {
-                        botao.setBackground(new Color(255, 255, 255, 30));
+                        botao.setBackground(new Color(255, 255, 255, 1));
                     }
                     
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        botao.setBackground(new Color(255, 255, 255, 70));
+                        botao.setBackground(new Color(255, 255, 255, 1));
                     }
                     
                     @Override
                     public void mouseReleased(MouseEvent e) {
-                        botao.setBackground(new Color(255, 255, 255, 50));
+                        botao.setBackground(new Color(255, 255, 255, 1));
                     }
                 });
                 
@@ -613,7 +613,7 @@ public class LayoutPadrao {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(COR_HEADER_ERP);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 70));
+        headerPanel.setPreferredSize(new Dimension(800, 70));
         
         // Painel esquerdo - Título
         JLabel lblTitulo = new JLabel(titulo);
@@ -623,7 +623,7 @@ public class LayoutPadrao {
         // Painel direito - Informações do sistema
         JLabel lblInfoSistema = new JLabel(infoSistema);
         lblInfoSistema.setFont(FONTE_PEQUENA);
-        lblInfoSistema.setForeground(new Color(255, 255, 255, 150)); // Branco com transparência
+        lblInfoSistema.setForeground(new Color(255, 255, 255, 1)); // Branco com transparência
         lblInfoSistema.setHorizontalAlignment(SwingConstants.RIGHT);
         
         headerPanel.add(lblTitulo, BorderLayout.WEST);
@@ -656,10 +656,10 @@ public class LayoutPadrao {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(COR_HEADER_PDV);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 80));
+        headerPanel.setPreferredSize(new Dimension(800, 80));
         
         // Painel esquerdo - Títulos
-        JPanel painelEsquerdo = new JPanel(new BorderLayout(0, 5));
+        JPanel painelEsquerdo = new JPanel(new BorderLayout(5, 5));
         painelEsquerdo.setBackground(COR_HEADER_PDV);
         painelEsquerdo.setOpaque(false);
         
@@ -669,13 +669,13 @@ public class LayoutPadrao {
         
         JLabel lblSubtitulo = new JLabel(subtitulo);
         lblSubtitulo.setFont(FONTE_TEXTO);
-        lblSubtitulo.setForeground(new Color(255, 255, 255, 200)); // Branco com transparência
+        lblSubtitulo.setForeground(new Color(255, 255, 255, 1)); // Branco com transparência
         
         painelEsquerdo.add(lblTitulo, BorderLayout.NORTH);
         painelEsquerdo.add(lblSubtitulo, BorderLayout.CENTER);
         
         // Painel direito - Informações do usuário
-        JPanel painelDireito = new JPanel(new BorderLayout(0, 5));
+        JPanel painelDireito = new JPanel(new BorderLayout(5, 5));
         painelDireito.setBackground(COR_HEADER_PDV);
         painelDireito.setOpaque(false);
         
@@ -686,7 +686,7 @@ public class LayoutPadrao {
         
         JLabel lblPerfil = new JLabel(perfilUsuario);
         lblPerfil.setFont(FONTE_ROTULO);
-        lblPerfil.setForeground(new Color(255, 255, 255, 180)); // Branco com transparência
+        lblPerfil.setForeground(new Color(255, 255, 255, 1)); // Branco com transparência
         lblPerfil.setHorizontalAlignment(SwingConstants.RIGHT);
         
         painelDireito.add(lblUsuario, BorderLayout.NORTH);
@@ -718,7 +718,7 @@ public class LayoutPadrao {
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(COR_HEADER_PDV);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        headerPanel.setPreferredSize(new Dimension(headerPanel.getPreferredSize().width, 60));
+        headerPanel.setPreferredSize(new Dimension(800, 60));
         
         JLabel lblTitulo = new JLabel(titulo);
         lblTitulo.setFont(FONTE_TITULO);
@@ -737,5 +737,191 @@ public class LayoutPadrao {
         containerCompleto.add(separador, BorderLayout.CENTER);
         
         return containerCompleto;
+    }
+    
+    /**
+     * Cria layout padrão para telas de gestão: Header → Busca → Formulário → Tabela
+     * @param isPDV - true para sistema PDV, false para sistema ERP
+     * @param tituloHeader - Título do header
+     * @param textoBusca - Texto placeholder do campo de busca
+     * @param formularioPanel - Painel do formulário (já criado)
+     * @param tabelaPanel - Painel da tabela (já criado)
+     * @return JPanel - Layout completo com estrutura padrão
+     */
+    public static JPanel criarLayoutPadraoGestao(
+            boolean isPDV, 
+            String tituloHeader, 
+            String textoBusca,
+            JPanel formularioPanel, 
+            JPanel tabelaPanel) {
+        
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(isPDV ? COR_FUNDO_ESCURO : COR_FUNDO);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
+        // 1. HEADER
+        JPanel headerPanel;
+        if (isPDV) {
+            headerPanel = criarHeaderPDVSimples(tituloHeader);
+        } else {
+            headerPanel = criarHeaderERPSimples(tituloHeader);
+        }
+        
+        // 2. PAINEL DE BUSCA
+        JPanel buscaPanel = criarPainelBusca(isPDV, textoBusca);
+        
+        // 3. PAINEL CENTRAL (Formulário + Tabela)
+        JPanel centroPanel = new JPanel(new BorderLayout());
+        centroPanel.setOpaque(false);
+        
+        // Formulário no topo
+        if (formularioPanel != null) {
+            formularioPanel.setBorder(BorderFactory.createCompoundBorder(
+                BORDA_PADRAO,
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+            ));
+            centroPanel.add(formularioPanel, BorderLayout.NORTH);
+        }
+        
+        // Tabela no centro
+        if (tabelaPanel != null) {
+            tabelaPanel.setBorder(BorderFactory.createCompoundBorder(
+                BORDA_PADRAO,
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+            ));
+            centroPanel.add(tabelaPanel, BorderLayout.CENTER);
+        }
+        
+        // Montar layout final
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        
+        // Painel intermediário para busca + conteúdo
+        JPanel conteudoPanel = new JPanel(new BorderLayout());
+        conteudoPanel.setOpaque(false);
+        conteudoPanel.setBorder(BorderFactory.createEmptyBorder(10, 5, 5, 5));
+        
+        conteudoPanel.add(buscaPanel, BorderLayout.NORTH);
+        conteudoPanel.add(centroPanel, BorderLayout.CENTER);
+        
+        mainPanel.add(conteudoPanel, BorderLayout.CENTER);
+        
+        return mainPanel;
+    }
+    
+    /**
+     * Cria painel de busca padrão para telas de gestão
+     * @param isPDV - true para sistema PDV, false para sistema ERP
+     * @param textoPlaceholder - Texto placeholder do campo de busca
+     * @return JPanel - Painel de busca estilizado
+     */
+    public static JPanel criarPainelBusca(boolean isPDV, String textoPlaceholder) {
+        JPanel buscaPanel = new JPanel(new BorderLayout());
+        buscaPanel.setOpaque(false);
+        buscaPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 15, 5));
+        
+        // Painel esquerdo - Campo de busca
+        JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        leftPanel.setOpaque(false);
+        
+        JLabel lblBuscar = criarRotuloTexto("🔍 Buscar:");
+        JTextField txtBusca = new JTextField(20);
+        txtBusca.setFont(FONTE_CAMPO);
+        txtBusca.setBorder(BorderFactory.createCompoundBorder(
+            BORDA_PADRAO,
+            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+        txtBusca.setText(textoPlaceholder);
+        
+        leftPanel.add(lblBuscar);
+        leftPanel.add(txtBusca);
+        
+        // Painel direito - Botões de ação
+        JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        rightPanel.setOpaque(false);
+        
+        JButton btnBuscar = criarBotaoPrimario("🔍 Buscar");
+        JButton btnLimpar = criarBotaoSecundario("🔄 Limpar");
+        JButton btnNovo = criarBotaoSucesso("➕ Novo");
+        
+        rightPanel.add(btnBuscar);
+        rightPanel.add(btnLimpar);
+        rightPanel.add(btnNovo);
+        
+        buscaPanel.add(leftPanel, BorderLayout.WEST);
+        buscaPanel.add(rightPanel, BorderLayout.EAST);
+        
+        return buscaPanel;
+    }
+    
+    /**
+     * Cria layout padrão simplificado: Header → Busca → Tabela
+     * @param isPDV - true para sistema PDV, false para sistema ERP
+     * @param tituloHeader - Título do header
+     * @param textoBusca - Texto placeholder do campo de busca
+     * @param tabelaPanel - Painel da tabela (já criado)
+     * @return JPanel - Layout completo com estrutura padrão
+     */
+    public static JPanel criarLayoutPadraoConsulta(
+            boolean isPDV, 
+            String tituloHeader, 
+            String textoBusca,
+            JPanel tabelaPanel) {
+        
+        return criarLayoutPadraoGestao(isPDV, tituloHeader, textoBusca, null, tabelaPanel);
+    }
+    
+    /**
+     * Cria layout padrão simplificado: Header → Formulário → Tabela
+     * @param isPDV - true para sistema PDV, false para sistema ERP
+     * @param tituloHeader - Título do header
+     * @param formularioPanel - Painel do formulário (já criado)
+     * @param tabelaPanel - Painel da tabela (já criado)
+     * @return JPanel - Layout completo com estrutura padrão
+     */
+    public static JPanel criarLayoutPadraoFormulario(
+            boolean isPDV, 
+            String tituloHeader,
+            JPanel formularioPanel, 
+            JPanel tabelaPanel) {
+        
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(isPDV ? COR_FUNDO_ESCURO : COR_FUNDO);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
+        // 1. HEADER
+        JPanel headerPanel;
+        if (isPDV) {
+            headerPanel = criarHeaderPDVSimples(tituloHeader);
+        } else {
+            headerPanel = criarHeaderERPSimples(tituloHeader);
+        }
+        
+        // 2. PAINEL CENTRAL (Formulário + Tabela)
+        JPanel centroPanel = new JPanel(new BorderLayout());
+        centroPanel.setOpaque(false);
+        
+        // Formulário no topo
+        if (formularioPanel != null) {
+            formularioPanel.setBorder(BorderFactory.createCompoundBorder(
+                BORDA_PADRAO,
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+            ));
+            centroPanel.add(formularioPanel, BorderLayout.NORTH);
+        }
+        
+        // Tabela no centro
+        if (tabelaPanel != null) {
+            tabelaPanel.setBorder(BorderFactory.createCompoundBorder(
+                BORDA_PADRAO,
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+            ));
+            centroPanel.add(tabelaPanel, BorderLayout.CENTER);
+        }
+        
+        // Montar layout final
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+        mainPanel.add(centroPanel, BorderLayout.CENTER);
+        
+        return mainPanel;
     }
 }

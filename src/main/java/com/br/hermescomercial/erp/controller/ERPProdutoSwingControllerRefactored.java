@@ -1,0 +1,757 @@
+package com.br.hermescomercial.erp.controller;
+
+import com.br.hermescomercial.injection.DependencyContainerRefactored;
+import com.br.hermescomercial.service.ProdutoService;
+import com.br.hermescomercial.dto.ProdutoDTO;
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
+import com.br.hermescomercial.config.ConfigurationManager;
+import com.br.hermescomercial.cache.CacheManager;
+import com.br.hermescomercial.event.EventSystem;
+import com.br.hermescomercial.exception.BusinessException;
+import com.br.hermescomercial.validation.ProdutoValidator;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.Map;
+import java.util.logging.Logger;
+import java.util.logging.Level;
+
+/**
+ * Controller para tela de gestão de produtos do ERP - Refatorado
+ * Versão 2.0.0 - Arquitetura Desacoplada com Injeção de Dependências
+ */
+public class ERPProdutoSwingControllerRefactored {
+    
+    private static final Logger logger = Logger.getLogger(ERPProdutoSwingControllerRefactored.class.getName());
+    
+    // Dependencies injetadas
+    private final ProdutoService produtoService;
+    private final ConfigurationManager configManager;
+    private final CacheManager cacheManager;
+    private final EventSystem eventSystem;
+    private final ProdutoValidator validator;
+    
+    // UI Components
+    private JFrame frame;
+    private JPanel mainPanel;
+    private JTable produtosTable;
+    private DefaultTableModel tableModel;
+    private JTextField txtNome, txtCodigo, txtDescricao, txtPreco, txtEstoque, txtCategoria;
+    private JButton btnSalvar, btnEditar, btnExcluir, btnCancelar, btnAtualizar, btnLimparCache;
+    private JComboBox<String> cbUnidade, cbStatus;
+    private JLabel lblStatus, lblTotalProdutos, lblCacheHits;
+    
+    // Estado do controller
+    private boolean editMode = false;
+    private Long produtoEditId = null;
+    private boolean isLoading = false;
+    
+    /**
+     * Construtor com injeção de dependências
+     */
+    public ERPProdutoSwingControllerRefactored() {
+        this(DependencyContainerRefactored.getInstance());
+    }
+    
+    /**
+     * Construtor para testes (permite mock de dependencies)
+     */
+    public ERPProdutoSwingControllerRefactored(DependencyContainerRefactored container) {
+        this.produtoService = container.resolve(ProdutoService.class);
+        this.configManager = container.resolve(ConfigurationManager.class);
+        this.cacheManager = container.resolve(CacheManager.class);
+        this.eventSystem = container.resolve(EventSystem.class);
+        this.validator = container.resolve(ProdutoValidator.class);
+        
+        initializeUI();
+        setupEventListeners();
+        loadInitialData();
+    }
+    
+    /**
+     * Inicializa a interface do usuário
+     */
+    private void initializeUI() {
+        frame = new JFrame("📦 Gestão de Produtos - ERP v2.0");
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        
+        // Configurações do ConfigurationManager
+        int width = configManager.getInteger("ui.produto.window.width", 1200);
+        int height = configManager.getInteger("ui.produto.window.height", 800);
+        frame.setSize(width, height);
+        frame.setLocationRelativeTo(null);
+        
+        // Aplicar tema padrão
+        frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
+        
+        // Criar painéis
+        JPanel formularioPanel = createFormPanel();
+        JPanel tabelaPanel = createTablePanel();
+        
+        // Layout padrão
+        mainPanel = LayoutPadrao.criarLayoutPadraoGestao(
+            false, // isPDV
+            "📦 Gestão de Produtos - ERP",
+            "Digite nome, código ou categoria do produto...",
+            formularioPanel,
+            tabelaPanel
+        );
+        
+        frame.add(mainPanel);
+    }
+    
+    /**
+     * Configura listeners de eventos
+     */
+    private void setupEventListeners() {
+        // Listener para eventos do sistema
+        eventSystem.subscribe("produto.atualizado", this::onProdutoAtualizado);
+        eventSystem.subscribe("produto.excluido", this::onProdutoExcluido);
+        eventSystem.subscribe("cache.limpo", this::onCacheLimpo);
+        
+        // Listener de configuração
+        configManager.addListener(this::onConfigurationChanged);
+    }
+    
+    /**
+     * Carrega dados iniciais
+     */
+    private void loadInitialData() {
+        CompletableFuture.runAsync(() -> {
+            try {
+                setLoading(true);
+                carregarProdutos();
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, "Erro ao carregar produtos iniciais", e);
+                SwingUtilities.invokeLater(() -> 
+                    showError("Erro ao carregar produtos: " + e.getMessage()));
+            } finally {
+                setLoading(false);
+            }
+        });
+    }
+    
+    /**
+     * Cria painel de formulário
+     */
+    private JPanel createFormPanel() {
+        JPanel formPanel = new JPanel(new GridBagLayout());
+        formPanel.setOpaque(false);
+        formPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.anchor = GridBagConstraints.WEST;
+        
+        // Código
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Código:"), gbc);
+        
+        gbc.gridx = 1; gbc.weightx = 0.2;
+        txtCodigo = createModernTextField(10);
+        txtCodigo.setEditable(false);
+        formPanel.add(txtCodigo, gbc);
+        
+        // Nome
+        gbc.gridx = 2; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Nome:"), gbc);
+        
+        gbc.gridx = 3; gbc.weightx = 1.0;
+        txtNome = createModernTextField(30);
+        formPanel.add(txtNome, gbc);
+        
+        // Categoria
+        gbc.gridx = 0; gbc.gridy = 1; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Categoria:"), gbc);
+        
+        gbc.gridx = 1; gbc.weightx = 0.5;
+        txtCategoria = createModernTextField(15);
+        formPanel.add(txtCategoria, gbc);
+        
+        // Unidade
+        gbc.gridx = 2; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Unidade:"), gbc);
+        
+        gbc.gridx = 3; gbc.weightx = 0.3;
+        cbUnidade = new JComboBox<>(getUnidadesFromConfig());
+        cbUnidade.setFont(LayoutPadrao.FONTE_CAMPO);
+        formPanel.add(cbUnidade, gbc);
+        
+        // Preço
+        gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Preço:"), gbc);
+        
+        gbc.gridx = 1; gbc.weightx = 0.5;
+        txtPreco = createModernTextField(15);
+        formPanel.add(txtPreco, gbc);
+        
+        // Estoque
+        gbc.gridx = 2; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Estoque:"), gbc);
+        
+        gbc.gridx = 3; gbc.weightx = 0.3;
+        txtEstoque = createModernTextField(10);
+        formPanel.add(txtEstoque, gbc);
+        
+        // Descrição
+        gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Descrição:"), gbc);
+        
+        gbc.gridx = 1; gbc.gridwidth = 3; gbc.weightx = 1.0;
+        txtDescricao = createModernTextField(50);
+        formPanel.add(txtDescricao, gbc);
+        
+        // Status
+        gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 1; gbc.weightx = 0.0;
+        formPanel.add(createLabel("Status:"), gbc);
+        
+        gbc.gridx = 1; gbc.weightx = 0.5;
+        cbStatus = new JComboBox<>(getStatusFromConfig());
+        cbStatus.setFont(LayoutPadrao.FONTE_CAMPO);
+        formPanel.add(cbStatus, gbc);
+        
+        // Painel de botões
+        gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 4;
+        JPanel buttonPanel = createButtonPanel();
+        formPanel.add(buttonPanel, gbc);
+        
+        // Painel de status
+        gbc.gridy = 6;
+        JPanel statusPanel = createStatusPanel();
+        formPanel.add(statusPanel, gbc);
+        
+        return formPanel;
+    }
+    
+    /**
+     * Cria painel de botões
+     */
+    private JPanel createButtonPanel() {
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setOpaque(false);
+        
+        btnSalvar = LayoutPadrao.criarBotaoSucesso("💾 Salvar");
+        btnSalvar.addActionListener(this::onSalvar);
+        buttonPanel.add(btnSalvar);
+        
+        btnEditar = LayoutPadrao.criarBotaoPrimario("✏️ Editar");
+        btnEditar.addActionListener(this::onEditar);
+        buttonPanel.add(btnEditar);
+        
+        btnExcluir = LayoutPadrao.criarBotaoPerigo("🗑️ Excluir");
+        btnExcluir.addActionListener(this::onExcluir);
+        buttonPanel.add(btnExcluir);
+        
+        btnCancelar = LayoutPadrao.criarBotaoSecundario("❌ Cancelar");
+        btnCancelar.addActionListener(this::onCancelar);
+        buttonPanel.add(btnCancelar);
+        
+        btnAtualizar = LayoutPadrao.criarBotaoSecundario("🔄 Atualizar");
+        btnAtualizar.addActionListener(this::onAtualizar);
+        buttonPanel.add(btnAtualizar);
+        
+        btnLimparCache = LayoutPadrao.criarBotaoSecundario("🧹 Limpar Cache");
+        btnLimparCache.addActionListener(this::onLimparCache);
+        buttonPanel.add(btnLimparCache);
+        
+        return buttonPanel;
+    }
+    
+    /**
+     * Cria painel de status
+     */
+    private JPanel createStatusPanel() {
+        JPanel statusPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        statusPanel.setOpaque(false);
+        
+        lblStatus = new JLabel("🟢 Pronto");
+        lblStatus.setFont(LayoutPadrao.FONTE_TEXTO);
+        lblStatus.setForeground(new Color(40, 167, 69));
+        statusPanel.add(lblStatus);
+        
+        lblTotalProdutos = new JLabel("📊 Total: 0");
+        lblTotalProdutos.setFont(LayoutPadrao.FONTE_TEXTO);
+        lblTotalProdutos.setForeground(LayoutPadrao.COR_TEXTO);
+        statusPanel.add(lblTotalProdutos);
+        
+        lblCacheHits = new JLabel("💾 Cache: 0%");
+        lblCacheHits.setFont(LayoutPadrao.FONTE_TEXTO);
+        lblCacheHits.setForeground(LayoutPadrao.COR_TEXTO);
+        statusPanel.add(lblCacheHits);
+        
+        return statusPanel;
+    }
+    
+    /**
+     * Cria painel de tabela
+     */
+    private JPanel createTablePanel() {
+        JPanel tablePanel = new JPanel(new BorderLayout());
+        tablePanel.setOpaque(false);
+        
+        // Configurar tabela
+        String[] colunas = {"ID", "Código", "Nome", "Categoria", "Preço", "Estoque", "Unidade", "Status"};
+        
+        tableModel = new DefaultTableModel(colunas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        produtosTable = new JTable(tableModel);
+        produtosTable.setFont(LayoutPadrao.FONTE_TEXTO);
+        produtosTable.getTableHeader().setFont(LayoutPadrao.FONTE_SUBTITULO);
+        produtosTable.setRowHeight(25);
+        produtosTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        // Ajustar colunas
+        ajustarLarguraColunas();
+        
+        JScrollPane scrollPane = new JScrollPane(produtosTable);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        
+        tablePanel.add(scrollPane, BorderLayout.CENTER);
+        
+        return tablePanel;
+    }
+    
+    /**
+     * Ajusta largura das colunas da tabela
+     */
+    private void ajustarLarguraColunas() {
+        produtosTable.getColumnModel().getColumn(0).setPreferredWidth(50);  // ID
+        produtosTable.getColumnModel().getColumn(1).setPreferredWidth(80);  // Código
+        produtosTable.getColumnModel().getColumn(2).setPreferredWidth(200); // Nome
+        produtosTable.getColumnModel().getColumn(3).setPreferredWidth(120); // Categoria
+        produtosTable.getColumnModel().getColumn(4).setPreferredWidth(100); // Preço
+        produtosTable.getColumnModel().getColumn(5).setPreferredWidth(80);  // Estoque
+        produtosTable.getColumnModel().getColumn(6).setPreferredWidth(60);  // Unidade
+        produtosTable.getColumnModel().getColumn(7).setPreferredWidth(80);  // Status
+    }
+    
+    /**
+     * Carrega produtos do serviço
+     */
+    private void carregarProdutos() {
+        try {
+            // Tenta do cache primeiro
+            String cacheKey = "produtos.lista";
+            @SuppressWarnings("unchecked")
+            List<ProdutoDTO> produtos = cacheManager.get(cacheKey);
+            
+            if (produtos == null) {
+                logger.info("Cache miss - carregando do serviço");
+                List<com.br.hermescomercial.model.Produto> produtosEntity = produtoService.listar();
+                
+                // Converter para DTO
+                produtos = produtosEntity.stream()
+                    .map(produto -> {
+                        ProdutoDTO dto = new ProdutoDTO();
+                        dto.setId(produto.getId());
+                        dto.setCodigo(produto.getCodigo());
+                        dto.setNome(produto.getNome());
+                        dto.setDescricao(produto.getDescricao());
+                        dto.setCategoria(produto.getCategoria());
+                        dto.setPreco(produto.getPreco());
+                        dto.setEstoque(produto.getEstoque());
+                        dto.setUnidade(produto.getUnidade());
+                        // Status não existe na classe Produto original
+                        dto.setDataCriacao(produto.getDataCriacao());
+                        dto.setDataAtualizacao(produto.getDataAtualizacao());
+                        return dto;
+                    })
+                    .collect(java.util.stream.Collectors.toList());
+                
+                cacheManager.put(cacheKey, produtos);
+            } else {
+                logger.info("Cache hit - usando dados em cache");
+            }
+            
+            atualizarTabela(produtos);
+            atualizarEstatisticas();
+            
+        } catch (BusinessException e) {
+            logger.log(Level.SEVERE, "Erro de negócio ao carregar produtos", e);
+            SwingUtilities.invokeLater(() -> showError("Erro ao carregar produtos: " + e.getMessage()));
+        }
+    }
+    
+    /**
+     * Atualiza tabela com produtos
+     */
+    private void atualizarTabela(List<ProdutoDTO> produtos) {
+        SwingUtilities.invokeLater(() -> {
+            tableModel.setRowCount(0);
+            
+            for (ProdutoDTO produto : produtos) {
+                Object[] row = {
+                    produto.getId(),
+                    produto.getCodigo(),
+                    produto.getNome(),
+                    produto.getCategoria(),
+                    formatarMoeda(produto.getPreco().doubleValue()),
+                    produto.getEstoque(),
+                    produto.getUnidade(),
+                    produto.getStatus()
+                };
+                tableModel.addRow(row);
+            }
+            
+            lblTotalProdutos.setText("📊 Total: " + produtos.size());
+        });
+    }
+    
+    /**
+     * Event handlers
+     */
+    private void onSalvar(ActionEvent e) {
+        if (isLoading) return;
+        
+        CompletableFuture.runAsync(() -> {
+            try {
+                setLoading(true);
+                
+                ProdutoDTO produto = criarProdutoDoFormulario();
+                validator.validar(produto);
+                
+                if (editMode) {
+                    // Converter DTO para entidade
+                    com.br.hermescomercial.model.Produto produtoEntity = new com.br.hermescomercial.model.Produto();
+                    produtoEntity.setId(produto.getId());
+                    produtoEntity.setCodigo(produto.getCodigo());
+                    produtoEntity.setNome(produto.getNome());
+                    produtoEntity.setCategoria(produto.getCategoria());
+                    produtoEntity.setPrecoVenda(produto.getPreco());
+                    produtoEntity.setEstoque(produto.getEstoque());
+                    produtoEntity.setUnidade(produto.getUnidade());
+                    // Status não existe na classe Produto original
+                    
+                    produtoService.atualizar(produtoEntity);
+                    eventSystem.publish(new com.br.hermescomercial.event.EventSystem.Event("produto.atualizado", produtoEntity, "ERPProdutoSwingController"));
+                    showSuccess("Produto atualizado com sucesso!");
+                } else {
+                    // Converter DTO para entidade
+                    com.br.hermescomercial.model.Produto produtoEntity = new com.br.hermescomercial.model.Produto();
+                    produtoEntity.setCodigo(produto.getCodigo());
+                    produtoEntity.setNome(produto.getNome());
+                    produtoEntity.setCategoria(produto.getCategoria());
+                    produtoEntity.setPrecoVenda(produto.getPreco());
+                    produtoEntity.setEstoque(produto.getEstoque());
+                    produtoEntity.setUnidade(produto.getUnidade());
+                    // Status não existe na classe Produto original
+                    
+                    produtoService.salvar(produtoEntity);
+                    eventSystem.publish(new com.br.hermescomercial.event.EventSystem.Event("produto.criado", produtoEntity, "ERPProdutoSwingController"));
+                    showSuccess("Produto salvo com sucesso!");
+                }
+                
+                limparFormulario();
+                carregarProdutos();
+                
+            } catch (BusinessException ex) {
+                SwingUtilities.invokeLater(() -> showError(ex.getMessage()));
+            } catch (Exception ex) {
+                logger.log(Level.SEVERE, "Erro ao salvar produto", ex);
+                SwingUtilities.invokeLater(() -> showError("Erro ao salvar produto: " + ex.getMessage()));
+            } finally {
+                setLoading(false);
+            }
+        });
+    }
+    
+    private void onEditar(ActionEvent e) {
+        if (isLoading) return;
+        
+        int linhaSelecionada = produtosTable.getSelectedRow();
+        if (linhaSelecionada == -1) {
+            showWarning("Selecione um produto para editar");
+            return;
+        }
+        
+        // Preencher formulário com dados selecionados
+        produtoEditId = (Long) tableModel.getValueAt(linhaSelecionada, 0);
+        txtCodigo.setText((String) tableModel.getValueAt(linhaSelecionada, 1));
+        txtNome.setText((String) tableModel.getValueAt(linhaSelecionada, 2));
+        txtCategoria.setText((String) tableModel.getValueAt(linhaSelecionada, 3));
+        txtPreco.setText(tableModel.getValueAt(linhaSelecionada, 4).toString());
+        txtEstoque.setText(tableModel.getValueAt(linhaSelecionada, 5).toString());
+        cbUnidade.setSelectedItem((String) tableModel.getValueAt(linhaSelecionada, 6));
+        cbStatus.setSelectedItem((String) tableModel.getValueAt(linhaSelecionada, 7));
+        
+        editMode = true;
+        btnSalvar.setText("💾 Atualizar");
+        txtNome.requestFocus();
+    }
+    
+    private void onExcluir(ActionEvent e) {
+        if (isLoading) return;
+        
+        int linhaSelecionada = produtosTable.getSelectedRow();
+        if (linhaSelecionada == -1) {
+            showWarning("Selecione um produto para excluir");
+            return;
+        }
+        
+        Long produtoId = (Long) tableModel.getValueAt(linhaSelecionada, 0);
+        String nome = (String) tableModel.getValueAt(linhaSelecionada, 2);
+        
+        int confirmacao = JOptionPane.showConfirmDialog(frame,
+            "Deseja realmente excluir o produto?\n\n" + nome,
+            "Confirmar Exclusão",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.QUESTION_MESSAGE);
+        
+        if (confirmacao == JOptionPane.YES_OPTION) {
+            CompletableFuture.runAsync(() -> {
+                try {
+                    setLoading(true);
+                    produtoService.excluir(produtoId);
+                    eventSystem.publish(new com.br.hermescomercial.event.EventSystem.Event("produto.excluido", produtoId, "ERPProdutoSwingController"));
+                    showSuccess("Produto excluído com sucesso!");
+                    carregarProdutos();
+                } catch (BusinessException ex) {
+                    SwingUtilities.invokeLater(() -> showError(ex.getMessage()));
+                } catch (Exception ex) {
+                    logger.log(Level.SEVERE, "Erro ao excluir produto", ex);
+                    SwingUtilities.invokeLater(() -> showError("Erro ao excluir produto: " + ex.getMessage()));
+                } finally {
+                    setLoading(false);
+                }
+            });
+        }
+    }
+    
+    private void onCancelar(ActionEvent e) {
+        limparFormulario();
+    }
+    
+    private void onAtualizar(ActionEvent e) {
+        if (isLoading) return;
+        carregarProdutos();
+    }
+    
+    private void onLimparCache(ActionEvent e) {
+        cacheManager.clear();
+        showInfo("Cache limpo com sucesso!");
+        atualizarEstatisticas();
+    }
+    
+    /**
+     * Event listeners do sistema
+     */
+    private void onProdutoAtualizado(com.br.hermescomercial.event.Event event) {
+        logger.info("Produto atualizado: " + event.getData());
+    }
+    
+    private void onProdutoExcluido(com.br.hermescomercial.event.Event event) {
+        logger.info("Produto excluído: " + event.getData());
+    }
+    
+    private void onCacheLimpo(com.br.hermescomercial.event.Event event) {
+        atualizarEstatisticas();
+    }
+    
+    private void onConfigurationChanged(String key, Object oldValue, Object newValue) {
+        if (key.startsWith("ui.produto.")) {
+            logger.info("Configuração alterada: " + key + " = " + newValue);
+        }
+    }
+    
+    /**
+     * Métodos utilitários
+     */
+    private ProdutoDTO criarProdutoDoFormulario() {
+        ProdutoDTO produto = new ProdutoDTO();
+        produto.setId(produtoEditId);
+        produto.setCodigo(txtCodigo.getText());
+        produto.setNome(txtNome.getText().trim());
+        produto.setDescricao(txtDescricao.getText().trim());
+        produto.setCategoria(txtCategoria.getText().trim());
+        produto.setPreco(java.math.BigDecimal.valueOf(parsePreco(txtPreco.getText())));
+        produto.setEstoque(parseInteger(txtEstoque.getText()));
+        produto.setUnidade((String) cbUnidade.getSelectedItem());
+        produto.setStatus((String) cbStatus.getSelectedItem());
+        return produto;
+    }
+    
+    private void limparFormulario() {
+        txtCodigo.setText("");
+        txtNome.setText("");
+        txtDescricao.setText("");
+        txtCategoria.setText("");
+        txtPreco.setText("");
+        txtEstoque.setText("");
+        cbUnidade.setSelectedIndex(0);
+        cbStatus.setSelectedIndex(0);
+        btnSalvar.setText("💾 Salvar");
+        editMode = false;
+        produtoEditId = null;
+    }
+    
+    private void setLoading(boolean loading) {
+        isLoading = loading;
+        SwingUtilities.invokeLater(() -> {
+            if (loading) {
+                lblStatus.setText("🔄 Carregando...");
+                lblStatus.setForeground(Color.ORANGE);
+                setButtonsEnabled(false);
+            } else {
+                lblStatus.setText("🟢 Pronto");
+                lblStatus.setForeground(new Color(40, 167, 69));
+                setButtonsEnabled(true);
+            }
+        });
+    }
+    
+    private void setButtonsEnabled(boolean enabled) {
+        btnSalvar.setEnabled(enabled);
+        btnEditar.setEnabled(enabled);
+        btnExcluir.setEnabled(enabled);
+        btnCancelar.setEnabled(enabled);
+        btnAtualizar.setEnabled(enabled);
+        btnLimparCache.setEnabled(enabled);
+    }
+    
+    private void atualizarEstatisticas() {
+        SwingUtilities.invokeLater(() -> {
+            @SuppressWarnings("unchecked")
+            Map<String, Object> stats = cacheManager.getStatistics();
+            double hitRatio = (Double) stats.get("hitRatio");
+            lblCacheHits.setText(String.format("💾 Cache: %.1f%%", hitRatio * 100));
+        });
+    }
+    
+    private void showSuccess(String message) {
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(frame, message, "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        });
+    }
+    
+    private void showError(String message) {
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(frame, message, "Erro", JOptionPane.ERROR_MESSAGE);
+        });
+    }
+    
+    private void showWarning(String message) {
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(frame, message, "Aviso", JOptionPane.WARNING_MESSAGE);
+        });
+    }
+    
+    private void showInfo(String message) {
+        SwingUtilities.invokeLater(() -> {
+            JOptionPane.showMessageDialog(frame, message, "Informação", JOptionPane.INFORMATION_MESSAGE);
+        });
+    }
+    
+    // Event handlers
+    private void onProdutoAtualizado(EventSystem.Event event) {
+        SwingUtilities.invokeLater(() -> {
+            carregarProdutos();
+            showInfo("Produto atualizado com sucesso!");
+        });
+    }
+    
+    private void onProdutoExcluido(EventSystem.Event event) {
+        SwingUtilities.invokeLater(() -> {
+            carregarProdutos();
+            showInfo("Produto excluído com sucesso!");
+        });
+    }
+    
+    private void onCacheLimpo(EventSystem.Event event) {
+        SwingUtilities.invokeLater(() -> {
+            lblCacheHits.setText("🔄 Cache: 0 hits");
+            showInfo("Cache limpo com sucesso!");
+        });
+    }
+    
+    private void onConfigurationChanged(String key, Object value) {
+        if (key.startsWith("produto.")) {
+            SwingUtilities.invokeLater(() -> {
+                carregarProdutos();
+                showInfo("Configuração atualizada: " + key);
+            });
+        }
+    }
+    
+    // Métodos utilitários de UI
+    private JLabel createLabel(String text) {
+        JLabel label = new JLabel(text);
+        label.setFont(LayoutPadrao.FONTE_ROTULO);
+        label.setForeground(LayoutPadrao.COR_TEXTO);
+        return label;
+    }
+    
+    private JTextField createModernTextField(int columns) {
+        JTextField field = new JTextField(columns);
+        field.setFont(LayoutPadrao.FONTE_CAMPO);
+        field.setForeground(LayoutPadrao.COR_TEXTO);
+        field.setBackground(Color.WHITE);
+        field.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
+            BorderFactory.createEmptyBorder(5, 5, 5, 5)
+        ));
+        return field;
+    }
+    
+    private String[] getUnidadesFromConfig() {
+        String unidadesStr = configManager.getString("produto.unidades", "UN,KG,LT,CX,DZ");
+        return unidadesStr.split(",");
+    }
+    
+    private String[] getStatusFromConfig() {
+        String statusStr = configManager.getString("produto.status", "Ativo,Inativo,Descontinuado");
+        return statusStr.split(",");
+    }
+    
+    private String formatarMoeda(Double valor) {
+        return String.format("R$ %.2f", valor);
+    }
+    
+    private Double parsePreco(String texto) {
+        try {
+            return Double.parseDouble(texto.replace("R$", "").replace(",", "."));
+        } catch (NumberFormatException e) {
+            throw new BusinessException("Preço inválido");
+        }
+    }
+    
+    private Integer parseInteger(String texto) {
+        try {
+            return Integer.parseInt(texto);
+        } catch (NumberFormatException e) {
+            throw new BusinessException("Valor deve ser um número inteiro");
+        }
+    }
+    
+    /**
+     * Exibe a janela
+     */
+    public void show() {
+        frame.setVisible(true);
+    }
+    
+    /**
+     * Obtém o frame
+     */
+    public JFrame getFrame() {
+        return frame;
+    }
+    
+    /**
+     * Dispose do controller
+     */
+    public void dispose() {
+        if (frame != null) {
+            frame.dispose();
+        }
+    }
+}

@@ -1,6 +1,7 @@
 package com.br.hermescomercial.erp.controller;
 
 import com.br.hermescomercial.ui.layout.LayoutPadrao;
+import com.br.hermescomercial.ui.layout.MenuColors;
 import com.br.hermescomercial.pdv.controller.PDVDashboardSwingController;
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +14,7 @@ public class ERPMenuPrincipalSwingController {
     
     private JFrame frame;
     private JPanel mainPanel;
-    private JLabel lblUsuario, lblDataHora;
+    private JLabel lblDataHora;
     private JPanel menuPanel; // Referência para atualização responsiva
     
     public ERPMenuPrincipalSwingController() {
@@ -73,47 +74,8 @@ public class ERPMenuPrincipalSwingController {
     }
     
     private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setOpaque(false);
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 10, 10));
-        
-        // Título principal
-        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        titlePanel.setOpaque(false);
-        
-        JLabel titleLabel = new JLabel("🏢 Hermes Comercial ERP");
-        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
-        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
-        
-        JLabel subtitleLabel = new JLabel("Sistema Integrado de Gestão Empresarial");
-        subtitleLabel.setFont(LayoutPadrao.FONTE_TEXTO);
-        subtitleLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
-        
-        titlePanel.add(titleLabel);
-        
-        // Painel do usuário
-        JPanel userPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        userPanel.setOpaque(false);
-        
-        lblUsuario = new JLabel("👤 Administrador");
-        lblUsuario.setFont(LayoutPadrao.FONTE_TEXTO);
-        lblUsuario.setForeground(LayoutPadrao.COR_PRIMARIA);
-        
-        userPanel.add(lblUsuario);
-        
-        headerPanel.add(titlePanel, BorderLayout.WEST);
-        headerPanel.add(userPanel, BorderLayout.EAST);
-        
-        JPanel subtitleContainer = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        subtitleContainer.setOpaque(false);
-        subtitleContainer.add(subtitleLabel);
-        
-        JPanel completeHeader = new JPanel(new BorderLayout());
-        completeHeader.setOpaque(false);
-        completeHeader.add(headerPanel, BorderLayout.NORTH);
-        completeHeader.add(subtitleContainer, BorderLayout.CENTER);
-        
-        return completeHeader;
+        // Usando header ERP padrão do LayoutPadrao
+        return LayoutPadrao.criarHeaderERPSimples("🏢 Hermes Comercial ERP - Sistema Principal");
     }
     
     private JPanel createMenuPanel() {
@@ -170,60 +132,59 @@ public class ERPMenuPrincipalSwingController {
         JPanel categoriaPanel = new JPanel(new BorderLayout());
         categoriaPanel.setOpaque(false);
         
-        // Título da categoria
-        JLabel tituloLabel = new JLabel(titulo);
+        // Header colorido baseado no setor
+        String setor = identificarSetorPorTitulo(titulo);
+        JLabel tituloLabel = MenuColors.criarHeaderMenu(setor, titulo);
         tituloLabel.setFont(LayoutPadrao.FONTE_SUBTITULO);
-        tituloLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
         tituloLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         
-        // Painel de botões da categoria
-        JPanel botoesPanel = new JPanel(new GridBagLayout());
+        categoriaPanel.add(tituloLabel, BorderLayout.NORTH);
+        
+        // Painel de botões com cores do setor
+        JPanel botoesPanel = new JPanel(new GridLayout(0, 2, 10, 10));
         botoesPanel.setOpaque(false);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 8, 8, 8);
-        gbc.fill = GridBagConstraints.BOTH;
-        gbc.weightx = 1.0;
-        gbc.weighty = 1.0;
         
-        // Layout responsivo baseado no tamanho da tela
-        Dimension size = frame.getSize();
-        int width = size.width;
+        for (JButton botao : botoes) {
+            // Aplicar cores específicas do setor
+            JButton botaoColorido = MenuColors.criarBotaoSetor(setor, botao.getText());
+            botoesPanel.add(botaoColorido);
         
-        if (width < 900) {
-            // Layout 1xN para telas pequenas
-            for (int i = 0; i < botoes.length; i++) {
-                gbc.gridx = 0; gbc.gridy = i;
-                botoesPanel.add(botoes[i], gbc);
+            if (width < 900) {
+                // Layout 1xN para telas pequenas
+                for (int i = 0; i < botoes.length; i++) {
+                    gbc.gridx = 0; gbc.gridy = i;
+                    botoesPanel.add(botoes[i], gbc);
+                }
+            } else if (width < 1200) {
+                // Layout 2xN para telas médias
+                for (int i = 0; i < botoes.length; i++) {
+                    gbc.gridx = i % 2; gbc.gridy = i / 2;
+                    botoesPanel.add(botoes[i], gbc);
+                }
+            } else {
+                // Layout 3xN para telas grandes
+                for (int i = 0; i < botoes.length; i++) {
+                    gbc.gridx = i % 3; gbc.gridy = i / 3;
+                    botoesPanel.add(botoes[i], gbc);
+                }
             }
-        } else if (width < 1200) {
-            // Layout 2xN para telas médias
-            for (int i = 0; i < botoes.length; i++) {
-                gbc.gridx = i % 2; gbc.gridy = i / 2;
-                botoesPanel.add(botoes[i], gbc);
-            }
-        } else {
-            // Layout 3xN para telas grandes
-            for (int i = 0; i < botoes.length; i++) {
-                gbc.gridx = i % 3; gbc.gridy = i / 3;
-                botoesPanel.add(botoes[i], gbc);
-            }
+        
+            // Painel com borda e fundo sutil
+            JPanel contentPanel = new JPanel(new BorderLayout());
+            contentPanel.setOpaque(false);
+            contentPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
+                BorderFactory.createEmptyBorder(15, 15, 15, 15)
+            ));
+                contentPanel.setBackground(LayoutPadrao.COR_FUNDO);
+                
+                contentPanel.add(tituloLabel, BorderLayout.NORTH);
+                contentPanel.add(botoesPanel, BorderLayout.CENTER);
+                
+                categoriaPanel.add(contentPanel, BorderLayout.CENTER);
+                
+                return categoriaPanel;
         }
-        
-        // Painel com borda e fundo sutil
-        JPanel contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setOpaque(false);
-        contentPanel.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
-            BorderFactory.createEmptyBorder(15, 15, 15, 15)
-        ));
-        contentPanel.setBackground(LayoutPadrao.COR_FUNDO);
-        
-        contentPanel.add(tituloLabel, BorderLayout.NORTH);
-        contentPanel.add(botoesPanel, BorderLayout.CENTER);
-        
-        categoriaPanel.add(contentPanel, BorderLayout.CENTER);
-        
-        return categoriaPanel;
     }
     
     
@@ -269,13 +230,11 @@ public class ERPMenuPrincipalSwingController {
     }
     
     private void abrirProdutos() {
-        ERPProdutoSwingController produtos = new ERPProdutoSwingController();
-        produtos.show();
+        new ERPProdutoSwingController();
     }
     
     private void abrirFinanceiro() {
-        ERPFinanceiroSwingController financeiro = new ERPFinanceiroSwingController();
-        financeiro.show();
+        new ERPGestaoFinanceiraSwingController();
     }
     
     private void abrirRelatorios() {
@@ -290,7 +249,7 @@ public class ERPMenuPrincipalSwingController {
     
     private void abrirConfiguracao() {
         ERPConfiguracaoSwingController configuracao = new ERPConfiguracaoSwingController();
-        configuracao.showFrame();
+        configuracao.getFrame().setVisible(true);
     }
     
     private void abrirDashboard() {

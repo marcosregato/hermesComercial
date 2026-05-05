@@ -55,7 +55,7 @@ public class CacheConfigSwingController {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         
-        // Painel de configuração principal
+        // Painel de configuração principal (sem busca - apenas formulário)
         JPanel configPanel = new JPanel(new GridBagLayout());
         configPanel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -198,7 +198,7 @@ public class CacheConfigSwingController {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         
-        // Painel superior com resumo
+        // Painel superior com resumo (sem busca - apenas tabela)
         JPanel resumoPanel = new JPanel(new GridLayout(2, 4, 10, 10));
         resumoPanel.setBackground(Color.WHITE);
         resumoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -264,7 +264,7 @@ public class CacheConfigSwingController {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         
-        // Painel de ações
+        // Painel de ações (sem busca - apenas formulário)
         JPanel acoesPanel = new JPanel(new GridBagLayout());
         acoesPanel.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
@@ -345,7 +345,7 @@ public class CacheConfigSwingController {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         
-        // Painel superior
+        // Painel superior com busca (sem formulário)
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.setBackground(Color.WHITE);
         

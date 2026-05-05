@@ -24,7 +24,7 @@ public class PDVPrincipalSwingController {
     private JButton btnCaixa;
     private JButton btnRelatorios;
     private JButton btnConfiguracoes;
-    
+        
     public PDVPrincipalSwingController() {
         // Usar LayoutPadrao - tema Oceano aplicado automaticamente
         initializeUI();
@@ -79,7 +79,7 @@ public class PDVPrincipalSwingController {
         
         // Menu Operações
         JMenu operationsMenu = new JMenu("💳 Operações");
-        operationsMenu.add(createMenuItem("💰 Nova Venda", e -> abrirVenda(e)));
+        operationsMenu.add(createMenuItem("💰 Nova Venda", e -> abrirNovaVenda()));
         operationsMenu.add(createMenuItem("💵 Caixa", e -> abrirCaixa(e)));
         operationsMenu.add(createMenuItem("🏪 Fechar Caixa", e -> fecharCaixa(e)));
         operationsMenu.add(createMenuItem("📊 Dashboard Analytics", e -> abrirDashboard(e)));
@@ -145,42 +145,8 @@ public class PDVPrincipalSwingController {
     }
     
     private JPanel createHeaderPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(LayoutPadrao.COR_PRIMARIA);
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
-        
-        // Botão de informações com LayoutPadrao
-        JButton btnInfo = LayoutPadrao.criarBotaoSecundario("ℹ️");
-        btnInfo.addActionListener(e -> {
-            JOptionPane.showMessageDialog(mainFrame, 
-                "🏪 Hermes Comercial PDV v2.8.3\n" +
-                "Sistema de Gestão Comercial Professional\n\n" +
-                "Funcionalidades:\n" +
-                "• Gestão de Vendas\n" +
-                "• Controle de Caixa\n" +
-                "• Gestão de Clientes\n" +
-                "• Relatórios\n" +
-                "• Configurações",
-                "Sobre", JOptionPane.INFORMATION_MESSAGE);
-        });
-        
-        // Título com LayoutPadrao
-        JLabel titleLabel = LayoutPadrao.criarRotuloTitulo("🏪 Hermes Comercial PDV - Sistema Principal");
-        titleLabel.setForeground(Color.WHITE);
-        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        
-        // Data e hora com LayoutPadrao
-        JLabel lblDataHora = LayoutPadrao.criarRotuloTexto(
-            java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        lblDataHora.setForeground(Color.WHITE);
-        lblDataHora.setHorizontalAlignment(SwingConstants.RIGHT);
-        lblDataHora.setOpaque(true);
-        
-        panel.add(btnInfo, BorderLayout.WEST);
-        panel.add(titleLabel, BorderLayout.CENTER);
-        panel.add(lblDataHora, BorderLayout.EAST);
-        
-        return panel;
+        // Usando header PDV padrão do LayoutPadrao
+        return LayoutPadrao.criarHeaderPDVSimples("🏪 Hermes Comercial PDV - Sistema Principal");
     }
     
     private JPanel createFeaturesPanel() {
@@ -847,7 +813,7 @@ public class PDVPrincipalSwingController {
         gbc.gridx = 1;
         JTextField txtCpfCnpj = new JTextField(20);
         
-        // Limitar a 14 caracteres (CNPJ: XX.XXX.XXX/XXXX-XX ou CPF: XXX.XXX.XXX-XX)
+        // Limitar a 14 caracteres (CNPJ ou CPF)
         txtCpfCnpj.setDocument(new javax.swing.text.PlainDocument() {
             @Override
             public void insertString(int offs, String str, javax.swing.text.AttributeSet a) throws javax.swing.text.BadLocationException {
@@ -1002,7 +968,7 @@ public class PDVPrincipalSwingController {
         gbc.gridx = 1;
         JTextField txtCpfCnpj = new JTextField(cpfCnpj, 20);
         
-        // Limitar a 14 caracteres (CNPJ: XX.XXX.XXX/XXXX-XX ou CPF: XXX.XXX.XXX-XX)
+        // Limitar a 14 caracteres (CNPJ ou CPF)
         txtCpfCnpj.setDocument(new javax.swing.text.PlainDocument() {
             @Override
             public void insertString(int offs, String str, javax.swing.text.AttributeSet a) throws javax.swing.text.BadLocationException {
@@ -1158,8 +1124,7 @@ public class PDVPrincipalSwingController {
      */
     private void gerenciarProdutosERP(ActionEvent e) {
         try {
-            ERPProdutoSwingController controller = new ERPProdutoSwingController();
-            controller.show();
+            new ERPProdutoSwingController();
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(mainFrame, 
                 "Erro ao abrir gestão de produtos: " + ex.getMessage(), 
@@ -1356,13 +1321,12 @@ public class PDVPrincipalSwingController {
     /**
      * Abre a tela de Nova Venda
      */
-    private void abrirVenda(ActionEvent e) {
+    private void abrirNovaVenda() {
         try {
-            PDVVendaSwingController controller = new PDVVendaSwingController();
-            controller.show();
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(mainFrame, 
-                "Erro ao abrir Nova Venda: " + ex.getMessage(), 
+            PDVVendaSwingController vendaController = new PDVVendaSwingController();
+            vendaController.show();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainFrame, "Erro ao abrir tela de venda: " + e.getMessage(), 
                 "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }

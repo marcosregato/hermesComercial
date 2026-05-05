@@ -59,7 +59,7 @@ public class PDVNotificacaoSwingController {
         // Painel superior
         createHeaderPanel();
         
-        // Painel central com tabela
+        // Painel central com tabela (sem formulário)
         createNotificacoesPanel();
         
         // Painel inferior com botões

@@ -97,50 +97,17 @@ public class PDVDashboardSwingController {
     }
     
     private void createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(LayoutPadrao.COR_PRIMARIA);
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        // Usando header PDV padrão do LayoutPadrao
+        JPanel headerPanel = LayoutPadrao.criarHeaderPDVSimples("📊 Dashboard Analítico - PDV");
         
-        // Painel esquerdo com título e subtítulo
-        JPanel leftPanel = new JPanel(new BorderLayout());
-        leftPanel.setOpaque(false);
-        
-        JLabel titleLabel = LayoutPadrao.criarRotuloTitulo("📊 Dashboard Analítico");
-        titleLabel.setForeground(Color.WHITE);
-        
-        JLabel subtitleLabel = LayoutPadrao.criarRotuloTexto("Visão geral das métricas e desempenho do negócio");
-        subtitleLabel.setForeground(new Color(200, 220, 240));
-        
-        leftPanel.add(titleLabel, BorderLayout.NORTH);
-        leftPanel.add(subtitleLabel, BorderLayout.CENTER);
-        
-        // Painel direito com informações e ações
-        JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.setOpaque(false);
-        
-        // Painel de informações
-        JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        infoPanel.setOpaque(false);
-        
-        // Data de atualização com ícone
-        JLabel dataLabel = LayoutPadrao.criarRotuloTexto("🕒 " + 
-            java.time.LocalDateTime.now().format(
-            java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
-        dataLabel.setForeground(new Color(200, 220, 240));
-        
-        // Botão atualizar com LayoutPadrao
+        // Adicionar botão atualizar ao header
         JButton btnAtualizar = LayoutPadrao.criarBotaoPrimario("🔄 Atualizar");
         btnAtualizar.addActionListener(e -> atualizarDashboard());
         btnAtualizar.setToolTipText("Atualizar dados do dashboard");
         
-        infoPanel.add(dataLabel);
-        infoPanel.add(Box.createHorizontalStrut(15));
-        infoPanel.add(btnAtualizar);
-        
-        rightPanel.add(infoPanel, BorderLayout.EAST);
-        
-        headerPanel.add(leftPanel, BorderLayout.WEST);
-        headerPanel.add(rightPanel, BorderLayout.EAST);
+        // Adicionar ao painel direito do header
+        JPanel rightPanel = (JPanel) headerPanel.getComponent(2);
+        rightPanel.add(btnAtualizar);
         
         mainPanel.add(headerPanel, BorderLayout.NORTH);
     }

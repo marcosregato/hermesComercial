@@ -38,56 +38,25 @@ public class ERPUsuarioSwingController {
         // Aplicar tema padrão
         frame.getContentPane().setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
-        mainPanel = new JPanel(new BorderLayout(10, 10));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        mainPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
+        // Criar painéis de formulário e tabela
+        JPanel formularioPanel = createFormPanel();
+        JPanel tabelaPanel = createTablePanel();
+        
+        // Usando layout padrão Header → Busca → Formulário → Tabela
+        mainPanel = LayoutPadrao.criarLayoutPadraoGestao(
+            false, // isPDV (false para ERP)
+            "👥 Gestão de Usuários e Permissões - ERP",
+            "Digite nome, email ou usuário...",
+            formularioPanel,
+            tabelaPanel
+        );
         
         frame.add(mainPanel);
-        frame.add(createHeaderPanel(), BorderLayout.NORTH);
-        frame.add(createMainContentPanel(), BorderLayout.CENTER);
         
         carregarDadosExemplo();
     }
     
-    private JPanel createHeaderPanel() {
-        JPanel headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setOpaque(false);
-        headerPanel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
-        
-        JLabel titleLabel = new JLabel("👥 Gestão de Usuários e Permissões");
-        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
-        titleLabel.setForeground(LayoutPadrao.COR_PRIMARIA);
-        
-        JLabel subtitleLabel = new JLabel("Gerenciamento de usuários, senhas e níveis de acesso ao sistema");
-        subtitleLabel.setFont(LayoutPadrao.FONTE_TEXTO);
-        subtitleLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
-        
-        JPanel titlePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        titlePanel.setOpaque(false);
-        titlePanel.add(titleLabel);
-        
-        headerPanel.add(titlePanel, BorderLayout.WEST);
-        headerPanel.add(subtitleLabel, BorderLayout.CENTER);
-        
-        return headerPanel;
-    }
     
-    private JPanel createMainContentPanel() {
-        JPanel mainContentPanel = new JPanel(new BorderLayout(10, 10));
-        mainContentPanel.setOpaque(false);
-        
-        // Painel esquerdo - Formulário
-        JPanel formPanel = createFormPanel();
-        formPanel.setPreferredSize(new Dimension(400, 0));
-        
-        // Painel direito - Tabela
-        JPanel tablePanel = createTablePanel();
-        
-        mainContentPanel.add(formPanel, BorderLayout.WEST);
-        mainContentPanel.add(tablePanel, BorderLayout.CENTER);
-        
-        return mainContentPanel;
-    }
     
     private JPanel createFormPanel() {
         JPanel formPanel = new JPanel(new BorderLayout(10, 10));

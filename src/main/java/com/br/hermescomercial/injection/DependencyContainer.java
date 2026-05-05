@@ -6,6 +6,7 @@ import com.br.hermescomercial.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -182,7 +183,7 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
     }
     
     @Override
-    public boolean excluir(Long id) {
+    public boolean remover(Long id) {
         try {
             // ProdutoDao não tem método excluir por ID, implementar workaround
             List<Produto> produtos = produtoDao.listar();
@@ -193,7 +194,7 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
             }
             return false;
         } catch (Exception e) {
-            throw new RuntimeException("Erro ao excluir produto", e);
+            throw new RuntimeException("Erro ao remover produto", e);
         }
     }
     
@@ -207,16 +208,16 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
     }
     
     @Override
-    public Produto buscarPorId(Long id) {
+    public java.util.Optional<Produto> buscarPorId(Long id) {
         try {
             // ProdutoDao não tem método buscarPorId, implementar workaround
             List<Produto> produtos = produtoDao.listar();
             for (Produto produto : produtos) {
                 if (produto.getId().equals(id)) {
-                    return produto;
+                    return java.util.Optional.of(produto);
                 }
             }
-            return null;
+            return java.util.Optional.empty();
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar produto por ID", e);
         }
@@ -228,6 +229,15 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
             return produtoDao.buscarPorCodigoBarras(codigoBarras);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar produto por código de barras", e);
+        }
+    }
+    
+    @Override
+    public java.util.List<Produto> buscarTodos() {
+        try {
+            return produtoDao.listar();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao listar produtos", e);
         }
     }
     
@@ -249,6 +259,122 @@ class ProdutoRepositoryImpl implements ProdutoRepository {
                                               precoMin, precoMax, estoqueMin, ativos, inativos);
         } catch (Exception e) {
             throw new RuntimeException("Erro ao buscar produtos com filtros", e);
+        }
+    }
+    
+    @Override
+    public java.util.List<Produto> buscarPorNome(String nome) {
+        try {
+            List<Produto> todos = produtoDao.listar();
+            List<Produto> filtrados = new ArrayList<>();
+            for (Produto produto : todos) {
+                if (produto.getNome() != null && produto.getNome().toLowerCase().contains(nome.toLowerCase())) {
+                    filtrados.add(produto);
+                }
+            }
+            return filtrados;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar produtos por nome", e);
+        }
+    }
+    
+    @Override
+    public java.util.List<Produto> buscarPorCategoria(String categoria) {
+        try {
+            List<Produto> todos = produtoDao.listar();
+            List<Produto> filtrados = new ArrayList<>();
+            for (Produto produto : todos) {
+                if (produto.getCategoria() != null && produto.getCategoria().equalsIgnoreCase(categoria)) {
+                    filtrados.add(produto);
+                }
+            }
+            return filtrados;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar produtos por categoria", e);
+        }
+    }
+    
+    @Override
+    public java.util.List<Produto> buscarEstoqueBaixo() {
+        try {
+            List<Produto> todos = produtoDao.listar();
+            List<Produto> filtrados = new ArrayList<>();
+            for (Produto produto : todos) {
+                // getEstoque() e getEstoqueMinimo() retornam int, não podem ser null
+                if (produto.getEstoque() <= produto.getEstoqueMinimo()) {
+                    filtrados.add(produto);
+                }
+            }
+            return filtrados;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar produtos com estoque baixo", e);
+        }
+    }
+    
+    @Override
+    public boolean atualizarEstoque(Long id, int novaQuantidade) {
+        try {
+            List<Produto> produtos = produtoDao.listar();
+            for (Produto produto : produtos) {
+                if (produto.getId().equals(id)) {
+                    produto.setEstoque(novaQuantidade);
+                    return produtoDao.update(produto);
+                }
+            }
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao atualizar estoque do produto", e);
+        }
+    }
+
+    @Override
+    public java.util.List<Produto> buscarPorFaixaPreco(java.math.BigDecimal precoMin, java.math.BigDecimal precoMax) {
+        try {
+            List<Produto> todos = produtoDao.listar();
+            List<Produto> filtrados = new ArrayList<>();
+            for (Produto produto : todos) {
+                if (produto.getPrecoVenda() != null && 
+                    produto.getPrecoVenda().compareTo(precoMin) >= 0 && 
+                    produto.getPrecoVenda().compareTo(precoMax) <= 0) {
+                    filtrados.add(produto);
+                }
+            }
+            return filtrados;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar produtos por faixa de preço", e);
+        }
+    }
+    
+    @Override
+    public java.util.List<Produto> buscarComEstoqueBaixo(int limite) {
+        try {
+            List<Produto> todos = produtoDao.listar();
+            List<Produto> filtrados = new ArrayList<>();
+            for (Produto produto : todos) {
+                if (produto.getEstoque() < limite) {
+                    filtrados.add(produto);
+                }
+            }
+            return filtrados;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar produtos com estoque baixo", e);
+        }
+    }
+    
+    @Override
+    public java.util.List<Produto> buscarPorCodigo(String codigo) {
+        try {
+            List<Produto> todos = produtoDao.listar();
+            List<Produto> filtrados = new ArrayList<>();
+            for (Produto produto : todos) {
+                if (produto.getCodigoBarras() != null && 
+                    produto.getCodigoBarras().equals(codigo)) {
+                    filtrados.add(produto);
+                }
+            }
+            return filtrados;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar produtos por código", e);
         }
     }
 }

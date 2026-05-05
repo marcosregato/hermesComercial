@@ -7,6 +7,8 @@ package com.br.hermescomercial.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 /**
  *
@@ -32,6 +34,13 @@ public class Produto  {
     private String localizacaoEstoque;
     private String lote;
     private LocalDate dataValidade;
+    
+    // Campos adicionais para compatibilidade com Design Patterns
+    private String descricao;
+    private BigDecimal precoCusto;
+    private boolean ativo;
+    private LocalDateTime dataCriacao;
+    private LocalDateTime dataAtualizacao;
     
     
 	public String getNome() {
@@ -185,5 +194,63 @@ public class Produto  {
         if (estoque <= estoqueMinimo * 1.5) return "BAIXO";
         if (estoque >= estoqueMaximo) return "EXCESSO";
         return "NORMAL";
+    }
+    
+    // Getters e Setters para campos adicionais
+    public String getDescricao() {
+        return descricao;
+    }
+    
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+    
+    public BigDecimal getPrecoCusto() {
+        return precoCusto;
+    }
+    
+    public void setPrecoCusto(BigDecimal precoCusto) {
+        this.precoCusto = precoCusto;
+    }
+    
+    public boolean isAtivo() {
+        return ativo;
+    }
+    
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+    
+    public LocalDateTime getDataCriacao() {
+        return dataCriacao;
+    }
+    
+    public void setDataCriacao(LocalDateTime dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+    
+    public LocalDateTime getDataAtualizacao() {
+        return dataAtualizacao;
+    }
+    
+    public void setDataAtualizacao(LocalDateTime dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
+    
+    // Métodos de compatibilidade com Timestamp
+    public Timestamp getDataCriacaoTimestamp() {
+        return dataCriacao != null ? Timestamp.valueOf(dataCriacao) : null;
+    }
+    
+    public void setDataCriacaoTimestamp(Timestamp timestamp) {
+        this.dataCriacao = timestamp != null ? timestamp.toLocalDateTime() : null;
+    }
+    
+    public Timestamp getDataAtualizacaoTimestamp() {
+        return dataAtualizacao != null ? Timestamp.valueOf(dataAtualizacao) : null;
+    }
+    
+    public void setDataAtualizacaoTimestamp(Timestamp timestamp) {
+        this.dataAtualizacao = timestamp != null ? timestamp.toLocalDateTime() : null;
     }
 }
