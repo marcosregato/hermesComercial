@@ -100,7 +100,7 @@ public class ConfigurationManager {
         
         // Configurações da Aplicação
         setDefault("app.name", "Hermes Comercial PDV/ERP", "Nome da aplicação");
-        setDefault("app.version", "3.0.0", "Versão da aplicação");
+        setDefault("app.version", "3.1.0", "Versão da aplicação");
         setDefault("app.theme", "default", "Tema da interface");
         setDefault("app.language", "pt_BR", "Idioma da aplicação");
         setDefault("app.auto_save", "true", "Salvamento automático");
