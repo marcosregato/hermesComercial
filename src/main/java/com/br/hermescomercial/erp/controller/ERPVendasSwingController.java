@@ -17,6 +17,10 @@ import java.time.format.DateTimeFormatter;
 public class ERPVendasSwingController {
     
     private JFrame frame;
+    
+    public JFrame getFrame() {
+        return frame;
+    }
     private JPanel mainPanel;
     private JTable vendasTable;
     private DefaultTableModel tableModel;

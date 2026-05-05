@@ -90,7 +90,6 @@ public abstract class BaseService {
      */
     protected <T> T getFromCacheOrExecute(String cacheKey, Supplier<T> operation, String operationName) {
         // Tenta do cache primeiro
-        @SuppressWarnings("unchecked")
         T cachedValue = cacheManager.get(cacheKey);
         
         if (cachedValue != null) {

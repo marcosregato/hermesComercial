@@ -22,15 +22,15 @@ import java.util.Map;
  */
 public class PDVDashboardAnalyticsController {
     
-    private JFrame dashboardFrame;
-    private DashboardService dashboardService;
+    public JFrame dashboardFrame;
+    public DashboardService dashboardService;
     
     // Componentes principais
     private JPanel mainPanel;
     private JPanel headerPanel;
-    private JPanel kpiPanel;
-    private JPanel chartsPanel;
-    private JPanel topProductsPanel;
+    public JPanel kpiPanel;
+    public JPanel chartsPanel;
+    public JPanel topProductsPanel;
     
     // KPIs
     private KPIPanel revenueKPI;
@@ -66,7 +66,7 @@ public class PDVDashboardAnalyticsController {
     
     private void initializeComponents() {
         // Frame principal
-        dashboardFrame = new JFrame("📊 Dashboard Analytics v2.8.3 - LayoutPadrao");
+        dashboardFrame = new JFrame("📊 Dashboard Analytics v3.0.0 - LayoutPadrao");
         dashboardFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         dashboardFrame.setSize(1200, 800);
         dashboardFrame.setLocationRelativeTo(null);
@@ -250,7 +250,7 @@ public class PDVDashboardAnalyticsController {
         infoPanel.setBackground(LayoutPadrao.COR_FUNDO_ESCURO);
         
         lblUltimaAtualizacao = LayoutPadrao.criarRotuloTexto("Última atualização: " + 
-            LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
+            java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
         lblUltimaAtualizacao.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         infoPanel.add(lblUltimaAtualizacao);
@@ -344,7 +344,7 @@ public class PDVDashboardAnalyticsController {
         updatePeriodo();
     }
     
-    private void updateData() {
+    public void updateData() {
         try {
             // Mostrar cursor de espera
             dashboardFrame.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
@@ -373,7 +373,7 @@ public class PDVDashboardAnalyticsController {
         }
     }
     
-    private void updateKPIs() {
+    public void updateKPIs() {
         Map<String, Object> kpis = dashboardService.getKPIsFaturamento(dataInicio, dataFim);
         
         BigDecimal faturamentoTotal = (BigDecimal) kpis.get("faturamentoTotal");
@@ -395,7 +395,7 @@ public class PDVDashboardAnalyticsController {
         stockKPI.updateValue(BigDecimal.valueOf(totalProdutos));
     }
     
-    private void updateCharts() {
+    public void updateCharts() {
         // Atualizar gráfico de vendas diárias
         List<Map<String, Object>> vendasDiarias = dashboardService.getVendasDiarias(dataInicio, dataFim);
         dailySalesChart.updateData(vendasDiarias);
@@ -411,7 +411,7 @@ public class PDVDashboardAnalyticsController {
         monthlySalesChart.updateData(vendasMensais);
     }
     
-    private void updateTopProducts() {
+    public void updateTopProducts() {
         // Obter top produtos para uso futuro
         dashboardService.getTopProdutos(dataInicio, dataFim, 10);
         
@@ -419,7 +419,7 @@ public class PDVDashboardAnalyticsController {
         // (Implementação seria aqui)
     }
     
-    private void exportData() {
+    public void exportData() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Exportar Dashboard");
         fileChooser.setSelectedFile(new java.io.File("dashboard_" + 
@@ -444,7 +444,7 @@ public class PDVDashboardAnalyticsController {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             try {
-                // Usando look and feel padrão do sistema
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -452,5 +452,10 @@ public class PDVDashboardAnalyticsController {
             PDVDashboardAnalyticsController dashboard = new PDVDashboardAnalyticsController();
             dashboard.showDashboard();
         });
+    }
+    
+    // Método para compatibilidade com testes
+    public DashboardService getDashboardService() {
+        return dashboardService;
     }
 }

@@ -12,7 +12,7 @@ import java.awt.event.MouseEvent;
  * Classe LayoutPadrao - Centralização de estilos visuais do sistema
  * Contém toda configuração de botões, campos, fontes e cores
  * @author Hermes Comercial
- * @version 2.8.3
+ * @version 3.0.0
  */
 public class LayoutPadrao {
     

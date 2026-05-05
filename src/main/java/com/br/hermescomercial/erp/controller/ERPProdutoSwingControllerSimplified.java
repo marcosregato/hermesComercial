@@ -29,7 +29,6 @@ public class ERPProdutoSwingControllerSimplified {
     
     // Estado do controller
     private boolean editMode = false;
-    private Long produtoEditId = null;
     
     public ERPProdutoSwingControllerSimplified() {
         initializeUI();
@@ -332,7 +331,7 @@ public class ERPProdutoSwingControllerSimplified {
         }
         
         // Preencher formulário com dados selecionados
-        produtoEditId = (Long) tableModel.getValueAt(linhaSelecionada, 0);
+        // produtoEditId = (Long) tableModel.getValueAt(linhaSelecionada, 0);
         txtCodigo.setText((String) tableModel.getValueAt(linhaSelecionada, 1));
         txtNome.setText((String) tableModel.getValueAt(linhaSelecionada, 2));
         txtCategoria.setText((String) tableModel.getValueAt(linhaSelecionada, 3));
@@ -411,7 +410,7 @@ public class ERPProdutoSwingControllerSimplified {
         cbStatus.setSelectedIndex(0);
         btnSalvar.setText("💾 Salvar");
         editMode = false;
-        produtoEditId = null;
+        // produtoEditId = null;
     }
     
     /**

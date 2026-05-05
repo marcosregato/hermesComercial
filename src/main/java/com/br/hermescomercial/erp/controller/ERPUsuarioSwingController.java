@@ -14,6 +14,10 @@ import java.awt.*;
 public class ERPUsuarioSwingController {
     
     private JFrame frame;
+    
+    public JFrame getFrame() {
+        return frame;
+    }
     private JPanel mainPanel;
     private JTextField txtNome, txtEmail, txtUsuario, txtBusca;
     private JPasswordField txtSenha, txtConfirmarSenha;

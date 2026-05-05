@@ -37,7 +37,7 @@ public class PDVVendaSwingController {
     private void initializeUI() {
         // Usar LayoutPadrao - tema consistente
         
-        frame = new JFrame("PDV - Nova Venda v2.8.3 - LayoutPadrao");
+        frame = new JFrame("PDV - Nova Venda v3.0.0 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(900, 650);
         frame.setLocationRelativeTo(null);
@@ -584,5 +584,10 @@ public class PDVVendaSwingController {
         public BigDecimal getSubtotal() {
             return produto.getPreco().multiply(new BigDecimal(quantidade));
         }
+    }
+    
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return frame;
     }
 }

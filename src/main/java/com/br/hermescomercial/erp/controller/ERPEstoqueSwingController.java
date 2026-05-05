@@ -13,6 +13,10 @@ import java.awt.*;
 public class ERPEstoqueSwingController {
     
     private JFrame frame;
+    
+    public JFrame getFrame() {
+        return frame;
+    }
     private JPanel mainPanel;
     private JTable estoqueTable;
     private DefaultTableModel tableModel;

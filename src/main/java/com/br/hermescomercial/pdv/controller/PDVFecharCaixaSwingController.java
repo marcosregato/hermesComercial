@@ -10,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import com.br.hermescomercial.ui.layout.LayoutPadrao;
+import com.br.hermescomercial.ui.layout.MenuColors;
 
 /**
  * Controller de Fechamento de Caixa em SWING
@@ -69,14 +70,14 @@ public class PDVFecharCaixaSwingController {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createEmptyBorder(5, 5, 15, 5));
         
-        JLabel titleLabel = new JLabel("Fechamento de Caixa", JLabel.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        // Header colorido para o setor financeiro/caixa
+        JPanel headerColorido = MenuColors.criarHeaderSetor("financeiro", "💰 Fechamento de Caixa");
         
         JButton btnVoltar = new JButton("← Voltar");
         btnVoltar.addActionListener(e -> frame.dispose());
         
         panel.add(btnVoltar, BorderLayout.WEST);
-        panel.add(titleLabel, BorderLayout.CENTER);
+        panel.add(headerColorido, BorderLayout.CENTER);
         
         return panel;
     }
@@ -371,5 +372,10 @@ public class PDVFecharCaixaSwingController {
         public int getQuantidade() { return quantidade; }
         public BigDecimal getValorTotal() { return valorTotal; }
         public LocalDateTime getDataHora() { return dataHora; }
+    }
+    
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return frame;
     }
 }

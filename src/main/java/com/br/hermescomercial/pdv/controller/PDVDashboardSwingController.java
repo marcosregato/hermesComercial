@@ -56,7 +56,7 @@ public class PDVDashboardSwingController {
     private void initializeUI() {
         // Usar LayoutPadrao - tema consistente
         
-        frame = new JFrame("📊 Dashboard Analítico v2.8.3 - LayoutPadrao");
+        frame = new JFrame("📊 Dashboard Analítico v3.0.0 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1200, 800);
         frame.setLocationRelativeTo(null);
@@ -674,5 +674,10 @@ public class PDVDashboardSwingController {
     
     public void dispose() {
         frame.dispose();
+    }
+    
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return frame;
     }
 }

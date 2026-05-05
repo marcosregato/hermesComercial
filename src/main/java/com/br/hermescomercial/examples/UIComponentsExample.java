@@ -336,7 +336,6 @@ public class UIComponentsExample {
         
         confirmationButton.addActionListener(e -> {
             int result = DialogManager.showConfirmation("Confirmação", "Escolha uma opção:");
-            String[] options = {"SIM", "NÃO", "CANCELAR"};
             String[] messages = {"Você confirmou a ação.", "Você negou a ação.", "Você cancelou a ação."};
             
             String message = result >= 0 && result < messages.length ? messages[result] : "Opção desconhecida";

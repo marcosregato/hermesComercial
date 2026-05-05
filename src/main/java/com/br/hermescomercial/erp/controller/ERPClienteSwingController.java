@@ -13,12 +13,16 @@ public class ERPClienteSwingController {
     
     private JFrame frame;
     
+    public JFrame getFrame() {
+        return frame;
+    }
+    
     public ERPClienteSwingController() {
         initializeUI();
     }
     
     private void initializeUI() {
-        frame = new JFrame("👥 Gestão de Clientes v2.8.3 - LayoutPadrao");
+        frame = new JFrame("👥 Gestão de Clientes v3.0.0 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(1000, 700);
         frame.setLocationRelativeTo(null);

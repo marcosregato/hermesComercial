@@ -435,6 +435,11 @@ public class PDVLoginSwingController {
         return "GERENTE".equals(perfilUsuario) || "ADMIN".equals(perfilUsuario);
     }
     
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return loginFrame;
+    }
+    
     // Método main para teste
     public static void main(String[] args) {
         // Look and feel moderno

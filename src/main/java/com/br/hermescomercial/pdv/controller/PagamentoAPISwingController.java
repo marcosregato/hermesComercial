@@ -18,6 +18,14 @@ public class PagamentoAPISwingController {
     
     private JFrame frame;
     private JTabbedPane tabbedPane;
+    
+    public JFrame getFrame() {
+        return frame;
+    }
+    
+    public JTabbedPane getTabbedPane() {
+        return tabbedPane;
+    }
     private JTextField txtStripeKey, txtMercadoPagoToken, txtWebhookUrl;
     private JCheckBox chkStripeAtivo, chkMercadoPagoAtivo, chkWebhookAtivo;
     private JTable transacoesTable;
@@ -371,7 +379,7 @@ public class PagamentoAPISwingController {
         return button;
     }
     
-    private void salvarConfiguracoes() {
+    public void salvarConfiguracoes() {
         try {
             // Salvar configurações (simulação)
             apiStatus.put("stripe", chkStripeAtivo.isSelected());
@@ -386,7 +394,7 @@ public class PagamentoAPISwingController {
         }
     }
     
-    private void limparFormulario() {
+    public void limparFormulario() {
         txtStripeKey.setText("");
         txtMercadoPagoToken.setText("");
         txtWebhookUrl.setText("https://seusite.com/webhook/pagamentos");
@@ -395,7 +403,7 @@ public class PagamentoAPISwingController {
         chkWebhookAtivo.setSelected(false);
     }
     
-    private void testarConexaoStripe() {
+    public void testarConexaoStripe() {
         String key = txtStripeKey.getText().trim();
         if (key.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Digite a chave do Stripe!", 
@@ -411,7 +419,7 @@ public class PagamentoAPISwingController {
         apiStatus.put("stripe", true);
     }
     
-    private void testarConexaoMercadoPago() {
+    public void testarConexaoMercadoPago() {
         String token = txtMercadoPagoToken.getText().trim();
         if (token.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Digite o token do Mercado Pago!", 
@@ -427,7 +435,7 @@ public class PagamentoAPISwingController {
         apiStatus.put("mercadopago", true);
     }
     
-    private void testarWebhook() {
+    public void testarWebhook() {
         String url = txtWebhookUrl.getText().trim();
         if (url.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "Digite a URL do webhook!", 
@@ -443,7 +451,7 @@ public class PagamentoAPISwingController {
             "Teste de Webhook", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void buscarTransacoes(String termo, String status, String api) {
+    public void buscarTransacoes(String termo, String status, String api) {
         JOptionPane.showMessageDialog(frame, "Buscando transações...\n" +
             "Termo: " + termo + "\n" +
             "Status: " + status + "\n" +
@@ -474,7 +482,7 @@ public class PagamentoAPISwingController {
         }
     }
     
-    private void verDetalhesTransacao() {
+    public void verDetalhesTransacao() {
         int selectedRow = transacoesTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(frame, "Selecione uma transação para ver detalhes!", 
@@ -495,7 +503,7 @@ public class PagamentoAPISwingController {
             "Detalhes da Transação", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void estornarTransacao() {
+    public void estornarTransacao() {
         JOptionPane.showMessageDialog(frame, "Funcionalidade de estorno em desenvolvimento...", 
             "Estorno", JOptionPane.INFORMATION_MESSAGE);
     }
@@ -505,15 +513,50 @@ public class PagamentoAPISwingController {
             "Reembolso", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void exportarLog() {
+    public void exportarLog() {
         JOptionPane.showMessageDialog(frame, "Log de webhooks exportado com sucesso!", 
             "Exportação", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void gerarRelatorio(String tipo, String periodo) {
+    public void gerarRelatorio(String tipo, String periodo) {
         JOptionPane.showMessageDialog(frame, "Gerando relatório: " + tipo + "\n" +
             "Período: " + periodo + "\n\n" +
             "Funcionalidade em desenvolvimento...", "Relatório", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void processarPagamento(String gateway, double valor) {
+        JOptionPane.showMessageDialog(frame, "Processando pagamento de R$ " + valor + " via " + gateway, 
+            "Processamento", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void validarDadosPagamento() {
+        JOptionPane.showMessageDialog(frame, "Validando dados do pagamento...", 
+            "Validação", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void integrarComGateway(String gateway) {
+        JOptionPane.showMessageDialog(frame, "Integrando com gateway: " + gateway, 
+            "Integração", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void confirmarPagamento(String id) {
+        JOptionPane.showMessageDialog(frame, "Pagamento confirmado: " + id, 
+            "Confirmação", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void cancelarPagamento() {
+        JOptionPane.showMessageDialog(frame, "Pagamento cancelado...", 
+            "Cancelamento", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void estornarPagamento(String id) {
+        JOptionPane.showMessageDialog(frame, "Pagamento estornado: " + id, 
+            "Estorno", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void gerarRelatorioTransacoes() {
+        JOptionPane.showMessageDialog(frame, "Gerando relatório de transações...", 
+            "Relatório Transações", JOptionPane.INFORMATION_MESSAGE);
     }
     
     public void show() {

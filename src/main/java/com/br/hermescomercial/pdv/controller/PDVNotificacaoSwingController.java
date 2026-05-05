@@ -3,6 +3,7 @@ package com.br.hermescomercial.pdv.controller;
 import com.br.hermescomercial.shared.model.Notificacao;
 import com.br.hermescomercial.pdv.service.NotificacaoService;
 import com.br.hermescomercial.ui.layout.LayoutPadrao;
+import com.br.hermescomercial.ui.layout.MenuColors;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,7 +19,7 @@ import java.util.List;
  */
 public class PDVNotificacaoSwingController {
     
-    private JFrame frame;
+    public JFrame frame;
     private JPanel mainPanel;
     private JTable notificacaoTable;
     private DefaultTableModel tableModel;
@@ -71,18 +72,17 @@ public class PDVNotificacaoSwingController {
         headerPanel.setOpaque(false);
         headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 20));
         
-        // Título
-        JLabel titleLabel = new JLabel("🔔 Central de Notificações");
-        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        titleLabel.setForeground(LayoutPadrao.COR_TEXTO);
+        // Header colorido para o setor de notificações (config)
+        JPanel headerColorido = MenuColors.criarHeaderSetor("config", "🔔 Central de Notificações");
         
         // Contador de não lidas
         contadorLabel = new JLabel("📬 Carregando...");
-        contadorLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        contadorLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
         contadorLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         contadorLabel.setHorizontalAlignment(SwingConstants.RIGHT);
+        contadorLabel.setBorder(BorderFactory.createEmptyBorder(0, 20, 0, 0));
         
-        headerPanel.add(titleLabel, BorderLayout.WEST);
+        headerPanel.add(headerColorido, BorderLayout.CENTER);
         headerPanel.add(contadorLabel, BorderLayout.EAST);
         
         mainPanel.add(headerPanel, BorderLayout.NORTH);
@@ -264,6 +264,17 @@ public class PDVNotificacaoSwingController {
         SwingUtilities.invokeLater(() -> {
             PDVNotificacaoSwingController controller = new PDVNotificacaoSwingController(usuarioLogado);
             controller.show();
+        });
+    }
+    
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return frame;
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new PDVNotificacaoSwingController("admin");
         });
     }
 }

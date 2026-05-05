@@ -1,13 +1,12 @@
 package com.br.hermescomercial;
 
-import com.br.hermescomercial.pdv.controller.PDVLoginSwingController;
-import com.br.hermescomercial.pdv.controller.PDVLoginSimpleController;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import com.br.hermescomercial.pdv.controller.PDVLoginSimpleController;
 
 /**
  * Classe principal da aplicação Hermes Comercial PDV
- * Versão v2.8.3 - Production-Ready
+ * Versão v3.0.0 - Production-Ready
  * Interface SWING completa com todas as funcionalidades empresariais
  */
 public class MainApplication {
@@ -46,15 +45,15 @@ public class MainApplication {
             // Executar na thread de UI
             SwingUtilities.invokeLater(() -> {
                 try {
-                    System.out.println("Iniciando Hermes Comercial PDV v2.8.3 - Production-Ready");
+                    System.out.println("Iniciando Hermes Comercial PDV v3.0.0 - Production-Ready");
                     
                     // Testar conexão com banco de dados
                     System.out.println("Verificando conexão com banco de dados...");
                     
                     // Iniciar com tela de login moderna (sem validação em tempo real)
                     System.out.println("Abrindo tela de login...");
-                    PDVLoginSwingController login = new PDVLoginSwingController();
-                    login.showFrame();
+                    PDVLoginSimpleController login = new PDVLoginSimpleController();
+                    login.show();
                     
                     System.out.println("Sistema iniciado com sucesso");
                     
@@ -64,7 +63,7 @@ public class MainApplication {
                     
                     // Fallback: tentar tela de login original
                     try {
-                        PDVLoginSwingController login = new PDVLoginSwingController();
+                        PDVLoginSimpleController login = new PDVLoginSimpleController();
                         login.showFrame();
                     } catch (Exception fallbackError) {
                         System.err.println("Erro crítico na interface gráfica: " + fallbackError.getMessage());

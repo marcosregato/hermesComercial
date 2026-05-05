@@ -4,6 +4,7 @@ import com.br.hermescomercial.dao.VendaDao;
 import com.br.hermescomercial.dao.ProdutoDao;
 import com.br.hermescomercial.model.VendaPDV;
 import com.br.hermescomercial.model.Produto;
+import com.br.hermescomercial.logging.LoggerManager;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -66,6 +67,12 @@ public class DashboardService {
             kpis.put("percentualMeta", percentualMeta);
             
         } catch (Exception e) {
+            // Log de erro com contexto
+            Map<String, Object> context = new HashMap<>();
+            context.put("dataInicio", dataInicio);
+            context.put("dataFim", dataFim);
+            LoggerManager.getInstance().error("getKPIsFaturamento", e, context);
+            
             // Valores padrão em caso de erro
             kpis.put("faturamentoTotal", BigDecimal.ZERO);
             kpis.put("numeroVendas", 0);
@@ -112,6 +119,12 @@ public class DashboardService {
             }
             
         } catch (Exception e) {
+            // Log de erro com contexto
+            Map<String, Object> context = new HashMap<>();
+            context.put("dataInicio", dataInicio);
+            context.put("dataFim", dataFim);
+            LoggerManager.getInstance().error("getVendasDiarias", e, context);
+            
             // Retornar dados vazios em caso de erro
             for (int i = 0; i < 7; i++) {
                 Map<String, Object> dado = new HashMap<>();
@@ -327,20 +340,12 @@ public class DashboardService {
      */
     private String getNomeProduto(String codigo) {
         try {
-            try {
-                List<Produto> produtos = produtoDao.buscar(codigo);
-                return produtos.isEmpty() ? "Produto " + codigo : produtos.get(0).getNome();
-            } catch (Exception e) {
-                return "Produto " + codigo;
-            }
+            List<Produto> produtos = produtoDao.buscar(codigo);
+            return produtos.isEmpty() ? "Produto " + codigo : produtos.get(0).getNome();
         } catch (Exception e) {
             return "Produto " + codigo;
         }
     }
-    
-    /**
-     * Obtém resumo do estoque
-     */
     public Map<String, Object> getResumoEstoque() {
         Map<String, Object> resumo = new HashMap<>();
         

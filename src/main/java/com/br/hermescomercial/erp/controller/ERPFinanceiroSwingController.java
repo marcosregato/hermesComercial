@@ -18,6 +18,10 @@ import java.util.Date;
 public class ERPFinanceiroSwingController {
     
     private JFrame frame;
+    
+    public JFrame getFrame() {
+        return frame;
+    }
     private DecimalFormat df;
     private JTable lancamentosTable;
     private DefaultTableModel tableModel;
@@ -415,5 +419,11 @@ public class ERPFinanceiroSwingController {
             frame.dispose();
             frame = null;
         }
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new ERPFinanceiroSwingController();
+        });
     }
 }

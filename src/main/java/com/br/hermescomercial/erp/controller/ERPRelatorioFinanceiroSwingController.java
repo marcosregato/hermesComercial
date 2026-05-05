@@ -36,6 +36,10 @@ public class ERPRelatorioFinanceiroSwingController {
     private static final Color TEXT_PRIMARY = new Color(70, 70, 70);          // Texto principal suave
     
     private JFrame frame;
+    
+    public JFrame getFrame() {
+        return frame;
+    }
     private DecimalFormat df;
     private JTabbedPane tabbedPane;
     
@@ -87,24 +91,26 @@ public class ERPRelatorioFinanceiroSwingController {
     }
     
     private JPanel createHeaderPanel() {
-        // Usando header ERP padrão do LayoutPadrao
-        JPanel headerPanel = LayoutPadrao.criarHeaderERPComBotoes(
-            "📊 Relatórios Financeiros", 
-            "Análise financeira e relatórios contábeis",
-            "Administrador", 
-            "Gerente Financeiro",
-            new JButton[]{
-                LayoutPadrao.criarBotaoPrimario("🔄 Gerar"),
-                LayoutPadrao.criarBotaoSucesso("📥 Exportar"),
-                LayoutPadrao.criarBotaoSecundario("📊 Dashboard")
-            }
+        // Usando layout padrão Header → Formulário (sem tabela)
+        JPanel headerPanel = LayoutPadrao.criarLayoutPadraoGestao(
+            false, // isPDV (false para ERP)
+            "📊 Relatórios Financeiros - ERP",
+            "Selecione período e tipo de relatório...",
+            null, // formulário
+            null // tela de relatório não tem tabela
         );
         
         // Configurar ações dos botões
-        JPanel buttonPanel = (JPanel) headerPanel.getComponent(2);
-        JButton btnGerar = (JButton) buttonPanel.getComponent(0);
-        JButton btnExportar = (JButton) buttonPanel.getComponent(1);
-        JButton btnDashboard = (JButton) buttonPanel.getComponent(2);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setOpaque(false);
+        
+        JButton btnGerar = LayoutPadrao.criarBotaoPrimario("🔄 Gerar");
+        JButton btnExportar = LayoutPadrao.criarBotaoSucesso("📥 Exportar");
+        JButton btnDashboard = LayoutPadrao.criarBotaoSecundario("📊 Dashboard");
+        
+        buttonPanel.add(btnGerar);
+        buttonPanel.add(btnExportar);
+        buttonPanel.add(btnDashboard);
         
         btnGerar.addActionListener(e -> gerarRelatorios());
         btnExportar.addActionListener(e -> exportarRelatorios());
@@ -207,9 +213,13 @@ public class ERPRelatorioFinanceiroSwingController {
         dreTable.getTableHeader().setBackground(PASTEL_BLUE);
         dreTable.getTableHeader().setForeground(TEXT_PRIMARY);
         
-        // Renderizador personalizado para valores
-        dreTable.getColumnModel().getColumn(2).setCellRenderer(new CurrencyCellRenderer());
-        dreTable.getColumnModel().getColumn(3).setCellRenderer(new PercentageCellRenderer());
+        // Renderizadores personalizados (verificar se colunas existem antes de aplicar)
+        if (dreTable.getColumnModel().getColumnCount() > 2) {
+            dreTable.getColumnModel().getColumn(2).setCellRenderer(new CurrencyCellRenderer());
+        }
+        if (dreTable.getColumnModel().getColumnCount() > 3) {
+            dreTable.getColumnModel().getColumn(3).setCellRenderer(new PercentageCellRenderer());
+        }
         
         JScrollPane scrollDRE = new JScrollPane(dreTable);
         scrollDRE.setPreferredSize(new Dimension(1300, 400));
@@ -250,11 +260,19 @@ public class ERPRelatorioFinanceiroSwingController {
         fluxoCaixaTable = LayoutPadrao.criarTabela();
         fluxoCaixaTable.setRowHeight(30);
         
-        // Renderizadores personalizados
-        fluxoCaixaTable.getColumnModel().getColumn(0).setCellRenderer(new DateCellRenderer());
-        fluxoCaixaTable.getColumnModel().getColumn(3).setCellRenderer(new CurrencyCellRenderer());
-        fluxoCaixaTable.getColumnModel().getColumn(4).setCellRenderer(new CurrencyCellRenderer());
-        fluxoCaixaTable.getColumnModel().getColumn(5).setCellRenderer(new CurrencyCellRenderer());
+        // Renderizadores personalizados (verificar se colunas existem antes de aplicar)
+        if (fluxoCaixaTable.getColumnModel().getColumnCount() > 0) {
+            fluxoCaixaTable.getColumnModel().getColumn(0).setCellRenderer(new DateCellRenderer());
+        }
+        if (fluxoCaixaTable.getColumnModel().getColumnCount() > 3) {
+            fluxoCaixaTable.getColumnModel().getColumn(3).setCellRenderer(new CurrencyCellRenderer());
+        }
+        if (fluxoCaixaTable.getColumnModel().getColumnCount() > 4) {
+            fluxoCaixaTable.getColumnModel().getColumn(4).setCellRenderer(new CurrencyCellRenderer());
+        }
+        if (fluxoCaixaTable.getColumnModel().getColumnCount() > 5) {
+            fluxoCaixaTable.getColumnModel().getColumn(5).setCellRenderer(new CurrencyCellRenderer());
+        }
         
         JScrollPane scrollFluxo = new JScrollPane(fluxoCaixaTable);
         scrollFluxo.setPreferredSize(new Dimension(1300, 400));
@@ -290,10 +308,16 @@ public class ERPRelatorioFinanceiroSwingController {
         balanceteTable = LayoutPadrao.criarTabela();
         balanceteTable.setRowHeight(30);
         
-        // Renderizadores personalizados
-        balanceteTable.getColumnModel().getColumn(2).setCellRenderer(new CurrencyCellRenderer());
-        balanceteTable.getColumnModel().getColumn(3).setCellRenderer(new CurrencyCellRenderer());
-        balanceteTable.getColumnModel().getColumn(4).setCellRenderer(new CurrencyCellRenderer());
+        // Renderizadores personalizados (verificar se colunas existem antes de aplicar)
+        if (balanceteTable.getColumnModel().getColumnCount() > 2) {
+            balanceteTable.getColumnModel().getColumn(2).setCellRenderer(new CurrencyCellRenderer());
+        }
+        if (balanceteTable.getColumnModel().getColumnCount() > 3) {
+            balanceteTable.getColumnModel().getColumn(3).setCellRenderer(new CurrencyCellRenderer());
+        }
+        if (balanceteTable.getColumnModel().getColumnCount() > 4) {
+            balanceteTable.getColumnModel().getColumn(4).setCellRenderer(new CurrencyCellRenderer());
+        }
         
         JScrollPane scrollBalancete = new JScrollPane(balanceteTable);
         scrollBalancete.setPreferredSize(new Dimension(1300, 450));
@@ -333,11 +357,19 @@ public class ERPRelatorioFinanceiroSwingController {
         contasTable = LayoutPadrao.criarTabela();
         contasTable.setRowHeight(30);
         
-        // Renderizadores personalizados
-        contasTable.getColumnModel().getColumn(3).setCellRenderer(new DateCellRenderer());
-        contasTable.getColumnModel().getColumn(4).setCellRenderer(new CurrencyCellRenderer());
-        contasTable.getColumnModel().getColumn(5).setCellRenderer(new StatusCellRenderer());
-        contasTable.getColumnModel().getColumn(6).setCellRenderer(new DiasAtrasoCellRenderer());
+        // Renderizadores personalizados (verificar se colunas existem antes de aplicar)
+        if (contasTable.getColumnModel().getColumnCount() > 3) {
+            contasTable.getColumnModel().getColumn(3).setCellRenderer(new DateCellRenderer());
+        }
+        if (contasTable.getColumnModel().getColumnCount() > 4) {
+            contasTable.getColumnModel().getColumn(4).setCellRenderer(new CurrencyCellRenderer());
+        }
+        if (contasTable.getColumnModel().getColumnCount() > 5) {
+            contasTable.getColumnModel().getColumn(5).setCellRenderer(new StatusCellRenderer());
+        }
+        if (contasTable.getColumnModel().getColumnCount() > 6) {
+            contasTable.getColumnModel().getColumn(6).setCellRenderer(new DiasAtrasoCellRenderer());
+        }
         
         JScrollPane scrollContas = new JScrollPane(contasTable);
         scrollContas.setPreferredSize(new Dimension(1300, 400));
@@ -748,6 +780,12 @@ public class ERPRelatorioFinanceiroSwingController {
             
             return this;
         }
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new ERPRelatorioFinanceiroSwingController();
+        });
     }
     
     // ==================== MÉTODOS PÚBLICOS ====================

@@ -32,7 +32,7 @@ public class PDVPrincipalSwingController {
     
     private void initializeUI() {
         // Usar LayoutPadrao - tema consistente em todo sistema
-        mainFrame = new JFrame("Hermes Comercial PDV v2.8.3 - Production-Ready");
+        mainFrame = new JFrame("Hermes Comercial PDV v3.0.0 - Production-Ready");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainFrame.setSize(1200, 800);
         mainFrame.setLocationRelativeTo(null);
@@ -186,7 +186,7 @@ public class PDVPrincipalSwingController {
         
         JLabel welcomeLabel = LayoutPadrao.criarRotuloSubtitulo(
             "👋 Bem-vindo ao Hermes Comercial PDV!\n" +
-            "Sistema profissional de gestão comercial v2.8.3");
+            "Sistema profissional de gestão comercial v3.0.0");
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         welcomeLabel.setForeground(LayoutPadrao.COR_TEXTO);
         
@@ -276,7 +276,7 @@ public class PDVPrincipalSwingController {
         JPanel systemInfoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         systemInfoPanel.setOpaque(false);
         
-        JLabel versionLabel = LayoutPadrao.criarRotuloTexto("Hermes Comercial PDV v2.8.3");
+        JLabel versionLabel = LayoutPadrao.criarRotuloTexto("Hermes Comercial PDV v3.0.0");
         versionLabel.setForeground(LayoutPadrao.COR_TEXTO_CLARO);
         
         systemInfoPanel.add(versionLabel);
@@ -1479,5 +1479,10 @@ public class PDVPrincipalSwingController {
                 "Erro ao abrir relatório de estoque: " + ex.getMessage(), 
                 "Relatórios", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return mainFrame;
     }
 }

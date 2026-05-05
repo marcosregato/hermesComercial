@@ -178,7 +178,6 @@ public class DependencyContainerRefactored {
     /**
      * Cria nova instância da dependência
      */
-    @SuppressWarnings("unchecked")
     private <T> T createNewInstance(DependencyDescriptor<T> descriptor) {
         try {
             if (descriptor.supplier != null) {

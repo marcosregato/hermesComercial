@@ -15,6 +15,10 @@ import java.util.Date;
 public class ERPRelatorioSwingController {
     
     private JFrame frame;
+    
+    public JFrame getFrame() {
+        return frame;
+    }
     private JPanel mainPanel;
     private JComboBox<String> cbTipoRelatorio;
     private JTextField txtDataInicio, txtDataFim;
@@ -55,10 +59,16 @@ public class ERPRelatorioSwingController {
         );
         
         // Configurar ações dos botões do header
-        JPanel buttonPanel = (JPanel) headerPanel.getComponent(2);
-        JButton btnGerar = (JButton) buttonPanel.getComponent(0);
-        JButton btnExportar = (JButton) buttonPanel.getComponent(1);
-        JButton btnImprimir = (JButton) buttonPanel.getComponent(2);
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        buttonPanel.setOpaque(false);
+        
+        JButton btnGerar = LayoutPadrao.criarBotaoSucesso("📄 Gerar");
+        JButton btnExportar = LayoutPadrao.criarBotaoPrimario("📤 Exportar");
+        JButton btnImprimir = LayoutPadrao.criarBotaoSecundario("🖨️ Imprimir");
+        
+        buttonPanel.add(btnGerar);
+        buttonPanel.add(btnExportar);
+        buttonPanel.add(btnImprimir);
         
         btnGerar.addActionListener(e -> gerarRelatorio());
         btnExportar.addActionListener(e -> exportarRelatorio());

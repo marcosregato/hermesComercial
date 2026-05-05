@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Gerenciador de Logging Unificado - Versão Refatorada
@@ -159,10 +158,10 @@ public class LoggerManager {
         enableFile = configManager.getBoolean("logging.file.enabled", true);
         enableEvents = configManager.getBoolean("logging.events.enabled", true);
         
-        // Configurações de arquivo
-        String logFile = configManager.getString("logging.file.path", "logs/hermes-comercial.log");
-        String maxFileSize = configManager.getString("logging.file.max_size", "10MB");
-        int fileCount = configManager.getInteger("logging.file.count", 5);
+        // Configurações de arquivo (lidas mas não utilizadas atualmente)
+        // String logFile = configManager.getString("logging.file.path", "logs/hermes-comercial.log");
+        // String maxFileSize = configManager.getString("logging.file.max_size", "10MB");
+        // int fileCount = configManager.getInteger("logging.file.count", 5);
         
         // Níveis específicos por logger
         Map<String, Object> allConfigs = configManager.getAllConfigurations();
@@ -350,12 +349,27 @@ public class LoggerManager {
     }
     
     /**
+     * Log de informação
+     */
+    public void info(String operation, String message) {
+        Logger infoLogger = getLogger("INFO");
+        infoLogger.info(String.format("INFO: %s | %s", operation, message));
+    }
+    
+    /**
+     * Log de aviso
+     */
+    public void warn(String operation, String message) {
+        Logger warnLogger = getLogger("WARN");
+        warnLogger.warning(String.format("WARN: %s | %s", operation, message));
+    }
+    
+    /**
      * Formatter customizado para logs Hermes
      */
     private static class HermesFormatter extends Formatter {
         
         private final LogFormat format;
-        private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
         
         public HermesFormatter(LogFormat format) {
             this.format = format;

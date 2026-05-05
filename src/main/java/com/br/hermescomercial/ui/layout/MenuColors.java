@@ -188,4 +188,28 @@ public class MenuColors {
         
         return botao;
     }
+    
+    /**
+     * Cria um header colorido para telas específicas
+     * @param setor Nome do setor
+     * @param titulo Título do header
+     * @return JPanel com header colorido
+     */
+    public static JPanel criarHeaderSetor(String setor, String titulo) {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(getCorHeader(setor));
+        headerPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(getCorHeader(setor).darker(), 1),
+            BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
+        
+        JLabel titleLabel = new JLabel(titulo);
+        titleLabel.setFont(LayoutPadrao.FONTE_TITULO);
+        titleLabel.setForeground(COR_TEXTO_HEADER);
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        headerPanel.add(titleLabel, BorderLayout.CENTER);
+        
+        return headerPanel;
+    }
 }

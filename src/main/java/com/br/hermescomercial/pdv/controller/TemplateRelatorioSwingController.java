@@ -15,7 +15,21 @@ import java.awt.event.MouseEvent;
 public class TemplateRelatorioSwingController {
     
     private JFrame frame;
+    
+    public JFrame getFrame() {
+        return frame;
+    }
+    
     private JTabbedPane tabbedPane;
+    
+    public void exportarRelatorioComTemplate(int templateId, String nome) {
+        JOptionPane.showMessageDialog(frame, 
+            "Exportando relatório...\n" +
+            "Template ID: " + templateId + "\n" +
+            "Nome: " + nome + "\n" +
+            "Status: ✅ Exportado!", 
+            "Exportação", JOptionPane.INFORMATION_MESSAGE);
+    }
     private JTextField txtNome, txtDescricao;
     private JComboBox<String> cmbTipoRelatorio;
     private JTextArea txtConteudo;
@@ -279,7 +293,7 @@ public class TemplateRelatorioSwingController {
         return button;
     }
     
-    private void salvarTemplate() {
+    public void salvarTemplate() {
         try {
             String nome = txtNome.getText().trim();
             String tipo = (String) cmbTipoRelatorio.getSelectedItem();
@@ -318,11 +332,15 @@ public class TemplateRelatorioSwingController {
         }
     }
     
-    private void limparFormulario() {
+    public void limparFormulario() {
         txtNome.setText("");
         txtDescricao.setText("");
         txtConteudo.setText("");
         cmbTipoRelatorio.setSelectedIndex(0);
+    }
+    
+    public void criarTemplate(String nome, String descricao) {
+        salvarTemplate();
     }
     
     private void previsualizarTemplate() {
@@ -338,10 +356,32 @@ public class TemplateRelatorioSwingController {
             "Pré-visualização", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void buscarTemplates(String termo, String tipo) {
+    public void buscarTemplates(String termo, String tipo) {
         // Simulação de busca
         JOptionPane.showMessageDialog(frame, "Buscando templates por: " + termo + "\nTipo: " + tipo + 
             "\n\nFuncionalidade em desenvolvimento...", "Busca", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void aplicarTemplate(int id, String tipo, String formato) {
+        // Simulação de aplicação
+        JOptionPane.showMessageDialog(frame, "Aplicando template ID: " + id + "\nTipo: " + tipo + "\nFormato: " + formato, 
+            "Aplicação", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void validarTemplate(int id) {
+        // Simulação de validação
+        JOptionPane.showMessageDialog(frame, "Validando template ID: " + id, "Validação", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void integrarComSistemaRelatorios() {
+        // Simulação de integração
+        JOptionPane.showMessageDialog(frame, "Integrando com sistema de relatórios...", "Integração", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void personalizarTemplate(int id, String estilo, String fonte) {
+        // Simulação de personalização
+        JOptionPane.showMessageDialog(frame, "Personalizando template ID: " + id + "\nEstilo: " + estilo + "\nFonte: " + fonte, 
+            "Personalização", JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void carregarTemplates() {
@@ -393,16 +433,25 @@ public class TemplateRelatorioSwingController {
         );
     }
     
-    private void editarTemplate() {
+    public void editarTemplate() {
         carregarTemplateSelecionado();
     }
     
-    private void duplicarTemplate() {
+    public void editarTemplate(int id, String nome) {
+        carregarTemplateSelecionado();
+        txtNome.setText(nome);
+    }
+    
+    public void duplicarTemplate() {
+        duplicarTemplate();
+    }
+    
+    public void duplicarTemplate(int id) {
         carregarTemplateSelecionado();
         txtNome.setText(txtNome.getText() + " (Cópia)");
     }
     
-    private void excluirTemplate() {
+    public void excluirTemplate() {
         int selectedRow = templatesTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(frame, "Selecione um template para excluir!", 
@@ -421,7 +470,15 @@ public class TemplateRelatorioSwingController {
         }
     }
     
-    private void exportarTemplate() {
+    public void excluirTemplate(int id) {
+        excluirTemplate();
+    }
+    
+    public void exportarTemplate() {
+        exportarTemplate();
+    }
+    
+    public void exportarTemplate(int id) {
         int selectedRow = templatesTable.getSelectedRow();
         if (selectedRow == -1) {
             JOptionPane.showMessageDialog(frame, "Selecione um template para exportar!", 

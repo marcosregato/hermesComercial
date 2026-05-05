@@ -12,10 +12,10 @@ import java.awt.*;
  */
 public class ERPMenuPrincipalSwingController {
     
-    private JFrame frame;
-    private JPanel mainPanel;
-    private JLabel lblDataHora;
-    private JPanel menuPanel; // Referência para atualização responsiva
+    public JFrame frame;
+    public JPanel mainPanel;
+    public JLabel lblDataHora;
+    public JPanel menuPanel; // Referência para atualização responsiva
     
     public ERPMenuPrincipalSwingController() {
         inicializarUI();
@@ -148,45 +148,35 @@ public class ERPMenuPrincipalSwingController {
             // Aplicar cores específicas do setor
             JButton botaoColorido = MenuColors.criarBotaoSetor(setor, botao.getText());
             botoesPanel.add(botaoColorido);
-        
-            if (width < 900) {
-                // Layout 1xN para telas pequenas
-                for (int i = 0; i < botoes.length; i++) {
-                    gbc.gridx = 0; gbc.gridy = i;
-                    botoesPanel.add(botoes[i], gbc);
-                }
-            } else if (width < 1200) {
-                // Layout 2xN para telas médias
-                for (int i = 0; i < botoes.length; i++) {
-                    gbc.gridx = i % 2; gbc.gridy = i / 2;
-                    botoesPanel.add(botoes[i], gbc);
-                }
-            } else {
-                // Layout 3xN para telas grandes
-                for (int i = 0; i < botoes.length; i++) {
-                    gbc.gridx = i % 3; gbc.gridy = i / 3;
-                    botoesPanel.add(botoes[i], gbc);
-                }
-            }
-        
-            // Painel com borda e fundo sutil
-            JPanel contentPanel = new JPanel(new BorderLayout());
-            contentPanel.setOpaque(false);
-            contentPanel.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
-                BorderFactory.createEmptyBorder(15, 15, 15, 15)
-            ));
-                contentPanel.setBackground(LayoutPadrao.COR_FUNDO);
-                
-                contentPanel.add(tituloLabel, BorderLayout.NORTH);
-                contentPanel.add(botoesPanel, BorderLayout.CENTER);
-                
-                categoriaPanel.add(contentPanel, BorderLayout.CENTER);
-                
-                return categoriaPanel;
         }
+        
+        // Painel com borda e fundo sutil
+        JPanel contentPanel = new JPanel(new BorderLayout());
+        contentPanel.setOpaque(false);
+        contentPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(LayoutPadrao.COR_BORDA, 1),
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
+        ));
+        contentPanel.setBackground(LayoutPadrao.COR_FUNDO);
+        contentPanel.add(tituloLabel, BorderLayout.NORTH);
+        contentPanel.add(botoesPanel, BorderLayout.CENTER);
+        
+        categoriaPanel.add(contentPanel, BorderLayout.CENTER);
+        
+        return categoriaPanel;
     }
     
+    /**
+     * Identifica o setor baseado no título do menu
+     * @param titulo Título do menu
+     * @return Setor identificado
+     */
+    private String identificarSetorPorTitulo(String titulo) {
+        if (titulo.contains("PRODUTOS")) {
+            return "produtos";
+        }
+        return "erp";
+    }
     
     private JPanel createFooterPanel() {
         JPanel footerPanel = new JPanel(new BorderLayout());

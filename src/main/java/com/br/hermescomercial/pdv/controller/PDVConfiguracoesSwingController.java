@@ -17,8 +17,8 @@ import com.br.hermescomercial.util.DatabaseConfig;
  */
 public class PDVConfiguracoesSwingController {
     
-    private JFrame frame;
-    private JTabbedPane tabbedPane;
+    public JFrame frame;
+    public JTabbedPane tabbedPane;
     private JTextField txtNomeEmpresa;
     private JTextField txtCnpj;
     private JTextField txtEndereco;
@@ -796,7 +796,7 @@ public class PDVConfiguracoesSwingController {
         }
     }
     
-    private void salvarConfiguracoes(ActionEvent e) {
+    public void salvarConfiguracoes(ActionEvent e) {
         JOptionPane.showMessageDialog(frame, 
             "Configurações salvas com sucesso!\n\n" +
             "Empresa: " + txtNomeEmpresa.getText() + "\n" +
@@ -806,7 +806,7 @@ public class PDVConfiguracoesSwingController {
             "Salvar", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void restaurarPadrao(ActionEvent e) {
+    public void restaurarPadrao(ActionEvent e) {
         int confirm = JOptionPane.showConfirmDialog(frame, 
             "Deseja restaurar as configurações padrão?\n" +
             "Todas as alterações serão perdidas.",
@@ -820,7 +820,7 @@ public class PDVConfiguracoesSwingController {
         }
     }
     
-    private void importarConfiguracoes(ActionEvent e) {
+    public void importarConfiguracoes(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter(
             "Arquivos de Configuração", "json", "xml", "properties"));
@@ -834,7 +834,7 @@ public class PDVConfiguracoesSwingController {
         }
     }
     
-    private void exportarConfiguracoes(ActionEvent e) {
+    public void exportarConfiguracoes(ActionEvent e) {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setDialogTitle("Exportar Configurações");
         
@@ -960,5 +960,10 @@ public class PDVConfiguracoesSwingController {
                 mainPanel.setBackground(new Color(250, 250, 230)); // Amarelo escuro suave
             }
         }
+    }
+    
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return frame;
     }
 }

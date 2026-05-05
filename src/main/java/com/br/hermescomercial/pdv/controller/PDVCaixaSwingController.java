@@ -41,7 +41,7 @@ public class PDVCaixaSwingController {
     }
     
     private void initializeUI() {
-        frame = new JFrame("PDV - Operações de Caixa v2.8.3 - LayoutPadrao");
+        frame = new JFrame("PDV - Operações de Caixa v3.0.0 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(900, 600);
         frame.setLocationRelativeTo(null);
@@ -433,5 +433,10 @@ public class PDVCaixaSwingController {
         public String getDescricao() { return descricao; }
         public BigDecimal getValor() { return valor; }
         public BigDecimal getSaldo() { return saldo; }
+    }
+    
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return frame;
     }
 }

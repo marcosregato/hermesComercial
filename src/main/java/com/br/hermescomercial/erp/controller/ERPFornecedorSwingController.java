@@ -13,6 +13,10 @@ import java.awt.*;
 public class ERPFornecedorSwingController {
     
     private JFrame frame;
+    
+    public JFrame getFrame() {
+        return frame;
+    }
     private JPanel mainPanel;
     private JTable fornecedoresTable;
     private DefaultTableModel tableModel;
@@ -346,6 +350,12 @@ public class ERPFornecedorSwingController {
         txtPrazoEntrega.setText("");
         cbCategoria.setSelectedIndex(0);
         cbStatus.setSelectedIndex(0);
+    }
+    
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(() -> {
+            new ERPFornecedorSwingController();
+        });
     }
     
     private void carregarDadosExemplo() {

@@ -28,7 +28,7 @@ public class PDVProdutosUnificadoSwingController {
     }
     
     private void initializeUI() {
-        frame = new JFrame("📦 Gestão de Produtos v2.8.3 - LayoutPadrao");
+        frame = new JFrame("📦 Gestão de Produtos v3.0.0 - LayoutPadrao");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(950, 650);
         frame.setLocationRelativeTo(null);
@@ -228,5 +228,10 @@ public class PDVProdutosUnificadoSwingController {
             // Implementação básica sem campos não utilizados
         }
         
+    }
+    
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return frame;
     }
 }

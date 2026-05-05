@@ -25,7 +25,7 @@ public class PDVVendaSwingControllerSimple {
     }
     
     private void initializeUI() {
-        frame = new JFrame("PDV - Nova Venda v2.8.3 - Simples");
+        frame = new JFrame("PDV - Nova Venda v3.0.0 - Simples");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setSize(900, 650);
         frame.setLocationRelativeTo(null);

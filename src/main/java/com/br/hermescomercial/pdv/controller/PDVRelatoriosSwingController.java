@@ -860,4 +860,9 @@ public class PDVRelatoriosSwingController {
         tabbedPane.setSelectedIndex(4); // Quarta aba (Financeiro)
         updateTabHighlight();
     }
+    
+    // Método para compatibilidade com testes
+    public JFrame getFrame() {
+        return frame;
+    }
 }
