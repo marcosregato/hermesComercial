@@ -57,6 +57,7 @@ public class SystemLogger {
     }
     
     // Arquivos de Log
+    @SuppressWarnings("unused")
     private static final String[] LOG_FILES = {
         "app.log",        // Logs gerais
         "auth.log",       // Autenticação

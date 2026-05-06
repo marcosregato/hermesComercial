@@ -271,6 +271,7 @@ public class PDVMenuLateralDebug {
                     subMenuPanel.setVisible(!isVisible);
                     
                     // Atualizar ícone e TEXTO
+                    @SuppressWarnings("unused")
                     String currentText = mainButton.getText();
                     if (isVisible) {
                         mainButton.setText(menuTitle.replace("▼", "▶"));

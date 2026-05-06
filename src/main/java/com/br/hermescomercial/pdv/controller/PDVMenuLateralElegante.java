@@ -5,9 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.RoundRectangle2D;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
 import com.br.hermescomercial.util.SystemLogger;
 
 /**
@@ -31,6 +29,7 @@ public class PDVMenuLateralElegante {
     private static final Color MEDIUM_GRAY = new Color(189, 195, 199);       // Cinza médio
     private static final Color DARK_GRAY = new Color(127, 140, 141);         // Cinza escuro
     private static final Color WHITE = Color.WHITE;
+    @SuppressWarnings("unused")
     private static final Color BLACK = new Color(44, 62, 80);                // Preto elegante
     
     public PDVMenuLateralElegante(String usuario, String nome, JPanel workArea) {
@@ -1671,6 +1670,7 @@ public class PDVMenuLateralElegante {
         botoesPanel.setBorder(BorderFactory.createEmptyBorder(15, 0, 5, 0));
         
         // Determinar cor do módulo
+        @SuppressWarnings("unused")
         Color moduleColor = getModuleColor(item);
         
         // Botão Novo - Gradiente Azul Vibrante
@@ -2070,6 +2070,7 @@ public class PDVMenuLateralElegante {
     /**
      * Animação de redimensionamento suave (otimizada para performance)
      */
+    @SuppressWarnings("unused")
     private void animatePanelResize(JPanel panel, int targetHeight) {
         Timer timer = new Timer(5, new ActionListener() {
             private int currentHeight = panel.getHeight();
@@ -2229,6 +2230,7 @@ public class PDVMenuLateralElegante {
             timer.start();
         }
         
+        @SuppressWarnings("unused")
         public void animateExpand() {
             // Animação mais rápida para melhor performance
             Timer timer = new Timer(15, new ActionListener() {
@@ -2245,6 +2247,7 @@ public class PDVMenuLateralElegante {
             timer.start();
         }
         
+        @SuppressWarnings("unused")
         public void animateCollapse() {
             // Animação mais rápida para melhor performance
             Timer timer = new Timer(15, new ActionListener() {
@@ -2299,6 +2302,7 @@ public class PDVMenuLateralElegante {
                 g2d.setColor(MEDIUM_GRAY);
                 g2d.setFont(getFont().deriveFont(Font.ITALIC));
                 FontMetrics fm = g2d.getFontMetrics();
+                @SuppressWarnings("unused")
                 int textWidth = fm.stringWidth(placeholder);
                 g2d.drawString(placeholder, 15, (getHeight() + fm.getAscent()) / 2 - 2);
             }

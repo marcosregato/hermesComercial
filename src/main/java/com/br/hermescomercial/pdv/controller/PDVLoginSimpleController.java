@@ -3532,6 +3532,7 @@ public class PDVLoginSimpleController {
         return panel;
     }
     
+    @SuppressWarnings("unused")
     private JPanel criarFormularioCadastro(GridBagConstraints gbc) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
@@ -3548,17 +3549,17 @@ public class PDVLoginSimpleController {
         gbc.gridx = 1; gbc.weightx = 1.0;
         panel.add(new JTextField(20), gbc);
         
-        // Telefone
+        // Email
         gbc.gridx = 0; gbc.gridy = 2; gbc.weightx = 0;
-        panel.add(new JLabel("📞 Telefone:"), gbc);
-        gbc.gridx = 1; gbc.weightx = 1.0;
-        panel.add(new JTextField(15), gbc);
-        
-        // E-mail
-        gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 0;
-        panel.add(new JLabel("📧 E-mail:"), gbc);
+        panel.add(new JLabel("📧 Email:"), gbc);
         gbc.gridx = 1; gbc.weightx = 1.0;
         panel.add(new JTextField(30), gbc);
+        
+        // Telefone
+        gbc.gridx = 0; gbc.gridy = 3; gbc.weightx = 0;
+        panel.add(new JLabel("📱 Telefone:"), gbc);
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        panel.add(new JTextField(15), gbc);
         
         // Endereço
         gbc.gridx = 0; gbc.gridy = 4; gbc.weightx = 0;
@@ -3576,6 +3577,7 @@ public class PDVLoginSimpleController {
         return panel;
     }
     
+    @SuppressWarnings("unused")
     private JPanel criarFormularioPDV(GridBagConstraints gbc) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
@@ -3614,6 +3616,7 @@ public class PDVLoginSimpleController {
         return panel;
     }
     
+    @SuppressWarnings("unused")
     private JPanel criarFormularioEstoque(GridBagConstraints gbc) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
@@ -3657,6 +3660,7 @@ public class PDVLoginSimpleController {
         return panel;
     }
     
+    @SuppressWarnings("unused")
     private JPanel criarFormularioUsuarios(GridBagConstraints gbc) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
@@ -3701,6 +3705,7 @@ public class PDVLoginSimpleController {
         return panel;
     }
     
+    @SuppressWarnings("unused")
     private JPanel criarFormularioBackup(GridBagConstraints gbc) {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
