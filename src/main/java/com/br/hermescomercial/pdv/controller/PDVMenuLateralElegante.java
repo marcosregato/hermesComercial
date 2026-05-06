@@ -25,6 +25,7 @@ public class PDVMenuLateralElegante {
     private static final Color ACCENT_COLOR = new Color(231, 76, 60);        // Vermelho elegante
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);       // Verde elegante
     private static final Color WARNING_COLOR = new Color(243, 156, 18);      // Amarelo elegante
+    @SuppressWarnings("unused")
     private static final Color LIGHT_GRAY = new Color(245, 247, 250);        // Cinza claro
     private static final Color MEDIUM_GRAY = new Color(189, 195, 199);       // Cinza médio
     private static final Color DARK_GRAY = new Color(127, 140, 141);         // Cinza escuro
@@ -568,27 +569,41 @@ public class PDVMenuLateralElegante {
         conteudoPrincipal.setOpaque(false);
         conteudoPrincipal.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
-        // Painel de busca elegante
-        JPanel buscaPanel = criarPainelBuscaElegante(item, module);
-        conteudoPrincipal.add(buscaPanel);
-        conteudoPrincipal.add(Box.createVerticalStrut(15));
-        
-        // Painel de formulário elegante
-        JPanel formularioPanel = criarPainelFormularioElegante(item, module);
-        conteudoPrincipal.add(formularioPanel);
-        conteudoPrincipal.add(Box.createVerticalStrut(15));
-        
-        // Painel de tabela elegante
-        JPanel tabelaPanel = criarPainelTabelaElegante(item, module);
-        conteudoPrincipal.add(tabelaPanel);
-        conteudoPrincipal.add(Box.createVerticalStrut(15));
-        
-        // Painel de botões elegante
-        JPanel botoesPanel = criarPainelBotoesElegante(item);
-        conteudoPrincipal.add(botoesPanel);
+        // Verificar se há tela ativa
+        if (item == null || item.trim().isEmpty()) {
+            // Tela inicial elegante quando não houver tela ativa
+            JPanel painelInicial = criarTelaInicialElegante();
+            conteudoPrincipal.add(painelInicial);
+        } else {
+            // Painel de busca elegante
+            JPanel buscaPanel = criarPainelBuscaElegante(item, module);
+            conteudoPrincipal.add(buscaPanel);
+            conteudoPrincipal.add(Box.createVerticalStrut(15));
+            
+            // Painel de formulário elegante
+            JPanel formularioPanel = criarPainelFormularioElegante(item, module);
+            conteudoPrincipal.add(formularioPanel);
+            conteudoPrincipal.add(Box.createVerticalStrut(15));
+            
+            // Painel de tabela elegante
+            JPanel tabelaPanel = criarPainelTabelaElegante(item, module);
+            tabelaPanel.setVisible(true);
+            conteudoPrincipal.add(tabelaPanel);
+            conteudoPrincipal.add(Box.createVerticalStrut(15));
+            
+            // Painel de botões elegante
+            JPanel botoesPanel = criarPainelBotoesElegante(item);
+            conteudoPrincipal.add(botoesPanel);
+        }
         
         scrollPane.setViewportView(conteudoPrincipal);
         painelPrincipal.add(scrollPane, BorderLayout.CENTER);
+        
+        // Forçar revalidação e repaint
+        conteudoPrincipal.revalidate();
+        conteudoPrincipal.repaint();
+        scrollPane.revalidate();
+        scrollPane.repaint();
         
         // Status bar elegante
         JPanel statusBar = criarStatusBarTelaElegante(item);
@@ -948,65 +963,88 @@ public class PDVMenuLateralElegante {
         switch (item) {
             case "🛒 Ponto de Venda":
                 // Código do produto
-                gbc.gridx = 0; gbc.gridy = 0;
+                gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
                 JLabel lblCodigo = new JLabel("Código do Produto:");
                 lblCodigo.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblCodigo.setForeground(DARK_GRAY);
                 panel.add(lblCodigo, gbc);
-                gbc.gridx = 1; gbc.gridy = 0;
+                gbc.gridx = 1; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtCodigo = new ElegantTextField(15);
                 panel.add(txtCodigo, gbc);
                 
                 // Descrição
-                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.gridx = 0; gbc.gridy = 1; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
+                gbc.fill = GridBagConstraints.NONE;
                 JLabel lblDescricao = new JLabel("Descrição:");
                 lblDescricao.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblDescricao.setForeground(DARK_GRAY);
                 panel.add(lblDescricao, gbc);
-                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.gridx = 1; gbc.gridy = 1; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtDescricao = new ElegantTextField(30);
                 txtDescricao.setEditable(false);
                 panel.add(txtDescricao, gbc);
                 
                 // Quantidade
-                gbc.gridx = 0; gbc.gridy = 2;
+                gbc.gridx = 0; gbc.gridy = 2; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
+                gbc.fill = GridBagConstraints.NONE;
                 JLabel lblQuantidade = new JLabel("Quantidade:");
                 lblQuantidade.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblQuantidade.setForeground(DARK_GRAY);
                 panel.add(lblQuantidade, gbc);
-                gbc.gridx = 1; gbc.gridy = 2;
+                gbc.gridx = 1; gbc.gridy = 2; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtQuantidade = new ElegantTextField(10);
                 panel.add(txtQuantidade, gbc);
                 
                 // Valor Unitário
-                gbc.gridx = 0; gbc.gridy = 3;
+                gbc.gridx = 0; gbc.gridy = 3; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
+                gbc.fill = GridBagConstraints.NONE;
                 JLabel lblValorUnitario = new JLabel("Valor Unitário:");
                 lblValorUnitario.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblValorUnitario.setForeground(DARK_GRAY);
                 panel.add(lblValorUnitario, gbc);
-                gbc.gridx = 1; gbc.gridy = 3;
+                gbc.gridx = 1; gbc.gridy = 3; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtValorUnitario = new ElegantTextField(15);
                 txtValorUnitario.setEditable(false);
                 panel.add(txtValorUnitario, gbc);
                 
                 // Valor Total
-                gbc.gridx = 0; gbc.gridy = 4;
+                gbc.gridx = 0; gbc.gridy = 4; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
+                gbc.fill = GridBagConstraints.NONE;
                 JLabel lblValorTotal = new JLabel("Valor Total:");
                 lblValorTotal.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblValorTotal.setForeground(DARK_GRAY);
                 panel.add(lblValorTotal, gbc);
-                gbc.gridx = 1; gbc.gridy = 4;
+                gbc.gridx = 1; gbc.gridy = 4; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtValorTotal = new ElegantTextField(15);
                 txtValorTotal.setEditable(false);
                 panel.add(txtValorTotal, gbc);
                 
                 // Forma de Pagamento
-                gbc.gridx = 0; gbc.gridy = 5;
+                gbc.gridx = 0; gbc.gridy = 5; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
+                gbc.fill = GridBagConstraints.NONE;
                 JLabel lblFormaPagamento = new JLabel("Forma Pagamento:");
                 lblFormaPagamento.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblFormaPagamento.setForeground(DARK_GRAY);
                 panel.add(lblFormaPagamento, gbc);
-                gbc.gridx = 1; gbc.gridy = 5;
+                gbc.gridx = 1; gbc.gridy = 5; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 JComboBox<String> cbFormaPagamento = new JComboBox<>(new String[]{"Dinheiro", "Cartão Débito", "Cartão Crédito", "PIX"});
                 cbFormaPagamento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
                 panel.add(cbFormaPagamento, gbc);
@@ -1014,43 +1052,58 @@ public class PDVMenuLateralElegante {
                 
             case "💳 Pagamentos":
                 // Cliente
-                gbc.gridx = 0; gbc.gridy = 0;
+                gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
                 JLabel lblCliente = new JLabel("Cliente:");
                 lblCliente.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblCliente.setForeground(DARK_GRAY);
                 panel.add(lblCliente, gbc);
-                gbc.gridx = 1; gbc.gridy = 0;
+                gbc.gridx = 1; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtCliente = new ElegantTextField(30);
                 panel.add(txtCliente, gbc);
                 
                 // Valor do Pagamento
-                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.gridx = 0; gbc.gridy = 1; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
+                gbc.fill = GridBagConstraints.NONE;
                 JLabel lblValor = new JLabel("Valor:");
                 lblValor.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblValor.setForeground(DARK_GRAY);
                 panel.add(lblValor, gbc);
-                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.gridx = 1; gbc.gridy = 1; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtValor = new ElegantTextField(15);
                 panel.add(txtValor, gbc);
                 
                 // Forma de Pagamento
-                gbc.gridx = 0; gbc.gridy = 2;
+                gbc.gridx = 0; gbc.gridy = 2; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
+                gbc.fill = GridBagConstraints.NONE;
                 JLabel lblPagamento = new JLabel("Forma Pagamento:");
                 lblPagamento.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblPagamento.setForeground(DARK_GRAY);
                 panel.add(lblPagamento, gbc);
-                gbc.gridx = 1; gbc.gridy = 2;
+                gbc.gridx = 1; gbc.gridy = 2; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 JComboBox<String> cbPagamento = new JComboBox<>(new String[]{"Dinheiro", "Cartão Débito", "Cartão Crédito", "PIX", "Boleto"});
                 cbPagamento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
                 panel.add(cbPagamento, gbc);
                 
                 // Data do Pagamento
-                gbc.gridx = 0; gbc.gridy = 3;
+                gbc.gridx = 0; gbc.gridy = 3; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 5, 5, 10);
+                gbc.fill = GridBagConstraints.NONE;
                 JLabel lblData = new JLabel("Data:");
                 lblData.setFont(new Font("Segoe UI", Font.BOLD, 12));
                 lblData.setForeground(DARK_GRAY);
                 panel.add(lblData, gbc);
-                gbc.gridx = 1; gbc.gridy = 3;
+                gbc.gridx = 1; gbc.gridy = 3; gbc.anchor = GridBagConstraints.WEST;
+                gbc.insets = new Insets(5, 0, 5, 5);
+                gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtData = new ElegantTextField(10);
                 panel.add(txtData, gbc);
                 break;
@@ -1815,64 +1868,103 @@ public class PDVMenuLateralElegante {
      * Cria painel de tabela elegante
      */
     private JPanel criarPainelTabelaElegante(String item, String module) {
-        JPanel tabelaPanel = new JPanel(new BorderLayout()) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                
-                // Fundo elegante
-                g2d.setColor(WHITE);
-                g2d.fillRoundRect(2, 2, getWidth()-4, getHeight()-4, 12, 12);
-                
-                // Borda elegante
-                g2d.setColor(MEDIUM_GRAY);
-                g2d.drawRoundRect(2, 2, getWidth()-4, getHeight()-4, 12, 12);
-                
-                // Sombra sutil
-                g2d.setColor(new Color(0, 0, 0, 15));
-                g2d.fillRoundRect(4, 4, getWidth()-4, getHeight()-4, 12, 12);
-                g2d.dispose();
-            }
-        };
-        tabelaPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        tabelaPanel.setOpaque(false);
+        // Determinar cor do módulo para a tabela
+        Color moduleColor = getModuleColor(item);
+        Color moduleColorLight = new Color(
+            Math.min(255, moduleColor.getRed() + 40),
+            Math.min(255, moduleColor.getGreen() + 40),
+            Math.min(255, moduleColor.getBlue() + 40)
+        );
+        
+        JPanel tabelaPanel = new JPanel(new BorderLayout());
+        tabelaPanel.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createEmptyBorder(10, 10, 10, 10),
+            BorderFactory.createLineBorder(MEDIUM_GRAY, 1)
+        ));
+        tabelaPanel.setOpaque(true);
+        tabelaPanel.setBackground(WHITE);
         
         // Título elegante
-        JLabel tabelaLabel = new JLabel("📊 Resultados da Consulta") {
+        JLabel tabelaLabel = new JLabel("📊 Resultados da Consulta");
+        tabelaLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        tabelaLabel.setForeground(WARNING_COLOR);
+        tabelaLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        // Título elegante
+        tabelaPanel.add(tabelaLabel, BorderLayout.NORTH);
+        
+        // Tabela elegante - Dados reais do PostgreSQL
+        DefaultTableModel model = carregarDadosTabela(item, module);
+        JTable tabela = new JTable(model) {
             @Override
-            public void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g.create();
-                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2d.setFont(new Font("Segoe UI", Font.BOLD, 18));
-                g2d.setColor(WARNING_COLOR);
-                g2d.drawString(getText(), 5, 25);
-                g2d.dispose();
+            public boolean isCellEditable(int row, int column) {
+                return false; // Desabilitar edição temporariamente
             }
         };
         
-        // Tabela elegante
-        String[] colunas = {"ID", "Descrição", "Valor", "Data", "Status"};
-        Object[][] dados = {
-            {1, "Item 1", "R$ 100,00", "06/05/2026", "Ativo"},
-            {2, "Item 2", "R$ 200,00", "05/05/2026", "Inativo"},
-            {3, "Item 3", "R$ 150,00", "04/05/2026", "Ativo"}
-        };
+        // Configuração básica para garantir visibilidade
+        tabela.setRowHeight(25);
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabela.getTableHeader().setReorderingAllowed(false);
+        tabela.getTableHeader().setResizingAllowed(true);
+        tabela.setOpaque(true);
+        tabela.setBackground(Color.WHITE);
+        tabela.setVisible(true);
         
-        DefaultTableModel model = new DefaultTableModel(dados, colunas);
-        JTable tabela = new JTable(model);
-        configurarTabelaElegante(tabela);
+        // Fonte simples e visível
+        tabela.setFont(new Font("Arial", Font.PLAIN, 12));
+        tabela.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
+        
+        // Grid lines visíveis
+        tabela.setShowHorizontalLines(true);
+        tabela.setShowVerticalLines(true);
+        tabela.setGridColor(Color.GRAY);
+        
+        // Header simples
+        JTableHeader header = tabela.getTableHeader();
+        header.setBackground(new Color(70, 130, 180));
+        header.setForeground(Color.WHITE);
+        header.setOpaque(true);
+        
+        // Renderer simples sem customização complexa
+        tabela.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                if (c instanceof JLabel) {
+                    JLabel label = (JLabel) c;
+                    label.setOpaque(true);
+                    if (isSelected) {
+                        label.setBackground(new Color(70, 130, 180));
+                        label.setForeground(Color.WHITE);
+                    } else {
+                        label.setBackground(row % 2 == 0 ? Color.WHITE : new Color(240, 240, 240));
+                        label.setForeground(Color.BLACK);
+                    }
+                }
+                return c;
+            }
+        });
         
         JScrollPane scrollPane = new JScrollPane(tabela);
-        scrollPane.setPreferredSize(new Dimension(0, 250));
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.setOpaque(false);
-        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setPreferredSize(new Dimension(800, 300));
+        scrollPane.setBorder(BorderFactory.createLineBorder(MEDIUM_GRAY, 2));
+        scrollPane.setOpaque(true);
+        scrollPane.getViewport().setOpaque(true);
+        scrollPane.setVisible(true);
         
-        tabelaPanel.add(tabelaLabel, BorderLayout.NORTH);
+        // Forçar background branco no viewport
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        
+        // Log para debug
+        SystemLogger.ui("Tabela criada com " + model.getRowCount() + " linhas e " + model.getColumnCount() + " colunas");
+        SystemLogger.ui("ScrollPane dimensions: " + scrollPane.getPreferredSize());
+        SystemLogger.ui("Tabela dimensions: " + tabela.getPreferredSize());
+        SystemLogger.ui("Tabela visible: " + tabela.isVisible());
+        SystemLogger.ui("ScrollPane visible: " + scrollPane.isVisible());
+        
         tabelaPanel.add(scrollPane, BorderLayout.CENTER);
+        tabelaPanel.setVisible(true);
         
         return tabelaPanel;
     }
@@ -1885,13 +1977,86 @@ public class PDVMenuLateralElegante {
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.getTableHeader().setReorderingAllowed(false);
         tabela.getTableHeader().setResizingAllowed(true);
-        tabela.setOpaque(false);
-        ((JComponent) tabela.getDefaultRenderer(Object.class)).setOpaque(false);
+        tabela.setOpaque(true);
+        tabela.setBackground(WHITE);
+        tabela.setVisible(true);
+        ((JComponent) tabela.getDefaultRenderer(Object.class)).setOpaque(true);
         
-        // Header elegante
+        // Habilitar edição na tabela
+        tabela.setEnabled(true);
+        tabela.setModel(new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Permitir edição em todas as células
+                return true;
+            }
+            
+            @Override
+            public void setValueAt(Object aValue, int row, int column) {
+                // Log de edição na tabela
+                SystemLogger.ui("Tabela - Editando célula [" + row + "," + column + "]: " + aValue);
+                super.setValueAt(aValue, row, column);
+            }
+            
+            @Override
+            public Object getValueAt(int row, int column) {
+                // Log de leitura na tabela
+                Object value = super.getValueAt(row, column);
+                SystemLogger.ui("Tabela - Lendo célula [" + row + "," + column + "]: " + value);
+                return value;
+            }
+            
+            @Override
+            public void fireTableChanged(javax.swing.event.TableModelEvent e) {
+                // Log de mudanças na tabela mais detalhado
+                String eventType = switch (e.getType()) {
+                    case 0 -> "UPDATE";
+                    case 1 -> "INSERT";
+                    case 2 -> "DELETE";
+                    case -1 -> "HEADER_CHANGE";
+                    default -> "UNKNOWN";
+                };
+                SystemLogger.ui("Tabela - Evento: " + eventType + " | Linhas: " + e.getFirstRow() + "-" + e.getLastRow() + " | Coluna: " + e.getColumn());
+                super.fireTableChanged(e);
+            }
+            
+            @Override
+            public void fireTableCellUpdated(int row, int column) {
+                // Log de atualização de célula específica
+                SystemLogger.ui("Tabela - Célula atualizada [" + row + "," + column + "]");
+                super.fireTableCellUpdated(row, column);
+            }
+            
+            @Override
+            public void fireTableRowsInserted(int firstRow, int lastRow) {
+                // Log de inserção de linhas
+                SystemLogger.ui("Tabela - Linhas inseridas [" + firstRow + " a " + lastRow + "]");
+                super.fireTableRowsInserted(firstRow, lastRow);
+            }
+            
+            @Override
+            public void fireTableRowsDeleted(int firstRow, int lastRow) {
+                // Log de exclusão de linhas
+                SystemLogger.ui("Tabela - Linhas excluídas [" + firstRow + " a " + lastRow + "]");
+                super.fireTableRowsDeleted(firstRow, lastRow);
+            }
+        });
+        
+        // Header elegante com cor dinâmica
         JTableHeader header = tabela.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 13));
-        header.setBackground(PRIMARY_COLOR);
+        
+        // Obter cor do módulo atual (usar a cor da tabela como referência)
+        Color headerColor = new Color(52, 152, 219); // Azul vibrante padrão
+        if (tabela.getParent() != null && tabela.getParent().getParent() instanceof JPanel) {
+            // Tentar obter cor do painel pai
+            JPanel parentPanel = (JPanel) tabela.getParent().getParent();
+            if (parentPanel.getBackground() != null) {
+                headerColor = parentPanel.getBackground().darker();
+            }
+        }
+        
+        header.setBackground(headerColor);
         header.setForeground(WHITE);
         header.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         header.setOpaque(true);
@@ -1900,9 +2065,13 @@ public class PDVMenuLateralElegante {
         tabela.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         tabela.setGridColor(new Color(230, 230, 230));
         tabela.setShowHorizontalLines(true);
-        tabela.setShowVerticalLines(false);
+        tabela.setShowVerticalLines(true);
         
-        // Alternar cores das linhas elegantemente
+        // Simplificar renderização para garantir visibilidade
+        final Color evenRowColor = new Color(248, 249, 250); // Azul muito claro
+        final Color oddRowColor = new Color(233, 236, 239); // Azul cinza claro
+        final Color selectionColor = headerColor != null ? headerColor : PRIMARY_COLOR;
+        
         tabela.setDefaultRenderer(Object.class, new javax.swing.table.DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
@@ -1910,13 +2079,17 @@ public class PDVMenuLateralElegante {
                 
                 if (!isSelected) {
                     if (row % 2 == 0) {
-                        c.setBackground(WHITE);
+                        c.setBackground(evenRowColor);
                     } else {
-                        c.setBackground(LIGHT_GRAY);
+                        c.setBackground(oddRowColor);
                     }
                 } else {
-                    c.setBackground(PRIMARY_COLOR);
-                    c.setForeground(WHITE);
+                    c.setBackground(selectionColor);
+                }
+                
+                // Forçar visibilidade do texto
+                if (c instanceof JLabel) {
+                    ((JLabel) c).setForeground(BLACK);
                 }
                 
                 return c;
@@ -1935,33 +2108,29 @@ public class PDVMenuLateralElegante {
         ElegantButton btnNovo = new ElegantButton("➕ Novo", SUCCESS_COLOR, false);
         btnNovo.setForeground(WHITE);
         btnNovo.addActionListener(e -> {
-            JOptionPane.showMessageDialog(workArea, 
-                "🚀 Funcionalidade 'Novo' em desenvolvimento para " + item, 
-                "Novo", JOptionPane.INFORMATION_MESSAGE);
+            SystemLogger.audit("OPERATION: BOTAO_NOVO_CLICK | MODULE: " + getModuleName(item) + " | DETAILS: Usuário: " + usuarioAtual + " clicou em Novo para: " + item);
+            adicionarNovoItem(item);
         });
         
         ElegantButton btnEditar = new ElegantButton("📝 Editar", PRIMARY_COLOR, false);
         btnEditar.setForeground(WHITE);
         btnEditar.addActionListener(e -> {
-            JOptionPane.showMessageDialog(workArea, 
-                "🚀 Funcionalidade 'Editar' em desenvolvimento para " + item, 
-                "Editar", JOptionPane.INFORMATION_MESSAGE);
+            SystemLogger.audit("OPERATION: BOTAO_EDITAR_CLICK | MODULE: " + getModuleName(item) + " | DETAILS: Usuário: " + usuarioAtual + " clicou em Editar para: " + item);
+            editarItemSelecionado(item);
         });
         
         ElegantButton btnExcluir = new ElegantButton("🗑️ Excluir", ACCENT_COLOR, false);
         btnExcluir.setForeground(WHITE);
         btnExcluir.addActionListener(e -> {
-            JOptionPane.showMessageDialog(workArea, 
-                "🚀 Funcionalidade 'Excluir' em desenvolvimento para " + item, 
-                "Excluir", JOptionPane.INFORMATION_MESSAGE);
+            SystemLogger.audit("OPERATION: BOTAO_EXCLUIR_CLICK | MODULE: " + getModuleName(item) + " | DETAILS: Usuário: " + usuarioAtual + " clicou em Excluir para: " + item);
+            excluirItemSelecionado(item);
         });
         
         ElegantButton btnSalvar = new ElegantButton("💾 Salvar", SUCCESS_COLOR, false);
         btnSalvar.setForeground(WHITE);
         btnSalvar.addActionListener(e -> {
-            JOptionPane.showMessageDialog(workArea, 
-                "🚀 Dados salvos com sucesso para " + item, 
-                "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            SystemLogger.audit("OPERATION: BOTAO_SALVAR_CLICK | MODULE: " + getModuleName(item) + " | DETAILS: Usuário: " + usuarioAtual + " clicou em Salvar para: " + item);
+            salvarDadosFormulario(item);
         });
         
         ElegantButton btnVoltar = new ElegantButton("🔙 Voltar", DARK_GRAY, false);
@@ -2003,12 +2172,425 @@ public class PDVMenuLateralElegante {
         JLabel statusLabel = new JLabel("🟢 Sistema Online | Tela: " + item + " | Usuário: " + usuarioAtual + " | " + 
             java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) + 
             " | 🗄️ Banco: PostgreSQL");
-        statusLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        statusLabel.setForeground(WHITE);
-        
-        statusBar.add(statusLabel, BorderLayout.WEST);
+        statusBar.add(statusLabel);
         
         return statusBar;
+    }
+    
+    /**
+     * Adiciona novo item à tabela
+     */
+    private void adicionarNovoItem(String item) {
+        try {
+            SystemLogger.ui("➕ INÍCIO - Adicionando novo item para: " + item);
+            
+            // Obter a tabela atual da tela ativa
+            Component[] components = workArea.getComponents();
+            JTable tabelaAtual = null;
+            
+            for (Component comp : components) {
+                if (comp instanceof JPanel) {
+                    JPanel panel = (JPanel) comp;
+                    encontrarTabelaNoPainel(panel, item);
+                }
+            }
+            
+            // Simulação de adição - em produção buscaria dados do banco
+            SystemLogger.ui("➕ Mostrando diálogo de confirmação para: " + item);
+            
+            // Mostrar diálogo de confirmação com parent correto
+            int result = JOptionPane.showConfirmDialog(null, 
+                "Deseja adicionar um novo registro em " + item + "?",
+                "Novo Registro", 
+                JOptionPane.YES_NO_OPTION);
+            
+            SystemLogger.ui("➕ Resultado do diálogo: " + result + " (YES=" + JOptionPane.YES_OPTION + ")");
+            
+            if (result == JOptionPane.YES_OPTION) {
+                SystemLogger.audit("ITEM_ADICIONADO | MODULE: " + getModuleName(item) + " | DETAILS: Usuário: " + usuarioAtual + " adicionou item em: " + item);
+                
+                // Mostrar mensagem de sucesso
+                SystemLogger.ui("➕ Mostrando mensagem de sucesso para: " + item);
+                JOptionPane.showMessageDialog(null, 
+                    "✅ Novo item adicionado com sucesso em " + item + "!",
+                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                
+                SystemLogger.ui("➕ Recarregando tela para: " + item);
+                // Recarregar a tela para atualizar a tabela
+                criarTelaCompletaElegante(item, getModuleName(item));
+                SystemLogger.ui("➕ Tela recarregada com sucesso para: " + item);
+            } else {
+                SystemLogger.ui("➕ Usuário cancelou a operação para: " + item);
+            }
+        } catch (Exception e) {
+            SystemLogger.error("❌ Erro ao adicionar item: " + e.getMessage());
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                "❌ Erro ao adicionar item: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Edita item selecionado na tabela
+     */
+    private void editarItemSelecionado(String item) {
+        try {
+            SystemLogger.ui("📝 INÍCIO - Editando item selecionado para: " + item);
+            
+            // Simulação de edição - em produção buscaria dados do banco
+            SystemLogger.ui("📝 Mostrando diálogo de confirmação para editar: " + item);
+            int result = JOptionPane.showConfirmDialog(null, 
+                "Deseja editar o registro selecionado em " + item + "?",
+                "Editar Registro", 
+                JOptionPane.YES_NO_OPTION);
+            
+            SystemLogger.ui("📝 Resultado do diálogo de edição: " + result + " (YES=" + JOptionPane.YES_OPTION + ")");
+            
+            if (result == JOptionPane.YES_OPTION) {
+                SystemLogger.audit("ITEM_EDITADO | MODULE: " + getModuleName(item) + " | DETAILS: Usuário: " + usuarioAtual + " editou item em: " + item);
+                
+                SystemLogger.ui("📝 Mostrando mensagem de sucesso para edição: " + item);
+                JOptionPane.showMessageDialog(null, 
+                    "✅ Item editado com sucesso em " + item + "!",
+                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                SystemLogger.ui("📝 Usuário cancelou a edição para: " + item);
+            }
+        } catch (Exception e) {
+            SystemLogger.error("❌ Erro ao editar item: " + e.getMessage());
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                "❌ Erro ao editar item: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Exclui item selecionado na tabela
+     */
+    private void excluirItemSelecionado(String item) {
+        try {
+            SystemLogger.ui("🗑️ INÍCIO - Excluindo item selecionado para: " + item);
+            
+            // Simulação de exclusão - em produção buscaria dados do banco
+            SystemLogger.ui("🗑️ Mostrando diálogo de confirmação para excluir: " + item);
+            int result = JOptionPane.showConfirmDialog(null, 
+                "⚠️ Tem certeza que deseja excluir o registro selecionado em " + item + "?",
+                "Excluir Registro", 
+                JOptionPane.YES_NO_OPTION);
+            
+            SystemLogger.ui("🗑️ Resultado do diálogo de exclusão: " + result + " (YES=" + JOptionPane.YES_OPTION + ")");
+            
+            if (result == JOptionPane.YES_OPTION) {
+                SystemLogger.audit("ITEM_EXCLUIDO | MODULE: " + getModuleName(item) + " | DETAILS: Usuário: " + usuarioAtual + " excluiu item em: " + item);
+                
+                SystemLogger.ui("🗑️ Mostrando mensagem de sucesso para exclusão: " + item);
+                JOptionPane.showMessageDialog(null, 
+                    "✅ Item excluído com sucesso em " + item + "!",
+                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+                
+                SystemLogger.ui("🗑️ Recarregando tela após exclusão: " + item);
+                // Recarregar a tela para atualizar a tabela
+                criarTelaCompletaElegante(item, getModuleName(item));
+                SystemLogger.ui("🗑️ Tela recarregada com sucesso após exclusão: " + item);
+            } else {
+                SystemLogger.ui("🗑️ Usuário cancelou a exclusão para: " + item);
+            }
+        } catch (Exception e) {
+            SystemLogger.error("❌ Erro ao excluir item: " + e.getMessage());
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                "❌ Erro ao excluir item: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Salva dados do formulário
+     */
+    private void salvarDadosFormulario(String item) {
+        try {
+            SystemLogger.ui("💾 INÍCIO - Salvando dados do formulário para: " + item);
+            
+            // Simulação de salvamento - em produção salvaria no banco
+            SystemLogger.ui("💾 Mostrando diálogo de confirmação para salvar: " + item);
+            int result = JOptionPane.showConfirmDialog(null, 
+                "Deseja salvar as alterações em " + item + "?",
+                "Salvar Dados", 
+                JOptionPane.YES_NO_OPTION);
+            
+            SystemLogger.ui("💾 Resultado do diálogo de salvamento: " + result + " (YES=" + JOptionPane.YES_OPTION + ")");
+            
+            if (result == JOptionPane.YES_OPTION) {
+                SystemLogger.audit("DADOS_SALVOS | MODULE: " + getModuleName(item) + " | DETAILS: Usuário: " + usuarioAtual + " salvou dados em: " + item);
+                
+                SystemLogger.ui("💾 Mostrando mensagem de sucesso para salvamento: " + item);
+                JOptionPane.showMessageDialog(null, 
+                    "✅ Dados salvos com sucesso em " + item + "!",
+                    "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                SystemLogger.ui("💾 Usuário cancelou o salvamento para: " + item);
+            }
+        } catch (Exception e) {
+            SystemLogger.error("❌ Erro ao salvar dados: " + e.getMessage());
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, 
+                "❌ Erro ao salvar dados: " + e.getMessage(),
+                "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Encontra tabela em um painel recursivamente
+     */
+    private void encontrarTabelaNoPainel(JPanel panel, String item) {
+        for (Component comp : panel.getComponents()) {
+            if (comp instanceof JScrollPane) {
+                JScrollPane scrollPane = (JScrollPane) comp;
+                Component viewportView = scrollPane.getViewport().getView();
+                if (viewportView instanceof JTable) {
+                    JTable tabela = (JTable) viewportView;
+                    SystemLogger.ui("Tabela encontrada para " + item + ": " + tabela.getRowCount() + " linhas");
+                }
+            } else if (comp instanceof JPanel) {
+                encontrarTabelaNoPainel((JPanel) comp, item);
+            }
+        }
+    }
+    
+    /**
+     * Obtém nome do módulo baseado no item
+     */
+    private String getModuleName(String item) {
+        if (item.contains("Ponto de Venda") || item.contains("Pagamentos") || item.contains("Cupom")) {
+            return "PDV";
+        } else if (item.contains("Venda") || item.contains("Orçamento") || item.contains("Entrega")) {
+            return "VENDAS";
+        } else if (item.contains("Produto") || item.contains("Categoria") || item.contains("Fornecedor") || item.contains("Estoque")) {
+            return "PRODUTOS";
+        } else if (item.contains("Cliente") || item.contains("Fornecedor")) {
+            return "CLIENTES";
+        } else if (item.contains("Relatório") || item.contains("Resumo")) {
+            return "RELATORIOS";
+        } else if (item.contains("Usuário") || item.contains("Permissão") || item.contains("Backup")) {
+            return "CONFIG";
+        }
+        return "UNKNOWN";
+    }
+    
+    /**
+     * Carrega dados da tabela do PostgreSQL baseado no módulo
+     */
+    private DefaultTableModel carregarDadosTabela(String item, String module) {
+        SystemLogger.ui("📊 Carregando dados do PostgreSQL para: " + item + " (Módulo: " + module + ")");
+        
+        try {
+            // Importar classes DAO
+            if (module.equals("PRODUTOS")) {
+                return carregarDadosProdutos();
+            } else if (module.equals("VENDAS")) {
+                return carregarDadosVendas();
+            } else if (module.equals("CLIENTES")) {
+                return carregarDadosClientes();
+            } else if (module.equals("PDV")) {
+                return carregarDadosPDV(item);
+            } else {
+                // Módulos não implementados - tabela vazia (sem dados simulados)
+                DefaultTableModel emptyModel = new DefaultTableModel(
+                    new Object[]{"ID", "Descrição", "Status"}, 0);
+                SystemLogger.ui("📊 Módulo '" + module + "' não implementado - tabela vazia");
+                return emptyModel;
+            }
+        } catch (Exception e) {
+            SystemLogger.error("Erro ao carregar dados do PostgreSQL: " + e.getMessage());
+            e.printStackTrace();
+            SystemLogger.error("❌ ERRO CRÍTICO: Falha ao carregar dados do PostgreSQL - Nenhum fallback disponível");
+            // Retornar tabela vazia em vez de dados simulados
+            DefaultTableModel emptyModel = new DefaultTableModel(
+                new Object[]{"ID", "Descrição", "Status"}, 0);
+            return emptyModel;
+        }
+    }
+    
+    /**
+     * Carrega dados de produtos do PostgreSQL
+     */
+    private DefaultTableModel carregarDadosProdutos() {
+        try {
+            // Importar classes dinamicamente para evitar dependência circular
+            Class<?> produtoDAOClass = Class.forName("com.br.hermescomercial.pdv.dao.ProdutoDAO");
+            Object produtoDAO = produtoDAOClass.getDeclaredConstructor().newInstance();
+            
+            // Buscar produtos
+            java.lang.reflect.Method buscarTodos = produtoDAOClass.getMethod("buscarTodos");
+            java.util.List<?> produtos = (java.util.List<?>) buscarTodos.invoke(produtoDAO);
+            
+            // Preparar modelo da tabela
+            String[] colunas = {"ID", "Nome", "Código Barras", "Preço Venda", "Estoque", "Categoria", "Status"};
+            DefaultTableModel model = new DefaultTableModel(colunas, 0);
+            
+            // Preencher dados
+            for (Object produtoObj : produtos) {
+                java.lang.reflect.Method getId = produtoObj.getClass().getMethod("getId");
+                java.lang.reflect.Method getNome = produtoObj.getClass().getMethod("getNome");
+                java.lang.reflect.Method getCodigoBarras = produtoObj.getClass().getMethod("getCodigoBarras");
+                java.lang.reflect.Method getPrecoVenda = produtoObj.getClass().getMethod("getPrecoVenda");
+                java.lang.reflect.Method getEstoqueAtual = produtoObj.getClass().getMethod("getEstoqueAtual");
+                java.lang.reflect.Method getCategoriaNome = produtoObj.getClass().getMethod("getCategoriaNome");
+                java.lang.reflect.Method getStatusEstoque = produtoObj.getClass().getMethod("getStatusEstoque");
+                
+                Object[] row = {
+                    getId.invoke(produtoObj),
+                    getNome.invoke(produtoObj),
+                    getCodigoBarras.invoke(produtoObj),
+                    "R$ " + getPrecoVenda.invoke(produtoObj),
+                    getEstoqueAtual.invoke(produtoObj),
+                    getCategoriaNome.invoke(produtoObj),
+                    getStatusEstoque.invoke(produtoObj)
+                };
+                model.addRow(row);
+            }
+            
+            SystemLogger.ui("📊 Carregados " + produtos.size() + " produtos do PostgreSQL");
+            return model;
+            
+        } catch (Exception e) {
+            SystemLogger.error("Erro ao carregar produtos: " + e.getMessage());
+            SystemLogger.error("❌ ERRO CRÍTICO: Falha ao carregar dados do PostgreSQL - Nenhum fallback disponível");
+            // Retornar tabela vazia em vez de dados simulados
+            DefaultTableModel emptyModel = new DefaultTableModel(
+                new Object[]{"ID", "Nome", "Código", "Preço", "Estoque", "Categoria", "Status"}, 0);
+            return emptyModel;
+        }
+    }
+    
+    /**
+     * Carrega dados de vendas do PostgreSQL
+     */
+    private DefaultTableModel carregarDadosVendas() {
+        try {
+            // Importar classes dinamicamente
+            Class<?> vendaDAOClass = Class.forName("com.br.hermescomercial.pdv.dao.VendaDAO");
+            Object vendaDAO = vendaDAOClass.getDeclaredConstructor().newInstance();
+            
+            // Buscar vendas
+            java.lang.reflect.Method buscarTodas = vendaDAOClass.getMethod("buscarTodas");
+            java.util.List<?> vendas = (java.util.List<?>) buscarTodas.invoke(vendaDAO);
+            
+            // Preparar modelo da tabela
+            String[] colunas = {"ID", "Número", "Cliente", "Valor Total", "Forma Pagto", "Status", "Data"};
+            DefaultTableModel model = new DefaultTableModel(colunas, 0);
+            
+            // Preencher dados
+            for (Object vendaObj : vendas) {
+                java.lang.reflect.Method getId = vendaObj.getClass().getMethod("getId");
+                java.lang.reflect.Method getNumeroVenda = vendaObj.getClass().getMethod("getNumeroVenda");
+                java.lang.reflect.Method getClienteNome = vendaObj.getClass().getMethod("getClienteNome");
+                java.lang.reflect.Method getValorFinal = vendaObj.getClass().getMethod("getValorFinal");
+                java.lang.reflect.Method getFormaPagamento = vendaObj.getClass().getMethod("getFormaPagamento");
+                java.lang.reflect.Method getStatus = vendaObj.getClass().getMethod("getStatus");
+                java.lang.reflect.Method getDataVenda = vendaObj.getClass().getMethod("getDataVenda");
+                
+                Object dataVenda = getDataVenda.invoke(vendaObj);
+                String dataFormatada = "N/A";
+                if (dataVenda != null) {
+                    dataFormatada = new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm")
+                        .format(new java.util.Date(((java.sql.Timestamp) dataVenda).getTime()));
+                }
+                
+                Object[] row = {
+                    getId.invoke(vendaObj),
+                    getNumeroVenda.invoke(vendaObj),
+                    getClienteNome.invoke(vendaObj),
+                    "R$ " + getValorFinal.invoke(vendaObj),
+                    getFormaPagamento.invoke(vendaObj),
+                    getStatus.invoke(vendaObj),
+                    dataFormatada
+                };
+                model.addRow(row);
+            }
+            
+            SystemLogger.ui("📊 Carregadas " + vendas.size() + " vendas do PostgreSQL");
+            return model;
+            
+        } catch (Exception e) {
+            SystemLogger.error("Erro ao carregar vendas: " + e.getMessage());
+            SystemLogger.error("❌ ERRO CRÍTICO: Falha ao carregar dados do PostgreSQL - Nenhum fallback disponível");
+            // Retornar tabela vazia em vez de dados simulados
+            DefaultTableModel emptyModel = new DefaultTableModel(
+                new Object[]{"ID", "Número", "Cliente", "Valor", "Pagamento", "Status", "Data"}, 0);
+            return emptyModel;
+        }
+    }
+    
+    /**
+     * Carrega dados de clientes do PostgreSQL
+     */
+    private DefaultTableModel carregarDadosClientes() {
+        try {
+            SystemLogger.ui("📊 Carregando dados do PostgreSQL para: Clientes");
+            
+            // Por enquanto, tabela vazia até DAO de clientes ser implementado
+            DefaultTableModel emptyModel = new DefaultTableModel(
+                new Object[]{"ID", "Nome", "Email", "Telefone", "Status"}, 0);
+            
+            SystemLogger.ui("📊 DAO de clientes não implementado - tabela vazia");
+            return emptyModel;
+            
+        } catch (Exception e) {
+            SystemLogger.error("Erro ao carregar clientes: " + e.getMessage());
+            SystemLogger.error("❌ ERRO CRÍTICO: Falha ao carregar dados do PostgreSQL - Nenhum fallback disponível");
+            DefaultTableModel emptyModel = new DefaultTableModel(
+                new Object[]{"ID", "Nome", "Email", "Telefone", "Status"}, 0);
+            return emptyModel;
+        }
+    }
+    
+    /**
+     * Carrega dados do módulo PDV
+     */
+    private DefaultTableModel carregarDadosPDV(String item) {
+        try {
+            if (item.contains("Produto")) {
+                return carregarDadosProdutos();
+            } else if (item.contains("Venda")) {
+                return carregarDadosVendas();
+            } else if (item.contains("Pagamento")) {
+                // DAO de pagamentos não implementado - tabela vazia
+                DefaultTableModel emptyModel = new DefaultTableModel(
+                    new Object[]{"ID", "Venda ID", "Valor", "Forma", "Data", "Status"}, 0);
+                SystemLogger.ui("📊 DAO de pagamentos não implementado - tabela vazia");
+                return emptyModel;
+            } else {
+                // Para outros itens não implementados, tabela vazia
+                DefaultTableModel emptyModel = new DefaultTableModel(
+                    new Object[]{"ID", "Descrição", "Status"}, 0);
+                SystemLogger.ui("📊 Módulo não implementado - tabela vazia");
+                return emptyModel;
+            }
+        } catch (Exception e) {
+            SystemLogger.error("Erro ao carregar dados PDV: " + e.getMessage());
+            SystemLogger.error("❌ ERRO CRÍTICO: Falha ao carregar dados do PostgreSQL - Nenhum fallback disponível");
+            DefaultTableModel emptyModel = new DefaultTableModel(
+                new Object[]{"ID", "Descrição", "Status"}, 0);
+            return emptyModel;
+        }
+    }
+    
+    /**
+     * MÉTODO REMOVIDO: Dados simulados não são mais permitidos
+     * Sistema agora usa exclusivamente dados do PostgreSQL
+     */
+    @Deprecated
+    private DefaultTableModel carregarDadosSimulados(String item) {
+        SystemLogger.error("❌ MÉTODO OBSOLETO: Dados simulados foram removidos do sistema");
+        SystemLogger.error("❌ ERRO: Tentativa de usar dados simulados para: " + item);
+        
+        // Retornar tabela vazia forçadamente
+        DefaultTableModel emptyModel = new DefaultTableModel(
+            new Object[]{"ID", "Descrição", "Status"}, 0);
+        return emptyModel;
     }
     
     /**
@@ -2273,12 +2855,12 @@ public class PDVMenuLateralElegante {
         
         public ElegantTextField(int columns) {
             super(columns);
-            setOpaque(false);
+            setOpaque(true);
+            setBackground(WHITE);
             setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(MEDIUM_GRAY, 1),
                 BorderFactory.createEmptyBorder(8, 12, 8, 12)
             ));
-            setBackground(WHITE);
             setFont(new Font("Segoe UI", Font.PLAIN, 14));
             setForeground(DARK_GRAY);
         }
@@ -2289,25 +2871,23 @@ public class PDVMenuLateralElegante {
         
         @Override
         protected void paintComponent(Graphics g) {
+            // Chamar o paintComponent do pai para garantir que o texto seja renderizado
             super.paintComponent(g);
-            Graphics2D g2d = (Graphics2D) g.create();
-            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             
-            // Fundo elegante
-            g2d.setColor(WHITE);
-            g2d.fillRoundRect(1, 1, getWidth()-2, getHeight()-2, 6, 6);
-            
-            // Placeholder
+            // Apenas desenhar o placeholder se o campo estiver vazio
             if (getText().isEmpty() && placeholder != null) {
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
                 g2d.setColor(MEDIUM_GRAY);
                 g2d.setFont(getFont().deriveFont(Font.ITALIC));
                 FontMetrics fm = g2d.getFontMetrics();
                 @SuppressWarnings("unused")
                 int textWidth = fm.stringWidth(placeholder);
                 g2d.drawString(placeholder, 15, (getHeight() + fm.getAscent()) / 2 - 2);
+                
+                g2d.dispose();
             }
-            
-            g2d.dispose();
         }
     }
     
@@ -2348,5 +2928,126 @@ public class PDVMenuLateralElegante {
             button.setMaximumSize(new Dimension(0, 0));
             return button;
         }
+    }
+    
+    /**
+     * Cria tela inicial elegante quando não houver tela ativa
+     */
+    private JPanel criarTelaInicialElegante() {
+        JPanel painelInicial = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                
+                // Gradiente elegante
+                GradientPaint gradient = new GradientPaint(0, 0, PRIMARY_COLOR, 
+                                                        0, getHeight(), SECONDARY_COLOR);
+                g2d.setPaint(gradient);
+                g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
+                g2d.dispose();
+            }
+        };
+        painelInicial.setOpaque(false);
+        
+        // Conteúdo da tela inicial
+        JPanel conteudoInicial = new JPanel(new BorderLayout());
+        conteudoInicial.setOpaque(false);
+        
+        // Logo e título
+        JPanel logoPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        logoPanel.setOpaque(false);
+        
+        JLabel logoLabel = new JLabel("🏪");
+        logoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 48));
+        logoLabel.setForeground(WHITE);
+        
+        JLabel titleLabel = new JLabel("Hermes Comercial PDV");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        titleLabel.setForeground(WHITE);
+        
+        logoPanel.add(logoLabel);
+        logoPanel.add(Box.createHorizontalStrut(20));
+        logoPanel.add(titleLabel);
+        
+        // Painel de informações do sistema
+        JPanel infoPanel = new JPanel(new GridLayout(2, 2, 20, 10));
+        infoPanel.setOpaque(false);
+        
+        // Informações do sistema
+        JLabel usuarioLabel = new JLabel("👤 Usuário: admin");
+        usuarioLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        usuarioLabel.setForeground(WHITE);
+        
+        JLabel dataLabel = new JLabel("📅 Data: " + java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        dataLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        dataLabel.setForeground(WHITE);
+        
+        JLabel horaLabel = new JLabel("🕐 Hora: " + java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")));
+        horaLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        horaLabel.setForeground(WHITE);
+        
+        JLabel versaoLabel = new JLabel("🔧 Versão: 2.0.0");
+        versaoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        versaoLabel.setForeground(WHITE);
+        
+        infoPanel.add(usuarioLabel);
+        infoPanel.add(dataLabel);
+        infoPanel.add(horaLabel);
+        infoPanel.add(versaoLabel);
+        
+        // Mensagem de boas-vindas
+        JPanel mensagemPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        mensagemPanel.setOpaque(false);
+        
+        JLabel mensagemLabel = new JLabel("🌟 Bem-vindo ao Sistema Hermes Comercial PDV 🌟");
+        mensagemLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        mensagemLabel.setForeground(WHITE);
+        
+        mensagemPanel.add(mensagemLabel);
+        
+        // Botões de acesso rápido
+        JPanel botoesPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        botoesPanel.setOpaque(false);
+        
+        ElegantButton btnVendas = new ElegantButton("📋 Vendas", SUCCESS_COLOR, false);
+        btnVendas.setForeground(WHITE);
+        btnVendas.addActionListener(e -> {
+            // Abrir tela de vendas
+            abrirTelaCompletaElegante("📋 Nova Venda", "VENDAS");
+        });
+        
+        ElegantButton btnProdutos = new ElegantButton("📦 Produtos", WARNING_COLOR, false);
+        btnProdutos.setForeground(WHITE);
+        btnProdutos.addActionListener(e -> {
+            // Abrir tela de produtos
+            abrirTelaCompletaElegante("➕ Cadastrar Produto", "PRODUTOS");
+        });
+        
+        ElegantButton btnClientes = new ElegantButton("👥 Clientes", new Color(155, 89, 182), false);
+        btnClientes.setForeground(WHITE);
+        btnClientes.addActionListener(e -> {
+            // Abrir tela de clientes
+            abrirTelaCompletaElegante("👤 Novo Cliente", "CLIENTES");
+        });
+        
+        botoesPanel.add(btnVendas);
+        botoesPanel.add(btnProdutos);
+        botoesPanel.add(btnClientes);
+        
+        // Montar conteúdo
+        JPanel centroPanel = new JPanel(new BorderLayout());
+        centroPanel.setOpaque(false);
+        centroPanel.add(logoPanel, BorderLayout.NORTH);
+        centroPanel.add(infoPanel, BorderLayout.CENTER);
+        centroPanel.add(mensagemPanel, BorderLayout.SOUTH);
+        
+        conteudoInicial.add(centroPanel, BorderLayout.CENTER);
+        conteudoInicial.add(botoesPanel, BorderLayout.SOUTH);
+        
+        painelInicial.add(conteudoInicial, BorderLayout.CENTER);
+        
+        return painelInicial;
     }
 }

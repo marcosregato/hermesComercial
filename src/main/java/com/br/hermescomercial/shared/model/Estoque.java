@@ -5,6 +5,7 @@ public class Estoque {
     private Long id;
     private Long idProduto;
     private Integer quantidade;
+    private Integer estoqueMinimo;
     private Double valorUnitario;
     private Double valorTotal;
     private String status;
@@ -12,10 +13,11 @@ public class Estoque {
     public Estoque() {
     }
 
-    public Estoque(Long id, Long idProduto, Integer quantidade, Double valorUnitario, Double valorTotal, String status) {
+    public Estoque(Long id, Long idProduto, Integer quantidade, Integer estoqueMinimo, Double valorUnitario, Double valorTotal, String status) {
         this.id = id;
         this.idProduto = idProduto;
         this.quantidade = quantidade;
+        this.estoqueMinimo = estoqueMinimo;
         this.valorUnitario = valorUnitario;
         this.valorTotal = valorTotal;
         this.status = status;
@@ -43,6 +45,14 @@ public class Estoque {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public Integer getEstoqueMinimo() {
+        return estoqueMinimo;
+    }
+
+    public void setEstoqueMinimo(Integer estoqueMinimo) {
+        this.estoqueMinimo = estoqueMinimo;
     }
 
     public Double getValorUnitario() {
@@ -75,6 +85,7 @@ public class Estoque {
                 "id=" + id +
                 ", idProduto=" + idProduto +
                 ", quantidade=" + quantidade +
+                ", estoqueMinimo=" + estoqueMinimo +
                 ", valorUnitario=" + valorUnitario +
                 ", valorTotal=" + valorTotal +
                 ", status='" + status + '\'' +

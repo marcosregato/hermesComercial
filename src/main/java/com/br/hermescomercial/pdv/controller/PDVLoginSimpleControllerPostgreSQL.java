@@ -170,9 +170,8 @@ public class PDVLoginSimpleControllerPostgreSQL {
             Connection conn = getPostgreSQLConnection();
             SystemLogger.database("Conexão PostgreSQL estabelecida para login");
             
-            String sql = "SELECT u.id, u.nome, l.login, 'ADMIN' as perfil FROM usuario u " +
-                        "INNER JOIN login l ON l.fk_usuario = u.id " +
-                        "WHERE l.login = ? AND l.senha = ? AND l.ativo = TRUE";
+            String sql = "SELECT id, nome_completo, username, 'ADMIN' as perfil FROM hermes_pdv.usuarios " +
+                        "WHERE username = ? AND password = ? AND ativo = TRUE";
             
             SystemLogger.database("Executando query de autenticação para usuário: " + usuario);
             
@@ -187,19 +186,19 @@ public class PDVLoginSimpleControllerPostgreSQL {
                     if (rs.next()) {
                         SystemLogger.loginSuccess(usuario);
                         SystemLogger.auth("Login bem-sucedido - Usuário: " + usuario + 
-                            ", Nome: " + rs.getString("nome"));
+                            ", Nome: " + rs.getString("nome_completo"));
                         
                         JOptionPane.showMessageDialog(loginFrame, 
                             "✅ Login bem-sucedido!\n\n" +
                             "👤 Usuário: " + usuario + "\n" +
-                            "📝 Nome: " + rs.getString("nome") + "\n" +
+                            "📝 Nome: " + rs.getString("nome_completo") + "\n" +
                             "🎯 Perfil: ADMIN\n" +
                             "🚀 Abrindo sistema...", 
                             "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                         
                         loginFrame.dispose();
                         SystemLogger.ui("Fechando tela de login, abrindo tela principal");
-                        abrirTelaPrincipal(usuario, rs.getString("nome"));
+                        abrirTelaPrincipal(usuario, rs.getString("nome_completo"));
                     } else {
                         SystemLogger.loginFailure(usuario, "Credenciais inválidas");
                         SystemLogger.auth("Login falhou - Usuário não encontrado ou senha incorreta: " + usuario);
@@ -243,7 +242,7 @@ public class PDVLoginSimpleControllerPostgreSQL {
                 SystemLogger.database("Conexão PostgreSQL estabelecida em " + connectionTime + "ms");
                 
                 // Testar consulta simples
-                try (ResultSet rs = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM usuario")) {
+                try (ResultSet rs = conn.createStatement().executeQuery("SELECT COUNT(*) as total FROM hermes_pdv.usuarios")) {
                     if (rs.next()) {
                         int totalUsuarios = rs.getInt("total");
                         SystemLogger.database("Total de usuários no PostgreSQL: " + totalUsuarios);
