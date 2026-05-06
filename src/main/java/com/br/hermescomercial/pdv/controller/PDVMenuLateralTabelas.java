@@ -3,12 +3,10 @@ package com.br.hermescomercial.pdv.controller;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Vector;
 import com.br.hermescomercial.util.SystemLogger;
 
 /**
