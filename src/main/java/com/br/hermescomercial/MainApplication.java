@@ -6,7 +6,7 @@ import com.br.hermescomercial.pdv.controller.PDVLoginSimpleController;
 
 /**
  * Classe principal da aplicação Hermes Comercial PDV
- * Versão v3.0.0 - Production-Ready
+ * Versão v3.2.0 - Production-Ready
  * Interface SWING completa com todas as funcionalidades empresariais
  */
 public class MainApplication {
@@ -45,7 +45,7 @@ public class MainApplication {
             // Executar na thread de UI
             SwingUtilities.invokeLater(() -> {
                 try {
-                    System.out.println("Iniciando Hermes Comercial PDV v3.1.0 - Production-Ready");
+                    System.out.println("Iniciando Hermes Comercial PDV v3.2.0 - Production-Ready");
                     
                     // Testar conexão com banco de dados
                     System.out.println("Verificando conexão com banco de dados...");

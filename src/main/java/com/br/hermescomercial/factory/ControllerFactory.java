@@ -31,9 +31,10 @@ public class ControllerFactory {
         return new PDVPrincipalSwingController();
     }
     
-    public PDVVendaSwingController createPDVVendaController() {
-        return new PDVVendaSwingController();
-    }
+    // Removido - usando apenas PDVMenuLateralElegante.java
+    // public PDVVendaSwingController createPDVVendaController() {
+    //     return new PDVVendaSwingController();
+    // }
     
     public PDVProdutosUnificadoSwingController createPDVProdutoController() {
         return new PDVProdutosUnificadoSwingController();
@@ -149,8 +150,9 @@ public class ControllerFactory {
                     return (T) createPDVLoginController();
                 case "PDVPrincipalSwingController":
                     return (T) createPDVPrincipalController();
-                case "PDVVendaSwingController":
-                    return (T) createPDVVendaController();
+                // Removido - usando apenas PDVMenuLateralElegante.java
+                // case "PDVVendaSwingController":
+                //     return (T) createPDVVendaController();
                 case "PDVProdutosUnificadoSwingController":
                     return (T) createPDVProdutoController();
                 case "PDVCaixaSwingController":

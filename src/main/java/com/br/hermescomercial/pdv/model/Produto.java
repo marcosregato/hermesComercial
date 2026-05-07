@@ -163,7 +163,7 @@ public class Produto {
     public BigDecimal getMargemLucro() {
         if (precoCusto != null && precoCusto.compareTo(BigDecimal.ZERO) > 0) {
             return precoVenda.subtract(precoCusto)
-                    .divide(precoCusto, 2, BigDecimal.ROUND_HALF_UP)
+                    .divide(precoCusto, 2, java.math.RoundingMode.HALF_UP)
                     .multiply(new BigDecimal("100"));
         }
         return BigDecimal.ZERO;

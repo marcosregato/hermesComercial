@@ -1,12 +1,14 @@
 package com.br.hermescomercial.pdv.controller;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.*;
 
 import com.br.hermescomercial.util.SystemLogger;
+// Dark Mode removido devido a erros de implementação
 
 /**
  * Menu Lateral com Submenus em Cascade - Versão Elegante
@@ -14,12 +16,28 @@ import com.br.hermescomercial.util.SystemLogger;
  */
 public class PDVMenuLateralElegante {
     
+    // Componentes do menu
     private JPanel menuPanel;
+    private JPanel workArea;
     private String usuarioAtual;
     private String nomeUsuario;
-    private JPanel workArea; // Área de trabalho principal
     
-    // Cores elegantes
+    // Variáveis para controle de tela ativa
+    private String telaAtual;
+    private String moduloAtual;
+    private String tipoTelaAtual;
+    private java.util.Date timestampTelaAtual;
+    
+    // Labels para painel de informações
+    private JLabel lblInfoTela;
+    private JLabel lblInfoModulo;
+    private JLabel lblInfoTipo;
+    private JLabel lblInfoUsuario;
+    private JLabel lblInfoTimestamp;
+    private JLabel lblInfoClasse;
+    
+    // Cores gerenciadas pelo ThemeManager
+    // Removendo cores estáticas para usar ThemeManager dinamicamente
     private static final Color PRIMARY_COLOR = new Color(41, 128, 185);      // Azul elegante
     private static final Color SECONDARY_COLOR = new Color(52, 73, 94);      // Cinza escuro
     private static final Color ACCENT_COLOR = new Color(231, 76, 60);        // Vermelho elegante
@@ -29,9 +47,10 @@ public class PDVMenuLateralElegante {
     private static final Color LIGHT_GRAY = new Color(245, 247, 250);        // Cinza claro
     private static final Color MEDIUM_GRAY = new Color(189, 195, 199);       // Cinza médio
     private static final Color DARK_GRAY = new Color(127, 140, 141);         // Cinza escuro
-    private static final Color WHITE = Color.WHITE;
     @SuppressWarnings("unused")
     private static final Color BLACK = new Color(44, 62, 80);                // Preto elegante
+    @SuppressWarnings("unused")
+    private static final Color WHITE = new Color(255, 255, 255);              // Branco elegante
     
     public PDVMenuLateralElegante(String usuario, String nome, JPanel workArea) {
         this.usuarioAtual = usuario;
@@ -49,9 +68,13 @@ public class PDVMenuLateralElegante {
                     Graphics2D g2d = (Graphics2D) g.create();
                     g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                     
-                    // Gradiente sutil de fundo
-                    GradientPaint gradient = new GradientPaint(0, 0, new Color(250, 252, 255), 
-                                                            0, getHeight(), new Color(240, 244, 248));
+                    // Gradiente sutil de fundo com cores dinâmicas
+                    Color startColor = false ? 
+                        new Color(30, 30, 30) : new Color(250, 252, 255);
+                    Color endColor = false ? 
+                        new Color(45, 45, 45) : new Color(240, 244, 248);
+                    GradientPaint gradient = new GradientPaint(0, 0, startColor, 
+                                                            0, getHeight(), endColor);
                     g2d.setPaint(gradient);
                     g2d.fillRect(0, 0, getWidth(), getHeight());
                     g2d.dispose();
@@ -475,7 +498,20 @@ public class PDVMenuLateralElegante {
                 SystemLogger.operation("SUBMENU_CLICK", module, 
                     "Usuário: " + usuarioAtual + " acessou: " + text);
                 
+                // Log específico para Nova Venda
+                if (text.equals("📋 Nova Venda")) {
+                    SystemLogger.ui("🎯 DETECTADO CLIQUE EM NOVA VENDA!");
+                    SystemLogger.ui("📋 NOVA VENDA - Iniciando fluxo de abertura");
+                    SystemLogger.ui("📋 NOVA VENDA - Módulo identificado: " + module);
+                    SystemLogger.ui("📋 NOVA VENDA - Usuário: " + usuarioAtual);
+                    SystemLogger.ui("📋 NOVA VENDA - Timestamp: " + new java.util.Date());
+                    SystemLogger.ui("📋 NOVA VENDA - Thread: " + Thread.currentThread().getName());
+                    SystemLogger.info("NOVA VENDA - Clique detectado, iniciando abertura da tela");
+                }
+                
                 // Abrir tela completa elegante
+                SystemLogger.ui("🚀 ABRINDO TELA COMPLETA ELEGANTE: " + text);
+                SystemLogger.info("TELA - Abrindo: " + text + " | Módulo: " + module);
                 abrirTelaCompletaElegante(text, module);
                     
             } catch (Exception ex) {
@@ -490,24 +526,192 @@ public class PDVMenuLateralElegante {
     }
     
     /**
+     * Verifica e exibe qual tela está ativa no sistema (genérico para todos os submenus)
+     */
+    private void verificarTelaAtiva(String item, String module) {
+        // Armazenar informações da tela atual
+        this.telaAtual = item;
+        this.moduloAtual = module;
+        this.tipoTelaAtual = identificarTipoTela(item, module);
+        this.timestampTelaAtual = new java.util.Date();
+        
+        SystemLogger.ui("=== VERIFICAÇÃO DE TELA ATIVA - SISTEMA COMPLETO ===");
+        SystemLogger.ui("🔍 TELA ATUAL IDENTIFICADA:");
+        SystemLogger.ui("   • Classe: " + this.getClass().getSimpleName());
+        SystemLogger.ui("   • Arquivo: PDVMenuLateralElegante.java");
+        SystemLogger.ui("   • Método: abrirTelaCompletaElegante()");
+        SystemLogger.ui("   • Item: " + item);
+        SystemLogger.ui("   • Módulo: " + module);
+        SystemLogger.ui("   • Tipo de Tela: " + this.tipoTelaAtual);
+        SystemLogger.ui("   • Usuário: " + usuarioAtual);
+        SystemLogger.ui("   • Timestamp: " + this.timestampTelaAtual);
+        SystemLogger.ui("   • Thread: " + Thread.currentThread().getName());
+        SystemLogger.ui("   • PID: " + ProcessHandle.current().pid());
+        
+        // Log específico para Nova Venda
+        if (item.equals("📋 Nova Venda")) {
+            SystemLogger.ui("✅ TELA NOVA VENDA ATIVA - ÚNICA IMPLEMENTAÇÃO");
+            SystemLogger.info("VERIFICAÇÃO - Tela Nova Venda ativa: " + this.getClass().getSimpleName());
+        } else {
+            SystemLogger.ui("✅ TELA ATIVA: " + item + " - Módulo: " + module);
+            SystemLogger.info("VERIFICAÇÃO - Tela ativa: " + item + " | Classe: " + this.getClass().getSimpleName());
+        }
+        
+        // Atualizar painel de informações em tempo real
+        atualizarPainelInformacoesTela();
+    }
+    
+    /**
+     * Cria um painel de informações em tempo real sobre a tela ativa
+     */
+    private JPanel criarPainelInformacoesTela() {
+        JPanel infoPanel = new JPanel(new BorderLayout());
+        infoPanel.setOpaque(false);
+        infoPanel.setBorder(BorderFactory.createTitledBorder(
+            BorderFactory.createEtchedBorder(), "📊 Informações da Tela Ativa",
+            TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 11),
+            DARK_GRAY));
+        
+        // Painel de informações
+        JPanel dadosPanel = new JPanel(new GridLayout(0, 2, 5, 3));
+        dadosPanel.setOpaque(false);
+        
+        lblInfoTela = new JLabel("Tela: Nenhuma");
+        lblInfoModulo = new JLabel("Módulo: N/A");
+        lblInfoTipo = new JLabel("Tipo: N/A");
+        lblInfoUsuario = new JLabel("Usuário: " + usuarioAtual);
+        lblInfoTimestamp = new JLabel("Atualizado: N/A");
+        lblInfoClasse = new JLabel("Classe: " + this.getClass().getSimpleName());
+        
+        // Configurar labels
+        Font fontInfo = new Font("Segoe UI", Font.PLAIN, 10);
+        lblInfoTela.setFont(fontInfo);
+        lblInfoModulo.setFont(fontInfo);
+        lblInfoTipo.setFont(fontInfo);
+        lblInfoUsuario.setFont(fontInfo);
+        lblInfoTimestamp.setFont(fontInfo);
+        lblInfoClasse.setFont(fontInfo);
+        
+        dadosPanel.add(new JLabel("Tela Ativa:"));
+        dadosPanel.add(lblInfoTela);
+        dadosPanel.add(new JLabel("Módulo:"));
+        dadosPanel.add(lblInfoModulo);
+        dadosPanel.add(new JLabel("Tipo:"));
+        dadosPanel.add(lblInfoTipo);
+        dadosPanel.add(new JLabel("Usuário:"));
+        dadosPanel.add(lblInfoUsuario);
+        dadosPanel.add(new JLabel("Atualizado:"));
+        dadosPanel.add(lblInfoTimestamp);
+        dadosPanel.add(new JLabel("Classe:"));
+        dadosPanel.add(lblInfoClasse);
+        
+        infoPanel.add(dadosPanel, BorderLayout.CENTER);
+        
+        return infoPanel;
+    }
+    
+    /**
+     * Atualiza o painel de informações da tela
+     */
+    private void atualizarPainelInformacoesTela() {
+        if (lblInfoTela != null && telaAtual != null) {
+            lblInfoTela.setText("Tela: " + telaAtual);
+            lblInfoModulo.setText("Módulo: " + moduloAtual);
+            lblInfoTipo.setText("Tipo: " + tipoTelaAtual);
+            lblInfoTimestamp.setText("Atualizado: " + new java.text.SimpleDateFormat("HH:mm:ss").format(timestampTelaAtual));
+            
+            // Destaque especial para Nova Venda
+            if (telaAtual.equals("📋 Nova Venda")) {
+                lblInfoTela.setForeground(PRIMARY_COLOR);
+                lblInfoModulo.setForeground(PRIMARY_COLOR);
+                lblInfoTipo.setForeground(PRIMARY_COLOR);
+            } else {
+                lblInfoTela.setForeground(DARK_GRAY);
+                lblInfoModulo.setForeground(DARK_GRAY);
+                lblInfoTipo.setForeground(DARK_GRAY);
+            }
+        }
+    }
+    
+    /**
+     * Identifica o tipo de tela baseado no item e módulo
+     */
+    private String identificarTipoTela(String item, String module) {
+        switch (module) {
+            case "VENDAS":
+                if (item.equals("📋 Nova Venda")) return "FORMULÁRIO DE VENDAS";
+                if (item.equals("🔍 Consultar Vendas")) return "CONSULTA DE VENDAS";
+                if (item.equals("↩️ Devoluções")) return "FORMULÁRIO DE DEVOLUÇÕES";
+                if (item.equals("📊 Resumo Diário")) return "RELATÓRIO DIÁRIO";
+                if (item.equals("📈 Relatório de Vendas")) return "RELATÓRIO DE VENDAS";
+                if (item.equals("🏷️ Orçamentos")) return "FORMULÁRIO DE ORÇAMENTOS";
+                if (item.equals("🚚 Entregas")) return "FORMULÁRIO DE ENTREGAS";
+                break;
+            case "PRODUTOS":
+                if (item.contains("Cadastrar")) return "FORMULÁRIO DE CADASTRO";
+                if (item.contains("Editar")) return "FORMULÁRIO DE EDIÇÃO";
+                if (item.contains("Consultar")) return "CONSULTA DE PRODUTOS";
+                if (item.contains("Categorias")) return "GERENCIAMENTO DE CATEGORIAS";
+                if (item.contains("Fornecedores")) return "GERENCIAMENTO DE FORNECEDORES";
+                if (item.contains("Estoque")) return "CONTROLE DE ESTOQUE";
+                if (item.contains("Códigos")) return "GERENCIAMENTO DE CÓDIGOS";
+                break;
+            case "CLIENTES":
+                if (item.contains("Cadastrar")) return "FORMULÁRIO DE CADASTRO";
+                if (item.contains("Editar")) return "FORMULÁRIO DE EDIÇÃO";
+                if (item.contains("Consultar")) return "CONSULTA DE CLIENTES";
+                break;
+            case "ESTOQUE":
+                if (item.contains("Entrada")) return "FORMULÁRIO DE ENTRADA";
+                if (item.contains("Saída")) return "FORMULÁRIO DE SAÍDA";
+                if (item.contains("Consultar")) return "CONSULTA DE ESTOQUE";
+                if (item.contains("Relatório")) return "RELATÓRIO DE ESTOQUE";
+                break;
+            case "FINANCEIRO":
+                if (item.contains("Contas")) return "GERENCIAMENTO DE CONTAS";
+                if (item.contains("Fluxo")) return "FLUXO DE CAIXA";
+                if (item.contains("Relatório")) return "RELATÓRIO FINANCEIRO";
+                break;
+            case "RELATÓRIOS":
+                return "RELATÓRIO SISTEMA";
+            case "CONFIGURAÇÕES":
+                if (item.contains("Usuários")) return "GERENCIAMENTO DE USUÁRIOS";
+                if (item.contains("Sistema")) return "CONFIGURAÇÕES DO SISTEMA";
+                if (item.contains("Backup")) return "BACKUP/RESTAURAÇÃO";
+                break;
+        }
+        return "TELA NÃO IDENTIFICADA";
+    }
+    
+    /**
+     * Verifica e exibe qual tela Nova Venda está ativa (método legacy)
+     */
+    private void verificarTelaNovaVendaAtiva(String item, String module) {
+        verificarTelaAtiva(item, module);
+    }
+    
+    /**
      * Abre tela completa elegante
      */
     private void abrirTelaCompletaElegante(String item, String module) {
         try {
             SystemLogger.ui("Abrindo tela completa elegante: " + item);
             
+            // Verificar e identificar qual tela está ativa (sistema completo)
+            verificarTelaAtiva(item, module);
+            
             // Limpar área de trabalho
             workArea.removeAll();
-            workArea.revalidate();
-            workArea.repaint();
             
             // Criar conteúdo elegante
             JPanel conteudoTela = criarTelaCompletaElegante(item, module);
             workArea.add(conteudoTela, BorderLayout.CENTER);
             
-            // Atualizar área de trabalho
-            workArea.revalidate();
-            workArea.repaint();
+            // Única atualização otimizada
+            SwingUtilities.invokeLater(() -> {
+                workArea.revalidate();
+                workArea.repaint();
+            });
             
             // Log de sucesso
             SystemLogger.ui("Tela completa elegante " + item + " aberta na área de trabalho principal para usuário: " + usuarioAtual);
@@ -628,8 +832,12 @@ public class PDVMenuLateralElegante {
                 g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 
                 // Gradiente elegante com cor do módulo
-                GradientPaint gradient = new GradientPaint(0, 0, moduleColor, 
-                                                        0, getHeight(), moduleColorDark);
+                Color primaryColor = false ? 
+                    new Color(75, 85, 99) : new Color(41, 128, 185);
+                Color secondaryColor = false ? 
+                    new Color(45, 45, 45) : new Color(52, 73, 94);
+                GradientPaint gradient = new GradientPaint(0, 0, primaryColor, 
+                                                        0, getHeight(), secondaryColor);
                 g2d.setPaint(gradient);
                 g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 15, 15);
                 g2d.dispose();
@@ -960,9 +1168,27 @@ public class PDVMenuLateralElegante {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
         
+        // Logs para identificação do formulário PDV
+        SystemLogger.ui("=== CRIANDO FORMULÁRIO PDV ELEGANTE ===");
+        SystemLogger.ui("🔧 FORMULÁRIO PDV IDENTIFICADO:");
+        SystemLogger.ui("   • Classe: " + this.getClass().getSimpleName());
+        SystemLogger.ui("   • Método: criarFormularioPDVElegante()");
+        SystemLogger.ui("   • Arquivo: PDVMenuLateralElegante.java");
+        SystemLogger.ui("   • Item: " + item);
+        SystemLogger.ui("   • Usuário: " + usuarioAtual);
+        SystemLogger.ui("   • Timestamp: " + new java.util.Date());
+        SystemLogger.ui("   • Thread: " + Thread.currentThread().getName());
+        SystemLogger.ui("✅ FORMULÁRIO PDV SENDO CRIADO");
+        SystemLogger.info("Formulário PDV - Item: " + item + " | Usuário: " + usuarioAtual);
+        
         switch (item) {
             case "🛒 Ponto de Venda":
+                // Log específico para Ponto de Venda
+                SystemLogger.ui("🏷️ CRIANDO FORMULÁRIO PONTO DE VENDA");
+                SystemLogger.info("PDV - Inicializando campos para Ponto de Venda");
+                
                 // Código do produto
+                SystemLogger.ui("📝 PDV - Criando campo: Código do Produto");
                 gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
                 gbc.insets = new Insets(5, 5, 5, 10);
                 JLabel lblCodigo = new JLabel("Código do Produto:");
@@ -974,8 +1200,10 @@ public class PDVMenuLateralElegante {
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtCodigo = new ElegantTextField(15);
                 panel.add(txtCodigo, gbc);
+                SystemLogger.info("PDV - Campo 'Código do Produto' criado");
                 
                 // Descrição
+                SystemLogger.ui("📝 PDV - Criando campo: Descrição");
                 gbc.gridx = 0; gbc.gridy = 1; gbc.anchor = GridBagConstraints.WEST;
                 gbc.insets = new Insets(5, 5, 5, 10);
                 gbc.fill = GridBagConstraints.NONE;
@@ -989,8 +1217,10 @@ public class PDVMenuLateralElegante {
                 ElegantTextField txtDescricao = new ElegantTextField(30);
                 txtDescricao.setEditable(false);
                 panel.add(txtDescricao, gbc);
+                SystemLogger.info("PDV - Campo 'Descrição' criado (readonly)");
                 
                 // Quantidade
+                SystemLogger.ui("📝 PDV - Criando campo: Quantidade");
                 gbc.gridx = 0; gbc.gridy = 2; gbc.anchor = GridBagConstraints.WEST;
                 gbc.insets = new Insets(5, 5, 5, 10);
                 gbc.fill = GridBagConstraints.NONE;
@@ -1003,8 +1233,10 @@ public class PDVMenuLateralElegante {
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtQuantidade = new ElegantTextField(10);
                 panel.add(txtQuantidade, gbc);
+                SystemLogger.info("PDV - Campo 'Quantidade' criado");
                 
                 // Valor Unitário
+                SystemLogger.ui("📝 PDV - Criando campo: Valor Unitário");
                 gbc.gridx = 0; gbc.gridy = 3; gbc.anchor = GridBagConstraints.WEST;
                 gbc.insets = new Insets(5, 5, 5, 10);
                 gbc.fill = GridBagConstraints.NONE;
@@ -1018,8 +1250,10 @@ public class PDVMenuLateralElegante {
                 ElegantTextField txtValorUnitario = new ElegantTextField(15);
                 txtValorUnitario.setEditable(false);
                 panel.add(txtValorUnitario, gbc);
+                SystemLogger.info("PDV - Campo 'Valor Unitário' criado (readonly)");
                 
                 // Valor Total
+                SystemLogger.ui("📝 PDV - Criando campo: Valor Total");
                 gbc.gridx = 0; gbc.gridy = 4; gbc.anchor = GridBagConstraints.WEST;
                 gbc.insets = new Insets(5, 5, 5, 10);
                 gbc.fill = GridBagConstraints.NONE;
@@ -1033,8 +1267,10 @@ public class PDVMenuLateralElegante {
                 ElegantTextField txtValorTotal = new ElegantTextField(15);
                 txtValorTotal.setEditable(false);
                 panel.add(txtValorTotal, gbc);
+                SystemLogger.info("PDV - Campo 'Valor Total' criado (readonly)");
                 
                 // Forma de Pagamento
+                SystemLogger.ui("📝 PDV - Criando campo: Forma Pagamento");
                 gbc.gridx = 0; gbc.gridy = 5; gbc.anchor = GridBagConstraints.WEST;
                 gbc.insets = new Insets(5, 5, 5, 10);
                 gbc.fill = GridBagConstraints.NONE;
@@ -1048,10 +1284,16 @@ public class PDVMenuLateralElegante {
                 JComboBox<String> cbFormaPagamento = new JComboBox<>(new String[]{"Dinheiro", "Cartão Débito", "Cartão Crédito", "PIX"});
                 cbFormaPagamento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
                 panel.add(cbFormaPagamento, gbc);
+                SystemLogger.info("PDV - Campo 'Forma Pagamento' criado (ComboBox)");
                 break;
                 
             case "💳 Pagamentos":
+                // Log específico para Pagamentos
+                SystemLogger.ui("💳 CRIANDO FORMULÁRIO PAGAMENTOS");
+                SystemLogger.info("PDV - Inicializando campos para Pagamentos");
+                
                 // Cliente
+                SystemLogger.ui("📝 PDV - Criando campo: Cliente (Pagamentos)");
                 gbc.gridx = 0; gbc.gridy = 0; gbc.anchor = GridBagConstraints.WEST;
                 gbc.insets = new Insets(5, 5, 5, 10);
                 JLabel lblCliente = new JLabel("Cliente:");
@@ -1063,6 +1305,7 @@ public class PDVMenuLateralElegante {
                 gbc.fill = GridBagConstraints.HORIZONTAL;
                 ElegantTextField txtCliente = new ElegantTextField(30);
                 panel.add(txtCliente, gbc);
+                SystemLogger.info("PDV - Campo 'Cliente' criado (Pagamentos)");
                 
                 // Valor do Pagamento
                 gbc.gridx = 0; gbc.gridy = 1; gbc.anchor = GridBagConstraints.WEST;
@@ -1109,8 +1352,15 @@ public class PDVMenuLateralElegante {
                 break;
                 
             default:
+                // Log para formulário padrão PDV
+                SystemLogger.ui("📋 FORMULÁRIO PADRÃO PDV - Item não reconhecido: " + item);
+                SystemLogger.info("PDV - Criando formulário padrão para: " + item);
                 return criarFormularioPadraoElegante(item, "PDV", gbc);
         }
+        
+        // Log de conclusão do formulário PDV
+        SystemLogger.ui("✅ FORMULÁRIO PDV CONCLUÍDO - " + item);
+        SystemLogger.info("PDV - Formulário criado com sucesso: " + item);
         
         return panel;
     }
@@ -1122,9 +1372,37 @@ public class PDVMenuLateralElegante {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setOpaque(false);
         
+        // Logs gerais para identificação do formulário Vendas
+        SystemLogger.ui("=== CRIANDO FORMULÁRIO VENDAS ELEGANTE ===");
+        SystemLogger.ui("💼 FORMULÁRIO VENDAS IDENTIFICADO:");
+        SystemLogger.ui("   • Classe: " + this.getClass().getSimpleName());
+        SystemLogger.ui("   • Método: criarFormularioVendasElegante()");
+        SystemLogger.ui("   • Arquivo: PDVMenuLateralElegante.java");
+        SystemLogger.ui("   • Item: " + item);
+        SystemLogger.ui("   • Usuário: " + usuarioAtual);
+        SystemLogger.ui("   • Timestamp: " + new java.util.Date());
+        SystemLogger.ui("   • Thread: " + Thread.currentThread().getName());
+        SystemLogger.ui("✅ FORMULÁRIO VENDAS SENDO CRIADO");
+        SystemLogger.info("Formulário Vendas - Item: " + item + " | Usuário: " + usuarioAtual);
+        
+        // Log específico para Nova Venda com identificação completa
+        if (item.equals("📋 Nova Venda")) {
+            SystemLogger.ui("=== FORMULÁRIO NOVA VENDA IDENTIFICADO ===");
+            SystemLogger.ui("Classe do Formulário: " + this.getClass().getSimpleName());
+            SystemLogger.ui("Método: criarFormularioVendasElegante()");
+            SystemLogger.ui("Arquivo Fonte: PDVMenuLateralElegante.java");
+            SystemLogger.ui("Item: " + item);
+            SystemLogger.ui("Thread: " + Thread.currentThread().getName());
+            SystemLogger.ui("Formulário Nova Venda sendo criado por classe única e exclusiva");
+            SystemLogger.info("Formulário Nova Venda - Classe: " + this.getClass().getSimpleName());
+        }
+        
         switch (item) {
             case "📋 Nova Venda":
+                SystemLogger.ui("📋 VENDAS - Criando formulário Nova Venda");
+                
                 // Cliente
+                SystemLogger.ui("📝 VENDAS - Criando campo: Cliente");
                 gbc.gridx = 0; gbc.gridy = 0;
                 JLabel lblCliente = new JLabel("Cliente:");
                 lblCliente.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -1133,8 +1411,10 @@ public class PDVMenuLateralElegante {
                 gbc.gridx = 1; gbc.gridy = 0;
                 ElegantTextField txtCliente = new ElegantTextField(30);
                 panel.add(txtCliente, gbc);
+                SystemLogger.info("VENDAS - Campo 'Cliente' criado");
                 
                 // Data da Venda
+                SystemLogger.ui("📝 VENDAS - Criando campo: Data");
                 gbc.gridx = 0; gbc.gridy = 1;
                 JLabel lblData = new JLabel("Data:");
                 lblData.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -1143,8 +1423,10 @@ public class PDVMenuLateralElegante {
                 gbc.gridx = 1; gbc.gridy = 1;
                 ElegantTextField txtData = new ElegantTextField(10);
                 panel.add(txtData, gbc);
+                SystemLogger.info("VENDAS - Campo 'Data' criado");
                 
                 // Vendedor
+                SystemLogger.ui("📝 VENDAS - Criando campo: Vendedor");
                 gbc.gridx = 0; gbc.gridy = 2;
                 JLabel lblVendedor = new JLabel("Vendedor:");
                 lblVendedor.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -1154,8 +1436,10 @@ public class PDVMenuLateralElegante {
                 ElegantTextField txtVendedor = new ElegantTextField(20);
                 txtVendedor.setEditable(false);
                 panel.add(txtVendedor, gbc);
+                SystemLogger.info("VENDAS - Campo 'Vendedor' criado (readonly)");
                 
                 // Condição de Pagamento
+                SystemLogger.ui("📝 VENDAS - Criando campo: Condição Pagamento");
                 gbc.gridx = 0; gbc.gridy = 3;
                 JLabel lblCondicao = new JLabel("Condição Pagamento:");
                 lblCondicao.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -1165,6 +1449,888 @@ public class PDVMenuLateralElegante {
                 JComboBox<String> cbCondicao = new JComboBox<>(new String[]{"À Vista", "30 Dias", "60 Dias", "90 Dias"});
                 cbCondicao.setFont(new Font("Segoe UI", Font.PLAIN, 12));
                 panel.add(cbCondicao, gbc);
+                SystemLogger.info("VENDAS - Campo 'Condição Pagamento' criado (ComboBox)");
+                
+                // Painel de Busca de Produtos
+                gbc.gridx = 0; gbc.gridy = 4; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(10, 5, 10, 5);
+                gbc.weighty = 0.0;
+                
+                // Log de criação do painel de busca
+                SystemLogger.ui("CRIANDO PAINEL DE BUSCA - Nova Venda");
+                SystemLogger.info("Painel Busca Nova Venda - Inicializando componentes de busca");
+                
+                JPanel buscaPanelProdutosVenda = new JPanel(new GridBagLayout());
+                buscaPanelProdutosVenda.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "🔍 Buscar Produtos",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBuscaProdutos = new GridBagConstraints();
+                gbcBuscaProdutos.insets = new Insets(5, 5, 5, 5);
+                gbcBuscaProdutos.anchor = GridBagConstraints.WEST;
+                
+                // Campo de busca de produtos
+                gbcBuscaProdutos.gridx = 0; gbcBuscaProdutos.gridy = 0;
+                gbcBuscaProdutos.fill = GridBagConstraints.NONE;
+                gbcBuscaProdutos.weightx = 0.0;
+                JLabel lblBuscaProdutos = new JLabel("Buscar:");
+                lblBuscaProdutos.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBuscaProdutos.setForeground(DARK_GRAY);
+                buscaPanelProdutosVenda.add(lblBuscaProdutos, gbcBuscaProdutos);
+                
+                gbcBuscaProdutos.gridx = 1; gbcBuscaProdutos.gridy = 0;
+                gbcBuscaProdutos.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaProdutos.weightx = 1.0;
+                
+                // Log de criação do campo de busca
+                SystemLogger.ui("CRIANDO CAMPO DE BUSCA - Nova Venda");
+                SystemLogger.info("Campo Busca Nova Venda - Configurando ElegantTextField");
+                
+                ElegantTextField txtBuscaProdutos = new ElegantTextField(30);
+                txtBuscaProdutos.setToolTipText("Digite código, nome ou descrição do produto");
+                buscaPanelProdutosVenda.add(txtBuscaProdutos, gbcBuscaProdutos);
+                
+                // Botões de busca de produtos
+                gbcBuscaProdutos.gridx = 2; gbcBuscaProdutos.gridy = 0;
+                gbcBuscaProdutos.fill = GridBagConstraints.NONE;
+                gbcBuscaProdutos.weightx = 0.0;
+                gbcBuscaProdutos.insets = new Insets(5, 10, 5, 5);
+                
+                // Log de criação do botão buscar
+                SystemLogger.ui("CRIANDO BOTÃO BUSCAR - Nova Venda");
+                SystemLogger.info("Botão Buscar Nova Venda - Configurando ElegantButton com PRIMARY_COLOR");
+                
+                ElegantButton btnBuscarProdutos = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarProdutos.setForeground(WHITE);
+                btnBuscarProdutos.setPreferredSize(new Dimension(100, 30));
+                buscaPanelProdutosVenda.add(btnBuscarProdutos, gbcBuscaProdutos);
+                
+                gbcBuscaProdutos.gridx = 3; gbcBuscaProdutos.gridy = 0;
+                gbcBuscaProdutos.insets = new Insets(5, 5, 5, 5);
+                
+                // Log de criação do botão limpar
+                SystemLogger.ui("CRIANDO BOTÃO LIMPAR - Nova Venda");
+                SystemLogger.info("Botão Limpar Nova Venda - Configurando ElegantButton com MEDIUM_GRAY");
+                
+                ElegantButton btnLimparBuscaProdutos = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaProdutos.setForeground(WHITE);
+                btnLimparBuscaProdutos.setPreferredSize(new Dimension(100, 30));
+                buscaPanelProdutosVenda.add(btnLimparBuscaProdutos, gbcBuscaProdutos);
+                
+                // Log de adição do painel de busca ao formulário
+                SystemLogger.ui("ADICIONANDO PAINEL BUSCA AO FORMULÁRIO - Nova Venda");
+                SystemLogger.info("Painel Busca Nova Venda - Adicionado ao formulário principal");
+                
+                panel.add(buscaPanelProdutosVenda, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Tabela de Produtos Encontrados
+                gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.weightx = 1.0; gbc.weighty = 0.1;
+                
+                String[] colunasTabelaProdutosVenda = {"Código", "Descrição", "Preço", "Estoque", "Categoria"};
+                Object[][] dadosTabelaProdutosVenda = {};
+                
+                JTable tabelaProdutosVenda = new JTable(dadosTabelaProdutosVenda, colunasTabelaProdutosVenda);
+                tabelaProdutosVenda.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaProdutosVenda.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaProdutosVenda.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaProdutosVenda.getTableHeader().setForeground(WHITE);
+                tabelaProdutosVenda.setRowHeight(25);
+                tabelaProdutosVenda.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaProdutosVenda.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabelaProdutosVenda = new JScrollPane(tabelaProdutosVenda);
+                scrollPaneTabelaProdutosVenda.setPreferredSize(new Dimension(700, 200));
+                scrollPaneTabelaProdutosVenda.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Produtos Encontrados",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabelaProdutosVenda, gbc);
+                break;
+                
+            case "↩️ Devoluções":
+                SystemLogger.ui("🔄 VENDAS - Criando formulário Devoluções");
+                
+                // Painel de Busca
+                gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(5, 5, 15, 5);
+                
+                JPanel buscaPanel = new JPanel(new GridBagLayout());
+                buscaPanel.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "🔍 Buscar Devoluções",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBusca = new GridBagConstraints();
+                gbcBusca.insets = new Insets(5, 5, 5, 5);
+                
+                // Campo de busca
+                gbcBusca.gridx = 0; gbcBusca.gridy = 0;
+                gbcBusca.fill = GridBagConstraints.HORIZONTAL;
+                gbcBusca.weightx = 1.0;
+                JLabel lblBusca = new JLabel("Buscar:");
+                lblBusca.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBusca.setForeground(DARK_GRAY);
+                buscaPanel.add(lblBusca, gbcBusca);
+                
+                gbcBusca.gridx = 1; gbcBusca.gridy = 0;
+                gbcBusca.fill = GridBagConstraints.HORIZONTAL;
+                gbcBusca.weightx = 2.0;
+                ElegantTextField txtBuscaDevolucao = new ElegantTextField(30);
+                txtBuscaDevolucao.setToolTipText("Digite número da venda, cliente ou motivo");
+                buscaPanel.add(txtBuscaDevolucao, gbcBusca);
+                
+                // Botões de busca
+                gbcBusca.gridx = 2; gbcBusca.gridy = 0;
+                gbcBusca.fill = GridBagConstraints.NONE;
+                gbcBusca.weightx = 0;
+                ElegantButton btnBuscarDevolucao = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarDevolucao.setForeground(WHITE);
+                buscaPanel.add(btnBuscarDevolucao, gbcBusca);
+                
+                gbcBusca.gridx = 3; gbcBusca.gridy = 0;
+                ElegantButton btnLimparBuscaDevolucao = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaDevolucao.setForeground(WHITE);
+                buscaPanel.add(btnLimparBuscaDevolucao, gbcBusca);
+                
+                panel.add(buscaPanel, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Número da Venda Original
+                SystemLogger.ui("📝 VENDAS - Criando campo: Nº Venda Original");
+                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblNumeroVendaOriginal = new JLabel("Nº Venda Original:");
+                lblNumeroVendaOriginal.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblNumeroVendaOriginal.setForeground(DARK_GRAY);
+                panel.add(lblNumeroVendaOriginal, gbc);
+                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                ElegantTextField txtNumeroVendaOriginal = new ElegantTextField(15);
+                txtNumeroVendaOriginal.setToolTipText("Número da venda a ser devolvida");
+                panel.add(txtNumeroVendaOriginal, gbc);
+                SystemLogger.info("VENDAS - Campo 'Nº Venda Original' criado");
+                
+                // Cliente
+                SystemLogger.ui("📝 VENDAS - Criando campo: Cliente (Devoluções)");
+                gbc.gridx = 0; gbc.gridy = 2;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblClienteDevolucao = new JLabel("Cliente:");
+                lblClienteDevolucao.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblClienteDevolucao.setForeground(DARK_GRAY);
+                panel.add(lblClienteDevolucao, gbc);
+                gbc.gridx = 1; gbc.gridy = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                ElegantTextField txtClienteDevolucao = new ElegantTextField(40);
+                txtClienteDevolucao.setEditable(false);
+                txtClienteDevolucao.setToolTipText("Cliente da venda original (preenchido automaticamente)");
+                panel.add(txtClienteDevolucao, gbc);
+                SystemLogger.info("VENDAS - Campo 'Cliente' criado (Devoluções - readonly)");
+                
+                // Data da Devolução
+                SystemLogger.ui("📝 VENDAS - Criando campo: Data Devolução");
+                gbc.gridx = 0; gbc.gridy = 3;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblDataDevolucao = new JLabel("Data Devolução:");
+                lblDataDevolucao.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblDataDevolucao.setForeground(DARK_GRAY);
+                panel.add(lblDataDevolucao, gbc);
+                gbc.gridx = 1; gbc.gridy = 3;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                ElegantTextField txtDataDevolucao = new ElegantTextField(10);
+                txtDataDevolucao.setText(new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()));
+                txtDataDevolucao.setEditable(false);
+                panel.add(txtDataDevolucao, gbc);
+                SystemLogger.info("VENDAS - Campo 'Data Devolução' criado (readonly)");
+                
+                // Motivo da Devolução
+                SystemLogger.ui("📝 VENDAS - Criando campo: Motivo Devolução");
+                gbc.gridx = 0; gbc.gridy = 4;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblMotivoDevolucao = new JLabel("Motivo Devolução:");
+                lblMotivoDevolucao.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblMotivoDevolucao.setForeground(DARK_GRAY);
+                panel.add(lblMotivoDevolucao, gbc);
+                gbc.gridx = 1; gbc.gridy = 4;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JComboBox<String> cbMotivoDevolucao = new JComboBox<>(new String[]{
+                    "Produto com defeito", "Produto diferente do pedido", "Arrependimento", 
+                    "Não recebeu o produto", "Outro"
+                });
+                cbMotivoDevolucao.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                panel.add(cbMotivoDevolucao, gbc);
+                SystemLogger.info("VENDAS - Campo 'Motivo Devolução' criado");
+                
+                // Tabela de Produtos para Devolução
+                gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weightx = 1.0; gbc.weighty = 1.0;
+                
+                String[] colunasTabelaDevolucao = {"Código", "Produto", "Qtde", "Valor Unit.", "Valor Total", "Motivo"};
+                Object[][] dadosTabelaDevolucao = {};
+                
+                JTable tabelaDevolucao = new JTable(dadosTabelaDevolucao, colunasTabelaDevolucao);
+                tabelaDevolucao.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaDevolucao.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaDevolucao.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaDevolucao.getTableHeader().setForeground(WHITE);
+                tabelaDevolucao.setRowHeight(25);
+                tabelaDevolucao.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaDevolucao.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabela = new JScrollPane(tabelaDevolucao);
+                scrollPaneTabela.setPreferredSize(new Dimension(600, 200));
+                scrollPaneTabela.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Produtos para Devolução",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabela, gbc);
+                
+                // Valor Total da Devolução
+                gbc.gridx = 0; gbc.gridy = 5; gbc.gridwidth = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                gbc.weightx = 0; gbc.weighty = 0;
+                JLabel lblValorTotalDevolucao = new JLabel("Valor Total:");
+                lblValorTotalDevolucao.setFont(new Font("Segoe UI", Font.BOLD, 14));
+                lblValorTotalDevolucao.setForeground(DARK_GRAY);
+                panel.add(lblValorTotalDevolucao, gbc);
+                gbc.gridx = 1; gbc.gridy = 5;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                ElegantTextField txtValorTotalDevolucao = new ElegantTextField(15);
+                txtValorTotalDevolucao.setText("R$ 0,00");
+                txtValorTotalDevolucao.setEditable(false);
+                txtValorTotalDevolucao.setFont(new Font("Segoe UI", Font.BOLD, 14));
+                txtValorTotalDevolucao.setHorizontalAlignment(JTextField.RIGHT);
+                panel.add(txtValorTotalDevolucao, gbc);
+                break;
+                
+            case "🚚 Entregas":
+                SystemLogger.ui("🚚 VENDAS - Criando formulário Entregas");
+                
+                // Painel de Busca
+                gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(5, 5, 15, 5);
+                
+                JPanel buscaPanelEntrega = new JPanel(new GridBagLayout());
+                buscaPanelEntrega.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "🔍 Buscar Entregas",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBuscaEntrega = new GridBagConstraints();
+                gbcBuscaEntrega.insets = new Insets(5, 5, 5, 5);
+                
+                // Campo de busca
+                gbcBuscaEntrega.gridx = 0; gbcBuscaEntrega.gridy = 0;
+                gbcBuscaEntrega.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaEntrega.weightx = 1.0;
+                JLabel lblBuscaEntrega = new JLabel("Buscar:");
+                lblBuscaEntrega.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBuscaEntrega.setForeground(DARK_GRAY);
+                buscaPanelEntrega.add(lblBuscaEntrega, gbcBuscaEntrega);
+                
+                gbcBuscaEntrega.gridx = 1; gbcBuscaEntrega.gridy = 0;
+                gbcBuscaEntrega.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaEntrega.weightx = 2.0;
+                ElegantTextField txtBuscaEntrega = new ElegantTextField(30);
+                txtBuscaEntrega.setToolTipText("Digite número do pedido, cliente ou endereço");
+                buscaPanelEntrega.add(txtBuscaEntrega, gbcBuscaEntrega);
+                
+                // Botões de busca
+                gbcBuscaEntrega.gridx = 2; gbcBuscaEntrega.gridy = 0;
+                gbcBuscaEntrega.fill = GridBagConstraints.NONE;
+                gbcBuscaEntrega.weightx = 0;
+                ElegantButton btnBuscarEntrega = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarEntrega.setForeground(WHITE);
+                buscaPanelEntrega.add(btnBuscarEntrega, gbcBuscaEntrega);
+                
+                gbcBuscaEntrega.gridx = 3; gbcBuscaEntrega.gridy = 0;
+                ElegantButton btnLimparBuscaEntrega = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaEntrega.setForeground(WHITE);
+                buscaPanelEntrega.add(btnLimparBuscaEntrega, gbcBuscaEntrega);
+                
+                panel.add(buscaPanelEntrega, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Número do Pedido
+                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblNumeroPedido = new JLabel("Nº Pedido:");
+                lblNumeroPedido.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblNumeroPedido.setForeground(DARK_GRAY);
+                panel.add(lblNumeroPedido, gbc);
+                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                ElegantTextField txtNumeroPedido = new ElegantTextField(15);
+                txtNumeroPedido.setToolTipText("Número do pedido para entrega");
+                panel.add(txtNumeroPedido, gbc);
+                
+                // Cliente
+                gbc.gridx = 0; gbc.gridy = 2;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblClienteEntrega = new JLabel("Cliente:");
+                lblClienteEntrega.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblClienteEntrega.setForeground(DARK_GRAY);
+                panel.add(lblClienteEntrega, gbc);
+                gbc.gridx = 1; gbc.gridy = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                ElegantTextField txtClienteEntrega = new ElegantTextField(40);
+                txtClienteEntrega.setToolTipText("Nome do cliente");
+                panel.add(txtClienteEntrega, gbc);
+                
+                // Data de Entrega
+                gbc.gridx = 0; gbc.gridy = 3;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblDataEntrega = new JLabel("Data Entrega:");
+                lblDataEntrega.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblDataEntrega.setForeground(DARK_GRAY);
+                panel.add(lblDataEntrega, gbc);
+                gbc.gridx = 1; gbc.gridy = 3;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                ElegantTextField txtDataEntrega = new ElegantTextField(10);
+                txtDataEntrega.setToolTipText("Data prevista para entrega");
+                panel.add(txtDataEntrega, gbc);
+                
+                // Endereço de Entrega
+                gbc.gridx = 0; gbc.gridy = 4;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblEnderecoEntrega = new JLabel("Endereço:");
+                lblEnderecoEntrega.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblEnderecoEntrega.setForeground(DARK_GRAY);
+                panel.add(lblEnderecoEntrega, gbc);
+                gbc.gridx = 1; gbc.gridy = 4;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                ElegantTextField txtEnderecoEntrega = new ElegantTextField(50);
+                txtEnderecoEntrega.setToolTipText("Endereço completo de entrega");
+                panel.add(txtEnderecoEntrega, gbc);
+                
+                // Status da Entrega
+                gbc.gridx = 0; gbc.gridy = 5;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblStatusEntrega = new JLabel("Status:");
+                lblStatusEntrega.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblStatusEntrega.setForeground(DARK_GRAY);
+                panel.add(lblStatusEntrega, gbc);
+                gbc.gridx = 1; gbc.gridy = 5;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JComboBox<String> cbStatusEntrega = new JComboBox<>(new String[]{
+                    "Pendente", "Em Transporte", "Entregue", "Cancelado", "Devolvido"
+                });
+                cbStatusEntrega.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                panel.add(cbStatusEntrega, gbc);
+                
+                // Motorista
+                gbc.gridx = 0; gbc.gridy = 6;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblMotorista = new JLabel("Motorista:");
+                lblMotorista.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblMotorista.setForeground(DARK_GRAY);
+                panel.add(lblMotorista, gbc);
+                gbc.gridx = 1; gbc.gridy = 6;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JComboBox<String> cbMotorista = new JComboBox<>(new String[]{
+                    "Selecione", "João Silva", "Maria Santos", "Carlos Oliveira", "Ana Costa"
+                });
+                cbMotorista.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                panel.add(cbMotorista, gbc);
+                
+                // Tabela de Produtos para Entrega
+                gbc.gridx = 0; gbc.gridy = 7; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weightx = 1.0; gbc.weighty = 1.0;
+                
+                String[] colunasTabelaEntrega = {"Código", "Produto", "Qtde", "Status Entrega", "Data Prevista", "Observações"};
+                Object[][] dadosTabelaEntrega = {};
+                JTable tabelaEntrega = new JTable(dadosTabelaEntrega, colunasTabelaEntrega);
+                tabelaEntrega.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaEntrega.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaEntrega.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaEntrega.getTableHeader().setForeground(WHITE); 
+                tabelaEntrega.setRowHeight(25);
+                tabelaEntrega.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaEntrega.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabelaEntrega = new JScrollPane(tabelaEntrega);
+                scrollPaneTabelaEntrega.setPreferredSize(new Dimension(700, 200));
+                scrollPaneTabelaEntrega.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Produtos para Entrega",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabelaEntrega, gbc);
+                break;
+                
+            case "🔍 Consultar Vendas":
+                SystemLogger.ui("🔍 VENDAS - Criando formulário Consultar Vendas");
+                
+                // Painel de Busca
+                gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(5, 5, 15, 5);
+                
+                JPanel buscaPanelVendas = new JPanel(new GridBagLayout());
+                buscaPanelVendas.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "🔍 Consultar Vendas",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBuscaVendas = new GridBagConstraints();
+                gbcBuscaVendas.insets = new Insets(5, 5, 5, 5);
+                
+                // Campo de busca
+                gbcBuscaVendas.gridx = 0; gbcBuscaVendas.gridy = 0;
+                gbcBuscaVendas.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaVendas.weightx = 1.0;
+                JLabel lblBuscaVendas = new JLabel("Buscar:");
+                lblBuscaVendas.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBuscaVendas.setForeground(DARK_GRAY);
+                buscaPanelVendas.add(lblBuscaVendas, gbcBuscaVendas);
+                
+                gbcBuscaVendas.gridx = 1; gbcBuscaVendas.gridy = 0;
+                gbcBuscaVendas.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaVendas.weightx = 2.0;
+                ElegantTextField txtBuscaVendas = new ElegantTextField(30);
+                txtBuscaVendas.setToolTipText("Digite número da venda, cliente ou produto");
+                buscaPanelVendas.add(txtBuscaVendas, gbcBuscaVendas);
+                
+                // Botões de busca
+                gbcBuscaVendas.gridx = 2; gbcBuscaVendas.gridy = 0;
+                gbcBuscaVendas.fill = GridBagConstraints.NONE;
+                gbcBuscaVendas.weightx = 0;
+                ElegantButton btnBuscarVendas = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarVendas.setForeground(WHITE);
+                buscaPanelVendas.add(btnBuscarVendas, gbcBuscaVendas);
+                
+                gbcBuscaVendas.gridx = 3; gbcBuscaVendas.gridy = 0;
+                ElegantButton btnLimparBuscaVendas = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaVendas.setForeground(WHITE);
+                buscaPanelVendas.add(btnLimparBuscaVendas, gbcBuscaVendas);
+                
+                panel.add(buscaPanelVendas, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Período de consulta
+                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblPeriodo = new JLabel("Período:");
+                lblPeriodo.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblPeriodo.setForeground(DARK_GRAY);
+                panel.add(lblPeriodo, gbc);
+                
+                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JPanel periodoPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                
+                JLabel lblDe = new JLabel("De:");
+                lblDe.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                periodoPanel.add(lblDe);
+                ElegantTextField txtDataInicio = new ElegantTextField(10);
+                txtDataInicio.setToolTipText("Data inicial");
+                periodoPanel.add(txtDataInicio);
+                
+                JLabel lblAte = new JLabel("Até:");
+                lblAte.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                periodoPanel.add(lblAte);
+                ElegantTextField txtDataFim = new ElegantTextField(10);
+                txtDataFim.setToolTipText("Data final");
+                periodoPanel.add(txtDataFim);
+                
+                panel.add(periodoPanel, gbc);
+                
+                // Status da Venda
+                gbc.gridx = 0; gbc.gridy = 2;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblStatusVenda = new JLabel("Status:");
+                lblStatusVenda.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblStatusVenda.setForeground(DARK_GRAY);
+                panel.add(lblStatusVenda, gbc);
+                gbc.gridx = 1; gbc.gridy = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JComboBox<String> cbStatusVenda = new JComboBox<>(new String[]{
+                    "Todos", "Concluída", "Cancelada", "Pendente", "Em Andamento"
+                });
+                cbStatusVenda.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                panel.add(cbStatusVenda, gbc);
+                
+                // Tabela de Vendas
+                gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weightx = 1.0; gbc.weighty = 1.0;
+                
+                String[] colunasTabelaVendas = {"Nº Venda", "Cliente", "Data", "Valor Total", "Status", "Vendedor"};
+                Object[][] dadosTabelaVendas = {};
+                
+                JTable tabelaVendas = new JTable(dadosTabelaVendas, colunasTabelaVendas);
+                tabelaVendas.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaVendas.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaVendas.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaVendas.getTableHeader().setForeground(WHITE);
+                tabelaVendas.setRowHeight(25);
+                tabelaVendas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaVendas.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabelaVendas = new JScrollPane(tabelaVendas);
+                scrollPaneTabelaVendas.setPreferredSize(new Dimension(700, 200));
+                scrollPaneTabelaVendas.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Vendas Encontradas",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabelaVendas, gbc);
+                break;
+                
+            case "📊 Resumo Diário":
+                SystemLogger.ui("📊 VENDAS - Criando formulário Resumo Diário");
+                
+                // Painel de Busca
+                gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(5, 5, 15, 5);
+                
+                JPanel buscaPanelResumo = new JPanel(new GridBagLayout());
+                buscaPanelResumo.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "📊 Resumo Diário",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBuscaResumo = new GridBagConstraints();
+                gbcBuscaResumo.insets = new Insets(5, 5, 5, 5);
+                
+                // Campo de busca
+                gbcBuscaResumo.gridx = 0; gbcBuscaResumo.gridy = 0;
+                gbcBuscaResumo.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaResumo.weightx = 1.0;
+                JLabel lblBuscaResumo = new JLabel("Buscar:");
+                lblBuscaResumo.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBuscaResumo.setForeground(DARK_GRAY);
+                buscaPanelResumo.add(lblBuscaResumo, gbcBuscaResumo);
+                
+                gbcBuscaResumo.gridx = 1; gbcBuscaResumo.gridy = 0;
+                gbcBuscaResumo.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaResumo.weightx = 2.0;
+                ElegantTextField txtBuscaResumo = new ElegantTextField(30);
+                txtBuscaResumo.setToolTipText("Digite data, vendedor ou forma de pagamento");
+                buscaPanelResumo.add(txtBuscaResumo, gbcBuscaResumo);
+                
+                // Botões de busca
+                gbcBuscaResumo.gridx = 2; gbcBuscaResumo.gridy = 0;
+                gbcBuscaResumo.fill = GridBagConstraints.NONE;
+                gbcBuscaResumo.weightx = 0;
+                ElegantButton btnBuscarResumo = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarResumo.setForeground(WHITE);
+                buscaPanelResumo.add(btnBuscarResumo, gbcBuscaResumo);
+                
+                gbcBuscaResumo.gridx = 3; gbcBuscaResumo.gridy = 0;
+                ElegantButton btnLimparBuscaResumo = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaResumo.setForeground(WHITE);
+                buscaPanelResumo.add(btnLimparBuscaResumo, gbcBuscaResumo);
+                
+                panel.add(buscaPanelResumo, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Filtros de resumo
+                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblFiltrosResumo = new JLabel("Filtros:");
+                lblFiltrosResumo.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblFiltrosResumo.setForeground(DARK_GRAY);
+                panel.add(lblFiltrosResumo, gbc);
+                
+                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JPanel filtrosPanelResumo = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                
+                JLabel lblDataResumo = new JLabel("Data:");
+                lblDataResumo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelResumo.add(lblDataResumo);
+                ElegantTextField txtDataResumo = new ElegantTextField(10);
+                txtDataResumo.setToolTipText("Data do resumo");
+                filtrosPanelResumo.add(txtDataResumo);
+                
+                JLabel lblVendedorResumo = new JLabel("Vendedor:");
+                lblVendedorResumo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelResumo.add(lblVendedorResumo);
+                JComboBox<String> cbVendedorResumo = new JComboBox<>(new String[]{
+                    "Todos", "Administrador", "Vendedor 1", "Vendedor 2", "Caixa 1"
+                });
+                cbVendedorResumo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelResumo.add(cbVendedorResumo);
+                
+                panel.add(filtrosPanelResumo, gbc);
+                
+                // Tabela de Resumo Diário
+                gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weightx = 1.0; gbc.weighty = 1.0;
+                
+                String[] colunasTabelaResumo = {"Data", "Vendedor", "Total Vendas", "Total Vendido", "Forma Pagamento", "Comissão"};
+                Object[][] dadosTabelaResumo = {};
+                
+                JTable tabelaResumo = new JTable(dadosTabelaResumo, colunasTabelaResumo);
+                tabelaResumo.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaResumo.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaResumo.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaResumo.getTableHeader().setForeground(WHITE);
+                tabelaResumo.setRowHeight(25);
+                tabelaResumo.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaResumo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabelaResumo = new JScrollPane(tabelaResumo);
+                scrollPaneTabelaResumo.setPreferredSize(new Dimension(700, 200));
+                scrollPaneTabelaResumo.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Resumo Diário",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabelaResumo, gbc);
+                break;
+                
+            case "📈 Relatório de Vendas":
+                // Painel de Busca
+                gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(5, 5, 15, 5);
+                
+                JPanel buscaPanelRelatorio = new JPanel(new GridBagLayout());
+                buscaPanelRelatorio.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "📈 Relatório de Vendas",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBuscaRelatorio = new GridBagConstraints();
+                gbcBuscaRelatorio.insets = new Insets(5, 5, 5, 5);
+                
+                // Campo de busca
+                gbcBuscaRelatorio.gridx = 0; gbcBuscaRelatorio.gridy = 0;
+                gbcBuscaRelatorio.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaRelatorio.weightx = 1.0;
+                JLabel lblBuscaRelatorio = new JLabel("Buscar:");
+                lblBuscaRelatorio.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBuscaRelatorio.setForeground(DARK_GRAY);
+                buscaPanelRelatorio.add(lblBuscaRelatorio, gbcBuscaRelatorio);
+                
+                gbcBuscaRelatorio.gridx = 1; gbcBuscaRelatorio.gridy = 0;
+                gbcBuscaRelatorio.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaRelatorio.weightx = 2.0;
+                ElegantTextField txtBuscaRelatorio = new ElegantTextField(30);
+                txtBuscaRelatorio.setToolTipText("Digite período, cliente ou produto");
+                buscaPanelRelatorio.add(txtBuscaRelatorio, gbcBuscaRelatorio);
+                
+                // Botões de busca
+                gbcBuscaRelatorio.gridx = 2; gbcBuscaRelatorio.gridy = 0;
+                gbcBuscaRelatorio.fill = GridBagConstraints.NONE;
+                gbcBuscaRelatorio.weightx = 0;
+                ElegantButton btnBuscarRelatorio = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarRelatorio.setForeground(WHITE);
+                buscaPanelRelatorio.add(btnBuscarRelatorio, gbcBuscaRelatorio);
+                
+                gbcBuscaRelatorio.gridx = 3; gbcBuscaRelatorio.gridy = 0;
+                ElegantButton btnLimparBuscaRelatorio = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaRelatorio.setForeground(WHITE);
+                buscaPanelRelatorio.add(btnLimparBuscaRelatorio, gbcBuscaRelatorio);
+                
+                panel.add(buscaPanelRelatorio, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Filtros de relatório
+                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblFiltrosRelatorio = new JLabel("Filtros:");
+                lblFiltrosRelatorio.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblFiltrosRelatorio.setForeground(DARK_GRAY);
+                panel.add(lblFiltrosRelatorio, gbc);
+                
+                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JPanel filtrosPanelRelatorio = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                
+                JLabel lblPeriodoRelatorio = new JLabel("Período:");
+                lblPeriodoRelatorio.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelRelatorio.add(lblPeriodoRelatorio);
+                JPanel periodoPanelRelatorio = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                
+                JLabel lblDeRelatorio = new JLabel("De:");
+                lblDeRelatorio.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                periodoPanelRelatorio.add(lblDeRelatorio);
+                ElegantTextField txtDataInicioRelatorio = new ElegantTextField(10);
+                txtDataInicioRelatorio.setToolTipText("Data inicial");
+                periodoPanelRelatorio.add(txtDataInicioRelatorio);
+                
+                JLabel lblAteRelatorio = new JLabel("Até:");
+                lblAteRelatorio.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                periodoPanelRelatorio.add(lblAteRelatorio);
+                ElegantTextField txtDataFimRelatorio = new ElegantTextField(10);
+                txtDataFimRelatorio.setToolTipText("Data final");
+                periodoPanelRelatorio.add(txtDataFimRelatorio);
+                
+                filtrosPanelRelatorio.add(periodoPanelRelatorio);
+                
+                JLabel lblTipoRelatorio = new JLabel("Tipo:");
+                lblTipoRelatorio.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelRelatorio.add(lblTipoRelatorio);
+                JComboBox<String> cbTipoRelatorio = new JComboBox<>(new String[]{
+                    "Todos", "Vendas", "Comissões", "Cancelamentos"
+                });
+                cbTipoRelatorio.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelRelatorio.add(cbTipoRelatorio);
+                
+                panel.add(filtrosPanelRelatorio, gbc);
+                
+                // Tabela de Relatório de Vendas
+                gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weightx = 1.0; gbc.weighty = 1.0;
+                
+                String[] colunasTabelaRelatorio = {"Data", "Cliente", "Produto", "Quantidade", "Valor", "Status", "Vendedor"};
+                Object[][] dadosTabelaRelatorio = {};
+                
+                JTable tabelaRelatorio = new JTable(dadosTabelaRelatorio, colunasTabelaRelatorio);
+                tabelaRelatorio.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaRelatorio.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaRelatorio.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaRelatorio.getTableHeader().setForeground(WHITE);
+                tabelaRelatorio.setRowHeight(25);
+                tabelaRelatorio.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaRelatorio.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabelaRelatorio = new JScrollPane(tabelaRelatorio);
+                scrollPaneTabelaRelatorio.setPreferredSize(new Dimension(700, 200));
+                scrollPaneTabelaRelatorio.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Relatório de Vendas",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabelaRelatorio, gbc);
+                break;
+                
+            case "🏷️ Orçamentos":
+                SystemLogger.ui("🏷️ VENDAS - Criando formulário Orçamentos");
+                
+                // Painel de Busca
+                gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(5, 5, 15, 5);
+                
+                JPanel buscaPanelOrcamentos = new JPanel(new GridBagLayout());
+                buscaPanelOrcamentos.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "🏷️ Orçamentos",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBuscaOrcamentos = new GridBagConstraints();
+                gbcBuscaOrcamentos.insets = new Insets(5, 5, 5, 5);
+                
+                // Campo de busca
+                gbcBuscaOrcamentos.gridx = 0; gbcBuscaOrcamentos.gridy = 0;
+                gbcBuscaOrcamentos.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaOrcamentos.weightx = 1.0;
+                JLabel lblBuscaOrcamentos = new JLabel("Buscar:");
+                lblBuscaOrcamentos.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBuscaOrcamentos.setForeground(DARK_GRAY);
+                buscaPanelOrcamentos.add(lblBuscaOrcamentos, gbcBuscaOrcamentos);
+                
+                gbcBuscaOrcamentos.gridx = 1; gbcBuscaOrcamentos.gridy = 0;
+                gbcBuscaOrcamentos.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaOrcamentos.weightx = 2.0;
+                ElegantTextField txtBuscaOrcamentos = new ElegantTextField(30);
+                txtBuscaOrcamentos.setToolTipText("Digite número, cliente ou produto");
+                buscaPanelOrcamentos.add(txtBuscaOrcamentos, gbcBuscaOrcamentos);
+                
+                // Botões de busca
+                gbcBuscaOrcamentos.gridx = 2; gbcBuscaOrcamentos.gridy = 0;
+                gbcBuscaOrcamentos.fill = GridBagConstraints.NONE;
+                gbcBuscaOrcamentos.weightx = 0;
+                ElegantButton btnBuscarOrcamentos = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarOrcamentos.setForeground(WHITE);
+                buscaPanelOrcamentos.add(btnBuscarOrcamentos, gbcBuscaOrcamentos);
+                
+                gbcBuscaOrcamentos.gridx = 3; gbcBuscaOrcamentos.gridy = 0;
+                ElegantButton btnLimparBuscaOrcamentos = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaOrcamentos.setForeground(WHITE);
+                buscaPanelOrcamentos.add(btnLimparBuscaOrcamentos, gbcBuscaOrcamentos);
+                
+                panel.add(buscaPanelOrcamentos, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Filtros de orçamentos
+                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblFiltrosOrcamentos = new JLabel("Filtros:");
+                lblFiltrosOrcamentos.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblFiltrosOrcamentos.setForeground(DARK_GRAY);
+                panel.add(lblFiltrosOrcamentos, gbc);
+                
+                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JPanel filtrosPanelOrcamentos = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                
+                JLabel lblStatusOrcamento = new JLabel("Status:");
+                lblStatusOrcamento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelOrcamentos.add(lblStatusOrcamento);
+                JComboBox<String> cbStatusOrcamento = new JComboBox<>(new String[]{
+                    "Todos", "Aberto", "Aprovado", "Rejeitado", "Fechado"
+                });
+                cbStatusOrcamento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelOrcamentos.add(cbStatusOrcamento);
+                
+                JLabel lblValidadeOrcamento = new JLabel("Validade:");
+                lblValidadeOrcamento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelOrcamentos.add(lblValidadeOrcamento);
+                JComboBox<String> cbValidadeOrcamento = new JComboBox<>(new String[]{
+                    "Todos", "Hoje", "Esta Semana", "Este Mês", "Próximo Mês"
+                });
+                cbValidadeOrcamento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelOrcamentos.add(cbValidadeOrcamento);
+                
+                panel.add(filtrosPanelOrcamentos, gbc);
+                
+                // Tabela de Orçamentos
+                gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weightx = 1.0; gbc.weighty = 1.0;
+                
+                String[] colunasTabelaOrcamentos = {"Número", "Cliente", "Produto", "Valor", "Validade", "Status", "Vendedor"};
+                Object[][] dadosTabelaOrcamentos = {};
+                
+                JTable tabelaOrcamentos = new JTable(dadosTabelaOrcamentos, colunasTabelaOrcamentos);
+                tabelaOrcamentos.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaOrcamentos.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaOrcamentos.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaOrcamentos.getTableHeader().setForeground(WHITE);
+                tabelaOrcamentos.setRowHeight(25);
+                tabelaOrcamentos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaOrcamentos.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabelaOrcamentos = new JScrollPane(tabelaOrcamentos);
+                scrollPaneTabelaOrcamentos.setPreferredSize(new Dimension(700, 200));
+                scrollPaneTabelaOrcamentos.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Orçamentos Encontrados",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabelaOrcamentos, gbc);
                 break;
                 
             default:
@@ -1287,9 +2453,124 @@ public class PDVMenuLateralElegante {
                 panel.add(cbUnidade, gbc);
                 break;
                 
+            case "🔍 Consultar Produto":
+                // Painel de Busca
+                gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(5, 5, 15, 5);
+                
+                JPanel buscaPanelProduto = new JPanel(new GridBagLayout());
+                buscaPanelProduto.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "🔍 Consultar Produtos",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBuscaProduto = new GridBagConstraints();
+                gbcBuscaProduto.insets = new Insets(5, 5, 5, 5);
+                
+                // Campo de busca
+                gbcBuscaProduto.gridx = 0; gbcBuscaProduto.gridy = 0;
+                gbcBuscaProduto.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaProduto.weightx = 1.0;
+                JLabel lblBuscaProduto = new JLabel("Buscar:");
+                lblBuscaProduto.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBuscaProduto.setForeground(DARK_GRAY);
+                buscaPanelProduto.add(lblBuscaProduto, gbcBuscaProduto);
+                
+                gbcBuscaProduto.gridx = 1; gbcBuscaProduto.gridy = 0;
+                gbcBuscaProduto.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaProduto.weightx = 2.0;
+                ElegantTextField txtBuscaProduto = new ElegantTextField(30);
+                txtBuscaProduto.setToolTipText("Digite código, nome ou descrição do produto");
+                buscaPanelProduto.add(txtBuscaProduto, gbcBuscaProduto);
+                
+                // Botões de busca
+                gbcBuscaProduto.gridx = 2; gbcBuscaProduto.gridy = 0;
+                gbcBuscaProduto.fill = GridBagConstraints.NONE;
+                gbcBuscaProduto.weightx = 0;
+                ElegantButton btnBuscarProduto = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarProduto.setForeground(WHITE);
+                buscaPanelProduto.add(btnBuscarProduto, gbcBuscaProduto);
+                
+                gbcBuscaProduto.gridx = 3; gbcBuscaProduto.gridy = 0;
+                ElegantButton btnLimparBuscaProduto = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaProduto.setForeground(WHITE);
+                buscaPanelProduto.add(btnLimparBuscaProduto, gbcBuscaProduto);
+                
+                panel.add(buscaPanelProduto, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Filtros adicionais
+                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblFiltrosProduto = new JLabel("Filtros:");
+                lblFiltrosProduto.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblFiltrosProduto.setForeground(DARK_GRAY);
+                panel.add(lblFiltrosProduto, gbc);
+                
+                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JPanel filtrosPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                
+                JLabel lblCategoriaProduto = new JLabel("Categoria:");
+                lblCategoriaProduto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanel.add(lblCategoriaProduto);
+                JComboBox<String> cbCategoriaProduto = new JComboBox<>(new String[]{
+                    "Todas", "Informática", "Periféricos", "Monitores"
+                });
+                cbCategoriaProduto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanel.add(cbCategoriaProduto);
+                
+                JLabel lblEstoqueMin = new JLabel("Estoque:");
+                lblEstoqueMin.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanel.add(lblEstoqueMin);
+                JComboBox<String> cbEstoqueMin = new JComboBox<>(new String[]{
+                    "Todos", "Acima do Mínimo", "Abaixo do Mínimo", "Zerado"
+                });
+                cbEstoqueMin.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanel.add(cbEstoqueMin);
+                
+                panel.add(filtrosPanel, gbc);
+                
+                // Tabela de Produtos
+                gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weightx = 1.0; gbc.weighty = 1.0;
+                
+                String[] colunasTabelaProduto = {"Código", "Descrição", "Categoria", "Preço", "Estoque", "Status"};
+                Object[][] dadosTabelaProduto = {};
+                
+                JTable tabelaProduto = new JTable(dadosTabelaProduto, colunasTabelaProduto);
+                tabelaProduto.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaProduto.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaProduto.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaProduto.getTableHeader().setForeground(WHITE);
+                tabelaProduto.setRowHeight(25);
+                tabelaProduto.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaProduto.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabelaProduto = new JScrollPane(tabelaProduto);
+                scrollPaneTabelaProduto.setPreferredSize(new Dimension(700, 200));
+                scrollPaneTabelaProduto.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Produtos Encontrados",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabelaProduto, gbc);
+                break;
+                
             default:
+                // Log para formulário padrão Vendas
+                SystemLogger.ui("📋 FORMULÁRIO PADRÃO VENDAS - Item não reconhecido: " + item);
+                SystemLogger.info("VENDAS - Criando formulário padrão para: " + item);
                 return criarFormularioPadraoElegante(item, "PRODUTOS", gbc);
         }
+        
+        // Log de conclusão do formulário Vendas
+        SystemLogger.ui("✅ FORMULÁRIO VENDAS CONCLUÍDO - " + item);
+        SystemLogger.info("VENDAS - Formulário criado com sucesso: " + item);
         
         return panel;
     }
@@ -1406,6 +2687,114 @@ public class PDVMenuLateralElegante {
                 panel.add(txtCep, gbc);
                 break;
                 
+            case "🔍 Consultar Cliente":
+                // Painel de Busca
+                gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(5, 5, 15, 5);
+                
+                JPanel buscaPanelCliente = new JPanel(new GridBagLayout());
+                buscaPanelCliente.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "🔍 Consultar Clientes",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBuscaCliente = new GridBagConstraints();
+                gbcBuscaCliente.insets = new Insets(5, 5, 5, 5);
+                
+                // Campo de busca
+                gbcBuscaCliente.gridx = 0; gbcBuscaCliente.gridy = 0;
+                gbcBuscaCliente.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaCliente.weightx = 1.0;
+                JLabel lblBuscaCliente = new JLabel("Buscar:");
+                lblBuscaCliente.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBuscaCliente.setForeground(DARK_GRAY);
+                buscaPanelCliente.add(lblBuscaCliente, gbcBuscaCliente);
+                
+                gbcBuscaCliente.gridx = 1; gbcBuscaCliente.gridy = 0;
+                gbcBuscaCliente.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaCliente.weightx = 2.0;
+                ElegantTextField txtBuscaCliente = new ElegantTextField(30);
+                txtBuscaCliente.setToolTipText("Digite nome, CPF/CNPJ ou email do cliente");
+                buscaPanelCliente.add(txtBuscaCliente, gbcBuscaCliente);
+                
+                // Botões de busca
+                gbcBuscaCliente.gridx = 2; gbcBuscaCliente.gridy = 0;
+                gbcBuscaCliente.fill = GridBagConstraints.NONE;
+                gbcBuscaCliente.weightx = 0;
+                ElegantButton btnBuscarCliente = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarCliente.setForeground(WHITE);
+                buscaPanelCliente.add(btnBuscarCliente, gbcBuscaCliente);
+                
+                gbcBuscaCliente.gridx = 3; gbcBuscaCliente.gridy = 0;
+                ElegantButton btnLimparBuscaCliente = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaCliente.setForeground(WHITE);
+                buscaPanelCliente.add(btnLimparBuscaCliente, gbcBuscaCliente);
+                
+                panel.add(buscaPanelCliente, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Filtros de busca
+                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblFiltrosCliente = new JLabel("Filtros:");
+                lblFiltrosCliente.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblFiltrosCliente.setForeground(DARK_GRAY);
+                panel.add(lblFiltrosCliente, gbc);
+                
+                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JPanel filtrosPanelCliente = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                
+                JLabel lblStatusCliente = new JLabel("Status:");
+                lblStatusCliente.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelCliente.add(lblStatusCliente);
+                JComboBox<String> cbStatusCliente = new JComboBox<>(new String[]{
+                    "Todos", "Ativo", "Inativo", "Bloqueado"
+                });
+                cbStatusCliente.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelCliente.add(cbStatusCliente);
+                
+                JLabel lblTipoCliente = new JLabel("Tipo:");
+                lblTipoCliente.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelCliente.add(lblTipoCliente);
+                JComboBox<String> cbTipoCliente = new JComboBox<>(new String[]{
+                    "Todos", "Pessoa Física", "Pessoa Jurídica"
+                });
+                cbTipoCliente.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelCliente.add(cbTipoCliente);
+                
+                panel.add(filtrosPanelCliente, gbc);
+                
+                // Tabela de Clientes
+                gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weightx = 1.0; gbc.weighty = 1.0;
+                
+                String[] colunasTabelaCliente = {"Código", "Nome", "CPF/CNPJ", "Telefone", "Email", "Status", "Cadastro"};
+                Object[][] dadosTabelaCliente = {};
+                
+                JTable tabelaCliente = new JTable(dadosTabelaCliente, colunasTabelaCliente);
+                tabelaCliente.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaCliente.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaCliente.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaCliente.getTableHeader().setForeground(WHITE);
+                tabelaCliente.setRowHeight(25);
+                tabelaCliente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaCliente.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabelaCliente = new JScrollPane(tabelaCliente);
+                scrollPaneTabelaCliente.setPreferredSize(new Dimension(700, 200));
+                scrollPaneTabelaCliente.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Clientes Encontrados",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabelaCliente, gbc);
+                break;
+                
             default:
                 return criarFormularioPadraoElegante(item, "CLIENTES", gbc);
         }
@@ -1471,6 +2860,114 @@ public class PDVMenuLateralElegante {
                 gbc.gridx = 1; gbc.gridy = 4;
                 ElegantTextField txtNotaFiscal = new ElegantTextField(15);
                 panel.add(txtNotaFiscal, gbc);
+                break;
+                
+            case "📋 Consultar Estoque":
+                // Painel de Busca
+                gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                gbc.insets = new Insets(5, 5, 15, 5);
+                
+                JPanel buscaPanelEstoque = new JPanel(new GridBagLayout());
+                buscaPanelEstoque.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "📋 Consultar Estoque",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                
+                GridBagConstraints gbcBuscaEstoque = new GridBagConstraints();
+                gbcBuscaEstoque.insets = new Insets(5, 5, 5, 5);
+                
+                // Campo de busca
+                gbcBuscaEstoque.gridx = 0; gbcBuscaEstoque.gridy = 0;
+                gbcBuscaEstoque.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaEstoque.weightx = 1.0;
+                JLabel lblBuscaEstoque = new JLabel("Buscar:");
+                lblBuscaEstoque.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblBuscaEstoque.setForeground(DARK_GRAY);
+                buscaPanelEstoque.add(lblBuscaEstoque, gbcBuscaEstoque);
+                
+                gbcBuscaEstoque.gridx = 1; gbcBuscaEstoque.gridy = 0;
+                gbcBuscaEstoque.fill = GridBagConstraints.HORIZONTAL;
+                gbcBuscaEstoque.weightx = 2.0;
+                ElegantTextField txtBuscaEstoque = new ElegantTextField(30);
+                txtBuscaEstoque.setToolTipText("Digite código, nome ou categoria do produto");
+                buscaPanelEstoque.add(txtBuscaEstoque, gbcBuscaEstoque);
+                
+                // Botões de busca
+                gbcBuscaEstoque.gridx = 2; gbcBuscaEstoque.gridy = 0;
+                gbcBuscaEstoque.fill = GridBagConstraints.NONE;
+                gbcBuscaEstoque.weightx = 0;
+                ElegantButton btnBuscarEstoque = new ElegantButton("🔍 Buscar", PRIMARY_COLOR, false);
+                btnBuscarEstoque.setForeground(WHITE);
+                buscaPanelEstoque.add(btnBuscarEstoque, gbcBuscaEstoque);
+                
+                gbcBuscaEstoque.gridx = 3; gbcBuscaEstoque.gridy = 0;
+                ElegantButton btnLimparBuscaEstoque = new ElegantButton("🔄 Limpar", MEDIUM_GRAY, false);
+                btnLimparBuscaEstoque.setForeground(WHITE);
+                buscaPanelEstoque.add(btnLimparBuscaEstoque, gbcBuscaEstoque);
+                
+                panel.add(buscaPanelEstoque, gbc);
+                
+                // Resetar gridwidth para campos abaixo
+                gbc.gridwidth = 1;
+                gbc.insets = new Insets(5, 5, 5, 5);
+                
+                // Filtros adicionais
+                gbc.gridx = 0; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.NONE;
+                JLabel lblFiltrosEstoque = new JLabel("Filtros:");
+                lblFiltrosEstoque.setFont(new Font("Segoe UI", Font.BOLD, 12));
+                lblFiltrosEstoque.setForeground(DARK_GRAY);
+                panel.add(lblFiltrosEstoque, gbc);
+                
+                gbc.gridx = 1; gbc.gridy = 1;
+                gbc.fill = GridBagConstraints.HORIZONTAL;
+                JPanel filtrosPanelEstoque = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+                
+                JLabel lblCategoriaEstoque = new JLabel("Categoria:");
+                lblCategoriaEstoque.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelEstoque.add(lblCategoriaEstoque);
+                JComboBox<String> cbCategoriaEstoque = new JComboBox<>(new String[]{
+                    "Todas", "Informática", "Periféricos", "Monitores"
+                });
+                cbCategoriaEstoque.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelEstoque.add(cbCategoriaEstoque);
+                
+                JLabel lblEstoqueMinimo = new JLabel("Estoque:");
+                lblEstoqueMinimo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelEstoque.add(lblEstoqueMinimo);
+                JComboBox<String> cbEstoqueMinimo = new JComboBox<>(new String[]{
+                    "Todos", "Acima do Mínimo", "Abaixo do Mínimo", "Zerado"
+                });
+                cbEstoqueMinimo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+                filtrosPanelEstoque.add(cbEstoqueMinimo);
+                
+                panel.add(filtrosPanelEstoque, gbc);
+                
+                // Tabela de Estoque
+                gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+                gbc.fill = GridBagConstraints.BOTH;
+                gbc.weightx = 1.0; gbc.weighty = 1.0;
+                
+                String[] colunasTabelaEstoque = {"Código", "Descrição", "Categoria", "Estoque Atual", "Estoque Mínimo", "Status"};
+                Object[][] dadosTabelaEstoque = {};
+                
+                JTable tabelaEstoque = new JTable(dadosTabelaEstoque, colunasTabelaEstoque);
+                tabelaEstoque.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+                tabelaEstoque.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+                tabelaEstoque.getTableHeader().setBackground(new Color(70, 130, 180));
+                tabelaEstoque.getTableHeader().setForeground(WHITE);
+                tabelaEstoque.setRowHeight(25);
+                tabelaEstoque.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+                tabelaEstoque.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+                
+                JScrollPane scrollPaneTabelaEstoque = new JScrollPane(tabelaEstoque);
+                scrollPaneTabelaEstoque.setPreferredSize(new Dimension(700, 200));
+                scrollPaneTabelaEstoque.setBorder(BorderFactory.createTitledBorder(
+                    BorderFactory.createEtchedBorder(), "Estoque Encontrado",
+                    TitledBorder.LEFT, TitledBorder.TOP, new Font("Segoe UI", Font.BOLD, 12),
+                    DARK_GRAY));
+                panel.add(scrollPaneTabelaEstoque, gbc);
                 break;
                 
             default:
@@ -1908,7 +3405,7 @@ public class PDVMenuLateralElegante {
         tabela.getTableHeader().setReorderingAllowed(false);
         tabela.getTableHeader().setResizingAllowed(true);
         tabela.setOpaque(true);
-        tabela.setBackground(Color.WHITE);
+        tabela.setBackground(WHITE);
         tabela.setVisible(true);
         
         // Fonte simples e visível
@@ -1923,7 +3420,7 @@ public class PDVMenuLateralElegante {
         // Header simples
         JTableHeader header = tabela.getTableHeader();
         header.setBackground(new Color(70, 130, 180));
-        header.setForeground(Color.WHITE);
+        header.setForeground(WHITE);
         header.setOpaque(true);
         
         // Renderer simples sem customização complexa
@@ -1936,9 +3433,9 @@ public class PDVMenuLateralElegante {
                     label.setOpaque(true);
                     if (isSelected) {
                         label.setBackground(new Color(70, 130, 180));
-                        label.setForeground(Color.WHITE);
+                        label.setForeground(WHITE);
                     } else {
-                        label.setBackground(row % 2 == 0 ? Color.WHITE : new Color(240, 240, 240));
+                        label.setBackground(row % 2 == 0 ? WHITE : new Color(240, 240, 240));
                         label.setForeground(Color.BLACK);
                     }
                 }
@@ -1954,7 +3451,7 @@ public class PDVMenuLateralElegante {
         scrollPane.setVisible(true);
         
         // Forçar background branco no viewport
-        scrollPane.getViewport().setBackground(Color.WHITE);
+        scrollPane.getViewport().setBackground(WHITE);
         
         // Log para debug
         SystemLogger.ui("Tabela criada com " + model.getRowCount() + " linhas e " + model.getColumnCount() + " colunas");
@@ -2365,7 +3862,7 @@ public class PDVMenuLateralElegante {
     private String getModuleName(String item) {
         if (item.contains("Ponto de Venda") || item.contains("Pagamentos") || item.contains("Cupom")) {
             return "PDV";
-        } else if (item.contains("Venda") || item.contains("Orçamento") || item.contains("Entrega")) {
+        } else if (item.contains("Nova Venda") || item.contains("Venda") || item.contains("Orçamento") || item.contains("Entrega")) {
             return "VENDAS";
         } else if (item.contains("Produto") || item.contains("Categoria") || item.contains("Fornecedor") || item.contains("Estoque")) {
             return "PRODUTOS";
@@ -2988,7 +4485,7 @@ public class PDVMenuLateralElegante {
         horaLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         horaLabel.setForeground(WHITE);
         
-        JLabel versaoLabel = new JLabel("🔧 Versão: 2.0.0");
+        JLabel versaoLabel = new JLabel("🔧 Versão: 3.2.0");
         versaoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         versaoLabel.setForeground(WHITE);
         
@@ -3014,6 +4511,10 @@ public class PDVMenuLateralElegante {
         ElegantButton btnVendas = new ElegantButton("📋 Vendas", SUCCESS_COLOR, false);
         btnVendas.setForeground(WHITE);
         btnVendas.addActionListener(e -> {
+            // Log de acesso ao submenu Nova Venda
+            SystemLogger.ui("Usuário acessando submenu Nova Venda do menu Vendas");
+            SystemLogger.info("Acesso ao submenu Nova Venda - Usuário: " + usuarioAtual);
+            
             // Abrir tela de vendas
             abrirTelaCompletaElegante("📋 Nova Venda", "VENDAS");
         });
@@ -3025,7 +4526,7 @@ public class PDVMenuLateralElegante {
             abrirTelaCompletaElegante("➕ Cadastrar Produto", "PRODUTOS");
         });
         
-        ElegantButton btnClientes = new ElegantButton("👥 Clientes", new Color(155, 89, 182), false);
+        ElegantButton btnClientes = new ElegantButton("👥 Clientes", PRIMARY_COLOR, false);
         btnClientes.setForeground(WHITE);
         btnClientes.addActionListener(e -> {
             // Abrir tela de clientes
@@ -3050,4 +4551,6 @@ public class PDVMenuLateralElegante {
         
         return painelInicial;
     }
+    
+    // Dark Mode removido completamente
 }

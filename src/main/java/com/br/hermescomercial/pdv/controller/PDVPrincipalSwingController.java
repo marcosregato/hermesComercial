@@ -293,10 +293,14 @@ public class PDVPrincipalSwingController {
     // Métodos de ação
     private void abrirNovaVenda(ActionEvent e) {
         try {
-            System.out.println("Iniciando nova venda");
-            PDVVendaSwingController vendaController = new PDVVendaSwingController();
-            vendaController.show();
-            statusLabel.setText("Nova venda iniciada");
+            // Removido - usando apenas PDVMenuLateralElegante.java
+            // System.out.println("Iniciando nova venda");
+            // PDVVendaSwingController vendaController = new PDVVendaSwingController();
+            // vendaController.show();
+            // statusLabel.setText("Nova venda iniciada");
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Função desabilitada - use o menu lateral elegante para Nova Venda", 
+                "Informação", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
             System.err.println("Erro ao abrir tela de venda: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
@@ -307,8 +311,6 @@ public class PDVPrincipalSwingController {
     
     private void consultarProdutos(ActionEvent e) {
         try {
-            System.out.println("Acessando consulta de produtos");
-            // System.out.logUserAction("Usuário", "CONSULTAR_PRODUTOS", "Acesso ao módulo de consulta");
             
             // Criar frame para consulta de produtos com layout padrão
             JFrame consultaFrame = new JFrame("📦 Consulta de Produtos v2.1.0 - Premium");
@@ -347,7 +349,6 @@ public class PDVPrincipalSwingController {
             consultaFrame.add(mainPanel, BorderLayout.CENTER);
             consultaFrame.setVisible(true);
             
-            System.out.println("Consulta de produtos aberta com sucesso");
             statusLabel.setText("Consulta de produtos aberta");
             
         } catch (Exception ex) {
@@ -360,15 +361,12 @@ public class PDVPrincipalSwingController {
     
     private void gerenciarProdutos(ActionEvent e) {
         try {
-            System.out.println("Acessando gestão unificada de produtos");
-            // System.out.logUserAction("Usuário", "GERENCIAR_PRODUTOS", "Acesso ao módulo unificado de produtos");
             
             // Abrir tela unificada de produtos
             PDVProdutosUnificadoSwingController produtosController = new PDVProdutosUnificadoSwingController();
             produtosController.show();
             
             statusLabel.setText("Gestão de produtos aberta");
-            System.out.println("Tela unificada de produtos aberta com sucesso");
         } catch (Exception ex) {
             System.err.println("Erro ao abrir gestão de produtos: " + ex.getMessage());
             JOptionPane.showMessageDialog(mainFrame, 
@@ -420,8 +418,6 @@ public class PDVPrincipalSwingController {
     
     private void gerenciarClientes(ActionEvent e) {
         try {
-            System.out.println("Abrindo gestão de clientes");
-            // System.out.logUserAction("Usuário", "GERENCIAR_CLIENTES", "Acesso ao módulo de clientes");
             
             // Criar janela de gestão de clientes com layout padrão
             JFrame clientesFrame = new JFrame("👥 Gestão de Clientes v2.1.0 - Premium");
@@ -643,7 +639,6 @@ public class PDVPrincipalSwingController {
                     "Exportar", JOptionPane.INFORMATION_MESSAGE);
             });
             
-            System.out.println("Gestão de clientes aberta com sucesso");
             statusLabel.setText("Gestão de clientes aberta");
             
         } catch (Exception ex) {
@@ -1323,8 +1318,12 @@ public class PDVPrincipalSwingController {
      */
     private void abrirNovaVenda() {
         try {
-            PDVVendaSwingController vendaController = new PDVVendaSwingController();
-            vendaController.show();
+            // Removido - usando apenas PDVMenuLateralElegante.java
+            // PDVVendaSwingController vendaController = new PDVVendaSwingController();
+            // vendaController.show();
+            JOptionPane.showMessageDialog(mainFrame, 
+                "Função desabilitada - use o menu lateral elegante para Nova Venda", 
+                "Informação", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(mainFrame, "Erro ao abrir tela de venda: " + e.getMessage(), 
                 "Erro", JOptionPane.ERROR_MESSAGE);

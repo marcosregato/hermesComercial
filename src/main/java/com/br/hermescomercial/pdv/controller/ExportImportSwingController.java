@@ -371,13 +371,10 @@ public class ExportImportSwingController {
         buttonPanel.setBackground(Color.WHITE);
         
         JButton btnSalvarConfig = createButton("💾 Salvar Configurações", new Color(76, 175, 80));
-        JButton btnTestar = createButton("🧪 Testar Configurações", new Color(33, 150, 243));
         
         btnSalvarConfig.addActionListener(e -> salvarConfiguracoes());
-        btnTestar.addActionListener(e -> testarConfiguracoes());
         
         buttonPanel.add(btnSalvarConfig);
-        buttonPanel.add(btnTestar);
         
         panel.add(buttonPanel, BorderLayout.SOUTH);
         
@@ -580,15 +577,7 @@ public class ExportImportSwingController {
             "Configurações", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void testarConfiguracoes() {
-        JOptionPane.showMessageDialog(frame, "Testando configurações...\n\n" +
-            "✅ Conexão com banco de dados: OK\n" +
-            "✅ Permissões de arquivo: OK\n" +
-            "✅ Formatos suportados: OK\n" +
-            "✅ Configurações validadas com sucesso!", 
-            "Teste", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
+        
     public void show() {
         frame.setVisible(true);
     }

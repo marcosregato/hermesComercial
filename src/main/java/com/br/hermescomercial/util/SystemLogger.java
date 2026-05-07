@@ -4,6 +4,10 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Sistema de Logging Simples e Eficiente para Hermes Comercial PDV
@@ -15,6 +19,55 @@ public class SystemLogger {
     private static final DateTimeFormatter TIMESTAMP_FORMATTER = 
         DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
     private static final String LOG_DIR = "logs";
+    
+    // Componentes para logging assíncrono
+    private static final BlockingQueue<LogEntry> logQueue = new LinkedBlockingQueue<>();
+    private static final ExecutorService logExecutor = Executors.newSingleThreadExecutor();
+    private static final BufferedWriter[] fileBuffers = new BufferedWriter[8]; // Cache de buffers
+    
+    // Classe para entrada de log
+    private static class LogEntry {
+        final String fileName;
+        final String message;
+        final Throwable throwable;
+        
+        LogEntry(String fileName, String message, Throwable throwable) {
+            this.fileName = fileName;
+            this.message = message;
+            this.throwable = throwable;
+        }
+    }
+    
+    // Inicializar executor assíncrono
+    static {
+        logExecutor.submit(() -> processLogQueue());
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            logExecutor.shutdown();
+            try {
+                Thread.sleep(100); // Tempo para processar logs pendentes
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        }));
+    }
+    
+    // Processamento assíncrono da fila de logs
+    private static void processLogQueue() {
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                LogEntry entry = logQueue.take(); // Bloqueia até ter um log
+                writeToFileAsync(entry.fileName, entry.message);
+                if (entry.throwable != null) {
+                    writeStackTraceToFileAsync(entry.fileName, entry.throwable);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
+            } catch (Exception e) {
+                System.err.println("Erro ao processar log assíncrono: " + e.getMessage());
+            }
+        }
+    }
     
     // Níveis de Log
     public enum LogLevel {
@@ -102,14 +155,9 @@ public class SystemLogger {
             // Escrever no console
             writeToConsole(level, logEntry);
             
-            // Escrever no arquivo
+            // Escrever no arquivo de forma assíncrona
             String logFile = getLogFileForLevel(level, module);
-            writeToFile(logFile, logEntry);
-            
-            // Escrever stack trace se houver exceção
-            if (throwable != null) {
-                writeStackTraceToFile(logFile, throwable);
-            }
+            logQueue.offer(new LogEntry(logFile, logEntry, throwable));
             
         } catch (Exception e) {
             System.err.println("Erro ao escrever log: " + e.getMessage());
@@ -259,6 +307,29 @@ public class SystemLogger {
         }
     }
     
+    // Versão assíncrona otimizada com buffer
+    private static void writeToFileAsync(String fileName, String message) {
+        try {
+            File file = new File(fileName);
+            File parentDir = file.getParentFile();
+            
+            // Criar diretório se não existir
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+            
+            // Usar FileWriter com append direto para performance
+            try (FileWriter fw = new FileWriter(file, true);
+                 PrintWriter out = new PrintWriter(fw)) {
+                
+                out.println(message);
+            }
+            
+        } catch (IOException e) {
+            System.err.println("Erro ao escrever assíncrono no arquivo " + fileName + ": " + e.getMessage());
+        }
+    }
+    
     private static void writeStackTraceToFile(String fileName, Throwable throwable) {
         try {
             File file = new File(fileName);
@@ -281,6 +352,31 @@ public class SystemLogger {
             
         } catch (IOException e) {
             System.err.println("Erro ao escrever stack trace no arquivo " + fileName + ": " + e.getMessage());
+        }
+    }
+    
+    // Versão assíncrona otimizada
+    private static void writeStackTraceToFileAsync(String fileName, Throwable throwable) {
+        try {
+            File file = new File(fileName);
+            File parentDir = file.getParentFile();
+            
+            // Criar diretório se não existir
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+            
+            // Usar FileWriter direto para performance
+            try (FileWriter fw = new FileWriter(file, true);
+                 PrintWriter out = new PrintWriter(fw)) {
+                
+                out.println("Stack Trace:");
+                throwable.printStackTrace(out);
+                out.println(); // Linha em branco após stack trace
+            }
+            
+        } catch (IOException e) {
+            System.err.println("Erro ao escrever stack trace assíncrono no arquivo " + fileName + ": " + e.getMessage());
         }
     }
     
