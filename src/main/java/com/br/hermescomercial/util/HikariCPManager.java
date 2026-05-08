@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * HikariCP-Style Connection Pool Manager - Enterprise-grade performance
