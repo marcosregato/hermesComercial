@@ -1,19 +1,30 @@
 package com.br.hermescomercial.pdv.controller;
 
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
+import com.br.hermescomercial.util.SystemLogger;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * Controller para tela de exportação/importação de dados
- * Versão 2.8.0 - Interface completa para gestão de dados
- * Funcionalidades: Exportação CSV/Excel/PDF, Importação, Validação, Histórico
+ * Classe especializada para formulário de Exportação/Importação de dados
+ * Segue o padrão Header → Abas → Tabelas → Ações
+ * Versão 1.0.0 - Adaptada para PDVMenuLateralElegante
  */
-public class ExportImportSwingController {
+public class PDVFormularioExportImport {
     
-    private JFrame frame;
+    private JPanel workArea;
+    private String usuarioAtual;
+    private String nomeUsuario;
+    
+    // Componentes da interface
     private JTabbedPane tabbedPane;
     private JComboBox<String> cmbTipoExportacao, cmbTabelaExportacao;
     private JCheckBox chkCabecalho, chkFormatacao, chkValidarDados;
@@ -23,48 +34,64 @@ public class ExportImportSwingController {
     private DefaultTableModel historicoModel;
     private JProgressBar progressBar;
     private JLabel lblStatus;
+    private JTextField txtArquivo;
     
-    public ExportImportSwingController() {
-        initializeUI();
+    // Dados
+    private List<Operacao> historicoOperacoes;
+    
+    public PDVFormularioExportImport(JPanel workArea, String usuario, String nome) {
+        this.workArea = workArea;
+        this.usuarioAtual = usuario;
+        this.nomeUsuario = nome;
+        this.historicoOperacoes = new ArrayList<>();
+        
+        SystemLogger.ui("Inicializando PDVFormularioExportImport para usuário: " + usuario);
     }
     
-    private void initializeUI() {
-        frame = new JFrame("Exportação/Importação - Hermes Comercial PDV");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(1000, 700);
-        frame.setLocationRelativeTo(null);
+    public JPanel criarFormularioExportImport() {
+        JPanel mainPanel = LayoutPadrao.criarPainelComMargem(15);
+        mainPanel.setLayout(new BorderLayout());
         
-        // Aplicar tema moderno
-        frame.getContentPane().setBackground(Color.WHITE);
-        
-        tabbedPane = new JTabbedPane();
-        tabbedPane.setBackground(Color.WHITE);
+        // Header
+        mainPanel.add(createHeaderPanel(), BorderLayout.NORTH);
         
         // Abas principais
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setBackground(LayoutPadrao.COR_FUNDO);
+        tabbedPane.setFont(LayoutPadrao.FONTE_TEXTO);
+        
         tabbedPane.addTab("📤 Exportar", createExportPanel());
         tabbedPane.addTab("📥 Importar", createImportPanel());
         tabbedPane.addTab("📜 Histórico", createHistoricoPanel());
         tabbedPane.addTab("⚙️ Configurações", createConfigPanel());
         
-        frame.add(tabbedPane);
+        mainPanel.add(tabbedPane, BorderLayout.CENTER);
+        
+        // Carregar histórico inicial
+        carregarHistorico();
+        
+        SystemLogger.ui("PDVFormularioExportImport criado com sucesso");
+        return mainPanel;
+    }
+    
+    private JPanel createHeaderPanel() {
+        return LayoutPadrao.criarHeaderPDVSimples("📊 Exportação/Importação de Dados");
     }
     
     private JPanel createExportPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        JPanel panel = LayoutPadrao.criarPainelBranco();
+        panel.setLayout(new BorderLayout());
         
-        // Painel de configuração de exportação
-        JPanel configPanel = new JPanel(new GridBagLayout());
-        configPanel.setBackground(Color.WHITE);
+        // Painel de configuração
+        JPanel configPanel = LayoutPadrao.criarPainelComMargem(10);
+        configPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         
+        // Tipo de arquivo
         gbc.gridx = 0; gbc.gridy = 0;
-        configPanel.add(new JLabel("📤 Exportação de Dados"), gbc);
-        
-        gbc.gridy = 1;
-        configPanel.add(new JLabel("Tipo de Arquivo:"), gbc);
+        configPanel.add(LayoutPadrao.criarRotuloCampo("Tipo de Arquivo:"), gbc);
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1;
         cmbTipoExportacao = new JComboBox<>(new String[]{
             "CSV (Valores Separados por Vírgula)",
@@ -73,33 +100,32 @@ public class ExportImportSwingController {
             "JSON",
             "XML"
         });
+        cmbTipoExportacao.setFont(LayoutPadrao.FONTE_TEXTO);
         configPanel.add(cmbTipoExportacao, gbc);
         
-        gbc.gridx = 0; gbc.gridy = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
-        configPanel.add(new JLabel("Tabela/Dados:"), gbc);
+        // Tabela/Dados
+        gbc.gridx = 0; gbc.gridy = 1; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        configPanel.add(LayoutPadrao.criarRotuloCampo("Tabela/Dados:"), gbc);
         gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1;
         cmbTabelaExportacao = new JComboBox<>(new String[]{
             "Produtos", "Clientes", "Vendas", "Fornecedores", "Estoque",
             "Categorias", "Usuários", "Financeiro", "Relatórios", "Todos"
         });
+        cmbTabelaExportacao.setFont(LayoutPadrao.FONTE_TEXTO);
         configPanel.add(cmbTabelaExportacao, gbc);
         
-        // Opções de exportação
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
-        JPanel optionsPanel = new JPanel(new GridLayout(3, 1, 5, 5));
-        optionsPanel.setBackground(Color.WHITE);
-        optionsPanel.setBorder(BorderFactory.createTitledBorder("Opções de Exportação"));
+        // Opções
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 2;
+        JPanel optionsPanel = LayoutPadrao.criarPainelComBorda("Opções de Exportação");
+        optionsPanel.setLayout(new GridLayout(3, 1, 5, 5));
         
-        chkCabecalho = new JCheckBox("Incluir cabeçalho (CSV/Excel)");
-        chkCabecalho.setBackground(Color.WHITE);
+        chkCabecalho = LayoutPadrao.criarCheckBox("Incluir cabeçalho (CSV/Excel)");
         chkCabecalho.setSelected(true);
         
-        chkFormatacao = new JCheckBox("Preservar formatação (Excel)");
-        chkFormatacao.setBackground(Color.WHITE);
+        chkFormatacao = LayoutPadrao.criarCheckBox("Preservar formatação (Excel)");
         chkFormatacao.setSelected(true);
         
-        chkValidarDados = new JCheckBox("Validar dados antes de exportar");
-        chkValidarDados.setBackground(Color.WHITE);
+        chkValidarDados = LayoutPadrao.criarCheckBox("Validar dados antes de exportar");
         chkValidarDados.setSelected(true);
         
         optionsPanel.add(chkCabecalho);
@@ -108,34 +134,15 @@ public class ExportImportSwingController {
         
         configPanel.add(optionsPanel, gbc);
         
-        // Filtros de data
-        gbc.gridy = 4; gbc.gridwidth = 1;
-        configPanel.add(new JLabel("Período (Opcional):"), gbc);
-        gbc.gridx = 1;
-        JPanel dataPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        dataPanel.setBackground(Color.WHITE);
-        
-        JTextField txtDataInicio = new JTextField(10);
-        txtDataInicio.setText("2026-05-01");
-        JTextField txtDataFim = new JTextField(10);
-        txtDataFim.setText("2026-05-04");
-        
-        dataPanel.add(new JLabel("De:"));
-        dataPanel.add(txtDataInicio);
-        dataPanel.add(new JLabel("Até:"));
-        dataPanel.add(txtDataFim);
-        
-        configPanel.add(dataPanel, gbc);
-        
         panel.add(configPanel, BorderLayout.CENTER);
         
         // Painel de botões
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.setBackground(Color.WHITE);
+        JPanel buttonPanel = LayoutPadrao.criarPainelComMargem(10);
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
-        JButton btnExportar = createButton("📤 Exportar", new Color(76, 175, 80));
-        JButton btnVisualizar = createButton("👁️ Visualizar", new Color(33, 150, 243));
-        JButton btnAgendar = createButton("📅 Agendar Exportação", new Color(255, 152, 0));
+        JButton btnExportar = LayoutPadrao.criarBotaoSucesso("📤 Exportar");
+        JButton btnVisualizar = LayoutPadrao.criarBotaoPrimario("👁️ Visualizar");
+        JButton btnAgendar = LayoutPadrao.criarBotaoSecundario("📅 Agendar");
         
         btnExportar.addActionListener(e -> exportarDados());
         btnVisualizar.addActionListener(e -> visualizarDados());
@@ -151,26 +158,26 @@ public class ExportImportSwingController {
     }
     
     private JPanel createImportPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        JPanel panel = LayoutPadrao.criarPainelBranco();
+        panel.setLayout(new BorderLayout());
         
         // Painel superior
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(Color.WHITE);
-        topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        JPanel topPanel = LayoutPadrao.criarPainelComMargem(10);
+        topPanel.setLayout(new BorderLayout());
         
         // Seleção de arquivo
         JPanel filePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        filePanel.setBackground(Color.WHITE);
+        filePanel.setBackground(LayoutPadrao.COR_FUNDO);
         
-        JTextField txtArquivo = new JTextField(40);
+        txtArquivo = new JTextField(40);
         txtArquivo.setEditable(false);
         txtArquivo.setText("Nenhum arquivo selecionado...");
+        txtArquivo.setFont(LayoutPadrao.FONTE_TEXTO);
         
-        JButton btnSelecionar = createButton("📁 Selecionar Arquivo", new Color(33, 150, 243));
-        btnSelecionar.addActionListener(e -> selecionarArquivo(txtArquivo));
+        JButton btnSelecionar = LayoutPadrao.criarBotaoPrimario("📁 Selecionar Arquivo");
+        btnSelecionar.addActionListener(e -> selecionarArquivo());
         
-        filePanel.add(new JLabel("Arquivo:"));
+        filePanel.add(LayoutPadrao.criarRotuloCampo("Arquivo:"));
         filePanel.add(txtArquivo);
         filePanel.add(btnSelecionar);
         
@@ -178,18 +185,15 @@ public class ExportImportSwingController {
         
         // Opções de importação
         JPanel optionsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        optionsPanel.setBackground(Color.WHITE);
+        optionsPanel.setBackground(LayoutPadrao.COR_FUNDO);
         
-        JCheckBox chkIgnorarCabecalho = new JCheckBox("Ignorar primeira linha (cabeçalho)");
-        chkIgnorarCabecalho.setBackground(Color.WHITE);
+        JCheckBox chkIgnorarCabecalho = LayoutPadrao.criarCheckBox("Ignorar primeira linha (cabeçalho)");
         chkIgnorarCabecalho.setSelected(true);
         
-        JCheckBox chkValidarImport = new JCheckBox("Validar dados durante importação");
-        chkValidarImport.setBackground(Color.WHITE);
+        JCheckBox chkValidarImport = LayoutPadrao.criarCheckBox("Validar dados durante importação");
         chkValidarImport.setSelected(true);
         
-        JCheckBox chkAtualizar = new JCheckBox("Atualizar registros existentes");
-        chkAtualizar.setBackground(Color.WHITE);
+        JCheckBox chkAtualizar = LayoutPadrao.criarCheckBox("Atualizar registros existentes");
         
         optionsPanel.add(chkIgnorarCabecalho);
         optionsPanel.add(chkValidarImport);
@@ -199,9 +203,9 @@ public class ExportImportSwingController {
         
         panel.add(topPanel, BorderLayout.NORTH);
         
-        // Área central com preview e progresso
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBackground(Color.WHITE);
+        // Área central
+        JPanel centerPanel = LayoutPadrao.criarPainelComMargem(10);
+        centerPanel.setLayout(new BorderLayout());
         
         // Tabela de preview
         String[] columns = {"Linha", "Campo 1", "Campo 2", "Campo 3", "Status"};
@@ -212,25 +216,23 @@ public class ExportImportSwingController {
             }
         };
         
-        importTable = new JTable(importModel);
-        importTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        importTable = LayoutPadrao.criarTabela();
+        importTable.setModel(importModel);
         
-        JScrollPane tableScrollPane = new JScrollPane(importTable);
+        JScrollPane tableScrollPane = LayoutPadrao.criarBarraRolagem(importTable);
         tableScrollPane.setPreferredSize(new Dimension(600, 300));
         
         centerPanel.add(tableScrollPane, BorderLayout.CENTER);
         
         // Painel de progresso
-        JPanel progressPanel = new JPanel(new BorderLayout());
-        progressPanel.setBackground(Color.WHITE);
-        progressPanel.setBorder(BorderFactory.createTitledBorder("Progresso da Importação"));
+        JPanel progressPanel = LayoutPadrao.criarPainelComBorda("Progresso da Importação");
+        progressPanel.setLayout(new BorderLayout());
         
         progressBar = new JProgressBar(0, 100);
         progressBar.setStringPainted(true);
         progressBar.setString("Aguardando início...");
         
-        lblStatus = new JLabel("Status: Pronto para importar");
-        lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblStatus = LayoutPadrao.criarRotuloTexto("Status: Pronto para importar");
         
         progressPanel.add(progressBar, BorderLayout.CENTER);
         progressPanel.add(lblStatus, BorderLayout.SOUTH);
@@ -239,13 +241,13 @@ public class ExportImportSwingController {
         
         panel.add(centerPanel, BorderLayout.CENTER);
         
-        // Painel de botões de ação
-        JPanel actionPanel = new JPanel(new FlowLayout());
-        actionPanel.setBackground(Color.WHITE);
+        // Painel de botões
+        JPanel actionPanel = LayoutPadrao.criarPainelComMargem(10);
+        actionPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         
-        JButton btnPreview = createButton("👁️ Preview", new Color(33, 150, 243));
-        JButton btnImportar = createButton("📥 Importar", new Color(76, 175, 80));
-        JButton btnCancelar = createButton("❌ Cancelar", new Color(244, 67, 54));
+        JButton btnPreview = LayoutPadrao.criarBotaoPrimario("👁️ Preview");
+        JButton btnImportar = LayoutPadrao.criarBotaoSucesso("📥 Importar");
+        JButton btnCancelar = LayoutPadrao.criarBotaoPerigo("❌ Cancelar");
         
         btnPreview.addActionListener(e -> previewImportacao());
         btnImportar.addActionListener(e -> importarDados());
@@ -261,16 +263,16 @@ public class ExportImportSwingController {
     }
     
     private JPanel createHistoricoPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        JPanel panel = LayoutPadrao.criarPainelBranco();
+        panel.setLayout(new BorderLayout());
         
         // Painel superior
-        JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        topPanel.setBackground(Color.WHITE);
+        JPanel topPanel = LayoutPadrao.criarPainelComMargem(10);
+        topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         
-        JButton btnAtualizar = createButton("🔄 Atualizar", new Color(76, 175, 80));
-        JButton btnLimpar = createButton("🗑️ Limpar Histórico", new Color(244, 67, 54));
-        JButton btnExportarLog = createButton("📤 Exportar Log", new Color(0, 150, 136));
+        JButton btnAtualizar = LayoutPadrao.criarBotaoSucesso("🔄 Atualizar");
+        JButton btnLimpar = LayoutPadrao.criarBotaoPerigo("🗑️ Limpar Histórico");
+        JButton btnExportarLog = LayoutPadrao.criarBotaoSecundario("📤 Exportar Log");
         
         btnAtualizar.addActionListener(e -> carregarHistorico());
         btnLimpar.addActionListener(e -> limparHistorico());
@@ -291,87 +293,78 @@ public class ExportImportSwingController {
             }
         };
         
-        historicoTable = new JTable(historicoModel);
-        historicoTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        historicoTable = LayoutPadrao.criarTabela();
+        historicoTable.setModel(historicoModel);
         
-        JScrollPane tableScrollPane = new JScrollPane(historicoTable);
+        JScrollPane tableScrollPane = LayoutPadrao.criarBarraRolagem(historicoTable);
         panel.add(tableScrollPane, BorderLayout.CENTER);
-        
-        // Carregar histórico
-        carregarHistorico();
         
         return panel;
     }
     
     private JPanel createConfigPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBackground(Color.WHITE);
+        JPanel panel = LayoutPadrao.criarPainelBranco();
+        panel.setLayout(new BorderLayout());
         
         // Configurações gerais
-        JPanel configPanel = new JPanel(new GridBagLayout());
-        configPanel.setBackground(Color.WHITE);
+        JPanel configPanel = LayoutPadrao.criarPainelComMargem(10);
+        configPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         
         gbc.gridx = 0; gbc.gridy = 0;
-        configPanel.add(new JLabel("⚙️ Configurações de Exportação/Importação"), gbc);
+        configPanel.add(LayoutPadrao.criarRotuloTexto("⚙️ Configurações de Exportação/Importação"), gbc);
         
         // Configurações de exportação
         gbc.gridy = 1;
-        configPanel.add(new JLabel("Exportação:"), gbc);
+        configPanel.add(LayoutPadrao.criarRotuloCampo("Exportação:"), gbc);
         
         gbc.gridy = 2;
-        JCheckBox chkAutoBackup = new JCheckBox("Backup automático diário");
-        chkAutoBackup.setBackground(Color.WHITE);
+        JCheckBox chkAutoBackup = LayoutPadrao.criarCheckBox("Backup automático diário");
         configPanel.add(chkAutoBackup, gbc);
         
         gbc.gridy = 3;
-        JCheckBox chkCompactar = new JCheckBox("Compactar arquivos exportados");
-        chkCompactar.setBackground(Color.WHITE);
+        JCheckBox chkCompactar = LayoutPadrao.criarCheckBox("Compactar arquivos exportados");
         configPanel.add(chkCompactar, gbc);
         
         gbc.gridy = 4;
-        JCheckBox chkAssinatura = new JCheckBox("Adicionar assinatura digital");
-        chkAssinatura.setBackground(Color.WHITE);
+        JCheckBox chkAssinatura = LayoutPadrao.criarCheckBox("Adicionar assinatura digital");
         configPanel.add(chkAssinatura, gbc);
         
         // Configurações de importação
         gbc.gridy = 5;
-        configPanel.add(new JLabel("Importação:"), gbc);
+        configPanel.add(LayoutPadrao.criarRotuloCampo("Importação:"), gbc);
         
         gbc.gridy = 6;
-        JCheckBox chkBackupAntes = new JCheckBox("Backup automático antes de importar");
-        chkBackupAntes.setBackground(Color.WHITE);
+        JCheckBox chkBackupAntes = LayoutPadrao.criarCheckBox("Backup automático antes de importar");
         configPanel.add(chkBackupAntes, gbc);
         
         gbc.gridy = 7;
-        JCheckBox chkLogDetalhado = new JCheckBox("Log detalhado de importação");
-        chkLogDetalhado.setBackground(Color.WHITE);
+        JCheckBox chkLogDetalhado = LayoutPadrao.criarCheckBox("Log detalhado de importação");
         chkLogDetalhado.setSelected(true);
         configPanel.add(chkLogDetalhado, gbc);
         
         gbc.gridy = 8;
-        JCheckBox chkNotificacoes = new JCheckBox("Notificações de conclusão");
-        chkNotificacoes.setBackground(Color.WHITE);
+        JCheckBox chkNotificacoes = LayoutPadrao.criarCheckBox("Notificações de conclusão");
         configPanel.add(chkNotificacoes, gbc);
         
         // Limites
         gbc.gridy = 9;
-        configPanel.add(new JLabel("Limite de registros por operação:"), gbc);
+        configPanel.add(LayoutPadrao.criarRotuloCampo("Limite de registros por operação:"), gbc);
         gbc.gridx = 1;
         JComboBox<String> cmbLimite = new JComboBox<>(new String[]{"1000", "5000", "10000", "50000", "Ilimitado"});
         cmbLimite.setSelectedItem("10000");
+        cmbLimite.setFont(LayoutPadrao.FONTE_TEXTO);
         configPanel.add(cmbLimite, gbc);
         
         panel.add(configPanel, BorderLayout.CENTER);
         
         // Painel de botões
-        JPanel buttonPanel = new JPanel(new FlowLayout());
-        buttonPanel.setBackground(Color.WHITE);
+        JPanel buttonPanel = LayoutPadrao.criarPainelComMargem(10);
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         
-        JButton btnSalvarConfig = createButton("💾 Salvar Configurações", new Color(76, 175, 80));
-        
+        JButton btnSalvarConfig = LayoutPadrao.criarBotaoSucesso("💾 Salvar Configurações");
         btnSalvarConfig.addActionListener(e -> salvarConfiguracoes());
         
         buttonPanel.add(btnSalvarConfig);
@@ -381,34 +374,13 @@ public class ExportImportSwingController {
         return panel;
     }
     
-    private JButton createButton(String text, Color color) {
-        JButton button = new JButton(text);
-        button.setBackground(color);
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setOpaque(true);
-        button.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        
-        button.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                button.setBackground(color.darker());
-            }
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                button.setBackground(color);
-            }
-        });
-        
-        return button;
-    }
-    
+    // Métodos de ação
     private void exportarDados() {
         String tipoArquivo = (String) cmbTipoExportacao.getSelectedItem();
         String tabela = (String) cmbTabelaExportacao.getSelectedItem();
         
         // Simulação de exportação
-        JOptionPane.showMessageDialog(frame, 
+        JOptionPane.showMessageDialog(workArea.getTopLevelAncestor(), 
             "Exportando dados...\n\n" +
             "Tipo: " + tipoArquivo + "\n" +
             "Tabela: " + tabela + "\n" +
@@ -419,19 +391,22 @@ public class ExportImportSwingController {
             "Exportação", JOptionPane.INFORMATION_MESSAGE);
         
         // Adicionar ao histórico
-        Object[] registro = {
-            "2026-05-04 10:30:15",
+        Operacao operacao = new Operacao(
+            LocalDateTime.now(),
             "Exportação",
             tabela + "." + tipoArquivo.substring(0, 3).toLowerCase(),
             "Concluído",
             "1,234",
-            "admin"
-        };
-        historicoModel.addRow(registro);
+            usuarioAtual
+        );
+        historicoOperacoes.add(operacao);
+        atualizarTabelaHistorico();
+        
+        SystemLogger.ui("Exportação simulada: " + tabela + " em " + tipoArquivo);
     }
     
     private void visualizarDados() {
-        JOptionPane.showMessageDialog(frame, 
+        JOptionPane.showMessageDialog(workArea.getTopLevelAncestor(), 
             "Visualização de dados em desenvolvimento...\n\n" +
             "Recursos planejados:\n" +
             "• Preview dos dados antes de exportar\n" +
@@ -441,7 +416,7 @@ public class ExportImportSwingController {
     }
     
     private void agendarExportacao() {
-        JOptionPane.showMessageDialog(frame, 
+        JOptionPane.showMessageDialog(workArea.getTopLevelAncestor(), 
             "Agendamento de exportação em desenvolvimento...\n\n" +
             "Recursos planejados:\n" +
             "• Exportações agendadas (diária, semanal, mensal)\n" +
@@ -450,17 +425,18 @@ public class ExportImportSwingController {
             "Agendamento", JOptionPane.INFORMATION_MESSAGE);
     }
     
-    private void selecionarArquivo(JTextField txtField) {
+    private void selecionarArquivo() {
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileFilter(new FileNameExtensionFilter(
             "Arquivos CSV, Excel, JSON, XML", 
             "csv", "xlsx", "xls", "json", "xml"
         ));
         
-        int returnValue = fileChooser.showOpenDialog(frame);
+        int returnValue = fileChooser.showOpenDialog(workArea.getTopLevelAncestor());
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            txtField.setText(selectedFile.getAbsolutePath());
+            txtArquivo.setText(selectedFile.getAbsolutePath());
+            SystemLogger.ui("Arquivo selecionado para importação: " + selectedFile.getName());
         }
     }
     
@@ -479,10 +455,12 @@ public class ExportImportSwingController {
             importModel.addRow(row);
         }
         
-        JOptionPane.showMessageDialog(frame, 
+        JOptionPane.showMessageDialog(workArea.getTopLevelAncestor(), 
             "Preview carregado com " + dados.length + " registros!\n" +
             "1 registro com erro detectado.", 
             "Preview", JOptionPane.INFORMATION_MESSAGE);
+        
+        SystemLogger.ui("Preview de importação carregado com " + dados.length + " registros");
     }
     
     private void importarDados() {
@@ -505,22 +483,25 @@ public class ExportImportSwingController {
                 
                 SwingUtilities.invokeLater(() -> {
                     lblStatus.setText("Importação concluída com sucesso!");
-                    JOptionPane.showMessageDialog(frame, 
+                    JOptionPane.showMessageDialog(workArea.getTopLevelAncestor(), 
                         "Dados importados com sucesso!\n" +
                         "Registros processados: " + importModel.getRowCount() + "\n" +
                         "Erros: 1", 
                         "Importação", JOptionPane.INFORMATION_MESSAGE);
                     
                     // Adicionar ao histórico
-                    Object[] registro = {
-                        "2026-05-04 10:35:20",
+                    Operacao operacao = new Operacao(
+                        LocalDateTime.now(),
                         "Importação",
                         "import.csv",
                         "Concluído",
                         String.valueOf(importModel.getRowCount()),
-                        "admin"
-                    };
-                    historicoModel.addRow(registro);
+                        usuarioAtual
+                    );
+                    historicoOperacoes.add(operacao);
+                    atualizarTabelaHistorico();
+                    
+                    SystemLogger.ui("Importação concluída: " + importModel.getRowCount() + " registros");
                 });
                 
             } catch (InterruptedException e) {
@@ -536,12 +517,13 @@ public class ExportImportSwingController {
         progressBar.setString("Aguardando início...");
         lblStatus.setText("Importação cancelada!");
         importModel.setRowCount(0);
+        SystemLogger.ui("Importação cancelada pelo usuário");
     }
     
     private void carregarHistorico() {
         historicoModel.setRowCount(0);
         
-        // Simulação de dados
+        // Simulação de dados iniciais
         Object[][] dados = {
             {"2026-05-04 10:30:15", "Exportação", "produtos.csv", "Concluído", "1,234", "admin"},
             {"2026-05-04 09:45:20", "Importação", "clientes.xlsx", "Concluído", "567", "admin"},
@@ -552,85 +534,80 @@ public class ExportImportSwingController {
         for (Object[] row : dados) {
             historicoModel.addRow(row);
         }
+        
+        SystemLogger.ui("Histórico de operações carregado: " + dados.length + " registros");
+    }
+    
+    private void atualizarTabelaHistorico() {
+        historicoModel.setRowCount(0);
+        
+        for (Operacao op : historicoOperacoes) {
+            Object[] row = {
+                op.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
+                op.getTipo(),
+                op.getArquivo(),
+                op.getStatus(),
+                op.getRegistros(),
+                op.getUsuario()
+            };
+            historicoModel.addRow(row);
+        }
     }
     
     private void limparHistorico() {
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(workArea.getTopLevelAncestor(), 
             "Deseja realmente limpar todo o histórico?", 
             "Confirmar Limpeza", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
+            historicoOperacoes.clear();
             historicoModel.setRowCount(0);
-            JOptionPane.showMessageDialog(frame, "Histórico limpo com sucesso!", 
+            JOptionPane.showMessageDialog(workArea.getTopLevelAncestor(), "Histórico limpo com sucesso!", 
                 "Histórico", JOptionPane.INFORMATION_MESSAGE);
+            SystemLogger.ui("Histórico de operações limpo pelo usuário: " + usuarioAtual);
         }
     }
     
     private void exportarLog() {
-        JOptionPane.showMessageDialog(frame, "Log de exportação/importação exportado com sucesso!\n" +
+        JOptionPane.showMessageDialog(workArea.getTopLevelAncestor(), 
+            "Log de exportação/importação exportado com sucesso!\n" +
             "Arquivo: log_export_import_" + System.currentTimeMillis() + ".csv", 
             "Exportação", JOptionPane.INFORMATION_MESSAGE);
+        
+        SystemLogger.ui("Log de operações exportado");
     }
     
     private void salvarConfiguracoes() {
-        JOptionPane.showMessageDialog(frame, "Configurações salvas com sucesso!", 
+        JOptionPane.showMessageDialog(workArea.getTopLevelAncestor(), 
+            "Configurações salvas com sucesso!", 
             "Configurações", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
         
-    public void show() {
-        frame.setVisible(true);
+        SystemLogger.ui("Configurações de Export/Import salvas pelo usuário: " + usuarioAtual);
     }
     
-    // Métodos para compatibilidade com testes
-    public JFrame getFrame() {
-        return frame;
-    }
-    
-    public void exportarDados(String formato, String tabela) {
-        JOptionPane.showMessageDialog(frame, 
-            "Exportando dados...\n" +
-            "Formato: " + formato + "\n" +
-            "Tabela: " + tabela + "\n" +
-            "Status: ✅ Exportação concluída!", 
-            "Exportação", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void importarDados(String arquivo, String formato) {
-        JOptionPane.showMessageDialog(frame, 
-            "Importando dados...\n" +
-            "Arquivo: " + arquivo + "\n" +
-            "Formato: " + formato + "\n" +
-            "Status: ✅ Importação concluída!", 
-            "Importação", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public boolean validarArquivo(String arquivo) {
-        JOptionPane.showMessageDialog(frame, 
-            "Validando arquivo...\n" +
-            "Arquivo: " + arquivo + "\n" +
-            "Status: ✅ Arquivo válido!", 
-            "Validação", JOptionPane.INFORMATION_MESSAGE);
-        return true;
-    }
-    
-    public void processarLote() {
-        JOptionPane.showMessageDialog(frame, 
-            "Processando lote...\n" +
-            "Status: ✅ Lote processado com sucesso!", 
-            "Processamento", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void integrarComSistemaArquivos() {
-        JOptionPane.showMessageDialog(frame, 
-            "Integrando com sistema de arquivos...\n" +
-            "Status: ✅ Integração concluída!", 
-            "Integração", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new ExportImportSwingController().show();
-        });
+    // Classe de apoio
+    private static class Operacao {
+        private LocalDateTime dataHora;
+        private String tipo;
+        private String arquivo;
+        private String status;
+        private String registros;
+        private String usuario;
+        
+        public Operacao(LocalDateTime dataHora, String tipo, String arquivo, String status, String registros, String usuario) {
+            this.dataHora = dataHora;
+            this.tipo = tipo;
+            this.arquivo = arquivo;
+            this.status = status;
+            this.registros = registros;
+            this.usuario = usuario;
+        }
+        
+        public LocalDateTime getDataHora() { return dataHora; }
+        public String getTipo() { return tipo; }
+        public String getArquivo() { return arquivo; }
+        public String getStatus() { return status; }
+        public String getRegistros() { return registros; }
+        public String getUsuario() { return usuario; }
     }
 }

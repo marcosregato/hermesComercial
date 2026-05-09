@@ -329,7 +329,7 @@ public class PDVLoginSimpleController {
             
             // Instanciar e mostrar o menu lateral elegante correto
             com.br.hermescomercial.pdv.controller.PDVMenuLateralElegante menuPrincipal = 
-                new com.br.hermescomercial.pdv.controller.PDVMenuLateralElegante(usuario, nome, workArea);
+                new com.br.hermescomercial.pdv.controller.PDVMenuLateralElegante(workArea, usuario, nome);
             
             // Criar frame principal
             JFrame mainFrame = new JFrame("Hermes Comercial PDV - Sistema Principal");
@@ -359,7 +359,7 @@ public class PDVLoginSimpleController {
             mainPanel.add(headerPanel, BorderLayout.NORTH);
             
             // Menu lateral
-            JPanel menuPanel = menuPrincipal.createMenuPanel();
+            JPanel menuPanel = menuPrincipal.criarMenuLateralElegante();
             mainPanel.add(menuPanel, BorderLayout.WEST);
             
             // Área de trabalho central

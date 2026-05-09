@@ -42,18 +42,18 @@ public class BatchProcessor {
                     
                     // Execute batch quando atingir o tamanho limite
                     if (batchCount % batchSize == 0) {
-                        int[] results = pstmt.executeBatch();
-                        totalProcessed += results.length;
+                        pstmt.executeBatch();
+                        totalProcessed += batchSize;
                         conn.commit();
                         
-                        System.out.println("📦 Batch executado: " + results.length + " registros");
+                        System.out.println("📦 Batch executado: " + batchSize + " registros");
                     }
                 }
                 
                 // Execute remaining batch
                 if (batchCount % batchSize != 0) {
                     int[] results = pstmt.executeBatch();
-                    totalProcessed += results.length;
+                    totalProcessed += batchSize;
                     conn.commit();
                 }
                 
@@ -91,7 +91,7 @@ public class BatchProcessor {
                     pstmt.addBatch();
                     
                     if (totalProcessed % batchSize == 0) {
-                        int[] results = pstmt.executeBatch();
+                        pstmt.executeBatch();
                         conn.commit();
                     }
                     
@@ -133,7 +133,7 @@ public class BatchProcessor {
                     pstmt.addBatch();
                     
                     if (totalProcessed % batchSize == 0) {
-                        int[] results = pstmt.executeBatch();
+                        pstmt.executeBatch();
                         conn.commit();
                     }
                     

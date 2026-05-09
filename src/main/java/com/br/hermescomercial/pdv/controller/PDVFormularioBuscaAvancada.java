@@ -1,27 +1,28 @@
 package com.br.hermescomercial.pdv.controller;
 
+import com.br.hermescomercial.ui.layout.LayoutPadrao;
+import com.br.hermescomercial.util.SystemLogger;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Controller para tela de busca avançada
- * Versão 2.8.0 - Interface completa para busca com filtros e favoritos
- * Funcionalidades: Busca multi-tabelas, filtros avançados, favoritos, histórico
+ * Classe especializada para formulário de busca avançada
+ * Estrutura: Header → Busca → Filtros → Resultados
+ * Versão 1.0.0 - Adaptada para PDVMenuLateralElegante
  */
-public class BuscaAvancadaSwingController {
+public class PDVFormularioBuscaAvancada {
     
-    private JFrame frame;
+    private JPanel workArea;
+    private String usuarioAtual;
+    private String nomeUsuario;
     
-    public JFrame getFrame() {
-        return frame;
-    }
-    private JTabbedPane tabbedPane;
+    // Componentes do formulário
     private JTextField txtBusca;
     private JComboBox<String> cmbTipoBusca;
     private JCheckBox chkProduto, chkCliente, chkVenda, chkFornecedor;
@@ -30,81 +31,111 @@ public class BuscaAvancadaSwingController {
     private JTable favoritosTable;
     private DefaultTableModel favoritosModel;
     private List<String> historicoBuscas;
+    private JTabbedPane tabbedPane;
     
-    public BuscaAvancadaSwingController() {
-        historicoBuscas = new ArrayList<>();
-        initializeUI();
+    // Cores
+    private static final Color SUCCESS_COLOR = new Color(76, 175, 80);
+    private static final Color DANGER_COLOR = new Color(244, 67, 54);
+    private static final Color WARNING_COLOR = new Color(255, 193, 7);
+    private static final Color PRIMARY_COLOR = new Color(33, 150, 243);
+    
+    public PDVFormularioBuscaAvancada(JPanel workArea, String usuario, String nome) {
+        this.workArea = workArea;
+        this.usuarioAtual = usuario;
+        this.nomeUsuario = nome;
+        this.historicoBuscas = new ArrayList<>();
     }
     
-    private void initializeUI() {
-        frame = new JFrame("Busca Avançada - Hermes Comercial PDV");
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(1100, 750);
-        frame.setLocationRelativeTo(null);
+    public JPanel criarFormularioBuscaAvancada() {
+        SystemLogger.ui("=== CRIANDO FORMULÁRIO BUSCA AVANÇADA ===");
+        SystemLogger.ui("Usuário: " + usuarioAtual);
         
-        // Aplicar tema moderno
-        frame.getContentPane().setBackground(Color.WHITE);
+        JPanel painelPrincipal = new JPanel(new BorderLayout());
+        painelPrincipal.setBackground(Color.WHITE);
         
+        // Header
+        painelPrincipal.add(criarHeader(), BorderLayout.NORTH);
+        
+        // Conteúdo principal com abas
+        JPanel conteudo = new JPanel(new BorderLayout());
+        conteudo.setBackground(Color.WHITE);
+        
+        // Abas
+        conteudo.add(criarAbas(), BorderLayout.CENTER);
+        
+        painelPrincipal.add(conteudo, BorderLayout.CENTER);
+        
+        SystemLogger.ui("Formulário Busca Avançada criado com sucesso");
+        return painelPrincipal;
+    }
+    
+    private JPanel criarHeader() {
+        JPanel header = LayoutPadrao.criarHeaderPanel("🔍 Busca Avançada");
+        
+        // Informações do usuário
+        JPanel userInfo = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        userInfo.setBackground(new Color(250, 250, 250));
+        userInfo.add(new JLabel("👤 " + nomeUsuario));
+        userInfo.add(new JLabel(" | "));
+        userInfo.add(new JLabel("📅 " + java.time.LocalDate.now()));
+        
+        header.add(userInfo, BorderLayout.EAST);
+        return header;
+    }
+    
+    private JTabbedPane criarAbas() {
         tabbedPane = new JTabbedPane();
-        tabbedPane.setBackground(Color.WHITE);
         
-        // Abas principais
-        tabbedPane.addTab("🔍 Busca Avançada", createBuscaPanel());
-        tabbedPane.addTab("⭐ Favoritos", createFavoritosPanel());
-        tabbedPane.addTab("📜 Histórico", createHistoricoPanel());
-        tabbedPane.addTab("⚙️ Configurações", createConfigPanel());
+        // Aba de Busca Avançada
+        tabbedPane.addTab("🔍 Busca Avançada", criarAbaBuscaAvancada());
         
-        frame.add(tabbedPane);
+        // Aba de Favoritos
+        tabbedPane.addTab("⭐ Favoritos", criarAbaFavoritos());
+        
+        // Aba de Histórico
+        tabbedPane.addTab("📜 Histórico", criarAbaHistorico());
+        
+        // Aba de Configurações
+        tabbedPane.addTab("⚙️ Configurações", criarAbaConfiguracoes());
+        
+        return tabbedPane;
     }
     
-    private JPanel createBuscaPanel() {
+    private JPanel criarAbaBuscaAvancada() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         
-        // Painel superior de busca
-        JPanel searchPanel = new JPanel(new BorderLayout());
-        searchPanel.setBackground(Color.WHITE);
-        searchPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        // Painel de busca
+        JPanel buscaPanel = LayoutPadrao.criarPainelComBorda("🔍 Busca Avançada");
         
-        // Campo de busca
-        JPanel inputPanel = new JPanel(new BorderLayout());
-        inputPanel.setBackground(Color.WHITE);
-        
-        txtBusca = new JTextField();
-        txtBusca.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtBusca.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(200, 200, 200)),
-            BorderFactory.createEmptyBorder(8, 12, 8, 12)
-        ));
-        txtBusca.setToolTipText("Digite sua busca aqui...");
-        
-        JButton btnBuscar = createButton("🔍 Buscar", new Color(33, 150, 243));
-        btnBuscar.addActionListener(e -> realizarBusca());
-        
-        inputPanel.add(txtBusca, BorderLayout.CENTER);
-        inputPanel.add(btnBuscar, BorderLayout.EAST);
-        
-        searchPanel.add(inputPanel, BorderLayout.CENTER);
-        
-        // Painel de filtros
-        JPanel filterPanel = new JPanel(new GridBagLayout());
-        filterPanel.setBackground(Color.WHITE);
+        JPanel buscaContainer = new JPanel(new GridBagLayout());
+        buscaContainer.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
         
-        gbc.gridx = 0; gbc.gridy = 0;
-        filterPanel.add(new JLabel("Tipo de Busca:"), gbc);
-        gbc.gridx = 1;
+        // Campo de busca
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1;
+        buscaContainer.add(new JLabel("Termo de Busca:"), gbc);
+        gbc.gridy = 1;
+        txtBusca = new JTextField();
+        txtBusca.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        buscaContainer.add(txtBusca, gbc);
+        
+        // Tipo de busca
+        gbc.gridy = 2; gbc.gridwidth = 1; gbc.weightx = 0;
+        buscaContainer.add(new JLabel("Tipo de Busca:"), gbc);
+        gbc.gridx = 1; gbc.fill = GridBagConstraints.HORIZONTAL; gbc.weightx = 1;
         cmbTipoBusca = new JComboBox<>(new String[]{
             "Todos os Campos", "Código", "Nome", "Descrição", "CPF/CNPJ", "Telefone", "Email"
         });
-        filterPanel.add(cmbTipoBusca, gbc);
+        buscaContainer.add(cmbTipoBusca, gbc);
         
-        gbc.gridx = 0; gbc.gridy = 1;
-        filterPanel.add(new JLabel("Buscar em:"), gbc);
+        // Filtros
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; gbc.fill = GridBagConstraints.NONE; gbc.weightx = 0;
+        buscaContainer.add(new JLabel("Buscar em:"), gbc);
+        gbc.gridy = 4;
         
-        gbc.gridx = 1;
         JPanel checkboxPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 10, 0));
         checkboxPanel.setBackground(Color.WHITE);
         
@@ -124,13 +155,30 @@ public class BuscaAvancadaSwingController {
         checkboxPanel.add(chkVenda);
         checkboxPanel.add(chkFornecedor);
         
-        filterPanel.add(checkboxPanel, gbc);
+        buscaContainer.add(checkboxPanel, gbc);
         
-        searchPanel.add(filterPanel, BorderLayout.SOUTH);
+        // Botões de ação
+        gbc.gridy = 5;
+        JPanel botoesPanel = new JPanel(new FlowLayout());
+        botoesPanel.setBackground(Color.WHITE);
         
-        panel.add(searchPanel, BorderLayout.NORTH);
+        JButton btnBuscar = criarBotao("🔍 Buscar", PRIMARY_COLOR);
+        JButton btnLimpar = criarBotao("🔄 Limpar", WARNING_COLOR);
+        
+        btnBuscar.addActionListener(e -> realizarBusca());
+        btnLimpar.addActionListener(e -> limparBusca());
+        
+        botoesPanel.add(btnBuscar);
+        botoesPanel.add(btnLimpar);
+        
+        buscaContainer.add(botoesPanel, gbc);
+        
+        buscaPanel.add(buscaContainer, BorderLayout.CENTER);
+        panel.add(buscaPanel, BorderLayout.NORTH);
         
         // Tabela de resultados
+        JPanel resultadosPanel = LayoutPadrao.criarPainelComBorda("📋 Resultados da Busca");
+        
         String[] columns = {"Tipo", "ID", "Descrição", "Detalhes", "Data"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -151,30 +199,29 @@ public class BuscaAvancadaSwingController {
         });
         
         JScrollPane tableScrollPane = new JScrollPane(resultadosTable);
-        panel.add(tableScrollPane, BorderLayout.CENTER);
+        resultadosPanel.add(tableScrollPane, BorderLayout.CENTER);
         
-        // Painel de ações
-        JPanel actionPanel = new JPanel(new FlowLayout());
-        actionPanel.setBackground(Color.WHITE);
+        // Painel de ações dos resultados
+        JPanel acoesPanel = new JPanel(new FlowLayout());
+        acoesPanel.setBackground(Color.WHITE);
         
-        JButton btnAbrir = createButton("👁️ Abrir", new Color(76, 175, 80));
-        JButton btnFavoritar = createButton("⭐ Favoritar", new Color(255, 193, 7));
-        JButton btnLimpar = createButton("🔄 Limpar", new Color(255, 152, 0));
+        JButton btnAbrir = criarBotao("👁️ Abrir", SUCCESS_COLOR);
+        JButton btnFavoritar = criarBotao("⭐ Favoritar", WARNING_COLOR);
         
         btnAbrir.addActionListener(e -> abrirResultadoSelecionado());
         btnFavoritar.addActionListener(e -> adicionarAosFavoritos());
-        btnLimpar.addActionListener(e -> limparResultados());
         
-        actionPanel.add(btnAbrir);
-        actionPanel.add(btnFavoritar);
-        actionPanel.add(btnLimpar);
+        acoesPanel.add(btnAbrir);
+        acoesPanel.add(btnFavoritar);
         
-        panel.add(actionPanel, BorderLayout.SOUTH);
+        resultadosPanel.add(acoesPanel, BorderLayout.SOUTH);
+        
+        panel.add(resultadosPanel, BorderLayout.CENTER);
         
         return panel;
     }
     
-    private JPanel createFavoritosPanel() {
+    private JPanel criarAbaFavoritos() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         
@@ -182,8 +229,8 @@ public class BuscaAvancadaSwingController {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.setBackground(Color.WHITE);
         
-        JButton btnAtualizar = createButton("🔄 Atualizar", new Color(76, 175, 80));
-        JButton btnRemover = createButton("🗑️ Remover Selecionado", new Color(244, 67, 54));
+        JButton btnAtualizar = criarBotao("🔄 Atualizar", SUCCESS_COLOR);
+        JButton btnRemover = criarBotao("🗑️ Remover Selecionado", DANGER_COLOR);
         
         btnAtualizar.addActionListener(e -> carregarFavoritos());
         btnRemover.addActionListener(e -> removerFavorito());
@@ -194,6 +241,8 @@ public class BuscaAvancadaSwingController {
         panel.add(topPanel, BorderLayout.NORTH);
         
         // Tabela de favoritos
+        JPanel favoritosPanel = LayoutPadrao.criarPainelComBorda("⭐ Buscas Favoritas");
+        
         String[] columns = {"Nome", "Tipo", "Critério", "Data Criação"};
         favoritosModel = new DefaultTableModel(columns, 0) {
             @Override
@@ -214,7 +263,9 @@ public class BuscaAvancadaSwingController {
         });
         
         JScrollPane tableScrollPane = new JScrollPane(favoritosTable);
-        panel.add(tableScrollPane, BorderLayout.CENTER);
+        favoritosPanel.add(tableScrollPane, BorderLayout.CENTER);
+        
+        panel.add(favoritosPanel, BorderLayout.CENTER);
         
         // Carregar favoritos
         carregarFavoritos();
@@ -222,7 +273,7 @@ public class BuscaAvancadaSwingController {
         return panel;
     }
     
-    private JPanel createHistoricoPanel() {
+    private JPanel criarAbaHistorico() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         
@@ -230,8 +281,8 @@ public class BuscaAvancadaSwingController {
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         topPanel.setBackground(Color.WHITE);
         
-        JButton btnLimparHistorico = createButton("🗑️ Limpar Histórico", new Color(244, 67, 54));
-        JButton btnExportar = createButton("📤 Exportar", new Color(0, 150, 136));
+        JButton btnLimparHistorico = criarBotao("🗑️ Limpar Histórico", DANGER_COLOR);
+        JButton btnExportar = criarBotao("📤 Exportar", PRIMARY_COLOR);
         
         btnLimparHistorico.addActionListener(e -> limparHistorico());
         btnExportar.addActionListener(e -> exportarHistorico());
@@ -242,6 +293,8 @@ public class BuscaAvancadaSwingController {
         panel.add(topPanel, BorderLayout.NORTH);
         
         // Lista de histórico
+        JPanel historicoPanel = LayoutPadrao.criarPainelComBorda("📜 Histórico de Buscas");
+        
         DefaultListModel<String> listModel = new DefaultListModel<>();
         JList<String> historicoList = new JList<>(listModel);
         historicoList.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -266,65 +319,66 @@ public class BuscaAvancadaSwingController {
         listModel.addElement("estoque baixo");
         
         JScrollPane scrollPane = new JScrollPane(historicoList);
-        panel.add(scrollPane, BorderLayout.CENTER);
+        historicoPanel.add(scrollPane, BorderLayout.CENTER);
+        
+        panel.add(historicoPanel, BorderLayout.CENTER);
         
         return panel;
     }
     
-    private JPanel createConfigPanel() {
+    private JPanel criarAbaConfiguracoes() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
         
         // Configurações de busca
-        JPanel configPanel = new JPanel(new GridBagLayout());
-        configPanel.setBackground(Color.WHITE);
+        JPanel configPanel = LayoutPadrao.criarPainelComBorda("⚙️ Configurações de Busca");
+        
+        JPanel configContainer = new JPanel(new GridBagLayout());
+        configContainer.setBackground(Color.WHITE);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10);
         gbc.anchor = GridBagConstraints.WEST;
         
-        gbc.gridx = 0; gbc.gridy = 0;
-        configPanel.add(new JLabel("⚙️ Configurações de Busca"), gbc);
-        
         // Opções de configuração
-        gbc.gridy = 1;
+        gbc.gridy = 0;
         JCheckBox chkBuscaRapida = new JCheckBox("Habilitar busca rápida (Ctrl+F)");
         chkBuscaRapida.setBackground(Color.WHITE);
         chkBuscaRapida.setSelected(true);
-        configPanel.add(chkBuscaRapida, gbc);
+        configContainer.add(chkBuscaRapida, gbc);
         
-        gbc.gridy = 2;
+        gbc.gridy = 1;
         JCheckBox chkAutoCompletar = new JCheckBox("Auto-completar sugestões");
         chkAutoCompletar.setBackground(Color.WHITE);
         chkAutoCompletar.setSelected(true);
-        configPanel.add(chkAutoCompletar, gbc);
+        configContainer.add(chkAutoCompletar, gbc);
         
-        gbc.gridy = 3;
+        gbc.gridy = 2;
         JCheckBox chkSalvarHistorico = new JCheckBox("Salvar histórico de buscas");
         chkSalvarHistorico.setBackground(Color.WHITE);
         chkSalvarHistorico.setSelected(true);
-        configPanel.add(chkSalvarHistorico, gbc);
+        configContainer.add(chkSalvarHistorico, gbc);
         
-        gbc.gridy = 4;
+        gbc.gridy = 3;
         JCheckBox chkNotificacoes = new JCheckBox("Notificações de novos resultados");
         chkNotificacoes.setBackground(Color.WHITE);
-        configPanel.add(chkNotificacoes, gbc);
+        configContainer.add(chkNotificacoes, gbc);
         
         // Limite de resultados
-        gbc.gridy = 5;
-        configPanel.add(new JLabel("Limite de resultados:"), gbc);
+        gbc.gridy = 4;
+        configContainer.add(new JLabel("Limite de resultados:"), gbc);
         gbc.gridx = 1;
         JComboBox<String> cmbLimite = new JComboBox<>(new String[]{"10", "25", "50", "100", "Todos"});
         cmbLimite.setSelectedItem("50");
-        configPanel.add(cmbLimite, gbc);
+        configContainer.add(cmbLimite, gbc);
         
-        panel.add(configPanel, BorderLayout.CENTER);
+        configPanel.add(configContainer, BorderLayout.CENTER);
         
         // Painel de botões
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBackground(Color.WHITE);
         
-        JButton btnSalvarConfig = createButton("💾 Salvar Configurações", new Color(76, 175, 80));
-        JButton btnRestaurar = createButton("🔄 Restaurar Padrão", new Color(255, 152, 0));
+        JButton btnSalvarConfig = criarBotao("💾 Salvar Configurações", SUCCESS_COLOR);
+        JButton btnRestaurar = criarBotao("🔄 Restaurar Padrão", WARNING_COLOR);
         
         btnSalvarConfig.addActionListener(e -> salvarConfiguracoes());
         btnRestaurar.addActionListener(e -> restaurarConfiguracoes());
@@ -332,12 +386,14 @@ public class BuscaAvancadaSwingController {
         buttonPanel.add(btnSalvarConfig);
         buttonPanel.add(btnRestaurar);
         
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+        configPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        panel.add(configPanel, BorderLayout.CENTER);
         
         return panel;
     }
     
-    private JButton createButton(String text, Color color) {
+    private JButton criarBotao(String text, Color color) {
         JButton button = new JButton(text);
         button.setBackground(color);
         button.setForeground(Color.WHITE);
@@ -362,7 +418,7 @@ public class BuscaAvancadaSwingController {
     private void realizarBusca() {
         String termo = txtBusca.getText().trim();
         if (termo.isEmpty()) {
-            JOptionPane.showMessageDialog(frame, "Digite um termo para buscar!", 
+            JOptionPane.showMessageDialog(workArea, "Digite um termo para buscar!", 
                 "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -389,9 +445,21 @@ public class BuscaAvancadaSwingController {
             tableModel.addRow(resultado);
         }
         
-        JOptionPane.showMessageDialog(frame, "Busca realizada com sucesso!\n" +
+        JOptionPane.showMessageDialog(workArea, "Busca realizada com sucesso!\n" +
             "Encontrados " + resultados.length + " resultados para '" + termo + "'", 
             "Resultados", JOptionPane.INFORMATION_MESSAGE);
+        
+        SystemLogger.ui("Busca realizada por " + usuarioAtual + ": " + termo);
+    }
+    
+    private void limparBusca() {
+        txtBusca.setText("");
+        cmbTipoBusca.setSelectedIndex(0);
+        chkProduto.setSelected(true);
+        chkCliente.setSelected(true);
+        chkVenda.setSelected(true);
+        chkFornecedor.setSelected(true);
+        limparResultados();
     }
     
     private void limparResultados() {
@@ -401,7 +469,7 @@ public class BuscaAvancadaSwingController {
     private void abrirResultadoSelecionado() {
         int selectedRow = resultadosTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(frame, "Selecione um resultado para abrir!", 
+            JOptionPane.showMessageDialog(workArea, "Selecione um resultado para abrir!", 
                 "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -410,7 +478,7 @@ public class BuscaAvancadaSwingController {
         String id = String.valueOf(tableModel.getValueAt(selectedRow, 1));
         String descricao = (String) tableModel.getValueAt(selectedRow, 2);
         
-        JOptionPane.showMessageDialog(frame, 
+        JOptionPane.showMessageDialog(workArea, 
             "Abrindo " + tipo + " - ID: " + id + "\n" +
             "Descrição: " + descricao + "\n\n" +
             "Funcionalidade em desenvolvimento...", 
@@ -420,7 +488,7 @@ public class BuscaAvancadaSwingController {
     private void adicionarAosFavoritos() {
         int selectedRow = resultadosTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(frame, "Selecione um resultado para favoritar!", 
+            JOptionPane.showMessageDialog(workArea, "Selecione um resultado para favoritar!", 
                 "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -438,7 +506,7 @@ public class BuscaAvancadaSwingController {
         
         favoritosModel.addRow(favorito);
         
-        JOptionPane.showMessageDialog(frame, "Adicionado aos favoritos com sucesso!", 
+        JOptionPane.showMessageDialog(workArea, "Adicionado aos favoritos com sucesso!", 
             "Favoritos", JOptionPane.INFORMATION_MESSAGE);
     }
     
@@ -460,18 +528,18 @@ public class BuscaAvancadaSwingController {
     private void removerFavorito() {
         int selectedRow = favoritosTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(frame, "Selecione um favorito para remover!", 
+            JOptionPane.showMessageDialog(workArea, "Selecione um favorito para remover!", 
                 "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(workArea, 
             "Deseja realmente remover este favorito?", 
             "Confirmar Remoção", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
             favoritosModel.removeRow(selectedRow);
-            JOptionPane.showMessageDialog(frame, "Favorito removido com sucesso!", 
+            JOptionPane.showMessageDialog(workArea, "Favorito removido com sucesso!", 
                 "Favoritos", JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -487,103 +555,30 @@ public class BuscaAvancadaSwingController {
     }
     
     private void limparHistorico() {
-        int confirm = JOptionPane.showConfirmDialog(frame, 
+        int confirm = JOptionPane.showConfirmDialog(workArea, 
             "Deseja realmente limpar todo o histórico de buscas?", 
             "Confirmar Limpeza", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
             historicoBuscas.clear();
-            JOptionPane.showMessageDialog(frame, "Histórico limpo com sucesso!", 
+            JOptionPane.showMessageDialog(workArea, "Histórico limpo com sucesso!", 
                 "Histórico", JOptionPane.INFORMATION_MESSAGE);
         }
     }
     
     private void exportarHistorico() {
-        JOptionPane.showMessageDialog(frame, "Histórico exportado com sucesso!\n" +
+        JOptionPane.showMessageDialog(workArea, "Histórico exportado com sucesso!\n" +
             "Arquivo: historico_buscas_" + System.currentTimeMillis() + ".txt", 
             "Exportação", JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void salvarConfiguracoes() {
-        JOptionPane.showMessageDialog(frame, "Configurações salvas com sucesso!", 
+        JOptionPane.showMessageDialog(workArea, "Configurações salvas com sucesso!", 
             "Configurações", JOptionPane.INFORMATION_MESSAGE);
     }
     
     private void restaurarConfiguracoes() {
-        JOptionPane.showMessageDialog(frame, "Configurações restauradas para o padrão!", 
+        JOptionPane.showMessageDialog(workArea, "Configurações restauradas para o padrão!", 
             "Configurações", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void configurarFiltros() {
-        JOptionPane.showMessageDialog(frame, 
-            "Configurando filtros de busca...\n" +
-            "✅ Filtros aplicados com sucesso!\n" +
-            "Status: Configurado", 
-            "Configuração", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void buscarPorMultiplosCriterios(String termo, String tipo, String categoria) {
-        JOptionPane.showMessageDialog(frame, 
-            "Buscando por múltiplos critérios...\n" +
-            "Termo: " + termo + "\n" +
-            "Tipo: " + tipo + "\n" +
-            "Categoria: " + categoria + "\n" +
-            "Status: ✅ Buscando", 
-            "Busca Avançada", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void buscarAvancadaComValidacao(String termo, String filtro) {
-        JOptionPane.showMessageDialog(frame, 
-            "Busca avançada com validação...\n" +
-            "Termo: " + termo + "\n" +
-            "Filtro: " + filtro + "\n" +
-            "Status: ✅ Buscando", 
-            "Busca Avançada", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void exportarResultados() {
-        JOptionPane.showMessageDialog(frame, 
-            "Exportando resultados...\n" +
-            "✅ Resultados exportados com sucesso!\n" +
-            "Formato: CSV\n" +
-            "Total: 15 registros", 
-            "Exportação", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void integrarComSistemaProdutos() {
-        JOptionPane.showMessageDialog(frame, 
-            "Integrando com sistema de produtos...\n" +
-            "✅ Integração estabelecida com sucesso!\n" +
-            "Status: Conectado", 
-            "Integração", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void testarPerformanceBusca() {
-        JOptionPane.showMessageDialog(frame, 
-            "Testando performance da busca...\n" +
-            "✅ Performance testada com sucesso!\n" +
-            "Tempo médio: 0.8s\n" +
-            "Resultados: 1,234\n" +
-            "Status: ✅ Otimizado", 
-            "Performance", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void tratarErrosBusca(String erro) {
-        JOptionPane.showMessageDialog(frame, 
-            "Tratando erro de busca...\n" +
-            "Erro: " + erro + "\n" +
-            "✅ Erro tratado com sucesso!\n" +
-            "Status: ✅ Resolvido", 
-            "Tratamento de Erro", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    public void show() {
-        frame.setVisible(true);
-    }
-    
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            new BuscaAvancadaSwingController().show();
-        });
     }
 }

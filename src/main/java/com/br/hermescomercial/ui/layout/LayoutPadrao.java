@@ -23,7 +23,7 @@ public class LayoutPadrao {
     public static final Color COR_PERIGO = new Color(231, 76, 60);           // Vermelho
     public static final Color COR_ALERTA = new Color(241, 196, 15);         // Amarelo
     public static final Color COR_SUCESSO = new Color(39, 174, 96);          // Verde escuro
-    public static final Color COR_INFO = new Color(52, 152, 219);           // Azul info
+    public static final Color COR_INFORMACAO = new Color(52, 152, 219);           // Azul info
     public static final Color COR_FUNDO = new Color(255, 255, 255);          // Branco
     public static final Color COR_FUNDO_ESCURO = new Color(245, 246, 250);   // Cinza claro
     public static final Color COR_TEXTO = new Color(52, 73, 94);             // Cinza escuro
@@ -114,6 +114,23 @@ public class LayoutPadrao {
         JButton botao = new JButton(texto);
         configurarBotao(botao, COR_ALERTA, Color.BLACK, FONTE_BOTAO);
         return botao;
+    }
+    
+    /**
+     * Cria um painel de header com estilo padrão
+     */
+    public static JPanel criarHeaderPanel(String titulo) {
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(COR_PRIMARIA);
+        header.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        
+        JLabel titleLabel = new JLabel(titulo);
+        titleLabel.setFont(FONTE_TITULO);
+        titleLabel.setForeground(Color.WHITE);
+        titleLabel.setIconTextGap(10);
+        
+        header.add(titleLabel, BorderLayout.WEST);
+        return header;
     }
     
     /**

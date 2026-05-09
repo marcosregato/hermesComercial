@@ -23,9 +23,7 @@ public class ControllerFactory {
     }
     
     // Controllers PDV
-    public PDVLoginSwingController createPDVLoginController() {
-        return new PDVLoginSwingController();
-    }
+    // PDVLoginSwingController removido - usando PDVLoginSimpleController
     
     public PDVPrincipalSwingController createPDVPrincipalController() {
         return new PDVPrincipalSwingController();
@@ -36,33 +34,40 @@ public class ControllerFactory {
     //     return new PDVVendaSwingController();
     // }
     
-    public PDVProdutosUnificadoSwingController createPDVProdutoController() {
-        return new PDVProdutosUnificadoSwingController();
-    }
+    // PDVProdutosUnificadoSwingController removido - usando PDVFormularioGestaoProduto com PDVMenuLateralElegante
+    // public PDVProdutosUnificadoSwingController createPDVProdutoController() {
+    //     return new PDVProdutosUnificadoSwingController();
+    // }
     
-    public PDVCaixaSwingController createPDVCaixaController() {
-        return new PDVCaixaSwingController();
-    }
+    // PDVCaixaSwingController removido - usando PDVFormularioCaixa com PDVMenuLateralElegante
+    // public PDVCaixaSwingController createPDVCaixaController() {
+    //     return new PDVCaixaSwingController();
+    // }
     
-    public PDVDashboardSwingController createPDVDashboardController() {
-        return new PDVDashboardSwingController();
-    }
+    // PDVDashboardSwingController removido - usando PDVFormularioDashboard com PDVMenuLateralElegante
+    // public PDVDashboardSwingController createPDVDashboardController() {
+    //     return new PDVDashboardSwingController();
+    // }
     
-    public PDVRelatoriosSwingController createPDVRelatorioController() {
-        return new PDVRelatoriosSwingController();
-    }
+    // PDVRelatoriosSwingController removido - usando PDVFormularioRelatorios com PDVMenuLateralElegante
+    // public PDVRelatoriosSwingController createPDVRelatorioController() {
+    //     return new PDVRelatoriosSwingController();
+    // }
     
-    public PDVConfiguracoesSwingController createPDVConfiguracaoController() {
-        return new PDVConfiguracoesSwingController();
-    }
+    // PDVConfiguracoesSwingController removido - usando PDVFormularioConfiguracoes com PDVMenuLateralElegante
+    // public PDVConfiguracoesSwingController createPDVConfiguracaoController() {
+    //     return new PDVConfiguracoesSwingController();
+    // }
     
-    public PDVFecharCaixaSwingController createPDVFecharCaixaController() {
-        return new PDVFecharCaixaSwingController();
-    }
+    // PDVFecharCaixaSwingController removido - usando PDVFormularioFecharCaixa com PDVMenuLateralElegante
+    // public PDVFecharCaixaSwingController createPDVFecharCaixaController() {
+    //     return new PDVFecharCaixaSwingController();
+    // }
     
-    public PDVNotificacaoSwingController createPDVNotificacaoController() {
-        return new PDVNotificacaoSwingController("admin");
-    }
+    // PDVNotificacaoSwingController removido - usando PDVFormularioNotificacoes com PDVMenuLateralElegante
+    // public PDVNotificacaoSwingController createPDVNotificacaoController() {
+    //     return new PDVNotificacaoSwingController("admin");
+    // }
     
     // Controllers ERP
     public ERPMenuPrincipalSwingController createERPMenuPrincipalController() {
@@ -106,33 +111,40 @@ public class ControllerFactory {
     }
     
     // Controllers Compartilhados
-    public TemplateRelatorioSwingController createTemplateRelatorioController() {
-        return new TemplateRelatorioSwingController();
-    }
+    // TemplateRelatorioSwingController removido - usando PDVFormularioRelatorios com PDVMenuLateralElegante
+    // public TemplateRelatorioSwingController createTemplateRelatorioController() {
+    //     return new TemplateRelatorioSwingController();
+    // }
     
-    public FornecedorSwingController createFornecedorController() {
-        return new FornecedorSwingController();
-    }
+    // FornecedorSwingController removido - usando PDVFormularioFornecedor com PDVMenuLateralElegante
+    // public FornecedorSwingController createFornecedorController() {
+    //     return new FornecedorSwingController();
+    // }
     
-    public PagamentoAPISwingController createPagamentoAPIController() {
-        return new PagamentoAPISwingController();
-    }
+    // PagamentoAPISwingController removido - usando PDVFormularioPagamentoAPI com PDVMenuLateralElegante
+    // public PagamentoAPISwingController createPagamentoAPIController() {
+    //     return new PagamentoAPISwingController();
+    // }
     
-    public BuscaAvancadaSwingController createBuscaAvancadaController() {
-        return new BuscaAvancadaSwingController();
-    }
+    // BuscaAvancadaSwingController removido - usando PDVFormularioBuscaAvancada com PDVMenuLateralElegante
+    // public BuscaAvancadaSwingController createBuscaAvancadaController() {
+    //     return new BuscaAvancadaSwingController();
+    // }
     
-    public ExportImportSwingController createExportImportController() {
-        return new ExportImportSwingController();
-    }
+    // ExportImportSwingController removido - usando PDVFormularioExportImport com PDVMenuLateralElegante
+    // public ExportImportSwingController createExportImportController() {
+    //     return new ExportImportSwingController();
+    // }
     
-    public CacheConfigSwingController createCacheConfigController() {
-        return new CacheConfigSwingController();
-    }
+    // CacheConfigSwingController removido - usando PDVFormularioCacheConfig com PDVMenuLateralElegante
+    // public CacheConfigSwingController createCacheConfigController() {
+    //     return new CacheConfigSwingController();
+    // }
     
-    public SistemaConfigSwingController createSistemaConfigController() {
-        return new SistemaConfigSwingController();
-    }
+    // SistemaConfigSwingController removido - usando PDVFormularioConfiguracoes com PDVMenuLateralElegante
+    // public SistemaConfigSwingController createSistemaConfigController() {
+    //     return new SistemaConfigSwingController();
+    // }
     
     /**
      * Método genérico para criar controllers por tipo
@@ -146,27 +158,33 @@ public class ControllerFactory {
             
             // Mapeamento dos controllers
             switch (className) {
-                case "PDVLoginSwingController":
-                    return (T) createPDVLoginController();
+                // PDVLoginSwingController removido - usando PDVLoginSimpleController
                 case "PDVPrincipalSwingController":
                     return (T) createPDVPrincipalController();
                 // Removido - usando apenas PDVMenuLateralElegante.java
                 // case "PDVVendaSwingController":
                 //     return (T) createPDVVendaController();
-                case "PDVProdutosUnificadoSwingController":
-                    return (T) createPDVProdutoController();
-                case "PDVCaixaSwingController":
-                    return (T) createPDVCaixaController();
-                case "PDVDashboardSwingController":
-                    return (T) createPDVDashboardController();
-                case "PDVRelatoriosSwingController":
-                    return (T) createPDVRelatorioController();
-                case "PDVConfiguracoesSwingController":
-                    return (T) createPDVConfiguracaoController();
-                case "PDVFecharCaixaSwingController":
-                    return (T) createPDVFecharCaixaController();
-                case "PDVNotificacaoSwingController":
-                    return (T) createPDVNotificacaoController();
+                // PDVProdutosUnificadoSwingController removido - usando PDVFormularioGestaoProduto com PDVMenuLateralElegante
+                // case "PDVProdutosUnificadoSwingController":
+                //     return (T) createPDVProdutoController();
+                // PDVCaixaSwingController removido - usando PDVFormularioCaixa com PDVMenuLateralElegante
+                // case "PDVCaixaSwingController":
+                //     return (T) createPDVCaixaController();
+                // PDVDashboardSwingController removido - usando PDVFormularioDashboard com PDVMenuLateralElegante
+                // case "PDVDashboardSwingController":
+                //     return (T) createPDVDashboardController();
+                // PDVRelatoriosSwingController removido - usando PDVFormularioRelatorios com PDVMenuLateralElegante
+                // case "PDVRelatoriosSwingController":
+                //     return (T) createPDVRelatorioController();
+                // PDVConfiguracoesSwingController removido - usando PDVFormularioConfiguracoes com PDVMenuLateralElegante
+                // case "PDVConfiguracoesSwingController":
+                //     return (T) createPDVConfiguracaoController();
+                // PDVFecharCaixaSwingController removido - usando PDVFormularioFecharCaixa com PDVMenuLateralElegante
+                // case "PDVFecharCaixaSwingController":
+                //     return (T) createPDVFecharCaixaController();
+                // PDVNotificacaoSwingController removido - usando PDVFormularioNotificacoes com PDVMenuLateralElegante
+                // case "PDVNotificacaoSwingController":
+                //     return (T) createPDVNotificacaoController();
                 case "ERPMenuPrincipalSwingController":
                     return (T) createERPMenuPrincipalController();
                 case "ERPClienteSwingController":
@@ -185,20 +203,27 @@ public class ControllerFactory {
                     return (T) createERPRelatorioController();
                 case "ERPRelatorioFinanceiroSwingController":
                     return (T) createERPRelatorioFinanceiroController();
-                case "FornecedorSwingController":
-                    return (T) createFornecedorController();
-                case "TemplateRelatorioSwingController":
-                    return (T) createTemplateRelatorioController();
-                case "PagamentoAPISwingController":
-                    return (T) createPagamentoAPIController();
-                case "BuscaAvancadaSwingController":
-                    return (T) createBuscaAvancadaController();
-                case "ExportImportSwingController":
-                    return (T) createExportImportController();
-                case "CacheConfigSwingController":
-                    return (T) createCacheConfigController();
-                case "SistemaConfigSwingController":
-                    return (T) createSistemaConfigController();
+                // FornecedorSwingController removido - usando PDVFormularioFornecedor com PDVMenuLateralElegante
+                // case "FornecedorSwingController":
+                //     return (T) createFornecedorController();
+                // TemplateRelatorioSwingController removido - usando PDVFormularioRelatorios com PDVMenuLateralElegante
+                // case "TemplateRelatorioSwingController":
+                //     return (T) createTemplateRelatorioController();
+                // PagamentoAPISwingController removido - usando PDVFormularioPagamentoAPI com PDVMenuLateralElegante
+                // case "PagamentoAPISwingController":
+                //     return (T) createPagamentoAPIController();
+                // BuscaAvancadaSwingController removido - usando PDVFormularioBuscaAvancada com PDVMenuLateralElegante
+                // case "BuscaAvancadaSwingController":
+                //     return (T) createBuscaAvancadaController();
+                // ExportImportSwingController removido - usando PDVFormularioExportImport com PDVMenuLateralElegante
+                // case "ExportImportSwingController":
+                //     return (T) createExportImportController();
+                // CacheConfigSwingController removido - usando PDVFormularioCacheConfig com PDVMenuLateralElegante
+                // case "CacheConfigSwingController":
+                //     return (T) createCacheConfigController();
+                // SistemaConfigSwingController removido - usando PDVFormularioConfiguracoes com PDVMenuLateralElegante
+                // case "SistemaConfigSwingController":
+                //     return (T) createSistemaConfigController();
                 default:
                     System.err.println("Controller não encontrado: " + className);
                     return null;

@@ -2,7 +2,7 @@ package com.br.hermescomercial.erp.controller;
 
 import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import com.br.hermescomercial.ui.layout.MenuColors;
-import com.br.hermescomercial.pdv.controller.PDVDashboardSwingController;
+// import com.br.hermescomercial.pdv.controller.PDVDashboardSwingController; // Removido - usando PDVFormularioDashboard
 import javax.swing.*;
 import java.awt.*;
 
@@ -97,11 +97,12 @@ public class ERPMenuPrincipalSwingController {
         btnEstoque.addActionListener(e -> abrirEstoque());
         JButton btnFinanceiro = LayoutPadrao.criarBotaoSucesso("💰 Gestão Financeira");
         btnFinanceiro.addActionListener(e -> abrirFinanceiro());
-        JButton btnDashboard = LayoutPadrao.criarBotaoPrimario(" Dashboard");
-        btnDashboard.addActionListener(e -> abrirDashboard());
+        // Botão Dashboard removido - usar PDVFormularioDashboard integrado ao menu lateral PDV
+        // JButton btnDashboard = LayoutPadrao.criarBotaoPrimario(" Dashboard");
+        // btnDashboard.addActionListener(e -> abrirDashboard());
         
         categoriasPanel.add(createCategoriaPanel("🏢 OPERAÇÕES PRINCIPAIS", 
-            new JButton[]{btnProdutos, btnEstoque, btnFinanceiro, btnDashboard}), gbc);
+            new JButton[]{btnProdutos, btnEstoque, btnFinanceiro}), gbc);
         
         // Categoria: Administração
         gbc.gridy = 1;
@@ -242,10 +243,11 @@ public class ERPMenuPrincipalSwingController {
         configuracao.getFrame().setVisible(true);
     }
     
-    private void abrirDashboard() {
-        PDVDashboardSwingController dashboard = new PDVDashboardSwingController();
-        dashboard.show();
-    }
+    // Método removido - usar PDVFormularioDashboard integrado ao menu lateral
+    // private void abrirDashboard() {
+    //     PDVDashboardSwingController dashboard = new PDVDashboardSwingController();
+    //     dashboard.show();
+    // }
     
     private void abrirEstoque() {
         new ERPEstoqueSwingController();
