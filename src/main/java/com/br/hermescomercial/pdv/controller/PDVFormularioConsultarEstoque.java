@@ -1,0 +1,590 @@
+package com.br.hermescomercial.pdv.controller;
+
+import com.br.hermescomercial.util.SystemLogger;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Classe especializada para o formulário de Consultar Estoque
+ * Estrutura: Header → Busca → Formulário → Tabela
+ */
+public class PDVFormularioConsultarEstoque {
+    
+    private JPanel workArea;
+    private String usuarioAtual;
+    private String nomeUsuario;
+    
+    // Componentes do formulário
+    private JTextField txtBusca;
+    private JTextField txtCodigo;
+    private JTextField txtProduto;
+    private JComboBox<String> comboCategoria;
+    private JComboBox<String> comboFornecedor;
+    private JTextField txtPrecoMin;
+    private JTextField txtPrecoMax;
+    private JComboBox<String> comboStatus;
+    private JTextArea txtObservacoes;
+    
+    // Tabela de consulta
+    private JTable tabelaConsulta;
+    private DefaultTableModel modelTabela;
+    private List<ProdutoEstoque> produtosEncontrados;
+    
+    // Cores
+    private static final Color WHITE = Color.WHITE;
+    private static final Color ACCENT_COLOR = new Color(52, 152, 219);
+    private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
+    private static final Color DANGER_COLOR = new Color(231, 76, 60);
+    private static final Color WARNING_COLOR = new Color(241, 196, 15);
+    private static final Color GRAY = new Color(149, 165, 166);
+    
+    public PDVFormularioConsultarEstoque(JPanel workArea, String usuarioAtual, String nomeUsuario) {
+        this.workArea = workArea;
+        this.usuarioAtual = usuarioAtual;
+        this.nomeUsuario = nomeUsuario;
+        this.produtosEncontrados = new ArrayList<>();
+    }
+    
+    /**
+     * Cria o formulário completo de Consultar Estoque
+     */
+    public JPanel criarFormularioConsultarEstoque() {
+        try {
+            SystemLogger.ui("=== CRIANDO FORMULÁRIO CONSULTAR ESTOQUE ===");
+            SystemLogger.ui("Usuário: " + usuarioAtual);
+            
+            JPanel painelPrincipal = new JPanel(new BorderLayout());
+            painelPrincipal.setBackground(WHITE);
+            
+            // Header
+            JPanel headerPanel = criarHeader();
+            painelPrincipal.add(headerPanel, BorderLayout.NORTH);
+            
+            // Painel central com busca, formulário e tabela
+            JPanel painelCentral = new JPanel(new BorderLayout());
+            painelCentral.setBackground(WHITE);
+            
+            // Painel de busca rápida
+            JPanel buscaPanel = criarPainelBusca();
+            painelCentral.add(buscaPanel, BorderLayout.NORTH);
+            
+            // Painel do formulário
+            JPanel formularioPanel = criarPainelFormulario();
+            painelCentral.add(formularioPanel, BorderLayout.CENTER);
+            
+            // Tabela de consulta
+            JPanel tabelaPanel = criarPainelTabela();
+            painelCentral.add(tabelaPanel, BorderLayout.SOUTH);
+            
+            painelPrincipal.add(painelCentral, BorderLayout.CENTER);
+            
+            SystemLogger.ui("Formulário Consultar Estoque criado com sucesso");
+            return painelPrincipal;
+            
+        } catch (Exception e) {
+            SystemLogger.error("Erro ao criar formulário Consultar Estoque", e);
+            return criarPainelErro();
+        }
+    }
+    
+    /**
+     * Cria o header do formulário
+     */
+    private JPanel criarHeader() {
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(ACCENT_COLOR);
+        headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        headerPanel.setPreferredSize(new Dimension(0, 80));
+        
+        // Título
+        JLabel titleLabel = new JLabel("📊 Consultar Estoque");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        titleLabel.setForeground(WHITE);
+        
+        // Informações do usuário
+        JPanel userInfoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        userInfoPanel.setBackground(ACCENT_COLOR);
+        
+        JLabel userLabel = new JLabel("👤 " + nomeUsuario);
+        userLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        userLabel.setForeground(WHITE);
+        
+        JLabel dateLabel = new JLabel("📅 " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date()));
+        dateLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        dateLabel.setForeground(WHITE);
+        
+        userInfoPanel.add(userLabel);
+        userInfoPanel.add(Box.createHorizontalStrut(20));
+        userInfoPanel.add(dateLabel);
+        
+        headerPanel.add(titleLabel, BorderLayout.WEST);
+        headerPanel.add(userInfoPanel, BorderLayout.EAST);
+        
+        return headerPanel;
+    }
+    
+    /**
+     * Cria o painel de busca rápida
+     */
+    private JPanel criarPainelBusca() {
+        JPanel buscaPanel = new JPanel(new BorderLayout());
+        buscaPanel.setBackground(WHITE);
+        buscaPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        
+        JLabel buscaLabel = new JLabel("🔍 Busca Rápida:");
+        buscaLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        buscaLabel.setForeground(ACCENT_COLOR);
+        
+        txtBusca = new JTextField();
+        txtBusca.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        txtBusca.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(GRAY),
+            BorderFactory.createEmptyBorder(8, 12, 8, 12)
+        ));
+        txtBusca.setToolTipText("Digite código, nome do produto ou categoria");
+        
+        JButton btnBuscar = new JButton("🔍 Buscar");
+        btnBuscar.setBackground(ACCENT_COLOR);
+        btnBuscar.setForeground(WHITE);
+        btnBuscar.setFocusPainted(false);
+        btnBuscar.setBorderPainted(false);
+        btnBuscar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnBuscar.addActionListener(e -> buscarProdutos());
+        
+        JPanel buscaInputPanel = new JPanel(new BorderLayout());
+        buscaInputPanel.setBackground(WHITE);
+        buscaInputPanel.add(txtBusca, BorderLayout.CENTER);
+        buscaInputPanel.add(btnBuscar, BorderLayout.EAST);
+        
+        buscaPanel.add(buscaLabel, BorderLayout.WEST);
+        buscaPanel.add(Box.createHorizontalStrut(10), BorderLayout.CENTER);
+        buscaPanel.add(buscaInputPanel, BorderLayout.CENTER);
+        
+        return buscaPanel;
+    }
+    
+    /**
+     * Cria o painel do formulário
+     */
+    private JPanel criarPainelFormulario() {
+        JPanel formularioPanel = new JPanel(new GridBagLayout());
+        formularioPanel.setBackground(WHITE);
+        formularioPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(8, 8, 8, 8);
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        
+        // Seção Filtros de Consulta
+        JLabel filtrosSectionLabel = new JLabel("🔍 Filtros de Consulta");
+        filtrosSectionLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        filtrosSectionLabel.setForeground(ACCENT_COLOR);
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 4;
+        formularioPanel.add(filtrosSectionLabel, gbc);
+        
+        // Código
+        gbc.gridy = 1; gbc.gridwidth = 1;
+        JLabel lblCodigo = new JLabel("Código:");
+        lblCodigo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        formularioPanel.add(lblCodigo, gbc);
+        
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        txtCodigo = new JTextField();
+        txtCodigo.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        txtCodigo.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(GRAY),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
+        formularioPanel.add(txtCodigo, gbc);
+        
+        // Produto
+        gbc.gridx = 2; gbc.weightx = 0.0;
+        JLabel lblProduto = new JLabel("Produto:");
+        lblProduto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        formularioPanel.add(lblProduto, gbc);
+        
+        gbc.gridx = 3; gbc.weightx = 1.0;
+        txtProduto = new JTextField();
+        txtProduto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        txtProduto.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(GRAY),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
+        formularioPanel.add(txtProduto, gbc);
+        
+        // Categoria
+        gbc.gridy = 2; gbc.gridx = 0;
+        JLabel lblCategoria = new JLabel("Categoria:");
+        lblCategoria.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        formularioPanel.add(lblCategoria, gbc);
+        
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        comboCategoria = new JComboBox<>(new String[]{"Todas", "Informática", "Eletrônicos", "Móveis", "Livros", "Vestuário"});
+        comboCategoria.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        comboCategoria.setBorder(BorderFactory.createLineBorder(GRAY));
+        formularioPanel.add(comboCategoria, gbc);
+        
+        // Fornecedor
+        gbc.gridx = 2; gbc.weightx = 0.0;
+        JLabel lblFornecedor = new JLabel("Fornecedor:");
+        lblFornecedor.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        formularioPanel.add(lblFornecedor, gbc);
+        
+        gbc.gridx = 3; gbc.weightx = 1.0;
+        comboFornecedor = new JComboBox<>(new String[]{"Todos", "Dell", "HP", "Samsung", "LG", "Sony"});
+        comboFornecedor.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        comboFornecedor.setBorder(BorderFactory.createLineBorder(GRAY));
+        formularioPanel.add(comboFornecedor, gbc);
+        
+        // Preço Mínimo
+        gbc.gridy = 3; gbc.gridx = 0;
+        JLabel lblPrecoMin = new JLabel("Preço Mínimo:");
+        lblPrecoMin.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        formularioPanel.add(lblPrecoMin, gbc);
+        
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        txtPrecoMin = new JTextField();
+        txtPrecoMin.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        txtPrecoMin.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(GRAY),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
+        txtPrecoMin.setToolTipText("R$ 0,00");
+        formularioPanel.add(txtPrecoMin, gbc);
+        
+        // Preço Máximo
+        gbc.gridx = 2; gbc.weightx = 0.0;
+        JLabel lblPrecoMax = new JLabel("Preço Máximo:");
+        lblPrecoMax.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        formularioPanel.add(lblPrecoMax, gbc);
+        
+        gbc.gridx = 3; gbc.weightx = 1.0;
+        txtPrecoMax = new JTextField();
+        txtPrecoMax.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        txtPrecoMax.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(GRAY),
+            BorderFactory.createEmptyBorder(5, 8, 5, 8)
+        ));
+        txtPrecoMax.setToolTipText("R$ 0,00");
+        formularioPanel.add(txtPrecoMax, gbc);
+        
+        // Status
+        gbc.gridy = 4; gbc.gridx = 0;
+        JLabel lblStatus = new JLabel("Status:");
+        lblStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        formularioPanel.add(lblStatus, gbc);
+        
+        gbc.gridx = 1; gbc.weightx = 1.0;
+        comboStatus = new JComboBox<>(new String[]{"Todos", "Em Estoque", "Estoque Baixo", "Sem Estoque"});
+        comboStatus.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        comboStatus.setBorder(BorderFactory.createLineBorder(GRAY));
+        formularioPanel.add(comboStatus, gbc);
+        
+        // Botões de ação
+        gbc.gridy = 5; gbc.gridx = 0; gbc.gridwidth = 4; gbc.weightx = 0.0;
+        JPanel botoesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        botoesPanel.setBackground(WHITE);
+        
+        JButton btnConsultar = new JButton("🔍 Consultar");
+        btnConsultar.setBackground(ACCENT_COLOR);
+        btnConsultar.setForeground(WHITE);
+        btnConsultar.setFocusPainted(false);
+        btnConsultar.setBorderPainted(false);
+        btnConsultar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnConsultar.addActionListener(e -> consultarEstoque());
+        
+        JButton btnLimpar = new JButton("🧹 Limpar");
+        btnLimpar.setBackground(GRAY);
+        btnLimpar.setForeground(WHITE);
+        btnLimpar.setFocusPainted(false);
+        btnLimpar.setBorderPainted(false);
+        btnLimpar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnLimpar.addActionListener(e -> limparCampos());
+        
+        JButton btnExportar = new JButton("📄 Exportar");
+        btnExportar.setBackground(SUCCESS_COLOR);
+        btnExportar.setForeground(WHITE);
+        btnExportar.setFocusPainted(false);
+        btnExportar.setBorderPainted(false);
+        btnExportar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnExportar.addActionListener(e -> exportarDados());
+        
+        botoesPanel.add(btnConsultar);
+        botoesPanel.add(Box.createHorizontalStrut(10));
+        botoesPanel.add(btnLimpar);
+        botoesPanel.add(Box.createHorizontalStrut(10));
+        botoesPanel.add(btnExportar);
+        
+        formularioPanel.add(botoesPanel, gbc);
+        
+        return formularioPanel;
+    }
+    
+    /**
+     * Cria o painel da tabela
+     */
+    private JPanel criarPainelTabela() {
+        JPanel tabelaPanel = new JPanel(new BorderLayout());
+        tabelaPanel.setBackground(WHITE);
+        tabelaPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+        
+        JLabel tabelaLabel = new JLabel("📋 Resultados da Consulta");
+        tabelaLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        tabelaLabel.setForeground(ACCENT_COLOR);
+        
+        // Modelo da tabela
+        String[] colunas = {"Código", "Produto", "Categoria", "Fornecedor", "Qtde. Estoque", "Preço", "Status", "Localização", "Ações"};
+        modelTabela = new DefaultTableModel(colunas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return column == 8; // Apenas a coluna de ações é editável
+            }
+        };
+        
+        tabelaConsulta = new JTable(modelTabela);
+        tabelaConsulta.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        tabelaConsulta.setRowHeight(25);
+        tabelaConsulta.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 12));
+        tabelaConsulta.getTableHeader().setBackground(ACCENT_COLOR);
+        tabelaConsulta.getTableHeader().setForeground(WHITE);
+        
+        // Scroll pane
+        JScrollPane scrollPane = new JScrollPane(tabelaConsulta);
+        scrollPane.setPreferredSize(new Dimension(0, 250));
+        scrollPane.setBorder(BorderFactory.createLineBorder(GRAY));
+        
+        // Painel de botões da tabela
+        JPanel botoesTabelaPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        botoesTabelaPanel.setBackground(WHITE);
+        
+        JButton btnDetalhes = new JButton("👁️ Ver Detalhes");
+        btnDetalhes.setBackground(ACCENT_COLOR);
+        btnDetalhes.setForeground(WHITE);
+        btnDetalhes.setFocusPainted(false);
+        btnDetalhes.setBorderPainted(false);
+        btnDetalhes.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnDetalhes.addActionListener(e -> verDetalhes());
+        
+        JButton btnRelatorio = new JButton("📊 Relatório");
+        btnRelatorio.setBackground(WARNING_COLOR);
+        btnRelatorio.setForeground(WHITE);
+        btnRelatorio.setFocusPainted(false);
+        btnRelatorio.setBorderPainted(false);
+        btnRelatorio.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnRelatorio.addActionListener(e -> gerarRelatorio());
+        
+        botoesTabelaPanel.add(btnDetalhes);
+        botoesTabelaPanel.add(Box.createHorizontalStrut(10));
+        botoesTabelaPanel.add(btnRelatorio);
+        
+        tabelaPanel.add(tabelaLabel, BorderLayout.NORTH);
+        tabelaPanel.add(scrollPane, BorderLayout.CENTER);
+        tabelaPanel.add(botoesTabelaPanel, BorderLayout.SOUTH);
+        
+        // Adicionar dados de exemplo
+        adicionarDadosExemplo();
+        
+        return tabelaPanel;
+    }
+    
+    /**
+     * Adiciona dados de exemplo à tabela
+     */
+    private void adicionarDadosExemplo() {
+        // Limpar tabela atual
+        modelTabela.setRowCount(0);
+        produtosEncontrados.clear();
+        
+        // Dados de exemplo
+        Object[][] dadosExemplo = {
+            {"PRD-001", "Notebook Dell", "Informática", "Dell", "15", "R$ 3.500,00", "Em Estoque", "A1-B2", "👁️"},
+            {"PRD-002", "Mouse Wireless", "Informática", "HP", "3", "R$ 89,90", "Estoque Baixo", "A1-C3", "👁️"},
+            {"PRD-003", "Monitor 24\"", "Eletrônicos", "Samsung", "0", "R$ 1.200,00", "Sem Estoque", "B2-A1", "👁️"},
+            {"PRD-004", "Cadeira Executiva", "Móveis", "LG", "25", "R$ 450,00", "Em Estoque", "C3-D4", "👁️"},
+            {"PRD-005", "Livro Java", "Livros", "Sony", "12", "R$ 89,00", "Estoque Baixo", "D1-E2", "👁️"}
+        };
+        
+        for (Object[] dados : dadosExemplo) {
+            modelTabela.addRow(dados);
+            
+            // Adicionar à lista de produtos
+            ProdutoEstoque produto = new ProdutoEstoque();
+            produto.setCodigo((String) dados[0]);
+            produto.setProduto((String) dados[1]);
+            produto.setCategoria((String) dados[2]);
+            produto.setFornecedor((String) dados[3]);
+            produto.setQuantidade((String) dados[4]);
+            produto.setPreco((String) dados[5]);
+            produto.setStatus((String) dados[6]);
+            produto.setLocalizacao((String) dados[7]);
+            produtosEncontrados.add(produto);
+        }
+    }
+    
+    /**
+     * Busca produtos
+     */
+    private void buscarProdutos() {
+        String termo = txtBusca.getText().trim();
+        if (termo.isEmpty()) {
+            JOptionPane.showMessageDialog(workArea, "Digite um termo para buscar!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        // TODO: Implementar lógica de busca no banco de dados
+        JOptionPane.showMessageDialog(workArea, 
+            "Busca realizada para: " + termo + "\n" +
+            "Produtos encontrados: " + produtosEncontrados.size(), 
+            "Resultado", JOptionPane.INFORMATION_MESSAGE);
+        
+        SystemLogger.ui("Busca realizada para: " + termo);
+    }
+    
+    /**
+     * Consulta estoque
+     */
+    private void consultarEstoque() {
+        try {
+            // TODO: Implementar lógica de consulta no banco de dados
+            JOptionPane.showMessageDialog(workArea, 
+                "Consulta realizada com sucesso!\n" +
+                "Produtos encontrados: " + produtosEncontrados.size(), 
+                "Resultado", JOptionPane.INFORMATION_MESSAGE);
+            
+            SystemLogger.ui("Consulta realizada - " + produtosEncontrados.size() + " produtos");
+            
+        } catch (Exception e) {
+            SystemLogger.error("Erro ao consultar estoque", e);
+            JOptionPane.showMessageDialog(workArea, "Erro ao consultar estoque: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    /**
+     * Limpa os campos do formulário
+     */
+    private void limparCampos() {
+        txtBusca.setText("");
+        txtCodigo.setText("");
+        txtProduto.setText("");
+        comboCategoria.setSelectedIndex(0);
+        comboFornecedor.setSelectedIndex(0);
+        txtPrecoMin.setText("");
+        txtPrecoMax.setText("");
+        comboStatus.setSelectedIndex(0);
+    }
+    
+    /**
+     * Ver detalhes do produto
+     */
+    private void verDetalhes() {
+        int selectedRow = tabelaConsulta.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(workArea, "Selecione um produto para ver detalhes!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        ProdutoEstoque produto = produtosEncontrados.get(selectedRow);
+        
+        // Preencher formulário com dados do produto
+        txtCodigo.setText(produto.getCodigo());
+        txtProduto.setText(produto.getProduto());
+        comboCategoria.setSelectedItem(produto.getCategoria());
+        comboFornecedor.setSelectedItem(produto.getFornecedor());
+        comboStatus.setSelectedItem(produto.getStatus());
+        
+        JOptionPane.showMessageDialog(workArea, 
+            "Detalhes do Produto:\n\n" +
+            "Código: " + produto.getCodigo() + "\n" +
+            "Produto: " + produto.getProduto() + "\n" +
+            "Categoria: " + produto.getCategoria() + "\n" +
+            "Fornecedor: " + produto.getFornecedor() + "\n" +
+            "Quantidade: " + produto.getQuantidade() + "\n" +
+            "Preço: " + produto.getPreco() + "\n" +
+            "Status: " + produto.getStatus(), 
+            "Detalhes do Produto", JOptionPane.INFORMATION_MESSAGE);
+        
+        SystemLogger.ui("Detalhes visualizados: " + produto.getProduto());
+    }
+    
+    /**
+     * Gera relatório
+     */
+    private void gerarRelatorio() {
+        JOptionPane.showMessageDialog(workArea, 
+            "Gerando relatório de " + produtosEncontrados.size() + " produtos...\n(Implementar geração de relatório PDF/Excel)", 
+            "Gerar Relatório", JOptionPane.INFORMATION_MESSAGE);
+        
+        SystemLogger.ui("Gerando relatório de " + produtosEncontrados.size() + " produtos");
+    }
+    
+    /**
+     * Exporta dados da tabela
+     */
+    private void exportarDados() {
+        JOptionPane.showMessageDialog(workArea, 
+            "Exportando " + produtosEncontrados.size() + " produtos...\n(Implementar exportação para CSV/Excel)", 
+            "Exportar Dados", JOptionPane.INFORMATION_MESSAGE);
+        
+        SystemLogger.ui("Exportando " + produtosEncontrados.size() + " produtos");
+    }
+    
+    /**
+     * Cria painel de erro
+     */
+    private JPanel criarPainelErro() {
+        JPanel painelErro = new JPanel(new BorderLayout());
+        painelErro.setBackground(WHITE);
+        
+        JLabel erroLabel = new JLabel("❌ Erro ao carregar formulário");
+        erroLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        erroLabel.setForeground(DANGER_COLOR);
+        erroLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        
+        painelErro.add(erroLabel, BorderLayout.CENTER);
+        return painelErro;
+    }
+    
+    /**
+     * Classe interna para representar um produto de estoque
+     */
+    private static class ProdutoEstoque {
+        private String codigo;
+        private String produto;
+        private String categoria;
+        private String fornecedor;
+        private String quantidade;
+        private String preco;
+        private String status;
+        private String localizacao;
+        
+        // Getters e Setters
+        public String getCodigo() { return codigo; }
+        public void setCodigo(String codigo) { this.codigo = codigo; }
+        
+        public String getProduto() { return produto; }
+        public void setProduto(String produto) { this.produto = produto; }
+        
+        public String getCategoria() { return categoria; }
+        public void setCategoria(String categoria) { this.categoria = categoria; }
+        
+        public String getFornecedor() { return fornecedor; }
+        public void setFornecedor(String fornecedor) { this.fornecedor = fornecedor; }
+        
+        public String getQuantidade() { return quantidade; }
+        public void setQuantidade(String quantidade) { this.quantidade = quantidade; }
+        
+        public String getPreco() { return preco; }
+        public void setPreco(String preco) { this.preco = preco; }
+        
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+        
+        public String getLocalizacao() { return localizacao; }
+        public void setLocalizacao(String localizacao) { this.localizacao = localizacao; }
+    }
+}

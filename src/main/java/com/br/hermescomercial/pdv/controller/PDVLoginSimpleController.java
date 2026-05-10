@@ -6,7 +6,7 @@ import java.awt.*;
 import java.util.Map;
 import java.util.HashMap;
 import java.sql.ResultSet;
-
+import com.br.hermescomercial.util.HikariCPManager;
 
 /**
  * Controller de Login Simplificado para Ambiente Headless
@@ -54,8 +54,8 @@ public class PDVLoginSimpleController {
         }
         
         // Inicializar HikariCP se necessário
-        if (!com.br.hermescomercial.util.HikariCPManager.isInitialized()) {
-            com.br.hermescomercial.util.HikariCPManager.initialize(
+        if (!HikariCPManager.isInitialized()) {
+            HikariCPManager.initialize(
                 "jdbc:postgresql://localhost:5432/hermes_comercial", "postgres", "postgres");
         }
         
@@ -63,7 +63,7 @@ public class PDVLoginSimpleController {
                     "INNER JOIN login l ON l.fk_usuario = u.id " +
                     "WHERE l.login = ? AND l.senha = ? AND l.ativo = TRUE";
         
-        try (java.sql.Connection conn = com.br.hermescomercial.util.HikariCPManager.getConnection();
+        try (java.sql.Connection conn = HikariCPManager.getConnection();
              java.sql.PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, usuario);
             pstmt.setString(2, senha);

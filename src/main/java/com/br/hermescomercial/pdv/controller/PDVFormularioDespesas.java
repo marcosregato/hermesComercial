@@ -490,31 +490,55 @@ public class PDVFormularioDespesas {
     }
     
     private boolean validarCampos() {
+        // Validação da Descrição (Obrigatório *)
         if (txtDescricao.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(workArea, "Informe a descrição!", "Validação", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(workArea, "⚠️ A Descrição é obrigatória!\n\nPor favor, informe a descrição da despesa.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
             txtDescricao.requestFocus();
+            txtDescricao.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             return false;
         }
         
+        // Validação do Valor (Obrigatório *)
         if (txtValor.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(workArea, "Informe o valor!", "Validação", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(workArea, "⚠️ O Valor é obrigatório!\n\nPor favor, informe o valor da despesa.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
             txtValor.requestFocus();
+            txtValor.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             return false;
         }
         
+        // Validação do formato do Valor
         try {
-            new BigDecimal(txtValor.getText().replace(",", "."));
+            BigDecimal valor = new BigDecimal(txtValor.getText().replace(",", "."));
+            if (valor.compareTo(BigDecimal.ZERO) <= 0) {
+                JOptionPane.showMessageDialog(workArea, "⚠️ O Valor deve ser maior que zero!\n\nPor favor, informe um valor válido.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
+                txtValor.requestFocus();
+                txtValor.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+                return false;
+            }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(workArea, "Valor inválido!", "Validação", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(workArea, "⚠️ Valor inválido!\n\nPor favor, informe um valor numérico válido (ex: 100,50).", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
             txtValor.requestFocus();
+            txtValor.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             return false;
         }
         
+        // Validação da Data (Obrigatório *)
         if (txtData.getDate() == null) {
-            JOptionPane.showMessageDialog(workArea, "Informe a data de vencimento!", "Validação", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(workArea, "⚠️ A Data de Vencimento é obrigatória!\n\nPor favor, selecione a data de vencimento.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
             txtData.requestFocus();
             return false;
         }
+        
+        // Validação da Categoria (Obrigatório *)
+        if (comboCategoria.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(workArea, "⚠️ A Categoria é obrigatória!\n\nPor favor, selecione uma categoria para a despesa.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
+            comboCategoria.requestFocus();
+            return false;
+        }
+        
+        // Resetar bordas dos campos válidos
+        txtDescricao.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        txtValor.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
         return true;
     }

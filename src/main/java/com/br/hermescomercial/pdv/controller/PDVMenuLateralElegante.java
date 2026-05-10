@@ -86,10 +86,16 @@ public class PDVMenuLateralElegante {
             JPanel formularioPanel = null;
             
             // Verificar se é um formulário especializado
-            if ("� Dashboard Analytics".equals(subMenuText)) {
+            if ("📊 Dashboard Analytics".equals(subMenuText)) {
                 SystemLogger.ui("Usando formulário especializado para Dashboard Analytics");
                 formularioPanel = PDVFormularioDashboard.criarFormularioDashboard();
-            } else if ("� Nova Venda".equals(subMenuText)) {
+            } else if ("🔔 Alertas Ativos".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Alertas Ativos");
+                PDVFormularioAlertasAtivos formularioAlertasAtivos = new PDVFormularioAlertasAtivos(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioAlertasAtivos.criarFormularioAlertasAtivosInstance();
+            } else if ("📋 Nova Venda".equals(subMenuText)) {
                 SystemLogger.ui("Usando formulário especializado para Nova Venda");
                 PDVFormularioNovaVenda formularioNovaVenda = new PDVFormularioNovaVenda(
                     workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
@@ -107,7 +113,13 @@ public class PDVMenuLateralElegante {
                     workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
                 );
                 formularioPanel = formularioDevolucoes.criarFormularioDevolucoes();
-            } else if ("📊 Resumo Diário".equals(subMenuText)) {
+            } else if ("📈 Métricas do Dia".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Métricas do Dia");
+                PDVFormularioMetricasDia formularioMetricasDia = new PDVFormularioMetricasDia(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioMetricasDia.criarFormularioMetricasDiaInstance();
+            } else if ("�📊 Resumo Diário".equals(subMenuText)) {
                 SystemLogger.ui("Usando formulário especializado para Resumo Diário");
                 PDVFormularioResumoDiario formularioResumoDiario = new PDVFormularioResumoDiario(
                     workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
@@ -119,17 +131,156 @@ public class PDVMenuLateralElegante {
                     workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
                 );
                 formularioPanel = formularioOrcamentos.criarFormularioOrcamentos();
-            } else if ("📊 Logs".equals(subMenuText)) {
-                SystemLogger.ui("Usando formulário fallback para Logs");
-                formularioPanel = renderer.criarFormularioFallback(
-                    subMenuText, "CONFIGURACOES", dataManager.getNomeUsuario(), dataManager.getUsuarioAtual()
-                );
-            } else if ("💰 Fechar Caixa".equals(subMenuText)) {
-                SystemLogger.ui("Usando formulário especializado para Fechar Caixa");
-                PDVFormularioFecharCaixa formularioFecharCaixa = new PDVFormularioFecharCaixa(
+            } else if ("🚚 Entregas".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Entregas");
+                PDVFormularioEntregas formularioEntregas = new PDVFormularioEntregas(
                     workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
                 );
-                formularioPanel = formularioFecharCaixa.criarFormularioFecharCaixa();
+                formularioPanel = formularioEntregas.criarFormularioEntregas();
+            } else if ("🔍 Consultar Produto".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Consultar Produto");
+                PDVFormularioConsultarProduto formularioConsultarProduto = new PDVFormularioConsultarProduto(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioConsultarProduto.criarFormularioConsultarProduto();
+            } else if ("📂 Categorias".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Categorias");
+                PDVFormularioCategorias formularioCategorias = new PDVFormularioCategorias(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioCategorias.criarFormularioCategorias();
+            } else if ("👥 Gestão de Cliente".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Gestão de Cliente");
+                PDVFormularioGestaoCliente formularioGestaoCliente = new PDVFormularioGestaoCliente(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioGestaoCliente.criarFormularioGestaoCliente();
+            } else if ("📊 Histórico de Compras".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Histórico de Compras");
+                PDVFormularioHistoricoCompras formularioHistoricoCompras = new PDVFormularioHistoricoCompras(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioHistoricoCompras.criarFormularioHistoricoCompras();
+            } else if ("📊 Status Estoque".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Status Estoque");
+                PDVFormularioStatusEstoque formularioStatusEstoque = new PDVFormularioStatusEstoque(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioStatusEstoque.criarFormularioStatusEstoque();
+            } else if ("📊 Consultar Estoque".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Consultar Estoque");
+                PDVFormularioConsultarEstoque formularioConsultarEstoque = new PDVFormularioConsultarEstoque(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioConsultarEstoque.criarFormularioConsultarEstoque();
+            } else if ("📦 Estoque Mínimo".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Estoque Mínimo");
+                PDVFormularioEstoqueMinimo formularioEstoqueMinimo = new PDVFormularioEstoqueMinimo(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioEstoqueMinimo.criarFormularioEstoqueMinimo();
+            } else if ("🔄 Ajuste de Estoque".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Ajuste de Estoque");
+                PDVFormularioAjusteEstoque formularioAjusteEstoque = new PDVFormularioAjusteEstoque(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioAjusteEstoque.criarFormulario();
+            } else if ("📦 Movimentações".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Movimentações");
+                PDVFormularioMovimentacoes formularioMovimentacoes = new PDVFormularioMovimentacoes(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioMovimentacoes.criarFormularioMovimentacoes();
+            } else if ("💰 Resumo Financeiro".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Resumo Financeiro");
+                PDVFormularioResumoFinanceiro formularioResumoFinanceiro = new PDVFormularioResumoFinanceiro(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioResumoFinanceiro.criarFormularioResumoFinanceiro();
+            } else if ("💸 Despesas".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Despesas");
+                PDVFormularioDespesas formularioDespesas = new PDVFormularioDespesas(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioDespesas.criarFormularioDespesas();
+            } else if ("📊 Fluxo de Caixa".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Fluxo de Caixa");
+                PDVFormularioFluxoCaixa formularioFluxoCaixa = new PDVFormularioFluxoCaixa(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioFluxoCaixa.criarFormularioFluxoCaixa();
+            } else if ("💰 Contas a Receber".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Contas a Receber");
+                PDVFormularioContasReceber formularioContasReceber = new PDVFormularioContasReceber(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioContasReceber.criarFormularioContasReceber();
+            } else if ("💸 Contas a Pagar".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Contas a Pagar");
+                PDVFormularioContasPagar formularioContasPagar = new PDVFormularioContasPagar(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioContasPagar.criarFormularioContasPagar();
+            } else if ("�💰 Relatório de Vendas".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Relatório de Vendas");
+                PDVFormularioRelatorioVendas formularioRelatorioVendas = new PDVFormularioRelatorioVendas(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioRelatorioVendas.criarFormularioRelatorioVendas();
+            } else if (" Relatório Financeiro".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Relatório Financeiro");
+                PDVFormularioRelatorioFinanceiro formularioRelatorioFinanceiro = new PDVFormularioRelatorioFinanceiro(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioRelatorioFinanceiro.criarFormularioRelatorioFinanceiro();
+            } else if ("🏪 Loja".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Loja");
+                PDVFormularioLoja formularioLoja = new PDVFormularioLoja(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioLoja.criarFormularioLoja();
+            } else if ("💳 Pagamentos".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Pagamentos");
+                PDVFormularioPagamentos formularioPagamentos = new PDVFormularioPagamentos(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioPagamentos.criarFormularioPagamentos();
+            } else if ("👥 Usuários".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Usuários");
+                PDVFormularioUsuarios formularioUsuarios = new PDVFormularioUsuarios(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioUsuarios.criarFormularioUsuarios();
+            } else if ("🔐 Permissões".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Permissões");
+                PDVFormularioPermissoes formularioPermissoes = new PDVFormularioPermissoes(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioPermissoes.criarFormularioPermissoes();
+            } else if ("🔧 Parâmetros".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Parâmetros");
+                PDVFormularioParametros formularioParametros = new PDVFormularioParametros(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioParametros.criarFormularioParametros();
+            } else if ("📬 Não Lidas".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Não Lidas");
+                PDVFormularioNaoLidas formularioNaoLidas = new PDVFormularioNaoLidas(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioNaoLidas.criarFormularioNaoLidas();
+            } else if ("📋 Todas".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Todas");
+                PDVFormularioTodasNotificacoes formularioTodasNotificacoes = new PDVFormularioTodasNotificacoes(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioTodasNotificacoes.criarFormularioTodasNotificacoes();
+            } else if ("⚙️ Configurar Alertas".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Configurar Alertas");
+                PDVFormularioConfigurarAlertas formularioConfigurarAlertas = new PDVFormularioConfigurarAlertas(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioConfigurarAlertas.criarFormularioConfigurarAlertas();
             } else if ("📦 Gestão Produto".equals(subMenuText)) {
                 SystemLogger.ui("Usando formulário especializado para Gestão Produto");
                 PDVFormularioGestaoProduto formularioGestaoProduto = new PDVFormularioGestaoProduto(
@@ -174,7 +325,7 @@ public class PDVMenuLateralElegante {
                     workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
                 );
                 formularioPanel = formularioNotificacoes.criarFormularioNotificacoes();
-            } else if ("� Despesas".equals(subMenuText)) {
+            } else if ("💸 Despesas".equals(subMenuText)) {
                 SystemLogger.ui("Usando formulário especializado para Despesas");
                 PDVFormularioDespesas formularioDespesas = new PDVFormularioDespesas(
                     workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
@@ -192,6 +343,24 @@ public class PDVMenuLateralElegante {
                     workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
                 );
                 formularioPanel = formularioBuscaAvancada.criarFormularioBuscaAvancada();
+            } else if ("⭐ Favoritos".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Favoritos");
+                PDVFormularioFavoritos formularioFavoritos = new PDVFormularioFavoritos(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioFavoritos.criarFormularioFavoritos();
+            } else if ("📜 Histórico de Buscas".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Histórico de Buscas");
+                PDVFormularioHistoricoBuscas formularioHistoricoBuscas = new PDVFormularioHistoricoBuscas(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioHistoricoBuscas.criarFormularioHistoricoBuscas();
+            } else if ("⚙️ Configurações de Busca".equals(subMenuText)) {
+                SystemLogger.ui("Usando formulário especializado para Configurações de Busca");
+                PDVFormularioConfiguracoesBusca formularioConfiguracoesBusca = new PDVFormularioConfiguracoesBusca(
+                    workArea, dataManager.getUsuarioAtual(), dataManager.getNomeUsuario()
+                );
+                formularioPanel = formularioConfiguracoesBusca.criarFormularioConfiguracoesBusca();
             } else if ("⚙️ Configuração de APIs".equals(subMenuText) || "💳 Transações".equals(subMenuText) || 
                        "🔗 Webhooks".equals(subMenuText) || "📊 Relatórios de Pagamentos".equals(subMenuText) ||
                        "🧪 Testar Conexões".equals(subMenuText) || "📋 Histórico".equals(subMenuText)) {

@@ -544,23 +544,34 @@ public class PDVFormularioFornecedor {
     }
     
     private boolean validarCampos() {
+        // Validação do Nome (Obrigatório *)
         if (txtNome.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(workArea, "Informe o nome!", "Validação", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(workArea, "⚠️ O Nome do Fornecedor é obrigatório!\n\nPor favor, informe o nome do fornecedor.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
             txtNome.requestFocus();
+            txtNome.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             return false;
         }
         
+        // Validação do CNPJ/CPF (Obrigatório *)
         if (txtCnpjCpf.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(workArea, "Informe o CNPJ/CPF!", "Validação", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(workArea, "⚠️ O CNPJ/CPF é obrigatório!\n\nPor favor, informe o CNPJ ou CPF do fornecedor.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
             txtCnpjCpf.requestFocus();
+            txtCnpjCpf.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             return false;
         }
         
+        // Validação do Telefone (Obrigatório *)
         if (txtTelefone.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(workArea, "Informe o telefone!", "Validação", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(workArea, "⚠️ O Telefone é obrigatório!\n\nPor favor, informe o telefone do fornecedor.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
             txtTelefone.requestFocus();
+            txtTelefone.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
             return false;
         }
+        
+        // Resetar bordas dos campos válidos
+        txtNome.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        txtCnpjCpf.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        txtTelefone.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
         return true;
     }

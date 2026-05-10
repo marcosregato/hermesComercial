@@ -1,220 +1,131 @@
 package com.br.hermescomercial.pdv.controller;
 
 import com.br.hermescomercial.service.DashboardService;
-import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import com.br.hermescomercial.util.SystemLogger;
-
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Formulário especializado de Dashboard Analytics
+ * Estende BaseFormulario para reaproveitar componentes comuns
  * Segue o padrão Header → Busca → Formulário → Tabela
  * @author Hermes Comercial
- * @version 3.0.0
+ * @version 3.1.0
  */
-public class PDVFormularioDashboard {
+public class PDVFormularioDashboard extends BaseFormulario {
     
-    private JPanel workArea;
-    private String usuarioAtual;
-    private String nomeUsuario;
-    
-    // Componentes principais
-    private JPanel mainPanel;
-    private JPanel headerPanel;
-    private JPanel searchPanel;
-    private JPanel formPanel;
-    private JPanel tablePanel;
-    
-    // Dashboard Service
-    private DashboardService dashboardService;
-    
-    // Campos de busca
-    private JTextField txtBusca;
-    private JComboBox<String> cbTipoBusca;
-    private JComboBox<String> cbPeriodo;
-    private JComboBox<String> cbAno;
-    private JButton btnBuscar;
-    private JButton btnLimpar;
-    
-    // Campos do formulário
+    // Campos específicos do formulário
     private JTextField txtReceitaTotal;
     private JTextField txtTotalVendas;
     private JTextField txtTicketMedio;
     private JTextField txtCrescimento;
     private JTextField txtMetas;
     private JTextField txtEstoque;
+    private JTextField txtLucroLiquido;
+    private JTextField txtMargemLucro;
+    private JTextField txtClientesAtivos;
+    private JTextField txtProdutosVendidos;
+    private JTextField txtDevolucoes;
+    private JTextField txtCustoTotal;
+    private JTextField txtDespesas;
+    private JTextField txtTaxaConversao;
+    private JTextField txtValorMedioPedido;
+    private JTextField txtMetaMensal;
+    private JTextField txtPercentualMeta;
     private JTextArea txtObservacoes;
     
-    // Tabela de resultados
-    private JTable table;
-    private DefaultTableModel tableModel;
-    private JScrollPane scrollPane;
+    // Campos de busca específicos
+    private JComboBox<String> cbPeriodo;
+    private JComboBox<String> cbAno;
     
-    // Botões de ação
-    private JButton btnNovo;
-    private JButton btnEditar;
-    private JButton btnExcluir;
-    private JButton btnAtualizar;
-    private JButton btnExportar;
+    // Dashboard Service
+    private DashboardService dashboardService;
     
-    // Dados
+    // Datas para filtros
     private LocalDate dataInicio;
     private LocalDate dataFim;
     
-    // Cores
-    private static final Color PRIMARY_COLOR = new Color(33, 150, 243);
-    private static final Color SUCCESS_COLOR = new Color(76, 175, 80);
-    private static final Color WARNING_COLOR = new Color(255, 193, 7);
-    private static final Color DANGER_COLOR = new Color(244, 67, 54);
-    
     public PDVFormularioDashboard(JPanel workArea, String usuario, String nome) {
-        this.workArea = workArea;
-        this.usuarioAtual = usuario;
-        this.nomeUsuario = nome;
+        super(workArea, usuario, nome);
+        SystemLogger.ui("[DASHBOARD] Construtor chamado - workArea: " + (workArea != null ? "OK" : "NULO") + 
+            ", usuario: " + usuario + ", nome: " + nome);
         this.dashboardService = new DashboardService();
-        initializeComponents();
-        setupLayout();
-        setupEvents();
-        loadInitialData();
+        // Inicializar datas para evitar NullPointerException
+        this.dataInicio = LocalDate.now().minusMonths(1);
+        this.dataFim = LocalDate.now();
+        SystemLogger.ui("[DASHBOARD] Construtor finalizado - datas inicializadas");
     }
     
-    private void initializeComponents() {
-        SystemLogger.ui("Inicializando componentes do Dashboard Analytics");
-        
-        // Painel principal
-        mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(Color.WHITE);
-        mainPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        
-        // Header
-        createHeaderPanel();
-        
-        // Painel de busca
-        createSearchPanel();
-        
-        // Painel de formulário
-        createFormPanel();
-        
-        // Painel de tabela
-        createTablePanel();
-        
-        SystemLogger.ui("Componentes do Dashboard Analytics inicializados com sucesso");
+    @Override
+    protected String getFormTitle() {
+        return "📊 Dashboard Analytics";
     }
     
-    private void createHeaderPanel() {
-        headerPanel = new JPanel(new BorderLayout());
-        headerPanel.setBackground(PRIMARY_COLOR);
-        headerPanel.setBorder(new EmptyBorder(15, 20, 15, 20));
-        headerPanel.setPreferredSize(new Dimension(0, 80));
-        
-        // Título
-        JLabel titleLabel = new JLabel("📊 Dashboard Analytics");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(Color.WHITE);
-        
-        // Subtítulo
-        JLabel subtitleLabel = new JLabel("Análise de vendas e métricas de negócio");
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 14));
-        subtitleLabel.setForeground(new Color(200, 220, 240));
-        
-        // Painel de título
-        JPanel titlePanel = new JPanel(new BorderLayout());
-        titlePanel.setOpaque(false);
-        titlePanel.add(titleLabel, BorderLayout.NORTH);
-        titlePanel.add(subtitleLabel, BorderLayout.SOUTH);
-        
-        // Painel de botões
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
-        buttonPanel.setOpaque(false);
-        
-        btnAtualizar = new JButton("🔄 Atualizar");
-        btnAtualizar.setBackground(SUCCESS_COLOR);
-        btnAtualizar.setForeground(Color.WHITE);
-        btnAtualizar.setFocusPainted(false);
-        btnAtualizar.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-        
-        btnExportar = new JButton("📥 Exportar");
-        btnExportar.setBackground(PRIMARY_COLOR);
-        btnExportar.setForeground(Color.WHITE);
-        btnExportar.setFocusPainted(false);
-        btnExportar.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
-        
-        buttonPanel.add(btnAtualizar);
-        buttonPanel.add(btnExportar);
-        
-        headerPanel.add(titlePanel, BorderLayout.WEST);
-        headerPanel.add(buttonPanel, BorderLayout.EAST);
+    @Override
+    protected String getFormSubtitle() {
+        return "Análise completa de métricas e indicadores de negócio";
     }
     
-    private void createSearchPanel() {
-        searchPanel = new JPanel(new BorderLayout());
-        searchPanel.setBackground(new Color(240, 240, 240));
-        searchPanel.setBorder(BorderFactory.createTitledBorder("🔍 Filtros de Busca"));
-        
-        // Painel de campos
-        JPanel fieldsPanel = new JPanel(new GridLayout(2, 4, 10, 10));
-        fieldsPanel.setBackground(new Color(240, 240, 240));
-        
-        // Tipo de busca
-        fieldsPanel.add(new JLabel("Tipo de Busca:"));
-        String[] tiposBusca = {"Todos", "Receita", "Vendas", "Produtos", "Período"};
-        cbTipoBusca = new JComboBox<>(tiposBusca);
-        fieldsPanel.add(cbTipoBusca);
-        
-        // Campo de busca
-        fieldsPanel.add(new JLabel("Buscar:"));
-        txtBusca = new JTextField();
-        fieldsPanel.add(txtBusca);
-        
-        // Período
+    @Override
+    protected String getTableTitle() {
+        return "Histórico de Análises";
+    }
+    
+    @Override
+    protected String[] getTableColumns() {
+        return new String[]{
+            "ID", "Período", "Receita Total", "Total Vendas", "Ticket Médio", "Lucro Líquido", 
+            "Margem %", "Crescimento %", "Metas %", "Clientes Ativos", "Produtos Vendidos", 
+            "Devoluções", "Estoque", "Data Análise", "Responsável", "Status"
+        };
+    }
+    
+    @Override
+    protected String[] getTiposBusca() {
+        return new String[]{"Todos", "Receita", "Vendas", "Lucro", "Clientes"};
+    }
+    
+    @Override
+    protected void addAdditionalSearchFields(JPanel fieldsPanel) {
+        // Adicionar campos específicos de busca
         fieldsPanel.add(new JLabel("Período:"));
-        String[] periodos = {"Hoje", "Últimos 7 dias", "Últimos 30 dias", "Este mês", "Últimos 3 meses", "Este ano"};
+        String[] periodos = {"Hoje", "Semana", "Mês", "Ano", "Personalizado"};
         cbPeriodo = new JComboBox<>(periodos);
         fieldsPanel.add(cbPeriodo);
         
-        // Ano
         fieldsPanel.add(new JLabel("Ano:"));
-        String[] anos = {"2024", "2023", "2022", "2021", "2020"};
+        String[] anos = {"2024", "2025", "2026", "2027"};
         cbAno = new JComboBox<>(anos);
-        cbAno.setSelectedItem("2024");
+        cbAno.setSelectedItem("2026");
         fieldsPanel.add(cbAno);
         
-        // Painel de botões
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        buttonPanel.setBackground(new Color(240, 240, 240));
-        
-        btnBuscar = new JButton("🔍 Buscar");
-        btnBuscar.setBackground(PRIMARY_COLOR);
-        btnBuscar.setForeground(Color.WHITE);
-        btnBuscar.setFocusPainted(false);
-        
-        btnLimpar = new JButton("🧹 Limpar");
-        btnLimpar.setBackground(WARNING_COLOR);
-        btnLimpar.setForeground(Color.WHITE);
-        btnLimpar.setFocusPainted(false);
-        
-        buttonPanel.add(btnBuscar);
-        buttonPanel.add(btnLimpar);
-        
-        searchPanel.add(fieldsPanel, BorderLayout.CENTER);
-        searchPanel.add(buttonPanel, BorderLayout.SOUTH);
+        // Eventos dos campos adicionais
+        cbPeriodo.addActionListener(e -> performSearch());
+        cbAno.addActionListener(e -> performSearch());
     }
     
-    private void createFormPanel() {
+    @Override
+    protected void setupAdditionalEvents() {
+        // Eventos adicionais já configurados no addAdditionalSearchFields
+    }
+    
+    @Override
+    protected void clearAdditionalFields() {
+        cbPeriodo.setSelectedIndex(0);
+        cbAno.setSelectedItem("2026");
+    }
+    
+    @Override
+    protected void createFormPanel() {
         formPanel = new JPanel(new BorderLayout());
         formPanel.setBackground(Color.WHITE);
-        formPanel.setBorder(BorderFactory.createTitledBorder("📊 Métricas do Dashboard"));
+        formPanel.setBorder(BorderFactory.createTitledBorder("📊 Métricas de Desempenho"));
         
         // Painel de campos
-        JPanel fieldsPanel = new JPanel(new GridLayout(3, 4, 10, 10));
+        JPanel fieldsPanel = new JPanel(new GridLayout(5, 4, 10, 10));
         fieldsPanel.setBackground(Color.WHITE);
         
         // Receita Total
@@ -225,39 +136,116 @@ public class PDVFormularioDashboard {
         fieldsPanel.add(txtReceitaTotal);
         
         // Total de Vendas
-        fieldsPanel.add(new JLabel("📈 Total de Vendas:"));
+        fieldsPanel.add(new JLabel("🛒 Total Vendas:"));
         txtTotalVendas = new JTextField();
         txtTotalVendas.setEditable(false);
-        txtTotalVendas.setBackground(new Color(240, 255, 240));
+        txtTotalVendas.setBackground(new Color(240, 240, 255));
         fieldsPanel.add(txtTotalVendas);
         
         // Ticket Médio
         fieldsPanel.add(new JLabel("🎫 Ticket Médio:"));
         txtTicketMedio = new JTextField();
         txtTicketMedio.setEditable(false);
-        txtTicketMedio.setBackground(new Color(240, 255, 240));
+        txtTicketMedio.setBackground(new Color(255, 245, 200));
         fieldsPanel.add(txtTicketMedio);
         
         // Crescimento
-        fieldsPanel.add(new JLabel("📊 Crescimento (%):"));
+        fieldsPanel.add(new JLabel("📈 Crescimento (%):"));
         txtCrescimento = new JTextField();
         txtCrescimento.setEditable(false);
-        txtCrescimento.setBackground(new Color(255, 255, 240));
+        txtCrescimento.setBackground(new Color(220, 255, 220));
         fieldsPanel.add(txtCrescimento);
         
         // Metas
-        fieldsPanel.add(new JLabel("🎯 Metas Alcançadas (%):"));
+        fieldsPanel.add(new JLabel("🎯 Metas (%):"));
         txtMetas = new JTextField();
         txtMetas.setEditable(false);
-        txtMetas.setBackground(new Color(255, 255, 240));
+        txtMetas.setBackground(new Color(255, 245, 200));
         fieldsPanel.add(txtMetas);
         
         // Estoque
-        fieldsPanel.add(new JLabel("📦 Itens em Estoque:"));
+        fieldsPanel.add(new JLabel("📦 Estoque:"));
         txtEstoque = new JTextField();
         txtEstoque.setEditable(false);
-        txtEstoque.setBackground(new Color(240, 240, 255));
+        txtEstoque.setBackground(new Color(240, 255, 240));
         fieldsPanel.add(txtEstoque);
+        
+        // Lucro Líquido
+        fieldsPanel.add(new JLabel("💵 Lucro Líquido:"));
+        txtLucroLiquido = new JTextField();
+        txtLucroLiquido.setEditable(false);
+        txtLucroLiquido.setBackground(new Color(220, 255, 220));
+        fieldsPanel.add(txtLucroLiquido);
+        
+        // Margem de Lucro
+        fieldsPanel.add(new JLabel("📊 Margem Lucro (%):"));
+        txtMargemLucro = new JTextField();
+        txtMargemLucro.setEditable(false);
+        txtMargemLucro.setBackground(new Color(255, 245, 200));
+        fieldsPanel.add(txtMargemLucro);
+        
+        // Clientes Ativos
+        fieldsPanel.add(new JLabel("👥 Clientes Ativos:"));
+        txtClientesAtivos = new JTextField();
+        txtClientesAtivos.setEditable(false);
+        txtClientesAtivos.setBackground(new Color(240, 240, 255));
+        fieldsPanel.add(txtClientesAtivos);
+        
+        // Produtos Vendidos
+        fieldsPanel.add(new JLabel("📦 Produtos Vendidos:"));
+        txtProdutosVendidos = new JTextField();
+        txtProdutosVendidos.setEditable(false);
+        txtProdutosVendidos.setBackground(new Color(240, 255, 240));
+        fieldsPanel.add(txtProdutosVendidos);
+        
+        // Devoluções
+        fieldsPanel.add(new JLabel("↩️ Devoluções:"));
+        txtDevolucoes = new JTextField();
+        txtDevolucoes.setEditable(false);
+        txtDevolucoes.setBackground(new Color(255, 240, 240));
+        fieldsPanel.add(txtDevolucoes);
+        
+        // Custo Total
+        fieldsPanel.add(new JLabel("💸 Custo Total:"));
+        txtCustoTotal = new JTextField();
+        txtCustoTotal.setEditable(false);
+        txtCustoTotal.setBackground(new Color(255, 240, 240));
+        fieldsPanel.add(txtCustoTotal);
+        
+        // Despesas
+        fieldsPanel.add(new JLabel("📉 Despesas:"));
+        txtDespesas = new JTextField();
+        txtDespesas.setEditable(false);
+        txtDespesas.setBackground(new Color(255, 240, 240));
+        fieldsPanel.add(txtDespesas);
+        
+        // Taxa de Conversão
+        fieldsPanel.add(new JLabel("🔄 Taxa Conversão (%):"));
+        txtTaxaConversao = new JTextField();
+        txtTaxaConversao.setEditable(false);
+        txtTaxaConversao.setBackground(new Color(255, 245, 200));
+        fieldsPanel.add(txtTaxaConversao);
+        
+        // Valor Médio do Pedido
+        fieldsPanel.add(new JLabel("💰 Valor Médio Pedido:"));
+        txtValorMedioPedido = new JTextField();
+        txtValorMedioPedido.setEditable(false);
+        txtValorMedioPedido.setBackground(new Color(240, 255, 240));
+        fieldsPanel.add(txtValorMedioPedido);
+        
+        // Meta Mensal
+        fieldsPanel.add(new JLabel("🎯 Meta Mensal:"));
+        txtMetaMensal = new JTextField();
+        txtMetaMensal.setEditable(false);
+        txtMetaMensal.setBackground(new Color(255, 245, 200));
+        fieldsPanel.add(txtMetaMensal);
+        
+        // Percentual da Meta
+        fieldsPanel.add(new JLabel("📊 % Meta Atingida:"));
+        txtPercentualMeta = new JTextField();
+        txtPercentualMeta.setEditable(false);
+        txtPercentualMeta.setBackground(new Color(220, 255, 220));
+        fieldsPanel.add(txtPercentualMeta);
         
         // Observações
         fieldsPanel.add(new JLabel("📝 Observações:"));
@@ -280,155 +268,127 @@ public class PDVFormularioDashboard {
         formPanel.add(mainFormPanel, BorderLayout.CENTER);
     }
     
-    private void createTablePanel() {
-        tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setBackground(Color.WHITE);
-        tablePanel.setBorder(BorderFactory.createTitledBorder("📋 Resultados da Análise"));
+    @Override
+    protected void performSearch() {
+        SystemLogger.ui("[DASHBOARD] performSearch() chamado - tela ativa");
         
-        // Modelo da tabela
-        String[] colunas = {
-            "ID", "Período", "Receita Total", "Total Vendas", 
-            "Ticket Médio", "Crescimento %", "Metas %", "Estoque",
-            "Data Análise", "Responsável", "Status"
-        };
-        
-        tableModel = new DefaultTableModel(colunas, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        };
-        
-        table = new JTable(tableModel);
-        table.setFont(new Font("Arial", Font.PLAIN, 12));
-        table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 12));
-        table.getTableHeader().setBackground(PRIMARY_COLOR);
-        table.getTableHeader().setForeground(Color.WHITE);
-        table.setRowHeight(25);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        
-        scrollPane = new JScrollPane(table);
-        scrollPane.setPreferredSize(new Dimension(0, 300));
-        
-        // Painel de botões da tabela
-        JPanel tableButtonPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        tableButtonPanel.setBackground(Color.WHITE);
-        
-        btnNovo = new JButton("➕ Novo");
-        btnNovo.setBackground(SUCCESS_COLOR);
-        btnNovo.setForeground(Color.WHITE);
-        btnNovo.setFocusPainted(false);
-        
-        btnEditar = new JButton("✏️ Editar");
-        btnEditar.setBackground(PRIMARY_COLOR);
-        btnEditar.setForeground(Color.WHITE);
-        btnEditar.setFocusPainted(false);
-        
-        btnExcluir = new JButton("🗑️ Excluir");
-        btnExcluir.setBackground(DANGER_COLOR);
-        btnExcluir.setForeground(Color.WHITE);
-        btnExcluir.setFocusPainted(false);
-        
-        tableButtonPanel.add(btnNovo);
-        tableButtonPanel.add(btnEditar);
-        tableButtonPanel.add(btnExcluir);
-        
-        tablePanel.add(tableButtonPanel, BorderLayout.NORTH);
-        tablePanel.add(scrollPane, BorderLayout.CENTER);
-    }
-    
-    private void setupLayout() {
-        mainPanel.add(headerPanel, BorderLayout.NORTH);
-        
-        // Painel central com busca e formulário
-        JPanel centerPanel = new JPanel(new BorderLayout());
-        centerPanel.setBackground(Color.WHITE);
-        centerPanel.add(searchPanel, BorderLayout.NORTH);
-        centerPanel.add(formPanel, BorderLayout.CENTER);
-        
-        mainPanel.add(centerPanel, BorderLayout.CENTER);
-        mainPanel.add(tablePanel, BorderLayout.SOUTH);
-    }
-    
-    private void setupEvents() {
-        // Evento do combo de período
-        cbPeriodo.addActionListener(e -> {
+        try {
+            String tipoBusca = (String) cbTipoBusca.getSelectedItem();
+            String busca = txtBusca.getText().trim();
+            String periodo = (String) cbPeriodo.getSelectedItem();
+            String ano = (String) cbAno.getSelectedItem();
+            
+            SystemLogger.ui("[DASHBOARD] Parâmetros de busca - tipo: " + tipoBusca + 
+                ", busca: '" + busca + "', período: " + periodo + ", ano: " + ano);
+            
+            // Atualizar datas
             updateDataRange();
-            refreshDashboard();
-        });
+            
+            // Implementar lógica de busca específica
+            refreshData();
+            
+            SystemLogger.ui("[DASHBOARD] Busca concluída com sucesso");
+            
+        } catch (Exception e) {
+            SystemLogger.error("[DASHBOARD] Erro ao realizar busca: " + e.getMessage());
+            SystemLogger.error("[DASHBOARD] Stack trace: " + e.toString());
+        }
+    }
+    
+    @Override
+    protected void refreshData() {
+        SystemLogger.ui("[DASHBOARD] Iniciando atualização de dados...");
         
-        // Evento do combo de ano
-        cbAno.addActionListener(e -> {
-            updateDataRange();
-            refreshDashboard();
-        });
-        
-        // Evento do botão buscar
-        btnBuscar.addActionListener(e -> {
-            performSearch();
-        });
-        
-        // Evento do botão limpar
-        btnLimpar.addActionListener(e -> {
-            clearFields();
-        });
-        
-        // Evento do botão atualizar
-        btnAtualizar.addActionListener(e -> {
-            refreshDashboard();
-        });
-        
-        // Evento do botão exportar
-        btnExportar.addActionListener(e -> {
-            exportData();
-        });
-        
-        // Evento do botão novo
-        btnNovo.addActionListener(e -> {
-            addNewAnalysis();
-        });
-        
-        // Evento do botão editar
-        btnEditar.addActionListener(e -> {
-            editSelectedAnalysis();
-        });
-        
-        // Evento do botão excluir
-        btnExcluir.addActionListener(e -> {
-            deleteSelectedAnalysis();
-        });
-        
-        // Evento de seleção na tabela
-        table.getSelectionModel().addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
-                loadSelectedData();
+        try {
+            SystemLogger.ui("[DASHBOARD] Verificando componentes do formulário...");
+            
+            // Verificar se os componentes estão inicializados
+            if (txtReceitaTotal == null) {
+                SystemLogger.error("[DASHBOARD] txtReceitaTotal é nulo");
+                return;
             }
-        });
+            if (txtTotalVendas == null) {
+                SystemLogger.error("[DASHBOARD] txtTotalVendas é nulo");
+                return;
+            }
+            
+            SystemLogger.ui("[DASHBOARD] Atualizando campos do formulário com dados de exemplo...");
+            
+            // Atualizar campos do formulário com dados de exemplo
+            txtReceitaTotal.setText("R$ 45.678,90");
+            txtTotalVendas.setText("234");
+            txtTicketMedio.setText("R$ 195,20");
+            txtCrescimento.setText("15,8");
+            txtMetas.setText("87,5");
+            txtEstoque.setText("1.234 unidades");
+            txtLucroLiquido.setText("R$ 12.345,67");
+            txtMargemLucro.setText("27,0");
+            txtClientesAtivos.setText("89");
+            txtProdutosVendidos.setText("456");
+            txtDevolucoes.setText("12");
+            txtCustoTotal.setText("R$ 28.456,23");
+            txtDespesas.setText("R$ 4.877,00");
+            txtTaxaConversao.setText("3,2");
+            txtValorMedioPedido.setText("R$ 195,20");
+            txtMetaMensal.setText("R$ 50.000,00");
+            txtPercentualMeta.setText("91,4");
+            
+            SystemLogger.ui("[DASHBOARD] Verificando datas para formatação...");
+            
+            // Verificar se as datas não são nulas antes de formatar
+            String periodoInfo = "";
+            if (dataInicio != null && dataFim != null) {
+                periodoInfo = "\nPeríodo analisado: " + dataInicio.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) +
+                    " a " + dataFim.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                SystemLogger.ui("[DASHBOARD] Período formatado: " + periodoInfo);
+            } else {
+                SystemLogger.ui("[DASHBOARD] Datas são nulas, usando período padrão");
+            }
+            
+            if (txtObservacoes != null) {
+                txtObservacoes.setText("Dashboard atualizado em " + 
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")) +
+                    periodoInfo);
+                SystemLogger.ui("[DASHBOARD] Observações atualizadas");
+            } else {
+                SystemLogger.error("[DASHBOARD] txtObservações é nulo");
+            }
+            
+            SystemLogger.ui("[DASHBOARD] Dashboard atualizado com sucesso");
+            
+        } catch (Exception e) {
+            SystemLogger.error("[DASHBOARD] Erro ao atualizar dashboard: " + e.getMessage());
+            SystemLogger.error("[DASHBOARD] Stack trace: " + e.toString());
+            
+            if (workArea != null) {
+                JOptionPane.showMessageDialog(workArea, 
+                    "Erro ao atualizar dashboard: " + e.getMessage(), 
+                    "Erro", JOptionPane.ERROR_MESSAGE);
+            } else {
+                SystemLogger.error("[DASHBOARD] workArea é nulo, não é possível exibir mensagem de erro");
+            }
+        }
     }
     
-    private void loadInitialData() {
-        SystemLogger.ui("Carregando dados iniciais do Dashboard Analytics");
-        updateDataRange();
-        refreshDashboard();
-        loadSampleData();
-        SystemLogger.ui("Dados iniciais do Dashboard Analytics carregados com sucesso");
-    }
-    
-    private void loadSampleData() {
+    @Override
+    protected void loadSampleData() {
         // Carregar dados de exemplo na tabela
         Object[] sampleData1 = {
-            "001", "Hoje", "R$ 12.545,00", "145", "R$ 86,52", 
-            "15,2", "85,5", "2.456", "09/05/2026", "João Silva", "Concluído"
+            "001", "Mensal", "R$ 45.678,90", "234", "R$ 195,20", "R$ 12.345,67",
+            "27,0", "15,8", "87,5", "89", "456", "12", "1.234",
+            "09/05/2026", "João Silva", "Concluído"
         };
         
         Object[] sampleData2 = {
-            "002", "Últimos 7 dias", "R$ 87.320,00", "1.023", "R$ 85,35", 
-            "12,8", "92,1", "2.412", "08/05/2026", "Maria Santos", "Concluído"
+            "002", "Semanal", "R$ 11.234,50", "58", "R$ 193,70", "R$ 2.890,45",
+            "25,7", "8,2", "78,3", "45", "123", "3", "456",
+            "02/05/2026", "Maria Santos", "Concluído"
         };
         
         Object[] sampleData3 = {
-            "003", "Este mês", "R$ 245.890,00", "2.847", "R$ 86,32", 
-            "18,5", "88,3", "2.398", "01/05/2026", "Pedro Oliveira", "Em andamento"
+            "003", "Diário", "R$ 1.545,80", "8", "R$ 193,23", "R$ 415,67",
+            "26,9", "5,1", "92,1", "12", "18", "0", "89",
+            "09/05/2026", "Pedro Oliveira", "Concluído"
         };
         
         tableModel.addRow(sampleData1);
@@ -436,6 +396,82 @@ public class PDVFormularioDashboard {
         tableModel.addRow(sampleData3);
     }
     
+    @Override
+    protected void loadSelectedData() {
+        int selectedRow = table.getSelectedRow();
+        if (selectedRow >= 0) {
+            // Carregar dados da linha selecionada para o formulário
+            txtReceitaTotal.setText(tableModel.getValueAt(selectedRow, 2).toString());
+            txtTotalVendas.setText(tableModel.getValueAt(selectedRow, 3).toString());
+            txtTicketMedio.setText(tableModel.getValueAt(selectedRow, 4).toString());
+            txtLucroLiquido.setText(tableModel.getValueAt(selectedRow, 5).toString());
+            txtMargemLucro.setText(tableModel.getValueAt(selectedRow, 6).toString());
+            txtCrescimento.setText(tableModel.getValueAt(selectedRow, 7).toString());
+            txtMetas.setText(tableModel.getValueAt(selectedRow, 8).toString());
+            txtClientesAtivos.setText(tableModel.getValueAt(selectedRow, 9).toString());
+            txtProdutosVendidos.setText(tableModel.getValueAt(selectedRow, 10).toString());
+            txtDevolucoes.setText(tableModel.getValueAt(selectedRow, 11).toString());
+            txtEstoque.setText(tableModel.getValueAt(selectedRow, 12).toString());
+            
+            String dataAnalise = tableModel.getValueAt(selectedRow, 13).toString();
+            String responsavel = tableModel.getValueAt(selectedRow, 14).toString();
+            
+            txtObservacoes.setText("Análise selecionada: " + dataAnalise +
+                "\nResponsável: " + responsavel +
+                "\nDados carregados da tabela");
+        }
+    }
+    
+    @Override
+    protected void addNew() {
+        SystemLogger.ui("[DASHBOARD] Botão Novo clicado - tela ativa");
+        try {
+            JOptionPane.showMessageDialog(workArea, 
+                "Funcionalidade de adicionar análise em desenvolvimento...", 
+                "Nova Análise", JOptionPane.INFORMATION_MESSAGE);
+            SystemLogger.ui("[DASHBOARD] Diálogo Novo exibido com sucesso");
+        } catch (Exception e) {
+            SystemLogger.error("[DASHBOARD] Erro ao exibir diálogo Novo: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    protected void editSelected() {
+        SystemLogger.ui("[DASHBOARD] Botão Editar clicado - tela ativa");
+        try {
+            int selectedRow = table.getSelectedRow();
+            SystemLogger.ui("[DASHBOARD] Linha selecionada: " + selectedRow);
+            
+            if (selectedRow >= 0) {
+                JOptionPane.showMessageDialog(workArea, 
+                    "Funcionalidade de editar análise em desenvolvimento...", 
+                    "Editar Análise", JOptionPane.INFORMATION_MESSAGE);
+                SystemLogger.ui("[DASHBOARD] Diálogo Editar exibido com sucesso");
+            } else {
+                JOptionPane.showMessageDialog(workArea, 
+                    "Selecione uma análise para editar", 
+                    "Aviso", JOptionPane.WARNING_MESSAGE);
+                SystemLogger.ui("[DASHBOARD] Aviso de seleção exibido");
+            }
+        } catch (Exception e) {
+            SystemLogger.error("[DASHBOARD] Erro ao processar edição: " + e.getMessage());
+        }
+    }
+    
+    @Override
+    protected void performExport(java.io.File file) throws Exception {
+        // Implementar exportação específica para dashboard
+        throw new UnsupportedOperationException("Exportação de dashboard em desenvolvimento");
+    }
+    
+    @Override
+    protected String getFileName() {
+        return "dashboard_analytics_";
+    }
+    
+    /**
+     * Atualiza o range de datas com base no período selecionado
+     */
     private void updateDataRange() {
         String periodo = (String) cbPeriodo.getSelectedItem();
         LocalDate hoje = LocalDate.now();
@@ -445,163 +481,53 @@ public class PDVFormularioDashboard {
                 dataInicio = hoje;
                 dataFim = hoje;
                 break;
-            case "Últimos 7 dias":
+            case "Semana":
                 dataInicio = hoje.minusDays(7);
                 dataFim = hoje;
                 break;
-            case "Últimos 30 dias":
-                dataInicio = hoje.minusDays(30);
+            case "Mês":
+                dataInicio = hoje.minusMonths(1);
                 dataFim = hoje;
                 break;
-            case "Este mês":
-                dataInicio = hoje.withDayOfMonth(1);
-                dataFim = hoje;
-                break;
-            case "Últimos 3 meses":
-                dataInicio = hoje.minusMonths(3);
-                dataFim = hoje;
-                break;
-            case "Este ano":
-                dataInicio = hoje.withDayOfYear(1);
+            case "Ano":
+                dataInicio = hoje.minusYears(1);
                 dataFim = hoje;
                 break;
             default:
-                dataInicio = hoje.minusDays(7);
+                dataInicio = hoje.minusMonths(1);
                 dataFim = hoje;
-        }
-    }
-    
-    
-    private void performSearch() {
-        String tipoBusca = (String) cbTipoBusca.getSelectedItem();
-        String busca = txtBusca.getText().trim();
-        
-        SystemLogger.ui("Realizando busca: " + tipoBusca + " - " + busca);
-        
-        // Implementar lógica de busca
-        // Por enquanto, apenas atualiza os dados
-        refreshDashboard();
-    }
-    
-    private void clearFields() {
-        txtBusca.setText("");
-        cbTipoBusca.setSelectedIndex(0);
-        cbPeriodo.setSelectedIndex(0);
-        cbAno.setSelectedItem("2024");
-        
-        SystemLogger.ui("Campos de busca limpos");
-    }
-    
-    private void addNewAnalysis() {
-        JOptionPane.showMessageDialog(workArea, 
-            "Funcionalidade de adicionar nova análise em desenvolvimento", 
-            "Novo Registro", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    private void editSelectedAnalysis() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow >= 0) {
-            JOptionPane.showMessageDialog(workArea, 
-                "Funcionalidade de editar análise em desenvolvimento", 
-                "Editar Registro", JOptionPane.INFORMATION_MESSAGE);
-        } else {
-            JOptionPane.showMessageDialog(workArea, 
-                "Selecione um registro para editar", 
-                "Aviso", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-    
-    private void deleteSelectedAnalysis() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow >= 0) {
-            int option = JOptionPane.showConfirmDialog(workArea, 
-                "Deseja excluir esta análise?", "Excluir Registro", 
-                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-            
-            if (option == JOptionPane.YES_OPTION) {
-                tableModel.removeRow(selectedRow);
-                SystemLogger.ui("Análise excluída com sucesso");
-            }
-        } else {
-            JOptionPane.showMessageDialog(workArea, 
-                "Selecione um registro para excluir", 
-                "Aviso", JOptionPane.WARNING_MESSAGE);
-        }
-    }
-    
-    private void loadSelectedData() {
-        int selectedRow = table.getSelectedRow();
-        if (selectedRow >= 0) {
-            // Carregar dados da linha selecionada para o formulário
-            txtReceitaTotal.setText(tableModel.getValueAt(selectedRow, 2).toString());
-            txtTotalVendas.setText(tableModel.getValueAt(selectedRow, 3).toString());
-            txtTicketMedio.setText(tableModel.getValueAt(selectedRow, 4).toString());
-            txtCrescimento.setText(tableModel.getValueAt(selectedRow, 5).toString());
-            txtMetas.setText(tableModel.getValueAt(selectedRow, 6).toString());
-            txtEstoque.setText(tableModel.getValueAt(selectedRow, 7).toString());
-        }
-    }
-    
-    private void refreshDashboard() {
-        try {
-            // Atualizar campos do formulário
-            txtReceitaTotal.setText("R$ 125.450,00");
-            txtTotalVendas.setText("1.234");
-            txtTicketMedio.setText("R$ 101,75");
-            txtCrescimento.setText("18,5");
-            txtMetas.setText("85,5");
-            txtEstoque.setText("2.456");
-            txtObservacoes.setText("Análise atualizada em " + 
-                LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")));
-            
-            SystemLogger.ui("Dashboard atualizado com sucesso");
-            
-        } catch (Exception e) {
-            SystemLogger.error("Erro ao atualizar dashboard: " + e.getMessage());
-            JOptionPane.showMessageDialog(workArea, 
-                "Erro ao atualizar dashboard: " + e.getMessage(), 
-                "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    private void exportData() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Exportar Dashboard Analytics");
-        fileChooser.setSelectedFile(new java.io.File("dashboard_analytics_" + 
-            LocalDate.now().format(DateTimeFormatter.ofPattern("dd_MM_yyyy")) + ".csv"));
-        
-        int userSelection = fileChooser.showSaveDialog(workArea);
-        
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            java.io.File fileToSave = fileChooser.getSelectedFile();
-            
-            try {
-                // Implementar exportação para CSV
-                JOptionPane.showMessageDialog(workArea, 
-                    "Exportação para CSV concluída: " + fileToSave.getAbsolutePath(), 
-                    "Exportação Concluída", 
-                    JOptionPane.INFORMATION_MESSAGE);
-                    
-                SystemLogger.ui("Dashboard exportado para: " + fileToSave.getAbsolutePath());
-                
-            } catch (Exception e) {
-                SystemLogger.error("Erro ao exportar dashboard: " + e.getMessage());
-                JOptionPane.showMessageDialog(workArea, 
-                    "Erro ao exportar: " + e.getMessage(), 
-                    "Erro de Exportação", JOptionPane.ERROR_MESSAGE);
-            }
+                break;
         }
     }
     
     /**
      * Método estático para criar o formulário de dashboard
-     * @return JPanel configurado do dashboard
+     * @return JPanel configurado do formulário
      */
     public static JPanel criarFormularioDashboard() {
-        PDVFormularioDashboard dashboard = new PDVFormularioDashboard(
-            new JPanel(), "usuario", "Nome Usuario"
-        );
-        return dashboard.mainPanel;
+        SystemLogger.ui("[TELA_ATIVA] Dashboard Analytics - INICIANDO criação");
+        SystemLogger.ui("[TELA_ATIVA] Dashboard Analytics - Status: CRIANDO");
+        
+        try {
+            PDVFormularioDashboard dashboard = new PDVFormularioDashboard(
+                new JPanel(), "usuario", "Nome Usuario"
+            );
+            JPanel panel = dashboard.getMainPanel();
+            
+            if (panel != null) {
+                SystemLogger.ui("[TELA_ATIVA] Dashboard Analytics - CRIADO com sucesso");
+                SystemLogger.ui("[TELA_ATIVA] Dashboard Analytics - Status: PRONTO PARA USO");
+                SystemLogger.ui("[TELA_ATIVA] Dashboard Analytics - Tela ATIVA e visível");
+            } else {
+                SystemLogger.error("[TELA_ATIVA] Dashboard Analytics - FALHA ao criar painel");
+            }
+            
+            return panel;
+        } catch (Exception e) {
+            SystemLogger.error("[TELA_ATIVA] Dashboard Analytics - ERRO na criação: " + e.getMessage());
+            SystemLogger.error("[TELA_ATIVA] Dashboard Analytics - Status: ERRO");
+            SystemLogger.error("[DASHBOARD] Stack trace: " + e.toString());
+            throw new RuntimeException("Falha ao criar dashboard", e);
+        }
     }
 }
-    

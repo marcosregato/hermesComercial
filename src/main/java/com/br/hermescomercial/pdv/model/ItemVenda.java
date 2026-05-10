@@ -1,164 +1,232 @@
 package com.br.hermescomercial.pdv.model;
 
-import com.br.hermescomercial.shared.model.Produto;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
+/**
+ * Classe que representa um item de venda
+ * @author Hermes Comercial
+ * @version 3.2.0
+ */
 public class ItemVenda {
     
-    private Long id;
-    private Produto produto;
+    private String codigo;
+    private String codigoProduto;
+    private String produto;
+    private String descricao;
     private int quantidade;
     private BigDecimal valorUnitario;
+    private BigDecimal descontoPercentual;
     private BigDecimal valorTotal;
-    private BigDecimal desconto;
-    private BigDecimal valorFinal;
-    private LocalDateTime dataCadastro;
-    private String observacao;
-
+    private String formaPagamento;
+    private String observacoes;
+    private LocalDateTime dataInclusao;
+    
     public ItemVenda() {
-        this.dataCadastro = LocalDateTime.now();
-        this.desconto = BigDecimal.ZERO;
+        this.dataInclusao = LocalDateTime.now();
+        this.descontoPercentual = BigDecimal.ZERO;
     }
-
-    public Long getId() {
-        return id;
+    
+    // Getters e Setters
+    public String getCodigo() {
+        return codigo;
     }
-
-    public void setId(Long id) {
-        this.id = id;
+    
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
     }
-
-    public Produto getProduto() {
+    
+    public String getCodigoProduto() {
+        return codigoProduto;
+    }
+    
+    public void setCodigoProduto(String codigoProduto) {
+        this.codigoProduto = codigoProduto;
+    }
+    
+    public String getProduto() {
         return produto;
     }
-
-    public void setProduto(Produto produto) {
+    
+    public void setProduto(String produto) {
         this.produto = produto;
     }
-
+    
+    public String getDescricao() {
+        return descricao;
+    }
+    
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+    
     public int getQuantidade() {
         return quantidade;
     }
-
+    
     public void setQuantidade(int quantidade) {
         this.quantidade = quantidade;
-        calcularValores();
     }
-
+    
     public BigDecimal getValorUnitario() {
         return valorUnitario;
     }
-
+    
     public void setValorUnitario(BigDecimal valorUnitario) {
         this.valorUnitario = valorUnitario;
-        calcularValores();
     }
-
+    
+    public BigDecimal getDescontoPercentual() {
+        return descontoPercentual;
+    }
+    
+    public void setDescontoPercentual(BigDecimal descontoPercentual) {
+        this.descontoPercentual = descontoPercentual;
+    }
+    
     public BigDecimal getValorTotal() {
         return valorTotal;
     }
-
+    
     public void setValorTotal(BigDecimal valorTotal) {
         this.valorTotal = valorTotal;
     }
-
-    public BigDecimal getDesconto() {
-        return desconto;
-    }
-
-    public void setDesconto(BigDecimal desconto) {
-        this.desconto = desconto != null ? desconto : BigDecimal.ZERO;
-        calcularValores();
-    }
-
-    public BigDecimal getValorFinal() {
-        return valorFinal;
-    }
-
-    public void setValorFinal(BigDecimal valorFinal) {
-        this.valorFinal = valorFinal;
-    }
-
-    public LocalDateTime getDataCadastro() {
-        return dataCadastro;
-    }
-
-    public void setDataCadastro(LocalDateTime dataCadastro) {
-        this.dataCadastro = dataCadastro;
-    }
-
-    public String getObservacao() {
-        return observacao;
-    }
-
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
-    }
-
-    // Métodos otimizados para PropertyValueFactory - melhor performance
-    public String getProdutoId() {
-        return produto != null ? String.valueOf(produto.getId()) : "";
+    
+    public String getFormaPagamento() {
+        return formaPagamento;
     }
     
-    public String getProdutoNome() {
-        return produto != null ? produto.getNome() : "";
+    public void setFormaPagamento(String formaPagamento) {
+        this.formaPagamento = formaPagamento;
     }
     
-    public String getAcoes() {
-        return "Remover";
+    public String getObservacoes() {
+        return observacoes;
     }
-
-    private void calcularValores() {
+    
+    public void setObservacoes(String observacoes) {
+        this.observacoes = observacoes;
+    }
+    
+    public LocalDateTime getDataInclusao() {
+        return dataInclusao;
+    }
+    
+    public void setDataInclusao(LocalDateTime dataInclusao) {
+        this.dataInclusao = dataInclusao;
+    }
+    
+    /**
+     * Calcula o valor total com base na quantidade, valor unitário e desconto
+     */
+    public void calcularValorTotal() {
         if (valorUnitario != null && quantidade > 0) {
-            this.valorTotal = valorUnitario.multiply(BigDecimal.valueOf(quantidade));
-            this.valorFinal = valorTotal.subtract(desconto);
+            BigDecimal valorBruto = valorUnitario.multiply(new BigDecimal(quantidade));
+            BigDecimal valorDesconto = valorBruto.multiply(
+                descontoPercentual.divide(new BigDecimal(100), 2, RoundingMode.HALF_UP));
+            this.valorTotal = valorBruto.subtract(valorDesconto);
         }
     }
-
-    public void adicionarQuantidade(int quantidade) {
-        this.quantidade += quantidade;
-        calcularValores();
+    
+    /**
+     * Retorna uma representação em array para adicionar na tabela
+     */
+    public Object[] toArray() {
+        return new Object[]{
+            codigo,
+            codigoProduto,
+            produto,
+            descricao,
+            quantidade,
+            "R$ " + formatarValor(valorUnitario),
+            descontoPercentual + "%",
+            "R$ " + formatarValor(valorTotal),
+            formaPagamento,
+            observacoes
+        };
     }
-
-    public void removerQuantidade(int quantidade) {
-        if (this.quantidade >= quantidade) {
-            this.quantidade -= quantidade;
-            calcularValores();
-        }
+    
+    // Métodos para compatibilidade com código existente
+    public Long getId() {
+        return codigo != null ? Long.valueOf(codigo) : null;
     }
-
-    // Métodos adicionais para compatibilidade
-    public Long getIdVenda() {
-        return id; // Simplificado - na prática viria de VendaPDV
+    
+    public void setId(Long id) {
+        this.codigo = id != null ? id.toString() : null;
     }
-
-    public void setIdVenda(Long idVenda) {
-        this.id = idVenda;
+    
+    public String getIdVenda() {
+        return codigo;
     }
-
-    public Long getIdProduto() {
-        return produto != null ? produto.getId() : null;
+    
+    public void setIdVenda(String idVenda) {
+        this.codigo = idVenda;
     }
-
-    public void setIdProduto(Long idProduto) {
-        // Simplificado - não implementado por enquanto
+    
+    public String getIdProduto() {
+        return codigoProduto;
     }
-
-    public void aplicarDesconto(BigDecimal valorDesconto) {
-        if (valorDesconto != null && valorDesconto.compareTo(BigDecimal.ZERO) > 0) {
-            this.desconto = valorDesconto;
-            calcularValores();
-        }
+    
+    public void setIdProduto(String idProduto) {
+        this.codigoProduto = idProduto;
     }
-
+    
+    public String getNome() {
+        return produto;
+    }
+    
+    public void setNome(String nome) {
+        this.produto = nome;
+    }
+    
+    public java.math.BigDecimal getDesconto() {
+        return descontoPercentual;
+    }
+    
+    public void setDesconto(java.math.BigDecimal desconto) {
+        this.descontoPercentual = desconto;
+    }
+    
+    public java.math.BigDecimal getValorFinal() {
+        return valorTotal;
+    }
+    
+    public void setValorFinal(java.math.BigDecimal valorFinal) {
+        this.valorTotal = valorFinal;
+    }
+    
+    public String getObservacao() {
+        return observacoes;
+    }
+    
+    public void setObservacao(String observacao) {
+        this.observacoes = observacao;
+    }
+    
+    public java.time.LocalDateTime getDataCadastro() {
+        return dataInclusao;
+    }
+    
+    public void setDataCadastro(java.time.LocalDateTime dataCadastro) {
+        this.dataInclusao = dataCadastro;
+    }
+    
+    /**
+     * Formata valor monetário
+     */
+    private String formatarValor(BigDecimal valor) {
+        if (valor == null) return "R$ 0,00";
+        return valor.setScale(2, RoundingMode.HALF_UP).toString().replace(".", ",");
+    }
+    
+    /**
+     * Retorna uma representação em string do item
+     */
     @Override
     public String toString() {
-        return "ItemVenda{" +
-                "produto=" + (produto != null ? produto.getNome() : "N/A") +
-                ", quantidade=" + quantidade +
-                ", valorUnitario=" + valorUnitario +
-                ", valorFinal=" + valorFinal +
-                '}';
+        return String.format("Item[%s] %s - %d x R$%.2f = R$%.2f", 
+            codigo, produto, quantidade, valorUnitario, valorTotal);
     }
 }

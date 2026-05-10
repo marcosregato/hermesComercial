@@ -346,7 +346,7 @@ public class ImpressaoNaoFiscalService {
         imprimirSeparador();
         
         for (ItemVenda item : itens) {
-            String descricao = item.getProduto().getNome();
+            String descricao = item.getProduto();
             String quantidade = String.format("%3d", item.getQuantidade());
             String valorUnit = String.format("R$ %7.2f", item.getValorUnitario());
             String valorTotal = String.format("R$ %7.2f", item.getValorFinal());

@@ -1,26 +1,27 @@
 package com.br.hermescomercial.pdv.controller;
 
+import com.br.hermescomercial.pdv.model.ItemVenda;
+import com.br.hermescomercial.pdv.service.VendaManager;
 import com.br.hermescomercial.util.SystemLogger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
- * Classe especializada para o formulário de Nova Venda
+ * Formulário simplificado de Nova Venda
  * Estrutura: Header → Busca → Formulário → Tabela
+ * @author Hermes Comercial
+ * @version 3.2.0
  */
-public class PDVFormularioNovaVenda {
+public class PDVFormularioNovaVendaSimplificado {
     
     private JPanel workArea;
     private String usuarioAtual;
     private String nomeUsuario;
+    private VendaManager vendaManager;
     
     // Componentes principais
     private JTextField txtCliente;
@@ -29,32 +30,30 @@ public class PDVFormularioNovaVenda {
     private JTextField txtQuantidade;
     private JTextField txtValorUnitario;
     private JTextField txtDesconto;
-    private JTextField txtCodigoProduto;
     private JComboBox<String> cbFormaPagamento;
     private JTextArea txtObservacoes;
-    private JLabel lblTotal;
-    private JLabel lblSubtotal;
+    
+    // Labels de resumo
     private JLabel lblTotalItens;
+    private JLabel lblSubtotal;
+    private JLabel lblTotal;
     private JLabel lblTroco;
     
-    // Tabela de itens
+    // Tabela
     private JTable tabelaItens;
     private DefaultTableModel modelTabela;
-    private List<ItemVenda> itensVenda;
     
     // Cores
     private static final Color WHITE = Color.WHITE;
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
-    private static final Color DANGER_COLOR = new Color(231, 76, 60);
     private static final Color GRAY = new Color(149, 165, 166);
     
-    public PDVFormularioNovaVenda(JPanel workArea, String usuarioAtual, String nomeUsuario) {
+    public PDVFormularioNovaVendaSimplificado(JPanel workArea, String usuarioAtual, String nomeUsuario) {
         this.workArea = workArea;
         this.usuarioAtual = usuarioAtual;
         this.nomeUsuario = nomeUsuario;
-        this.itensVenda = new ArrayList<>();
+        this.vendaManager = new VendaManager();
     }
     
     /**
@@ -62,7 +61,7 @@ public class PDVFormularioNovaVenda {
      */
     public JPanel criarFormularioNovaVenda() {
         try {
-            SystemLogger.ui("=== CRIANDO FORMULÁRIO NOVA VENDA ===");
+            SystemLogger.ui("=== CRIANDO FORMULÁRIO NOVA VENDA SIMPLIFICADO ===");
             SystemLogger.ui("Usuário: " + usuarioAtual);
             
             JPanel painelPrincipal = new JPanel(new BorderLayout());
@@ -90,7 +89,7 @@ public class PDVFormularioNovaVenda {
             
             painelPrincipal.add(painelCentral, BorderLayout.CENTER);
             
-            SystemLogger.ui("Formulário Nova Venda criado com sucesso");
+            SystemLogger.ui("Formulário Nova Venda simplificado criado com sucesso");
             return painelPrincipal;
             
         } catch (Exception e) {
@@ -108,12 +107,10 @@ public class PDVFormularioNovaVenda {
         headerPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
         headerPanel.setPreferredSize(new Dimension(0, 80));
         
-        // Título
         JLabel titleLabel = new JLabel("📋 Nova Venda");
         titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
         titleLabel.setForeground(WHITE);
         
-        // Informações
         JPanel infoPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         infoPanel.setOpaque(false);
         
@@ -155,7 +152,6 @@ public class PDVFormularioNovaVenda {
         ));
         txtBusca.setToolTipText("Digite para buscar produtos, clientes ou CPF");
         
-        // Enter para buscar
         txtBusca.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -218,21 +214,6 @@ public class PDVFormularioNovaVenda {
             BorderFactory.createEmptyBorder(5, 8, 5, 8)
         ));
         formularioPanel.add(txtCPF, gbc);
-        
-        gbc.gridy = 2; gbc.gridx = 0; gbc.gridwidth = 1; gbc.weightx = 0.0;
-        JLabel lblCodigoProduto = new JLabel("Cód. Produto:");
-        lblCodigoProduto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        formularioPanel.add(lblCodigoProduto, gbc);
-        
-        gbc.gridx = 1; gbc.weightx = 0.5;
-        txtCodigoProduto = new JTextField();
-        txtCodigoProduto.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        txtCodigoProduto.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(GRAY),
-            BorderFactory.createEmptyBorder(5, 8, 5, 8)
-        ));
-        txtCodigoProduto.setToolTipText("Digite o código do produto");
-        formularioPanel.add(txtCodigoProduto, gbc);
         
         // Seção Produto
         gbc.gridy = 2; gbc.gridx = 0; gbc.gridwidth = 4; gbc.weightx = 0.0;
@@ -300,6 +281,7 @@ public class PDVFormularioNovaVenda {
         txtDesconto.setHorizontalAlignment(JTextField.RIGHT);
         formularioPanel.add(txtDesconto, gbc);
         
+        // Forma de pagamento
         gbc.gridy = 5; gbc.gridx = 0; gbc.gridwidth = 1; gbc.weightx = 0.0;
         JLabel lblFormaPagamento = new JLabel("Forma Pagamento:");
         lblFormaPagamento.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -315,6 +297,7 @@ public class PDVFormularioNovaVenda {
         ));
         formularioPanel.add(cbFormaPagamento, gbc);
         
+        // Botões de ação
         gbc.gridx = 2; gbc.gridwidth = 2; gbc.weightx = 0.0;
         JPanel botoesPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         botoesPanel.setBackground(WHITE);
@@ -391,29 +374,29 @@ public class PDVFormularioNovaVenda {
         
         formularioPanel.add(resumoPanel, gbc);
         
-        // Listeners para cálculo automático
+        // Listeners
         txtQuantidade.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                calcularTotais();
+                atualizarResumo();
             }
         });
         
         txtValorUnitario.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                calcularTotais();
+                atualizarResumo();
             }
         });
         
         txtDesconto.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                calcularTotais();
+                atualizarResumo();
             }
         });
         
-        cbFormaPagamento.addActionListener(e -> calcularTroco());
+        cbFormaPagamento.addActionListener(e -> atualizarTroco());
         
         return formularioPanel;
     }
@@ -431,7 +414,7 @@ public class PDVFormularioNovaVenda {
         tabelaLabel.setForeground(ACCENT_COLOR);
         
         // Modelo da tabela
-        String[] colunas = {"Código", "Cód. Produto", "Produto", "Descrição", "Qtd", "Valor Unit.", "Desconto %", "Subtotal", "Forma Pagamento", "Observações"};
+        String[] colunas = {"Código", "Produto", "Descrição", "Qtd", "Valor Unit.", "Desconto %", "Subtotal", "Forma Pagamento", "Observações"};
         modelTabela = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -446,34 +429,32 @@ public class PDVFormularioNovaVenda {
         tabelaItens.getTableHeader().setBackground(ACCENT_COLOR);
         tabelaItens.getTableHeader().setForeground(WHITE);
         
-        // Scroll pane
         JScrollPane scrollPane = new JScrollPane(tabelaItens);
         scrollPane.setPreferredSize(new Dimension(0, 200));
         scrollPane.setBorder(BorderFactory.createLineBorder(GRAY));
         
-        // Painel de botões da tabela
         JPanel botoesTabelaPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         botoesTabelaPanel.setBackground(WHITE);
-        
-        JButton btnRemover = new JButton("❌ Remover Item");
-        btnRemover.setBackground(DANGER_COLOR);
-        btnRemover.setForeground(WHITE);
-        btnRemover.setFocusPainted(false);
-        btnRemover.setBorderPainted(false);
-        btnRemover.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnRemover.addActionListener(e -> removerItemSelecionado());
         
         JButton btnFinalizar = new JButton("💰 Finalizar Venda");
         btnFinalizar.setBackground(SUCCESS_COLOR);
         btnFinalizar.setForeground(WHITE);
         btnFinalizar.setFocusPainted(false);
         btnFinalizar.setBorderPainted(false);
-        btnFinalizar.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnFinalizar.setFont(new Font("Segoe UI", Font.BOLD, 12));
         btnFinalizar.addActionListener(e -> finalizarVenda());
         
-        botoesTabelaPanel.add(btnRemover);
-        botoesTabelaPanel.add(Box.createHorizontalStrut(10));
+        JButton btnCancelar = new JButton("❌ Cancelar Venda");
+        btnCancelar.setBackground(Color.RED);
+        btnCancelar.setForeground(WHITE);
+        btnCancelar.setFocusPainted(false);
+        btnCancelar.setBorderPainted(false);
+        btnCancelar.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnCancelar.addActionListener(e -> cancelarVenda());
+        
         botoesTabelaPanel.add(btnFinalizar);
+        botoesTabelaPanel.add(Box.createHorizontalStrut(10));
+        botoesTabelaPanel.add(btnCancelar);
         
         tabelaPanel.add(tabelaLabel, BorderLayout.NORTH);
         tabelaPanel.add(scrollPane, BorderLayout.CENTER);
@@ -489,7 +470,7 @@ public class PDVFormularioNovaVenda {
         try {
             String produto = txtProduto.getText().trim();
             if (produto.isEmpty()) {
-                JOptionPane.showMessageDialog(workArea, "Digite o nome do produto!", "Aviso", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(workArea, "Informe o nome do produto!", "Aviso", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             
@@ -499,55 +480,30 @@ public class PDVFormularioNovaVenda {
                 return;
             }
             
-            BigDecimal valorUnitario = new BigDecimal(txtValorUnitario.getText().trim().replace(",", "."));
-            if (valorUnitario.compareTo(BigDecimal.ZERO) <= 0) {
-                JOptionPane.showMessageDialog(workArea, "Valor unitário deve ser maior que zero!", "Aviso", JOptionPane.WARNING_MESSAGE);
+            ItemVenda item = new ItemVenda();
+            item.setCodigo(String.valueOf(modelTabela.getRowCount() + 1));
+            item.setProduto(produto);
+            item.setQuantidade(quantidade);
+            item.setFormaPagamento((String) cbFormaPagamento.getSelectedItem());
+            item.setObservacoes(txtObservacoes.getText().trim());
+            
+            try {
+                item.setValorUnitario(new java.math.BigDecimal(txtValorUnitario.getText().replace(",", ".")));
+                item.setDescontoPercentual(new java.math.BigDecimal(txtDesconto.getText().replace(",", ".")));
+                item.calcularValorTotal();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(workArea, "Valores inválidos!", "Erro", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
-            BigDecimal desconto = new BigDecimal(txtDesconto.getText().trim().replace(",", "."));
+            vendaManager.adicionarItem(item);
+            modelTabela.addRow(item.toArray());
             
-            // Calcular total do item
-            BigDecimal totalItem = valorUnitario.multiply(new BigDecimal(quantidade));
-            BigDecimal valorDesconto = totalItem.multiply(desconto).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
-            BigDecimal totalComDesconto = totalItem.subtract(valorDesconto);
+            limparCamposItem();
+            atualizarResumo();
             
-            // Adicionar à lista
-            ItemVenda item = new ItemVenda(
-                itensVenda.size() + 1,
-                produto,
-                quantidade,
-                valorUnitario,
-                desconto,
-                totalComDesconto
-            );
-            itensVenda.add(item);
+            SystemLogger.ui("Item adicionado: " + item.toString());
             
-            // Adicionar à tabela
-            Object[] rowData = {
-                item.getCodigo(),
-                item.getProduto(),
-                item.getQuantidade(),
-                "R$ " + formatarValor(item.getValorUnitario()),
-                item.getDesconto() + "%",
-                "R$ " + formatarValor(item.getTotal())
-            };
-            modelTabela.addRow(rowData);
-            
-            // Limpar campos do produto
-            txtProduto.setText("");
-            txtQuantidade.setText("1");
-            txtValorUnitario.setText("");
-            txtDesconto.setText("0");
-            txtProduto.requestFocus();
-            
-            // Atualizar totais
-            calcularTotais();
-            
-            SystemLogger.ui("Item adicionado: " + produto + " - Qtd: " + quantidade);
-            
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(workArea, "Verifique os valores digitados!", "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             SystemLogger.error("Erro ao adicionar item", e);
             JOptionPane.showMessageDialog(workArea, "Erro ao adicionar item: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
@@ -555,74 +511,22 @@ public class PDVFormularioNovaVenda {
     }
     
     /**
-     * Remove o item selecionado da tabela
+     * Limpa os campos do item
      */
-    private void removerItemSelecionado() {
-        int linhaSelecionada = tabelaItens.getSelectedRow();
-        if (linhaSelecionada >= 0) {
-            itensVenda.remove(linhaSelecionada);
-            modelTabela.removeRow(linhaSelecionada);
-            
-            // Reenumerar códigos
-            for (int i = 0; i < itensVenda.size(); i++) {
-                itensVenda.get(i).setCodigo(i + 1);
-                modelTabela.setValueAt(i + 1, i, 0);
-            }
-            
-            calcularTotais();
-            SystemLogger.ui("Item removido da venda");
-        } else {
-            JOptionPane.showMessageDialog(workArea, "Selecione um item para remover!", "Aviso", JOptionPane.WARNING_MESSAGE);
-        }
+    private void limparCamposItem() {
+        txtProduto.setText("");
+        txtQuantidade.setText("1");
+        txtValorUnitario.setText("");
+        txtDesconto.setText("0");
+        txtProduto.requestFocus();
     }
     
     /**
-     * Calcula os totais da venda
-     */
-    private void calcularTotais() {
-        try {
-            BigDecimal subtotal = BigDecimal.ZERO;
-            int totalItens = 0;
-            
-            for (ItemVenda item : itensVenda) {
-                subtotal = subtotal.add(item.getTotal());
-                totalItens += item.getQuantidade();
-            }
-            
-            // Calcular totais do item atual (se estiver preenchido)
-            if (!txtProduto.getText().trim().isEmpty()) {
-                try {
-                    int quantidade = Integer.parseInt(txtQuantidade.getText().trim());
-                    BigDecimal valorUnitario = new BigDecimal(txtValorUnitario.getText().trim().replace(",", "."));
-                    BigDecimal desconto = new BigDecimal(txtDesconto.getText().trim().replace(",", "."));
-                    
-                    BigDecimal totalItem = valorUnitario.multiply(new BigDecimal(quantidade));
-                    BigDecimal valorDesconto = totalItem.multiply(desconto).divide(new BigDecimal(100), 2, RoundingMode.HALF_UP);
-                    BigDecimal totalComDesconto = totalItem.subtract(valorDesconto);
-                    
-                    subtotal = subtotal.add(totalComDesconto);
-                    totalItens += quantidade;
-                } catch (Exception e) {
-                    // Ignora erros de cálculo do item atual
-                }
-            }
-            
-            lblTotalItens.setText(String.valueOf(totalItens));
-            lblSubtotal.setText("R$ " + formatarValor(subtotal));
-            lblTotal.setText("R$ " + formatarValor(subtotal));
-            
-        } catch (Exception e) {
-            SystemLogger.error("Erro ao calcular totais", e);
-        }
-    }
-    
-    /**
-     * Limpa os campos do formulário
+     * Limpa todos os campos do formulário
      */
     private void limparCampos() {
         txtCliente.setText("");
         txtCPF.setText("");
-        txtCodigoProduto.setText("");
         txtProduto.setText("");
         txtQuantidade.setText("1");
         txtValorUnitario.setText("");
@@ -630,6 +534,31 @@ public class PDVFormularioNovaVenda {
         cbFormaPagamento.setSelectedIndex(0);
         txtObservacoes.setText("");
         txtProduto.requestFocus();
+    }
+    
+    /**
+     * Atualiza o resumo da venda
+     */
+    private void atualizarResumo() {
+        vendaManager.setCliente(txtCliente.getText().trim());
+        vendaManager.setCpf(txtCPF.getText().trim());
+        vendaManager.setObservacoes(txtObservacoes.getText().trim());
+        
+        lblTotalItens.setText(String.valueOf(vendaManager.getTotalItens()));
+        lblSubtotal.setText("R$ " + formatarValor(vendaManager.getSubtotal()));
+        lblTotal.setText("R$ " + formatarValor(vendaManager.getTotal()));
+    }
+    
+    /**
+     * Atualiza o campo de troco
+     */
+    private void atualizarTroco() {
+        String formaPagamento = (String) cbFormaPagamento.getSelectedItem();
+        if ("Dinheiro".equals(formaPagamento)) {
+            lblTroco.setText("R$ 0,00");
+        } else {
+            lblTroco.setText("-");
+        }
     }
     
     /**
@@ -641,95 +570,51 @@ public class PDVFormularioNovaVenda {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, "Busca por: " + termo + "\n(Implementar busca no banco)", "Busca", JOptionPane.INFORMATION_MESSAGE);
-    }
-    
-    /**
-     * Calcula o troco baseado na forma de pagamento
-     */
-    private void calcularTroco() {
-        try {
-            String formaPagamento = (String) cbFormaPagamento.getSelectedItem();
-            if ("Dinheiro".equals(formaPagamento)) {
-                // Se for dinheiro, calcula troco baseado no total
-                String totalText = lblTotal.getText().replace("R$ ", "").replace(",", ".");
-                try {
-                    BigDecimal total = new BigDecimal(totalText);
-                    // TODO: Implementar lógica para calcular troco baseado no valor pago
-                    lblTroco.setText("R$ 0,00");
-                } catch (Exception e) {
-                    lblTroco.setText("R$ 0,00");
-                }
-            } else {
-                // Para outras formas de pagamento, não há troco
-                lblTroco.setText("-");
-            }
-        } catch (Exception e) {
-            SystemLogger.error("Erro ao calcular troco", e);
-        }
     }
     
     /**
      * Finaliza a venda
      */
     private void finalizarVenda() {
-        // Validação de Itens (Obrigatório *)
-        if (itensVenda.isEmpty()) {
-            JOptionPane.showMessageDialog(workArea, "⚠️ É obrigatório adicionar itens à venda!\n\nPor favor, adicione pelo menos um produto para finalizar a venda.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
+        if (vendaManager.isVendaVazia()) {
+            JOptionPane.showMessageDialog(workArea, "Adicione itens à venda!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        // Validação do Cliente (Obrigatório *)
         if (txtCliente.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(workArea, "⚠️ O Nome do Cliente é obrigatório!\n\nPor favor, informe o nome do cliente para finalizar a venda.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
-            txtCliente.requestFocus();
-            txtCliente.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            JOptionPane.showMessageDialog(workArea, "Informe o nome do cliente!", "Aviso", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
-        // Validação da Forma de Pagamento (Obrigatório *)
-        if (cbFormaPagamento.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(workArea, "⚠️ A Forma de Pagamento é obrigatória!\n\nPor favor, selecione uma forma de pagamento.", "Validação - Campo Obrigatório", JOptionPane.WARNING_MESSAGE);
-            cbFormaPagamento.requestFocus();
-            return;
-        }
+        vendaManager.setFormaPagamento((String) cbFormaPagamento.getSelectedItem());
         
-        // Resetar bordas dos campos válidos
-        txtCliente.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        JOptionPane.showMessageDialog(workArea, 
+            "Venda finalizada com sucesso!\n\n" + vendaManager.getResumo(), 
+            "Venda Concluída", 
+            JOptionPane.INFORMATION_MESSAGE);
         
-                BigDecimal total = new BigDecimal(lblTotal.getText().replace("R$ ", "").replace(",", "."));
+        cancelarVenda();
+    }
+    
+    /**
+     * Cancela a venda atual
+     */
+    private void cancelarVenda() {
+        vendaManager.limparItens();
+        modelTabela.setRowCount(0);
+        limparCampos();
+        atualizarResumo();
         
-        int resultado = JOptionPane.showConfirmDialog(
-            workArea,
-            "Deseja finalizar a venda?\n\n" +
-            "Cliente: " + txtCliente.getText().trim() + "\n" +
-            "Total: " + lblTotal.getText() + "\n" +
-            "Itens: " + itensVenda.size(),
-            "Finalizar Venda",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE
-        );
-        
-        if (resultado == JOptionPane.YES_OPTION) {
-            // Limpar venda
-            itensVenda.clear();
-            modelTabela.setRowCount(0);
-            txtCliente.setText("");
-            txtCPF.setText("");
-            limparCampos();
-            calcularTotais();
-            
-            JOptionPane.showMessageDialog(workArea, "Venda finalizada com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
-            SystemLogger.ui("Venda finalizada - Total: " + lblTotal.getText());
-        }
+        SystemLogger.ui("Venda cancelada e limpa");
     }
     
     /**
      * Formata valor monetário
      */
-    private String formatarValor(BigDecimal valor) {
-        return valor.setScale(2, RoundingMode.HALF_UP).toString().replace(".", ",");
+    private String formatarValor(java.math.BigDecimal valor) {
+        if (valor == null) return "0,00";
+        return valor.setScale(2, java.math.RoundingMode.HALF_UP).toString().replace(".", ",");
     }
     
     /**
@@ -737,44 +622,13 @@ public class PDVFormularioNovaVenda {
      */
     private JPanel criarPainelErro() {
         JPanel painelErro = new JPanel(new BorderLayout());
-        painelErro.setBackground(WHITE);
+        painelErro.setBackground(Color.WHITE);
         
-        JLabel erroLabel = new JLabel("❌ Erro ao carregar formulário");
-        erroLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        JLabel erroLabel = new JLabel("❌ Erro ao carregar formulário", JLabel.CENTER);
+        erroLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
         erroLabel.setForeground(Color.RED);
-        erroLabel.setHorizontalAlignment(JLabel.CENTER);
         
         painelErro.add(erroLabel, BorderLayout.CENTER);
         return painelErro;
-    }
-    
-    /**
-     * Classe interna para representar um item da venda
-     */
-    private static class ItemVenda {
-        private int codigo;
-        private String produto;
-        private int quantidade;
-        private BigDecimal valorUnitario;
-        private BigDecimal desconto;
-        private BigDecimal total;
-        
-        public ItemVenda(int codigo, String produto, int quantidade, BigDecimal valorUnitario, BigDecimal desconto, BigDecimal total) {
-            this.codigo = codigo;
-            this.produto = produto;
-            this.quantidade = quantidade;
-            this.valorUnitario = valorUnitario;
-            this.desconto = desconto;
-            this.total = total;
-        }
-        
-        // Getters e Setters
-        public int getCodigo() { return codigo; }
-        public void setCodigo(int codigo) { this.codigo = codigo; }
-        public String getProduto() { return produto; }
-        public int getQuantidade() { return quantidade; }
-        public BigDecimal getValorUnitario() { return valorUnitario; }
-        public BigDecimal getDesconto() { return desconto; }
-        public BigDecimal getTotal() { return total; }
     }
 }

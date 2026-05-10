@@ -559,7 +559,7 @@ public class PDVFormularioEntregas {
         tabelaLabel.setForeground(ACCENT_COLOR);
         
         // Modelo da tabela
-        String[] colunas = {"Nº Entrega", "Data", "Nº Venda", "Cliente", "Endereço", "Motorista", "Veículo", "Status", "Ações"};
+        String[] colunas = {"Nº Entrega", "Data", "Nº Venda", "Cliente", "Telefone", "Endereço Completo", "Motorista", "Veículo", "Placa", "Tipo", "Status", "Data Prevista", "Data Realizada", "Observações", "Ações"};
         modelTabela = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -801,11 +801,11 @@ public class PDVFormularioEntregas {
         
         // Dados de exemplo
         Object[][] dadosExemplo = {
-            {"ENT-20260509-0001", "09/05/2026", "001", "João Silva", "Rua A, Centro", "Carlos Motorista", "Van ABC-1234", "Em Rota", "👁️"},
-            {"ENT-20260508-0002", "08/05/2026", "002", "Maria Oliveira", "Av B, Jardim", "Pedro Transporte", "Moto DEF-5678", "Entregue", "👁️"},
-            {"ENT-20260507-0003", "07/05/2026", "003", "Carlos Alberto", "Rua C, São José", "Ana Motorista", "Carro GHI-9012", "Pendente", "👁️"},
-            {"ENT-20260506-0004", "06/05/2026", "004", "Fernanda Costa", "Av D, Centro", "Lucas Entregas", "Van JKL-3456", "Cancelada", "👁️"},
-            {"ENT-20260505-0005", "05/05/2026", "005", "Roberto Dias", "Rua E, Industrial", "Marcos Transporte", "Caminhão MNO-7890", "Entregue", "👁️"}
+            {"ENT-20260509-0001", "09/05/2026", "001", "João Silva", "(11) 9876-5432", "Rua A, 123 - Centro - São Paulo/SP", "Carlos Motorista", "Van ABC-1234", "ABC-1234", "Normal", "Em Rota", "10:30", "--:--", "Entrega urgente", "👁️"},
+            {"ENT-20260508-0002", "08/05/2026", "002", "Maria Oliveira", "(11) 9123-4567", "Av B, 456 - Jardim - São Paulo/SP", "Pedro Transporte", "Moto DEF-5678", "DEF-5678", "Expressa", "Entregue", "14:20", "14:15", "Cliente presente", "👁️"},
+            {"ENT-20260507-0003", "07/05/2026", "003", "Carlos Alberto", "(11) 8765-4321", "Rua C, 789 - São José - São Paulo/SP", "Ana Motorista", "Carro GHI-9012", "GHI-9012", "Agendada", "Pendente", "09:00", "--:--", "Entrega agendada para amanhã", "👁️"},
+            {"ENT-20260506-0004", "06/05/2026", "004", "Fernanda Costa", "(11) 7654-3210", "Av D, 321 - Centro - São Paulo/SP", "Lucas Entregas", "Van JKL-3456", "JKL-3456", "Normal", "Cancelada", "08:30", "--:--", "Cliente cancelou o pedido", "👁️"},
+            {"ENT-20260505-0005", "05/05/2026", "005", "Roberto Dias", "(11) 6543-2109", "Rua E, 654 - Industrial - São Paulo/SP", "Marcos Transporte", "Caminhão MNO-7890", "MNO-7890", "Normal", "Entregue", "16:45", "16:30", "Entrega com sucesso", "👁️"}
         };
         
         for (Object[] dados : dadosExemplo) {
@@ -817,10 +817,15 @@ public class PDVFormularioEntregas {
             entrega.setData((String) dados[1]);
             entrega.setNumeroVenda((String) dados[2]);
             entrega.setCliente((String) dados[3]);
-            entrega.setEndereco((String) dados[4]);
-            entrega.setMotorista((String) dados[5]);
-            entrega.setVeiculo((String) dados[6]);
-            entrega.setStatus((String) dados[7]);
+            entrega.setEndereco((String) dados[5]); // Endereço completo
+            entrega.setMotorista((String) dados[6]);
+            entrega.setVeiculo((String) dados[7]);
+            entrega.setPlaca((String) dados[8]); // Placa
+            entrega.setTipo((String) dados[9]); // Tipo
+            entrega.setStatus((String) dados[10]);
+            entrega.setDataPrevista((String) dados[11]); // Data prevista
+            entrega.setDataRealizada((String) dados[12]); // Data realizada
+            entrega.setObservacoes((String) dados[13]); // Observações
             entregasEncontradas.add(entrega);
         }
     }
@@ -1043,6 +1048,8 @@ public class PDVFormularioEntregas {
         private String placa;
         private String tipo;
         private String status;
+        private String dataPrevista;
+        private String dataRealizada;
         private String observacoes;
         
         // Getters e Setters
@@ -1072,6 +1079,12 @@ public class PDVFormularioEntregas {
         
         public String getCep() { return cep; }
         public void setCep(String cep) { this.cep = cep; }
+        
+        public String getDataPrevista() { return dataPrevista; }
+        public void setDataPrevista(String dataPrevista) { this.dataPrevista = dataPrevista; }
+        
+        public String getDataRealizada() { return dataRealizada; }
+        public void setDataRealizada(String dataRealizada) { this.dataRealizada = dataRealizada; }
         
         public String getTelefone() { return telefone; }
         public void setTelefone(String telefone) { this.telefone = telefone; }

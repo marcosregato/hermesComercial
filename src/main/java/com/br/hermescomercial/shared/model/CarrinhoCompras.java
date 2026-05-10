@@ -130,11 +130,11 @@ public class CarrinhoCompras {
         
         if (itemExistente != null) {
             // Atualizar quantidade do item existente
-            itemExistente.adicionarQuantidade(quantidade);
+            itemExistente.setQuantidade(itemExistente.getQuantidade() + quantidade);
         } else {
             // Criar novo item
             ItemVenda novoItem = new ItemVenda();
-            novoItem.setProduto(produto);
+            novoItem.setProduto(produto.getNome());
             novoItem.setQuantidade(quantidade);
             novoItem.setValorUnitario(valorUnitario);
             
@@ -207,7 +207,7 @@ public class CarrinhoCompras {
 
     private ItemVenda buscarItemPorProduto(Produto produto) {
         return itens.stream()
-                .filter(item -> produto.equals(item.getProduto()))
+                .filter(item -> produto.getNome().equals(item.getProduto()))
                 .findFirst()
                 .orElse(null);
     }

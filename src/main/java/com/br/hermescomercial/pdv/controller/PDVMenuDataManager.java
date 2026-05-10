@@ -58,21 +58,20 @@ public class PDVMenuDataManager {
             "🏭 Gestão Fornecedores"
         });
         
-        // Clientes - Gestão simplificada
+        // Clientes - Gestão unificada
         subMenusCache.put("👥 Clientes", new String[]{
-            "➕ Novo Cliente", "📝 Editar Cliente", "🔍 Consultar Cliente",
-            "📊 Histórico de Compras"
+            "👥 Gestão de Cliente", "📊 Histórico de Compras"
         });
         
         // Estoque - Controle essencial
         subMenusCache.put("📊 Estoque", new String[]{
-            "📊 Consultar Estoque", "📦 Estoque Mínimo", "🔄 Ajuste de Estoque",
+            "📊 Status Estoque", "📊 Consultar Estoque", "📦 Estoque Mínimo", "🔄 Ajuste de Estoque",
             "📦 Movimentações"
         });
         
         // Financeiro - Gestão financeira essencial
         subMenusCache.put("💰 Financeiro", new String[]{
-            "💰 Gestão de Caixa", "💸 Despesas", "📊 Fluxo de Caixa",
+            "💰 Resumo Financeiro", "💰 Gestão de Caixa", "💸 Despesas", "📊 Fluxo de Caixa",
             "💰 Contas a Receber", "💸 Contas a Pagar"
         });
         
@@ -84,8 +83,7 @@ public class PDVMenuDataManager {
         
         // Relatórios - Análises essenciais
         subMenusCache.put("📈 Relatórios", new String[]{
-            "📊 Relatórios e Análises", "📊 Vendas do Dia", "📅 Vendas do Mês", 
-            "📦 Vendas por Produto", " Relatório Financeiro"
+            "📊 Relatórios e Análises", "💰 Relatório de Vendas", " Relatório Financeiro"
         });
         
         // Export/Import - Gestão simplificada

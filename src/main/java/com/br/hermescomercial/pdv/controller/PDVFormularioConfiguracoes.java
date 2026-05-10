@@ -2,7 +2,6 @@ package com.br.hermescomercial.pdv.controller;
 
 import com.br.hermescomercial.ui.layout.LayoutPadrao;
 import com.br.hermescomercial.util.SystemLogger;
-import com.br.hermescomercial.util.DatabaseConfig;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

@@ -96,13 +96,14 @@ public class NotaFiscalItem {
     
     public void preencherComItemVenda(ItemVenda itemVenda) {
         if (itemVenda != null) {
-            this.codigoProduto = itemVenda.getProduto() != null ? itemVenda.getProduto().getId().toString() : "";
+            this.codigoProduto = itemVenda.getCodigoProduto() != null ? itemVenda.getCodigoProduto() : "";
             this.quantidade = new BigDecimal(itemVenda.getQuantidade());
             this.valorUnitario = itemVenda.getValorUnitario();
-            this.descricao = itemVenda.getProduto() != null ? itemVenda.getProduto().getNome() : "";
-            this.unidade = itemVenda.getProduto() != null ? itemVenda.getProduto().getUnidade() : "UN";
+            this.descricao = itemVenda.getDescricao() != null ? itemVenda.getDescricao() : "";
+            this.unidade = "UN"; // Unidade padrão, já que ItemVenda não tem informação de unidade
             this.valorDesconto = itemVenda.getDesconto() != null ? itemVenda.getDesconto() : BigDecimal.ZERO;
-            this.produto = itemVenda.getProduto();
+            // Produto não disponível em ItemVenda, manter null
+            this.produto = null;
             
             // Valores padrão para NF-e
             this.ncm = "00000000"; // Preencher com NCM correto

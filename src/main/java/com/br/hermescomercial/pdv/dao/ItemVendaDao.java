@@ -44,8 +44,8 @@ public class ItemVendaDao {
         try (Connection conn = ConnectionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(INSERT_SQL, Statement.RETURN_GENERATED_KEYS)) {
             
-            stmt.setLong(1, itemVenda.getIdVenda());
-            stmt.setLong(2, itemVenda.getIdProduto());
+            stmt.setString(1, itemVenda.getIdVenda());
+            stmt.setString(2, itemVenda.getIdProduto());
             stmt.setInt(3, itemVenda.getQuantidade());
             stmt.setBigDecimal(4, itemVenda.getValorUnitario());
             stmt.setBigDecimal(5, itemVenda.getValorTotal());
@@ -76,7 +76,7 @@ public class ItemVendaDao {
         try (Connection conn = ConnectionBD.getConnection();
              PreparedStatement stmt = conn.prepareStatement(UPDATE_SQL)) {
             
-            stmt.setLong(1, itemVenda.getIdProduto());
+            stmt.setString(1, itemVenda.getIdProduto());
             stmt.setInt(2, itemVenda.getQuantidade());
             stmt.setBigDecimal(3, itemVenda.getValorUnitario());
             stmt.setBigDecimal(4, itemVenda.getValorTotal());
@@ -171,8 +171,8 @@ public class ItemVendaDao {
         ItemVenda item = new ItemVenda();
         
         item.setId(rs.getLong("id"));
-        item.setIdVenda(rs.getLong("id_venda"));
-        item.setIdProduto(rs.getLong("id_produto"));
+        item.setIdVenda(String.valueOf(rs.getLong("id_venda")));
+        item.setIdProduto(String.valueOf(rs.getLong("id_produto")));
         item.setQuantidade(rs.getInt("quantidade"));
         item.setValorUnitario(rs.getBigDecimal("valor_unitario"));
         item.setValorTotal(rs.getBigDecimal("valor_total"));
