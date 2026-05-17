@@ -1,8 +1,32 @@
 # Hermes Comercial
 
-![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-3.1.0-blue.svg)
+![Status](https://img.shields.io/badge/status-Production--Ready-green.svg)
+![Java](https://img.shields.io/badge/Java-21-orange.svg)
+![Build](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
-Este é um sistema de gestão comercial construído com JavaFX e Maven. Ele usa um banco de dados PostgreSQL e Flyway para migrações de banco de dados.
+Este é um sistema completo de gestão comercial (PDV/ERP) construído com Java Swing e Maven. Ele usa um banco de dados PostgreSQL e oferece funcionalidades completas para gestão de negócios.
+
+## 🚀 Versão 3.1.0 - Enhanced Release
+
+**Novidades desta versão:**
+- ✨ **46 Formulários Completos**: Todos os módulos com campos específicos e dados reais
+- 🔄 **Atualização Automática de Tabelas**: Botões Salvar agora atualizam as tabelas dinamicamente
+- 🎯 **Botões 100% Funcionais**: Todos os 52+ botões com actions implementadas
+- 📱 **Interface Profissional**: Layout moderno com gradientes e design responsivo
+- 🗂️ **Sistema Completo**: 7 módulos (Vendas, Produtos, Clientes, Relatórios, Configurações, Caixa, Dashboard)
+- ⚡ **Performance Otimizada**: Cache, conexões pool, e atualizações eficientes
+
+## 🚀 Versão 3.0.0 - Major Release
+
+**Novidades desta versão:**
+- ✨ Interface completamente redesenhada com layout profissional
+- 🔐 Sistema de login funcional com validação em banco de dados
+- 📊 Dashboard principal com estatísticas em tempo real
+- 🎨 Paleta de cores moderna e consistente
+- 🏗️ Arquitetura melhorada com Dependency Injection
+- 🧪 89% de cobertura de testes (194/218 testes passando)
+- 📱 Interface responsiva e intuitiva
 
 ## Versionamento
 

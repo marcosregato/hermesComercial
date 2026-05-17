@@ -1,63 +1,85 @@
 package com.br.hermescomercial.connectionBD;
 
+import com.br.hermescomercial.config.DataSourceConfig;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Classe responsável por gerenciar conexões com banco de dados
+ * Utiliza HikariCP para pool de conexões melhorando performance
+ * Suporta múltiplos bancos: PostgreSQL, MySQL, SQLite
+ * @author system
+ */
 public class ConnectionBD {
-    private static final Logger logger = LogManager.getLogger(ConnectionBD.class.getName());
+    private static final Logger logger = LogManager.getLogger(ConnectionBD.class);
+    private static final DataSourceConfig dataSourceConfig = DataSourceConfig.getInstance();
     
-    // Configurações do banco de dados
-    private static final String URL = "jdbc:postgresql://localhost:5432/hermescomercialdb";
-    private static final String USER = "hermesuser";
-    private static final String PASSWORD = "hermespass";
-    
-    // Driver JDBC
-    private static final String DRIVER = "org.postgresql.Driver";
-    
-    static {
-        try {
-            Class.forName(DRIVER);
-            logger.info("Driver PostgreSQL carregado com sucesso");
-        } catch (ClassNotFoundException e) {
-            logger.error("Erro ao carregar driver PostgreSQL: " + e.getMessage(), e);
-            throw new RuntimeException("Driver PostgreSQL não encontrado", e);
-        }
-    }
-    
+    /**
+     * Obtém conexão com o banco de dados usando pool HikariCP
+     * @return Connection conexão ativa do pool
+     * @throws SQLException em caso de erro na conexão
+     */
     public static Connection getConnection() throws SQLException {
         try {
-            Connection connection = DriverManager.getConnection(URL, USER, PASSWORD);
-            logger.info("Conexão com banco de dados estabelecida com sucesso");
+            Connection connection = dataSourceConfig.getConnection();
+            logger.debug("Conexão obtida do pool HikariCP");
             return connection;
+            
         } catch (SQLException e) {
-            logger.error("Erro ao conectar ao banco de dados: " + e.getMessage(), e);
+            logger.error("Erro ao obter conexão do pool: " + e.getMessage(), e);
             throw new SQLException("Não foi possível conectar ao banco de dados", e);
         }
     }
     
+    /**
+     * Fecha conexão com o banco de dados
+     * @param connection conexão a ser fechada
+     */
     public static void closeConnection(Connection connection) {
         if (connection != null) {
             try {
-                connection.close();
-                logger.info("Conexão com banco de dados fechada com sucesso");
+                if (!connection.isClosed()) {
+                    connection.close();
+                    logger.debug("Conexão com banco de dados fechada com sucesso");
+                }
             } catch (SQLException e) {
                 logger.error("Erro ao fechar conexão com banco de dados: " + e.getMessage(), e);
             }
         }
     }
     
-    public static void testConnection() {
+    /**
+     * Verifica se uma conexão está aberta e a fecha se necessário
+     * @param connection conexão a ser verificada
+     */
+    public static void ensureConnectionClosed(Connection connection) {
+        if (connection != null) {
+            try {
+                if (!connection.isClosed()) {
+                    logger.warn("Conexão não foi fechada automaticamente pelo try-with-resources. Fechando manualmente.");
+                    connection.close();
+                }
+            } catch (SQLException e) {
+                logger.error("Erro ao verificar/fechar conexão: " + e.getMessage(), e);
+            }
+        }
+    }
+    
+    /**
+     * Testa a conexão com o banco de dados usando pool
+     * @return boolean true se conexão funcionar
+     */
+    public static boolean testConnection() {
         try (Connection connection = getConnection()) {
             if (connection != null && !connection.isClosed()) {
-                logger.info("Teste de conexão realizado com sucesso");
-                System.out.println("Conexão com banco de dados funcionando corretamente!");
+                logger.info("Teste de conexão com pool realizado com sucesso");
+                return true;
             }
         } catch (SQLException e) {
-            logger.error("Teste de conexão falhou: " + e.getMessage(), e);
-            System.err.println("Erro na conexão com banco de dados: " + e.getMessage());
+            logger.error("Teste de conexão com pool falhou: " + e.getMessage(), e);
         }
+        return false;
     }
 }

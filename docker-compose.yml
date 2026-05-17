@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  hermes-pdv:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hermes-pdv
+    ports:
+      - "8080:8080"
+    volumes:
+      # Persistir banco de dados
+      - hermes-data:/app/data
+      # Logs
+      - hermes-logs:/app/logs
+    environment:
+      - JAVA_OPTS=-Xmx1024m -Xms512m
+      - SPRING_PROFILES_ACTIVE=production
+    networks:
+      - hermes-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "java.*app.jar"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  hermes-data:
+    driver: local
+  hermes-logs:
+    driver: local
+
+networks:
+  hermes-network:
+    driver: bridge

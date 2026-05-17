@@ -1,22 +1,27 @@
 package com.br.hermescomercial.business.notafiscal;
 
+import com.br.hermescomercial.exception.BusinessException;
+import com.br.hermescomercial.exception.DataAccessException;
+import com.br.hermescomercial.exception.ExceptionHandler;
 import com.br.hermescomercial.model.NotaFiscal;
 import com.br.hermescomercial.model.NotaFiscalItem;
 import com.br.hermescomercial.model.NotaFiscalPagamento;
 import com.br.hermescomercial.model.NotaFiscalPagamentoItem;
 import com.br.hermescomercial.model.NotaFiscalTransporte;
 import com.br.hermescomercial.model.VendaPDV;
-import com.br.hermescomercial.model.ItemVenda;
-import com.br.hermescomercial.model.Pagamento;
 import com.br.hermescomercial.model.Usuario;
 import com.br.hermescomercial.model.Cliente;
+import com.br.hermescomercial.model.ItemVenda;
+import com.br.hermescomercial.model.Pagamento;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
+
 
 public class NotaFiscalService {
     
@@ -78,8 +83,14 @@ public class NotaFiscalService {
             logger.info("Nota fiscal gerada com sucesso: " + notaFiscal.getChaveAcesso());
             return notaFiscal;
             
+        } catch (BusinessException e) {
+            ExceptionHandler.handleBusinessException("gerar nota fiscal", e);
+            return null;
+        } catch (DataAccessException e) {
+            ExceptionHandler.handleDataAccessException("gerar nota fiscal", e);
+            return null;
         } catch (Exception e) {
-            logger.error("Erro ao gerar nota fiscal: " + e.getMessage(), e);
+            ExceptionHandler.handleSystemException("gerar nota fiscal", e);
             return null;
         }
     }

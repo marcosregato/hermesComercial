@@ -1,231 +1,290 @@
 package com.br.hermescomercial.service;
 
-import com.br.hermescomercial.business.pdv.PDVManager;
-import com.br.hermescomercial.business.pdv.PagamentoManager;
-// import com.br.hermescomercial.business.pdv.CupomFiscalManager; - não utilizado
-import com.br.hermescomercial.business.pdv.ImpressoraManager;
-import com.br.hermescomercial.model.VendaPDV;
-import com.br.hermescomercial.model.ItemVenda;
-import com.br.hermescomercial.model.Produto;
-import com.br.hermescomercial.model.Usuario;
-import com.br.hermescomercial.model.Pagamento;
-
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Camada de serviço para gerenciamento de vendas
- * Centraliza a lógica de negócio relacionada a vendas
+ * Serviço de regras de negócio para vendas
+ * @author Hermes Comercial
+ * @version 2.8.0
  */
 public class VendaService {
     
-    private final PDVManager pdvManager;
-    private final PagamentoManager pagamentoManager;
-    // private final CupomFiscalManager cupomManager; - não utilizado
-    private final ImpressoraManager impressoraManager;
+    // Configurações de negócio
+    private static final BigDecimal DESCONTO_MAXIMO = BigDecimal.valueOf(0.20); // 20%
+    private static final BigDecimal VALOR_MINIMO_VENDA = BigDecimal.valueOf(5.00); // R$ 5,00
+    private static final int QUANTIDADE_MAXIMA_ITENS = 50;
+    private static final int TEMPO_LIMITE_ALTERACAO_MINUTOS = 30; // 30 minutos
+    private static final BigDecimal VALOR_LIMITE_CANCELAMENTO = BigDecimal.valueOf(1000.00); // R$ 1.000,00
     
-    public VendaService() {
-        this.pdvManager = PDVManager.getInstance();
-        this.pagamentoManager = PagamentoManager.getInstance();
-        // this.cupomManager = CupomFiscalManager.getInstance(); - não utilizado
-        this.impressoraManager = ImpressoraManager.getInstance();
+    public enum ResultadoValidacao {
+        OK,                     // Venda permitida
+        DESCONTO_EXCEDIDO,     // Desconto acima do limite
+        VALOR_ABAIXO_MINIMO,    // Valor abaixo do mínimo
+        ITENS_EXCEDIDOS,        // Quantidade de itens acima do limite
+        HORARIO_INVALIDO,       // Fora do horário comercial
+        CANCELAMENTO_RESTRITO,  // Cancelamento precisa de autorização
+        VENDA_MUITO_ANTIGA,    // Alteração não permitida
+        LIMITE_VALOR_EXCEDIDO   // Valor acima do limite para cancelamento
+    }
+    
+    public enum TipoDesconto {
+        PERCENTUAL,    // Desconto em percentual
+        VALOR_FIXO    // Desconto em valor fixo
     }
     
     /**
-     * Inicia uma nova venda
+     * Valida se o desconto é permitido
      */
-    public VendaPDV iniciarNovaVenda(Usuario operador) {
-        VendaPDV venda = new VendaPDV();
-        venda.setNumeroCupom("V" + System.currentTimeMillis());
-        venda.setDataVenda(LocalDateTime.now());
-        venda.setOperador(operador);
-        venda.setStatus("EM_ANDAMENTO");
+    public ResultadoValidacao validarDesconto(BigDecimal valorTotal, BigDecimal valorDesconto, TipoDesconto tipo) {
+        if (valorDesconto.compareTo(BigDecimal.ZERO) <= 0) {
+            return ResultadoValidacao.OK; // Sem desconto é permitido
+        }
         
-        // O carrinho é criado automaticamente ao obter getCarrinhoAtual()
-        // Operador é definido através do método criarVendaPDV()
+        BigDecimal percentualDesconto;
         
-        return venda;
+        if (tipo == TipoDesconto.PERCENTUAL) {
+            percentualDesconto = valorDesconto;
+        } else {
+            // Converter valor fixo para percentual
+            percentualDesconto = valorDesconto.divide(valorTotal, 4, RoundingMode.HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
+        }
+        
+        if (percentualDesconto.compareTo(DESCONTO_MAXIMO.multiply(BigDecimal.valueOf(100))) > 0) {
+            return ResultadoValidacao.DESCONTO_EXCEDIDO;
+        }
+        
+        BigDecimal valorComDesconto = valorTotal.subtract(valorDesconto);
+        if (valorComDesconto.compareTo(VALOR_MINIMO_VENDA) < 0) {
+            return ResultadoValidacao.VALOR_ABAIXO_MINIMO;
+        }
+        
+        return ResultadoValidacao.OK;
     }
     
     /**
-     * Adiciona produto ao carrinho
+     * Valida se o valor mínimo da venda é respeitado
      */
-    public boolean adicionarProduto(String codigoProduto, int quantidade) {
-        try {
-            Produto produto = pdvManager.buscarProdutoPorCodigo(codigoProduto);
-            if (produto == null) {
+    public ResultadoValidacao validarValorMinimo(BigDecimal valorTotal) {
+        if (valorTotal.compareTo(VALOR_MINIMO_VENDA) < 0) {
+            return ResultadoValidacao.VALOR_ABAIXO_MINIMO;
+        }
+        return ResultadoValidacao.OK;
+    }
+    
+    /**
+     * Valida se a quantidade de itens é permitida
+     */
+    public ResultadoValidacao validarQuantidadeItens(int quantidadeItens) {
+        if (quantidadeItens > QUANTIDADE_MAXIMA_ITENS) {
+            return ResultadoValidacao.ITENS_EXCEDIDOS;
+        }
+        return ResultadoValidacao.OK;
+    }
+    
+    /**
+     * Valida se o horário permite vendas
+     */
+    public ResultadoValidacao validarHorarioVenda() {
+        LocalTime agora = LocalTime.now();
+        
+        // Horário comercial: 08:00 às 22:00
+        LocalTime inicioComercial = LocalTime.of(8, 0);
+        LocalTime fimComercial = LocalTime.of(22, 0);
+        
+        if (agora.isBefore(inicioComercial) || agora.isAfter(fimComercial)) {
+            return ResultadoValidacao.HORARIO_INVALIDO;
+        }
+        
+        return ResultadoValidacao.OK;
+    }
+    
+    /**
+     * Valida se o cancelamento é permitido
+     */
+    public ResultadoValidacao validarCancelamento(BigDecimal valorTotal, LocalDateTime dataVenda, String motivo) {
+        // Validar valor limite para cancelamento
+        if (valorTotal.compareTo(VALOR_LIMITE_CANCELAMENTO) > 0) {
+            return ResultadoValidacao.CANCELAMENTO_RESTRITO;
+        }
+        
+        // Validar tempo desde a venda
+        LocalDateTime agora = LocalDateTime.now();
+        long minutosDesdeVenda = java.time.temporal.ChronoUnit.MINUTES.between(dataVenda, agora);
+        
+        if (minutosDesdeVenda > TEMPO_LIMITE_ALTERACAO_MINUTOS) {
+            return ResultadoValidacao.VENDA_MUITO_ANTIGA;
+        }
+        
+        // Validar motivo do cancelamento
+        if (motivo == null || motivo.trim().isEmpty()) {
+            return ResultadoValidacao.CANCELAMENTO_RESTRITO;
+        }
+        
+        return ResultadoValidacao.OK;
+    }
+    
+    /**
+     * Valida alteração de venda
+     */
+    public ResultadoValidacao validarAlteracaoVenda(LocalDateTime dataVenda) {
+        LocalDateTime agora = LocalDateTime.now();
+        long minutosDesdeVenda = java.time.temporal.ChronoUnit.MINUTES.between(dataVenda, agora);
+        
+        if (minutosDesdeVenda > TEMPO_LIMITE_ALTERACAO_MINUTOS) {
+            return ResultadoValidacao.VENDA_MUITO_ANTIGA;
+        }
+        
+        return ResultadoValidacao.OK;
+    }
+    
+    /**
+     * Calcula o desconto máximo permitido
+     */
+    public BigDecimal calcularDescontoMaximo(BigDecimal valorTotal, TipoDesconto tipo) {
+        if (tipo == TipoDesconto.PERCENTUAL) {
+            return DESCONTO_MAXIMO.multiply(BigDecimal.valueOf(100));
+        } else {
+            return valorTotal.multiply(DESCONTO_MAXIMO);
+        }
+    }
+    
+    /**
+     * Obtém mensagem de erro para validação
+     */
+    public String getMensagemErro(ResultadoValidacao resultado) {
+        switch (resultado) {
+            case DESCONTO_EXCEDIDO:
+                return "🚫 DESCONTO EXCEDIDO!\n\n" +
+                       "Desconto máximo permitido: " + DESCONTO_MAXIMO.multiply(BigDecimal.valueOf(100)) + "%\n" +
+                       "Para descontos maiores, consulte o gerente.";
+                       
+            case VALOR_ABAIXO_MINIMO:
+                return "💰 VALOR ABAIXO DO MÍNIMO!\n\n" +
+                       "Valor mínimo por venda: R$ " + VALOR_MINIMO_VENDA + "\n" +
+                       "Adicione mais itens para atingir o valor mínimo.";
+                       
+            case ITENS_EXCEDIDOS:
+                return "📦 QUANTIDADE DE ITENS EXCEDIDA!\n\n" +
+                       "Máximo de itens por venda: " + QUANTIDADE_MAXIMA_ITENS + "\n" +
+                       "Para vendas maiores, consulte o gerente.";
+                       
+            case HORARIO_INVALIDO:
+                return "🕐 FORA DO HORÁRIO COMERCIAL!\n\n" +
+                       "Horário de funcionamento: 08:00 às 22:00\n" +
+                       "Vendas fora do horário requerem autorização.";
+                       
+            case CANCELAMENTO_RESTRITO:
+                return "🚫 CANCELAMENTO RESTRITO!\n\n" +
+                       "Cancelamentos acima de R$ " + VALOR_LIMITE_CANCELAMENTO + " precisam de autorização do gerente.\n" +
+                       "Forneça um motivo detalhado para análise.";
+                       
+            case VENDA_MUITO_ANTIGA:
+                return "⏰ ALTERAÇÃO NÃO PERMITIDA!\n\n" +
+                       "Alterações só são permitidas em até " + TEMPO_LIMITE_ALTERACAO_MINUTOS + " minutos após a venda.\n" +
+                       "Contate o gerente para alterações posteriores.";
+                       
+            case LIMITE_VALOR_EXCEDIDO:
+                return "💸 VALOR ACIMA DO LIMITE!\n\n" +
+                       "Operações acima de R$ " + VALOR_LIMITE_CANCELAMENTO + " precisam de autorização.";
+                       
+            default:
+                return "❓ Erro de validação não identificado.";
+        }
+    }
+    
+    /**
+     * Verifica se precisa de autorização do gerente
+     */
+    public boolean precisaAutorizacaoGerente(ResultadoValidacao resultado) {
+        return resultado == ResultadoValidacao.DESCONTO_EXCEDIDO ||
+               resultado == ResultadoValidacao.CANCELAMENTO_RESTRITO ||
+               resultado == ResultadoValidacao.ITENS_EXCEDIDOS ||
+               resultado == ResultadoValidacao.LIMITE_VALOR_EXCEDIDO;
+    }
+    
+    /**
+     * Obtém configurações atuais do sistema
+     */
+    public Map<String, Object> getConfiguracoes() {
+        Map<String, Object> config = new HashMap<>();
+        
+        config.put("descontoMaximo", DESCONTO_MAXIMO.multiply(BigDecimal.valueOf(100)) + "%");
+        config.put("valorMinimoVenda", "R$ " + VALOR_MINIMO_VENDA);
+        config.put("quantidadeMaximaItens", QUANTIDADE_MAXIMA_ITENS);
+        config.put("tempoLimiteAlteracao", TEMPO_LIMITE_ALTERACAO_MINUTOS + " minutos");
+        config.put("valorLimiteCancelamento", "R$ " + VALOR_LIMITE_CANCELAMENTO);
+        config.put("horarioComercial", "08:00 às 22:00");
+        
+        return config;
+    }
+    
+    /**
+     * Validação completa de uma venda
+     */
+    public Map<String, ResultadoValidacao> validarVendaCompleta(
+            BigDecimal valorTotal, 
+            BigDecimal valorDesconto, 
+            TipoDesconto tipoDesconto,
+            int quantidadeItens,
+            LocalDateTime dataVenda) {
+        
+        Map<String, ResultadoValidacao> validacoes = new HashMap<>();
+        
+        // Validar valor mínimo
+        validacoes.put("valorMinimo", validarValorMinimo(valorTotal));
+        
+        // Validar desconto
+        validacoes.put("desconto", validarDesconto(valorTotal, valorDesconto, tipoDesconto));
+        
+        // Validar quantidade de itens
+        validacoes.put("quantidadeItens", validarQuantidadeItens(quantidadeItens));
+        
+        // Validar horário
+        validacoes.put("horario", validarHorarioVenda());
+        
+        // Validar tempo para alteração
+        if (dataVenda != null) {
+            validacoes.put("alteracao", validarAlteracaoVenda(dataVenda));
+        }
+        
+        return validacoes;
+    }
+    
+    /**
+     * Verifica se todas as validações foram aprovadas
+     */
+    public boolean todasValidacoesAprovadas(Map<String, ResultadoValidacao> validacoes) {
+        for (ResultadoValidacao resultado : validacoes.values()) {
+            if (resultado != ResultadoValidacao.OK) {
                 return false;
             }
-            
-            if (!verificarEstoqueDisponivel(produto, quantidade)) {
-                return false;
-            }
-            
-            return pdvManager.adicionarProduto(produto, quantidade);
-            
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
-    /**
-     * Remove item do carrinho
-     */
-    public boolean removerItem(String codigoProduto) {
-        try {
-            return pdvManager.removerItem(codigoProduto);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
-    /**
-     * Aplica desconto em item
-     */
-    public boolean aplicarDescontoItem(String codigoProduto, BigDecimal desconto) {
-        try {
-            return pdvManager.aplicarDescontoItem(codigoProduto, desconto);
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
-    /**
-     * Processa pagamento
-     */
-    public Pagamento processarPagamento(String formaPagamento, BigDecimal valorPago, BigDecimal valorRecebido) {
-        try {
-            return pagamentoManager.processarPagamentoUnico(formaPagamento, valorPago, valorRecebido);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-    
-    /**
-     * Finaliza venda
-     */
-    public boolean finalizarVenda(Pagamento pagamento) {
-        try {
-            // Usar carrinho atual em vez de venda direta
-            var carrinhoAtual = pdvManager.getCarrinhoAtual();
-            if (carrinhoAtual == null) {
-                return false;
-            }
-            
-            // Gerar cupom fiscal simplificado
-            String cupom = "CUPOM FISCAL\n" +
-                          "Data: " + LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")) + "\n" +
-                          "Valor: R$ " + carrinhoAtual.getValorFinal() + "\n" +
-                          "Forma: " + pagamento.getTipoPagamento() + "\n" +
-                          "------------------------";
-            
-            // Imprimir cupom
-            impressoraManager.imprimirCupom(cupom);
-            
-            // Venda finalizada com sucesso
-            
-            return true;
-            
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
-    /**
-     * Cancela venda
-     */
-    public boolean cancelarVenda() {
-        try {
-            return pdvManager.cancelarVenda();
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
-    /**
-     * Obtém resumo da venda atual
-     */
-    public VendaResumo obterResumoVenda() {
-        try {
-            var carrinho = pdvManager.getCarrinhoAtual();
-            if (carrinho == null) {
-                return null;
-            }
-            
-            List<ItemVenda> itens = carrinho.getItens();
-            BigDecimal subtotal = BigDecimal.ZERO;
-            BigDecimal descontoTotal = BigDecimal.ZERO;
-            
-            for (ItemVenda item : itens) {
-                subtotal = subtotal.add(item.getValorTotal());
-                if (item.getDesconto() != null) {
-                    descontoTotal = descontoTotal.add(item.getDesconto());
-                }
-            }
-            
-            BigDecimal valorTotal = subtotal.subtract(descontoTotal);
-            
-            return new VendaResumo(
-                "V" + System.currentTimeMillis(), // Número cupom simulado
-                LocalDateTime.now(), // Data atual
-                pdvManager.getOperadorAtual(), // Operador atual
-                itens.size(),
-                subtotal,
-                descontoTotal,
-                valorTotal,
-                carrinho.estaAberto() ? "EM_ANDAMENTO" : "FINALIZADA"
-            );
-            
-        } catch (Exception e) {
-            return null;
-        }
-    }
-    
-    /**
-     * Verifica se há estoque disponível
-     */
-    private boolean verificarEstoqueDisponivel(Produto produto, int quantidade) {
-        if (produto == null || produto.getEstoque() < quantidade) {
-            return false;
         }
         return true;
     }
     
     /**
-     * Classe interna para resumo de venda
+     * Obtém o nível de risco de uma venda
      */
-    public static class VendaResumo {
-        private final String numeroCupom;
-        private final LocalDateTime dataVenda;
-        private final Usuario operador;
-        private final int quantidadeItens;
-        private final BigDecimal subtotal;
-        private final BigDecimal descontoTotal;
-        private final BigDecimal valorTotal;
-        private final String status;
+    public String getNivelRisco(BigDecimal valorTotal, int quantidadeItens) {
+        int pontosRisco = 0;
         
-        public VendaResumo(String numeroCupom, LocalDateTime dataVenda, Usuario operador,
-                          int quantidadeItens, BigDecimal subtotal, BigDecimal descontoTotal,
-                          BigDecimal valorTotal, String status) {
-            this.numeroCupom = numeroCupom;
-            this.dataVenda = dataVenda;
-            this.operador = operador;
-            this.quantidadeItens = quantidadeItens;
-            this.subtotal = subtotal;
-            this.descontoTotal = descontoTotal;
-            this.valorTotal = valorTotal;
-            this.status = status;
-        }
+        // Valor alto
+        if (valorTotal.compareTo(BigDecimal.valueOf(500)) > 0) pontosRisco++;
+        if (valorTotal.compareTo(BigDecimal.valueOf(1000)) > 0) pontosRisco++;
         
-        // Getters
-        public String getNumeroCupom() { return numeroCupom; }
-        public LocalDateTime getDataVenda() { return dataVenda; }
-        public Usuario getOperador() { return operador; }
-        public int getQuantidadeItens() { return quantidadeItens; }
-        public BigDecimal getSubtotal() { return subtotal; }
-        public BigDecimal getDescontoTotal() { return descontoTotal; }
-        public BigDecimal getValorTotal() { return valorTotal; }
-        public String getStatus() { return status; }
+        // Quantidade de itens
+        if (quantidadeItens > 20) pontosRisco++;
+        if (quantidadeItens > 30) pontosRisco++;
+        
+        if (pontosRisco == 0) return "🟢 Baixo";
+        if (pontosRisco == 1) return "🟡 Médio";
+        if (pontosRisco == 2) return "🟠 Alto";
+        return "🔴 Crítico";
     }
 }

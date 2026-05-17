@@ -1,5 +1,6 @@
 package com.br.hermescomercial.exception;
 
+
 /**
  * Exceção de validação para erros de validação de dados
  */

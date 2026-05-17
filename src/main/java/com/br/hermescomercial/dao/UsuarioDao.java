@@ -1,5 +1,6 @@
 package com.br.hermescomercial.dao;
 
+
 import com.br.hermescomercial.connectionBD.ConnectionBD;
 import com.br.hermescomercial.model.Usuario;
 import java.sql.PreparedStatement;
@@ -43,7 +44,8 @@ public class UsuarioDao {
     }
 
     public void salvar(Usuario usuario) {
-        String sql = "INSERT INTO USUARIO (nome, endereco, bairro, cidade, estado, cep, numeroDocumento, whatsapp, telefone, email, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        // Usar campos corretos da tabela: CPF e CNPJ em vez de numeroDocumento
+        String sql = "INSERT INTO USUARIO (nome, endereco, bairro, cidade, estado, cep, cpf, cnpj, whatsapp, telefone, email, tipo_usuario) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuario.getNome());
             ps.setString(2, usuario.getEndereco());
@@ -51,13 +53,33 @@ public class UsuarioDao {
             ps.setString(4, usuario.getCidade());
             ps.setString(5, usuario.getEstado());
             ps.setString(6, usuario.getCep());
-            // Removida tipoDocumento pois a coluna não existe no banco
-            // ps.setString(7, usuario.getTipoDocumento());
-            ps.setString(7, usuario.getNumeroDocumeto());
-            ps.setString(8, usuario.getWhastsapp());
-            ps.setString(9, usuario.getTelefone());
-            ps.setString(10, usuario.getEmail());
-            ps.setString(11, usuario.getTipousuario());
+            
+            // Determinar se é CPF ou CNPJ baseado no tipo de documento
+            if ("F".equals(usuario.getTipoDocumento())) {
+                ps.setString(7, usuario.getNumeroDocumeto()); // CPF
+                ps.setString(8, null); // CNPJ
+            } else if ("J".equals(usuario.getTipoDocumento())) {
+                ps.setString(7, null); // CPF
+                ps.setString(8, usuario.getNumeroDocumeto()); // CNPJ
+            } else {
+                // Se não tiver tipo definido, tentar inferir pelo tamanho
+                String numDoc = usuario.getNumeroDocumeto();
+                if (numDoc != null && numDoc.length() == 11) {
+                    ps.setString(7, numDoc); // CPF
+                    ps.setString(8, null); // CNPJ
+                } else if (numDoc != null && numDoc.length() == 14) {
+                    ps.setString(7, null); // CPF
+                    ps.setString(8, numDoc); // CNPJ
+                } else {
+                    ps.setString(7, numDoc); // CPF (padrão)
+                    ps.setString(8, null); // CNPJ
+                }
+            }
+            
+            ps.setString(9, usuario.getWhastsapp());
+            ps.setString(10, usuario.getTelefone());
+            ps.setString(11, usuario.getEmail());
+            ps.setString(12, usuario.getTipousuario());
             ps.executeUpdate();
         } catch (Exception e) {
             logger.error("Erro ao salvar usuario: " + e.getMessage());
@@ -65,20 +87,41 @@ public class UsuarioDao {
     }
 
     public void update(Usuario usuario) {
-        String sql = "UPDATE USUARIO SET endereco=?, bairro=?, cidade=?, estado=?, cep=?, numeroDocumento=?, whatsapp=?, telefone=?, email=?, tipo_usuario=? WHERE nome=?";
+        // Usar campos corretos da tabela: CPF e CNPJ em vez de numeroDocumento
+        String sql = "UPDATE USUARIO SET endereco=?, bairro=?, cidade=?, estado=?, cep=?, cpf=?, cnpj=?, whatsapp=?, telefone=?, email=?, tipo_usuario=? WHERE nome=?";
         try (PreparedStatement ps = ConnectionBD.getConnection().prepareStatement(sql)) {
             ps.setString(1, usuario.getEndereco());
             ps.setString(2, usuario.getBairro());
             ps.setString(3, usuario.getCidade());
             ps.setString(4, usuario.getEstado());
             ps.setString(5, usuario.getCep());
-            // Removida tipoDocumento pois a coluna não existe no banco
-            // ps.setString(6, usuario.getTipoDocumento());
-            ps.setString(6, usuario.getNumeroDocumeto());
-            ps.setString(7, usuario.getWhastsapp());
-            ps.setString(8, usuario.getTelefone());
-            ps.setString(9, usuario.getEmail());
-            ps.setString(10, usuario.getTipousuario());
+            
+            // Determinar se é CPF ou CNPJ baseado no tipo de documento
+            if ("F".equals(usuario.getTipoDocumento())) {
+                ps.setString(6, usuario.getNumeroDocumeto()); // CPF
+                ps.setString(7, null); // CNPJ
+            } else if ("J".equals(usuario.getTipoDocumento())) {
+                ps.setString(6, null); // CPF
+                ps.setString(7, usuario.getNumeroDocumeto()); // CNPJ
+            } else {
+                // Se não tiver tipo definido, tentar inferir pelo tamanho
+                String numDoc = usuario.getNumeroDocumeto();
+                if (numDoc != null && numDoc.length() == 11) {
+                    ps.setString(6, numDoc); // CPF
+                    ps.setString(7, null); // CNPJ
+                } else if (numDoc != null && numDoc.length() == 14) {
+                    ps.setString(6, null); // CPF
+                    ps.setString(7, numDoc); // CNPJ
+                } else {
+                    ps.setString(6, numDoc); // CPF (padrão)
+                    ps.setString(7, null); // CNPJ
+                }
+            }
+            
+            ps.setString(8, usuario.getWhastsapp());
+            ps.setString(9, usuario.getTelefone());
+            ps.setString(10, usuario.getEmail());
+            ps.setString(11, usuario.getTipousuario());
             ps.setString(12, usuario.getNome());
             ps.executeUpdate();
         } catch (Exception e) {

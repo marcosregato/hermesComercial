@@ -1,5 +1,6 @@
 package com.br.hermescomercial.model;
 
+
 public class Custo {
     private Long id;
     private String descricao;

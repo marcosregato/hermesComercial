@@ -8,7 +8,6 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
-PURPLE='\033[0;35m'
 CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
@@ -70,14 +69,15 @@ check_git_repo() {
 check_git_status() {
     print_section "VERIFICANDO STATUS DO REPOSITÓRIO"
     
-    local status_output=$(git status --porcelain)
+    local status_output
+    status_output=$(git status --porcelain)
     if [ -z "$status_output" ]; then
         echo -e "${YELLOW}⚠️  Nenhuma alteração pendente encontrada${NC}"
         return 1
     else
         echo -e "${GREEN}✅ Alterações pendentes detectadas${NC}"
         echo -e "${BLUE}📋 Arquivos modificados:${NC}"
-        echo "$status_output" | while read line; do
+        echo "$status_output" | while read -r line; do
             echo -e "   ${CYAN}• $line${NC}"
         done
         return 0
@@ -87,7 +87,8 @@ check_git_status() {
 # Função para obter versão atual do pom.xml
 get_current_version() {
     if [ -f "$VERSION_FILE" ]; then
-        local version=$(grep -oP '(?<=<version>)[^<]+' "$VERSION_FILE" | head -1)
+        local version
+    version=$(grep -oP '(?<=<version>)[^<]+' "$VERSION_FILE" | head -1)
         echo "$version"
     else
         echo "1.0.0"
@@ -310,8 +311,7 @@ main() {
     if [ "$skip_tests" = false ]; then
         print_section "EXECUTANDO TESTES"
         if [ -f "run_tests.sh" ]; then
-            run_command "./run_tests.sh" "Testes executados"
-            if [ $? -ne 0 ]; then
+            if ! run_command "./run_tests.sh" "Testes executados"; then
                 echo -e "${YELLOW}⚠️  Testes falharam, mas continuando deploy...${NC}"
             fi
         else

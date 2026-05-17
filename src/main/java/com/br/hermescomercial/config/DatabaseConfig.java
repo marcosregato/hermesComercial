@@ -18,6 +18,7 @@ public class DatabaseConfig {
     
     public enum DatabaseType {
         POSTGRESQL("PostgreSQL"),
+        MYSQL("MySQL"),
         EXCEL("Excel"),
         SQLITE("SQLite");
         
@@ -94,6 +95,9 @@ public class DatabaseConfig {
             case POSTGRESQL:
                 properties.setProperty("database.description", "Banco de dados PostgreSQL local");
                 break;
+            case MYSQL:
+                properties.setProperty("database.description", "Banco de dados MySQL local");
+                break;
             case EXCEL:
                 properties.setProperty("database.description", "Arquivos Excel como banco de dados");
                 break;
@@ -135,6 +139,9 @@ public class DatabaseConfig {
         switch (getDatabaseType()) {
             case POSTGRESQL:
                 logger.info("Usando PostgreSQL - Configuração via ConnectionBD");
+                break;
+            case MYSQL:
+                logger.info("Usando MySQL - Configuração via ConnectionBD");
                 break;
             case EXCEL:
                 logger.info("Usando Excel - Arquivos em ./data/excel/");

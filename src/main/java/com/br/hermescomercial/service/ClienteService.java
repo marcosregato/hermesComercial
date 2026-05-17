@@ -1,77 +1,168 @@
 package com.br.hermescomercial.service;
 
 import com.br.hermescomercial.model.Cliente;
-import com.br.hermescomercial.dao.ClienteDao;
+import com.br.hermescomercial.repository.ClienteRepository;
 import com.br.hermescomercial.exception.BusinessException;
+import com.br.hermescomercial.exception.ValidationException;
+import com.br.hermescomercial.validation.Validator;
+import com.br.hermescomercial.injection.DependencyContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.SQLException;
 import java.util.List;
 
 /**
- * Serviço para gerenciamento de clientes
- * Implementa a lógica de negócio para clientes
+ * Serviço refatorado para gerenciamento de clientes
+ * Implementa injeção de dependências e validações adequadas
  * @author marcos
  */
 public class ClienteService {
     
     private static final Logger logger = LogManager.getLogger(ClienteService.class);
+    private final ClienteRepository clienteRepository;
     
-    private final ClienteDao clienteDao;
-    
-    public ClienteService() {
-        this.clienteDao = new ClienteDao();
-    }
-    
-    public ClienteService(ClienteDao clienteDao) {
-        this.clienteDao = clienteDao;
+    /**
+     * Construtor com injeção de dependência
+     * @param clienteRepository Repository de clientes
+     */
+    public ClienteService(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
+        logger.info("ClienteServiceRefactored inicializado com repository injetado");
     }
     
     /**
-     * Salva um novo cliente
+     * Construtor padrão usando container de dependências
+     */
+    public ClienteService() {
+        this(DependencyContainer.getInstance().get(ClienteRepository.class));
+    }
+    
+    /**
+     * Salva um novo cliente com validação
      * @param cliente Cliente a ser salvo
      * @return true se salvo com sucesso
+     * @throws ValidationException Se o cliente for inválido
+     * @throws BusinessException Se ocorrer erro de negócio
      */
     public boolean salvar(Cliente cliente) {
         try {
-            validarCliente(cliente);
-            return clienteDao.salvar(cliente);
-        } catch (SQLException e) {
-            logger.error("Erro ao salvar cliente: " + e.getMessage(), e);
-            throw new RuntimeException("Não foi possível salvar o cliente", e);
-        }
-    }
-    
-    /**
-     * Remove um cliente pelo nome
-     * @param nome Nome do cliente a ser removido
-     * @return true se removido com sucesso
-     */
-    public boolean remover(String nome) {
-        try {
-            if (nome == null || nome.trim().isEmpty()) {
-                throw new IllegalArgumentException("Nome do cliente não pode ser nulo ou vazio");
+            logger.debug("Iniciando salvamento do cliente: {}", cliente != null ? cliente.getNome() : "null");
+            
+            // Validação do cliente
+            Validator.validarCliente(cliente);
+            
+            // Verificar se cliente já existe (mesmo CPF/CNPJ)
+            if (cliente.getCpf() != null && !cliente.getCpf().trim().isEmpty()) {
+                Cliente existente = buscarPorCPF(cliente.getCpf());
+                if (existente != null && !existente.getId().equals(cliente.getId())) {
+                    throw new BusinessException("Já existe um cliente cadastrado com este CPF");
+                }
             }
-            return clienteDao.remove(nome);
-        } catch (SQLException e) {
-            logger.error("Erro ao remover cliente: " + e.getMessage(), e);
-            throw new RuntimeException("Não foi possível remover o cliente", e);
+            
+            boolean resultado = clienteRepository.salvar(cliente);
+            
+            if (resultado) {
+                logger.info("Cliente salvo com sucesso: {}", cliente.getNome());
+            } else {
+                logger.warn("Falha ao salvar cliente: {}", cliente.getNome());
+            }
+            
+            return resultado;
+            
+        } catch (ValidationException e) {
+            logger.warn("Validação falhou ao salvar cliente: {}", e.getMessage());
+            throw e;
+        } catch (BusinessException e) {
+            logger.warn("Erro de negócio ao salvar cliente: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            logger.error("Erro ao salvar cliente: {}", e.getMessage(), e);
+            throw new BusinessException("Não foi possível salvar o cliente", e);
         }
     }
     
     /**
-     * Atualiza um cliente existente
-     * @param cliente Cliente com dados atualizados
+     * Atualiza um cliente existente com validação
+     * @param cliente Cliente a ser atualizado
      * @return true se atualizado com sucesso
      */
     public boolean atualizar(Cliente cliente) {
         try {
-            validarCliente(cliente);
-            return clienteDao.update(cliente);
-        } catch (SQLException e) {
-            logger.error("Erro ao atualizar cliente: " + e.getMessage(), e);
-            throw new RuntimeException("Não foi possível atualizar o cliente", e);
+            logger.debug("Iniciando atualização do cliente: {}", cliente != null ? cliente.getNome() : "null");
+            
+            if (cliente == null || cliente.getId() == null) {
+                throw new ValidationException("Cliente e ID são obrigatórios para atualização");
+            }
+            
+            // Validação do cliente
+            Validator.validarCliente(cliente);
+            
+            // Verificar se cliente existe
+            Cliente existente = clienteRepository.buscarPorId(cliente.getId());
+            if (existente == null) {
+                throw new BusinessException("Cliente não encontrado para atualização");
+            }
+            
+            boolean resultado = clienteRepository.atualizar(cliente);
+            
+            if (resultado) {
+                logger.info("Cliente atualizado com sucesso: {}", cliente.getNome());
+            } else {
+                logger.warn("Falha ao atualizar cliente: {}", cliente.getNome());
+            }
+            
+            return resultado;
+            
+        } catch (ValidationException e) {
+            logger.warn("Validação falhou ao atualizar cliente: {}", e.getMessage());
+            throw e;
+        } catch (BusinessException e) {
+            logger.warn("Erro de negócio ao atualizar cliente: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            logger.error("Erro ao atualizar cliente: {}", e.getMessage(), e);
+            throw new BusinessException("Não foi possível atualizar o cliente", e);
+        }
+    }
+    
+    /**
+     * Exclui um cliente pelo ID
+     * @param id ID do cliente
+     * @return true se excluído com sucesso
+     */
+    public boolean excluir(Long id) {
+        try {
+            logger.debug("Iniciando exclusão do cliente ID: {}", id);
+            
+            if (id == null) {
+                throw new ValidationException("ID do cliente é obrigatório para exclusão");
+            }
+            
+            // Verificar se cliente existe
+            Cliente cliente = clienteRepository.buscarPorId(id);
+            if (cliente == null) {
+                throw new BusinessException("Cliente não encontrado para exclusão");
+            }
+            
+            boolean resultado = clienteRepository.excluir(id);
+            
+            if (resultado) {
+                logger.info("Cliente excluído com sucesso: {} (ID: {})", cliente.getNome(), id);
+            } else {
+                logger.warn("Falha ao excluir cliente ID: {}", id);
+            }
+            
+            return resultado;
+            
+        } catch (ValidationException e) {
+            logger.warn("Validação falhou ao excluir cliente: {}", e.getMessage());
+            throw e;
+        } catch (BusinessException e) {
+            logger.warn("Erro de negócio ao excluir cliente: {}", e.getMessage());
+            throw e;
+        } catch (Exception e) {
+            logger.error("Erro ao excluir cliente ID {}: {}", id, e.getMessage(), e);
+            throw new BusinessException("Não foi possível excluir o cliente", e);
         }
     }
     
@@ -82,26 +173,21 @@ public class ClienteService {
      */
     public List<Cliente> buscarPorNome(String nome) {
         try {
-            if (nome == null) {
+            logger.debug("Buscando clientes por nome: {}", nome);
+            
+            if (nome == null || nome.trim().isEmpty()) {
+                logger.warn("Busca por nome vazia, retornando lista completa");
                 return listar();
             }
-            return clienteDao.buscarComFiltros(nome, false, false, false);
+            
+            List<Cliente> clientes = clienteRepository.buscarComFiltros(nome, true, false, true);
+            
+            logger.info("Encontrados {} clientes com nome contendo '{}'", clientes.size(), nome);
+            return clientes;
+            
         } catch (Exception e) {
             logger.error("Erro ao buscar clientes por nome '{}': {}", nome, e.getMessage(), e);
             throw new BusinessException("Não foi possível buscar clientes", e);
-        }
-    }
-    
-    /**
-     * Lista todos os clientes
-     * @return Lista de todos os clientes
-     */
-    public List<Cliente> listar() {
-        try {
-            return clienteDao.listar();
-        } catch (Exception e) {
-            logger.error("Erro ao listar clientes: {}", e.getMessage(), e);
-            throw new BusinessException("Não foi possível listar clientes", e);
         }
     }
     
@@ -112,180 +198,77 @@ public class ClienteService {
      */
     public Cliente buscarPorCPF(String cpf) {
         try {
+            logger.debug("Buscando cliente por CPF: {}", cpf);
+            
             if (cpf == null || cpf.trim().isEmpty()) {
+                logger.warn("Busca por CPF vazia");
                 return null;
             }
-            return clienteDao.buscarPorCPF(cpf);
-        } catch (SQLException e) {
-            logger.error("Erro ao buscar cliente por CPF: " + e.getMessage(), e);
-            throw new RuntimeException("Não foi possível buscar cliente por CPF", e);
+            
+            // Buscar todos clientes e filtrar por CPF (implementação workaround)
+            List<Cliente> todos = listar();
+            for (Cliente cliente : todos) {
+                if (cpf.equals(cliente.getCpf())) {
+                    logger.debug("Cliente encontrado por CPF: {}", cliente.getNome());
+                    return cliente;
+                }
+            }
+            
+            logger.debug("Nenhum cliente encontrado com CPF: {}", cpf);
+            return null;
+            
+        } catch (Exception e) {
+            logger.error("Erro ao buscar cliente por CPF '{}': {}", cpf, e.getMessage(), e);
+            throw new BusinessException("Não foi possível buscar cliente por CPF", e);
         }
     }
     
     /**
-     * Busca cliente por ID
+     * Lista todos os clientes
+     * @return Lista de todos os clientes
+     */
+    public List<Cliente> listar() {
+        try {
+            logger.debug("Listando todos os clientes");
+            
+            List<Cliente> clientes = clienteRepository.listar();
+            
+            logger.info("Total de clientes listados: {}", clientes.size());
+            return clientes;
+            
+        } catch (Exception e) {
+            logger.error("Erro ao listar clientes: {}", e.getMessage(), e);
+            throw new BusinessException("Não foi possível listar clientes", e);
+        }
+    }
+    
+    /**
+     * Busca cliente pelo ID
      * @param id ID do cliente
      * @return Cliente encontrado ou null
      */
     public Cliente buscarPorId(Long id) {
         try {
+            logger.debug("Buscando cliente por ID: {}", id);
+            
             if (id == null) {
+                logger.warn("Busca por ID nula");
                 return null;
             }
-            return clienteDao.buscarPorId(id);
-        } catch (SQLException e) {
-            logger.error("Erro ao buscar cliente por ID: " + e.getMessage(), e);
-            throw new RuntimeException("Não foi possível buscar cliente por ID", e);
-        }
-    }
-    
-    /**
-     * Busca clientes com filtros avançados
-     * @param busca Termo de busca geral
-     * @param apenasAtivos Filtrar apenas clientes ativos
-     * @param apenasFisica Filtrar apenas pessoas físicas
-     * @param apenasJuridica Filtrar apenas pessoas jurídicas
-     * @return Lista de clientes filtrados
-     */
-    public List<Cliente> buscarComFiltros(String busca, boolean apenasAtivos, 
-                                          boolean apenasFisica, boolean apenasJuridica) {
-        try {
-            return clienteDao.buscarComFiltros(busca, apenasAtivos, apenasFisica, apenasJuridica);
-        } catch (Exception e) {
-            logger.error("Erro ao buscar clientes com filtros: " + e.getMessage(), e);
-            throw new RuntimeException("Não foi possível buscar clientes com filtros", e);
-        }
-    }
-    
-    /**
-     * Valida os dados do cliente
-     * @param cliente Cliente a ser validado
-     */
-    private void validarCliente(Cliente cliente) {
-        if (cliente == null) {
-            throw new IllegalArgumentException("Cliente não pode ser nulo");
-        }
-        
-        if (cliente.getNome() == null || cliente.getNome().trim().isEmpty()) {
-            throw new IllegalArgumentException("Nome do cliente é obrigatório");
-        }
-        
-        if (cliente.getNome().length() < 3) {
-            throw new IllegalArgumentException("Nome do cliente deve ter pelo menos 3 caracteres");
-        }
-        
-        if (cliente.getNome().length() > 100) {
-            throw new IllegalArgumentException("Nome do cliente não pode ter mais de 100 caracteres");
-        }
-        
-        if (cliente.getCpf() != null && !cliente.getCpf().trim().isEmpty()) {
-            if (!validarCPF(cliente.getCpf())) {
-                throw new IllegalArgumentException("CPF inválido");
-            }
-        }
-        
-        if (cliente.getEmail() != null && !cliente.getEmail().trim().isEmpty()) {
-            if (!validarEmail(cliente.getEmail())) {
-                throw new IllegalArgumentException("E-mail inválido");
-            }
-        }
-        
-        logger.debug("Cliente validado com sucesso: " + cliente.getNome());
-    }
-    
-    /**
-     * Valida formato do CPF
-     * @param cpf CPF a ser validado
-     * @return true se CPF é válido
-     */
-    private boolean validarCPF(String cpf) {
-        if (cpf == null) return false;
-        
-        // Remove caracteres não numéricos
-        String cpfNumeros = cpf.replaceAll("[^0-9]", "");
-        
-        if (cpfNumeros.length() != 11) {
-            return false;
-        }
-        
-        // Validação simples de CPF (não considera dígitos verificadores reais)
-        // Para validação completa, implementar algoritmo do CPF
-        return !cpfNumeros.equals("00000000000") && 
-               !cpfNumeros.equals("11111111111") && 
-               !cpfNumeros.equals("22222222222") && 
-               !cpfNumeros.equals("33333333333") && 
-               !cpfNumeros.equals("44444444444") && 
-               !cpfNumeros.equals("55555555555") && 
-               !cpfNumeros.equals("66666666666") && 
-               !cpfNumeros.equals("77777777777") && 
-               !cpfNumeros.equals("88888888888") && 
-               !cpfNumeros.equals("99999999999");
-    }
-    
-    /**
-     * Valida formato de e-mail
-     * @param email E-mail a ser validado
-     * @return true se e-mail é válido
-     */
-    private boolean validarEmail(String email) {
-        if (email == null) return false;
-        
-        return email.contains("@") && 
-               email.contains(".") && 
-               email.indexOf("@") < email.lastIndexOf(".") &&
-               email.indexOf("@") > 0 &&
-               email.lastIndexOf(".") < email.length() - 1;
-    }
-    
-    /**
-     * Verifica se cliente existe pelo nome
-     * @param nome Nome do cliente
-     * @return true se cliente existe
-     */
-    public boolean existePorNome(String nome) {
-        try {
-            List<Cliente> clientes = buscarPorNome(nome);
-            return clientes.stream().anyMatch(c -> c.getNome().equalsIgnoreCase(nome));
-        } catch (Exception e) {
-            logger.error("Erro ao verificar existência do cliente: " + e.getMessage(), e);
-            return false;
-        }
-    }
-    
-    /**
-     * Verifica se cliente existe pelo CPF
-     * @param cpf CPF do cliente
-     * @return true se cliente existe
-     */
-    public boolean existePorCPF(String cpf) {
-        try {
-            Cliente cliente = buscarPorCPF(cpf);
-            return cliente != null;
-        } catch (Exception e) {
-            logger.error("Erro ao verificar existência do cliente por CPF: " + e.getMessage(), e);
-            return false;
-        }
-    }
-    
-    /**
-     * Ativa ou desativa um cliente
-     * @param id ID do cliente
-     * @param ativo Status a ser definido
-     * @return true se atualizado com sucesso
-     */
-    public boolean ativarDesativar(Long id, boolean ativo) {
-        try {
-            Cliente cliente = buscarPorId(id);
-            if (cliente == null) {
-                throw new IllegalArgumentException("Cliente não encontrado: " + id);
+            
+            Cliente cliente = clienteRepository.buscarPorId(id);
+            
+            if (cliente != null) {
+                logger.debug("Cliente encontrado por ID: {}", cliente.getNome());
+            } else {
+                logger.debug("Nenhum cliente encontrado com ID: {}", id);
             }
             
-            cliente.setAtivo(ativo);
-            return atualizar(cliente);
+            return cliente;
             
         } catch (Exception e) {
-            logger.error("Erro ao ativar/desativar cliente: " + e.getMessage(), e);
-            throw new RuntimeException("Não foi possível alterar status do cliente", e);
+            logger.error("Erro ao buscar cliente por ID '{}': {}", id, e.getMessage(), e);
+            throw new BusinessException("Não foi possível buscar cliente por ID", e);
         }
     }
 }

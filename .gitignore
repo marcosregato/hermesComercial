@@ -134,6 +134,14 @@ rebel.xml
 # Scripts executáveis
 *.sh
 !hermes-pdv.sh
+!run_tests.sh
+!start_jacoco_server.sh
+!setup.sh
+!update_readme_version.sh
+!deploy.sh
+
+# Scripts de correção (proteger contra commit acidental)
+fix_*.sh
 
 # Documentação
 README_EXECUTAVEL.md

@@ -1,5 +1,6 @@
 package com.br.hermescomercial.repository;
 
+
 import com.br.hermescomercial.model.Usuario;
 import java.util.List;
 
