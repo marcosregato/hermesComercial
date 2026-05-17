@@ -29,6 +29,8 @@ public class CommandSystemTest {
         for (String cmd : commands) {
             commandSystem.unregisterCommand(cmd);
         }
+        // Limpar pilhas de undo/redo
+        commandSystem.clearStacks();
     }
     
     @Test

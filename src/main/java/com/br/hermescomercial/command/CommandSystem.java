@@ -210,6 +210,14 @@ public class CommandSystem {
     }
     
     /**
+     * Limpa as pilhas de undo e redo (para testes)
+     */
+    public void clearStacks() {
+        undoStack.clear();
+        redoStack.clear();
+    }
+    
+    /**
      * Interface para comandos
      */
     public interface Command {

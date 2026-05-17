@@ -180,11 +180,13 @@ public class ProdutoServiceTest {
         void testAtualizarProduto() {
             Produto produto = criarProdutoValido();
             produto.setId(1L);
+            when(produtoRepository.buscarPorId(1L)).thenReturn(java.util.Optional.of(produto));
             when(produtoRepository.atualizar(produto)).thenReturn(true);
             
             boolean resultado = produtoService.atualizar(produto);
             
             assertTrue(resultado, "Produto deve ser atualizado com sucesso");
+            verify(produtoRepository).buscarPorId(1L);
             verify(produtoRepository).atualizar(produto);
         }
         
@@ -207,11 +209,15 @@ public class ProdutoServiceTest {
         @DisplayName("Deve excluir produto por ID")
         void testExcluirPorId() {
             Long id = 1L;
+            Produto produto = criarProdutoValido();
+            produto.setId(id);
+            when(produtoRepository.buscarPorId(id)).thenReturn(java.util.Optional.of(produto));
             when(produtoRepository.remover(id)).thenReturn(true);
             
             boolean resultado = produtoService.excluir(id);
             
             assertTrue(resultado, "Produto deve ser excluído com sucesso");
+            verify(produtoRepository).buscarPorId(id);
             verify(produtoRepository).remover(id);
         }
         
@@ -219,12 +225,12 @@ public class ProdutoServiceTest {
         @DisplayName("Deve falhar ao excluir produto inexistente")
         void testExcluirProdutoInexistente() {
             Long id = 999L;
-            when(produtoRepository.remover(id)).thenReturn(false);
+            when(produtoRepository.buscarPorId(id)).thenReturn(java.util.Optional.empty());
             
-            boolean resultado = produtoService.excluir(id);
-            
-            assertFalse(resultado, "Não deve excluir produto inexistente");
-            verify(produtoRepository).remover(id);
+            assertThrows(com.br.hermescomercial.exception.BusinessException.class, () -> {
+                produtoService.excluir(id);
+            }, "Deve lançar BusinessException para produto inexistente");
+            verify(produtoRepository).buscarPorId(id);
         }
     }
     
