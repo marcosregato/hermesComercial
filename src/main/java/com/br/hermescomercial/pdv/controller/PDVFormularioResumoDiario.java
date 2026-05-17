@@ -1,5 +1,7 @@
 package com.br.hermescomercial.pdv.controller;
 
+import com.br.hermescomercial.pdv.model.TransacaoDiaria;
+import com.br.hermescomercial.pdv.service.ResumoDiarioCalculator;
 import com.br.hermescomercial.util.SystemLogger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -39,6 +41,9 @@ public class PDVFormularioResumoDiario {
     private JTable tabelaResumo;
     private DefaultTableModel modelTabela;
     private List<TransacaoDiaria> transacoesEncontradas;
+    
+    // Serviço de cálculo
+    private final ResumoDiarioCalculator calculator = new ResumoDiarioCalculator();
     
     // Cores
     private static final Color WHITE = Color.WHITE;
@@ -460,12 +465,7 @@ public class PDVFormularioResumoDiario {
             String data = ((JTextField) dateChooserData.getComponent(0)).getText();
             String periodo = (String) comboPeriodo.getSelectedItem();
             String tipoRelatorio = (String) comboTipoRelatorio.getSelectedItem();
-            boolean incluirVendas = chkVendas.isSelected();
-            boolean incluirDevolucoes = chkDevolucoes.isSelected();
-            boolean incluirDespesas = chkDespesas.isSelected();
-            boolean detalharFormasPagamento = chkFormasPagamento.isSelected();
             
-            // TODO: Implementar lógica de geração de relatório no banco de dados
             // Por enquanto, vamos adicionar dados de exemplo
             adicionarDadosExemplo();
             
@@ -497,7 +497,6 @@ public class PDVFormularioResumoDiario {
             return;
         }
         
-        // TODO: Implementar lógica de exportação (Excel, PDF, etc.)
         JOptionPane.showMessageDialog(workArea, 
             "Exportando " + transacoesEncontradas.size() + " transações...\n(Implementar exportação)", 
             "Exportar", JOptionPane.INFORMATION_MESSAGE);
@@ -548,41 +547,18 @@ public class PDVFormularioResumoDiario {
      * Calcula os totais do resumo
      */
     private void calcularTotais() {
-        double totalVendas = 0.0;
-        double totalDevolucoes = 0.0;
-        double totalDespesas = 0.0;
-        int totalTransacoes = 0;
-        int vendasCount = 0;
-        
-        for (TransacaoDiaria transacao : transacoesEncontradas) {
-            String valorStr = transacao.getValor().replace("R$ ", "").replace(",", ".");
-            double valor = Double.parseDouble(valorStr);
-            
-            if ("Venda".equals(transacao.getTipo())) {
-                totalVendas += valor;
-                vendasCount++;
-            } else if ("Devolução".equals(transacao.getTipo())) {
-                totalDevolucoes += Math.abs(valor);
-            } else if ("Despesa".equals(transacao.getTipo())) {
-                totalDespesas += Math.abs(valor);
-            }
-            
-            totalTransacoes++;
-        }
-        
-        double saldoLiquido = totalVendas - totalDevolucoes - totalDespesas;
-        double ticketMedio = vendasCount > 0 ? totalVendas / vendasCount : 0.0;
+        ResumoDiarioCalculator.ResumoDiarioTotais totais = calculator.calcularTotais(transacoesEncontradas);
         
         // Atualizar labels
-        lblTotalVendas.setText("R$ " + String.format("%.2f", totalVendas).replace(".", ","));
-        lblTotalDevolucoes.setText("R$ " + String.format("%.2f", totalDevolucoes).replace(".", ","));
-        lblTotalDespesas.setText("R$ " + String.format("%.2f", totalDespesas).replace(".", ","));
-        lblSaldoLiquido.setText("R$ " + String.format("%.2f", saldoLiquido).replace(".", ","));
-        lblTotalTransacoes.setText(String.valueOf(totalTransacoes));
-        lblTicketMedio.setText("R$ " + String.format("%.2f", ticketMedio).replace(".", ","));
+        lblTotalVendas.setText("R$ " + String.format("%.2f", totais.getTotalVendas()).replace(".", ","));
+        lblTotalDevolucoes.setText("R$ " + String.format("%.2f", totais.getTotalDevolucoes()).replace(".", ","));
+        lblTotalDespesas.setText("R$ " + String.format("%.2f", totais.getTotalDespesas()).replace(".", ","));
+        lblSaldoLiquido.setText("R$ " + String.format("%.2f", totais.getSaldoLiquido()).replace(".", ","));
+        lblTotalTransacoes.setText(String.valueOf(totais.getTotalTransacoes()));
+        lblTicketMedio.setText("R$ " + String.format("%.2f", totais.getTicketMedio()).replace(".", ","));
         
         // Cor do saldo líquido
-        if (saldoLiquido >= 0) {
+        if (totais.getSaldoLiquido() >= 0) {
             lblSaldoLiquido.setForeground(SUCCESS_COLOR);
         } else {
             lblSaldoLiquido.setForeground(DANGER_COLOR);
@@ -649,44 +625,5 @@ public class PDVFormularioResumoDiario {
         
         painelErro.add(erroLabel, BorderLayout.CENTER);
         return painelErro;
-    }
-    
-    /**
-     * Classe interna para representar uma transação diária
-     */
-    private static class TransacaoDiaria {
-        private String dataHora;
-        private String tipo;
-        private String numeroDocumento;
-        private String cliente;
-        private String valor;
-        private String formaPagamento;
-        private String vendedor;
-        private String status;
-        
-        // Getters e Setters
-        public String getDataHora() { return dataHora; }
-        public void setDataHora(String dataHora) { this.dataHora = dataHora; }
-        
-        public String getTipo() { return tipo; }
-        public void setTipo(String tipo) { this.tipo = tipo; }
-        
-        public String getNumeroDocumento() { return numeroDocumento; }
-        public void setNumeroDocumento(String numeroDocumento) { this.numeroDocumento = numeroDocumento; }
-        
-        public String getCliente() { return cliente; }
-        public void setCliente(String cliente) { this.cliente = cliente; }
-        
-        public String getValor() { return valor; }
-        public void setValor(String valor) { this.valor = valor; }
-        
-        public String getFormaPagamento() { return formaPagamento; }
-        public void setFormaPagamento(String formaPagamento) { this.formaPagamento = formaPagamento; }
-        
-        public String getVendedor() { return vendedor; }
-        public void setVendedor(String vendedor) { this.vendedor = vendedor; }
-        
-        public String getStatus() { return status; }
-        public void setStatus(String status) { this.status = status; }
     }
 }

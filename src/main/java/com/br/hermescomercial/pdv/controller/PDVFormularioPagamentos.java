@@ -27,7 +27,6 @@ public class PDVFormularioPagamentos {
     private JTextField txtMinimo;
     private JTextField txtMaximo;
     private JComboBox<String> comboStatus;
-    private JTextArea txtObservacoes;
     
     // Tabela de configurações de pagamento
     private JTable tabelaPagamentos;
@@ -39,7 +38,6 @@ public class PDVFormularioPagamentos {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioPagamentos(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -463,7 +461,6 @@ public class PDVFormularioPagamentos {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Configurações encontradas: " + pagamentosEncontrados.size(), 
@@ -492,7 +489,6 @@ public class PDVFormularioPagamentos {
                 return;
             }
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Configuração de pagamento salva com sucesso!\n\n" +
                 "Nome: " + nomePagamento + "\n" +

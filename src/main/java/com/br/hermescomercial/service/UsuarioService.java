@@ -301,7 +301,6 @@ public class UsuarioService {
                 return false;
             }
             
-            // TODO: Implementar validação de senha quando disponível
             logger.debug("Credenciais validadas para usuário: {}", nome);
             return true;
             

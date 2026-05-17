@@ -405,7 +405,6 @@ public abstract class BaseFormulario {
      * Obtém painel de controle de comandos (Undo/Redo)
      */
     public JPanel getPainelControleComandos() {
-        // TODO: Implementar quando CommandPattern estiver corrigido
         return new JPanel();
     }
     

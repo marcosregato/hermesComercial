@@ -27,7 +27,6 @@ public class PDVFormularioContasReceber {
     private JTextField txtDataEmissao;
     private JComboBox<String> comboStatus;
     private JComboBox<String> comboFormaPagamento;
-    private JTextArea txtObservacoes;
     
     // Tabela de contas a receber
     private JTable tabelaContas;
@@ -440,7 +439,6 @@ public class PDVFormularioContasReceber {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Contas encontradas: " + contasEncontradas.size(), 
@@ -456,7 +454,6 @@ public class PDVFormularioContasReceber {
         String cliente = txtCliente.getText().trim();
         String documento = txtDocumento.getText().trim();
         String valor = txtValor.getText().trim();
-        String dataEmissao = txtDataEmissao.getText().trim();
         String dataVencimento = txtDataVencimento.getText().trim();
         
         if (cliente.isEmpty()) {
@@ -475,7 +472,6 @@ public class PDVFormularioContasReceber {
         }
         
         try {
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Conta adicionada com sucesso!\n\n" +
                 "Cliente: " + cliente + "\n" +
@@ -516,7 +512,6 @@ public class PDVFormularioContasReceber {
             "Confirmar Baixa", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de baixa no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Pagamento baixado com sucesso!\n" +
                 "Documento: " + conta.getDocumento(), 

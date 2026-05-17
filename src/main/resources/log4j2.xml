@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Configuração do Log4j 2 para Hermes Comercial
+  Para usar logging estruturado, altere o nome do arquivo para log4j2-structured.xml
+  ou adicione -Dlog4j.configurationFile=log4j2-structured.xml na JVM
+-->
 <Configuration status="WARN">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">

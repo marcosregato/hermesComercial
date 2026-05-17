@@ -12,9 +12,6 @@ import com.br.hermescomercial.pdv.controller.PDVLoginSimpleController;
 public class MainApplication {
     
     public static void main(String[] args) {
-        // Inicializar sistema de logs
-        // System.out.initialize(); // Método não existe
-        
         // Processar argumentos de linha de comando
         if (args.length > 0) {
             for (String arg : args) {
@@ -29,7 +26,6 @@ public class MainApplication {
         // Configurar Look and Feel padrão e aplicar tema LayoutPadrao
         try {
             UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-            // LayoutPadrao é aplicado diretamente nos componentes, não需要 tema global
             System.out.println("LayoutPadrao configurado com sucesso");
         } catch (Exception e) {
             System.out.println("Não foi possível configurar Look and Feel: " + e.getMessage());
@@ -77,7 +73,6 @@ public class MainApplication {
         // Adicionar shutdown hook para finalizar logs
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Encerrando Hermes Comercial PDV");
-            // System.out.shutdown(); // Método não existe
         }));
     }
     

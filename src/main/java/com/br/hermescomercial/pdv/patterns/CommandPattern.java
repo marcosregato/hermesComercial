@@ -2,7 +2,6 @@ package com.br.hermescomercial.pdv.patterns;
 
 import com.br.hermescomercial.util.SystemLogger;
 import javax.swing.*;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;

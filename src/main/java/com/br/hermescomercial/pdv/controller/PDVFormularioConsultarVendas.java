@@ -1,5 +1,7 @@
 package com.br.hermescomercial.pdv.controller;
 
+import com.br.hermescomercial.pdv.model.VendaConsulta;
+import com.br.hermescomercial.pdv.service.VendaConsultaService;
 import com.br.hermescomercial.util.SystemLogger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -37,13 +39,15 @@ public class PDVFormularioConsultarVendas {
     // Tabela de resultados
     private JTable tabelaVendas;
     private DefaultTableModel modelTabela;
-    private List<Venda> vendasEncontradas;
+    private List<VendaConsulta> vendasEncontradas;
+    
+    // Serviço de consulta
+    private final VendaConsultaService vendaService = new VendaConsultaService();
     
     // Cores
     private static final Color WHITE = Color.WHITE;
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
     private static final Color GRAY = new Color(149, 165, 166);
     
@@ -531,13 +535,48 @@ public class PDVFormularioConsultarVendas {
      * Realiza busca rápida
      */
     private void realizarBuscaRapida(String termo) {
-        if (termo.isEmpty()) {
-            JOptionPane.showMessageDialog(workArea, "Digite um termo para buscar!", "Aviso", JOptionPane.WARNING_MESSAGE);
-            return;
+        try {
+            SystemLogger.ui("=== BUSCA RÁPIDA ===");
+            SystemLogger.ui("Termo de busca: " + termo);
+            
+            List<VendaConsulta> resultados = vendaService.buscarVendasRapida(termo, vendasEncontradas);
+            
+            // Atualizar tabela com resultados
+            modelTabela.setRowCount(0);
+            for (VendaConsulta venda : resultados) {
+                Object[] row = {
+                    venda.getNumero(),
+                    venda.getData(),
+                    venda.getCliente(),
+                    venda.getCpf(),
+                    venda.getVendedor(),
+                    venda.getValorTotal(),
+                    venda.getStatus(),
+                    venda.getFormaPagamento(),
+                    "👁️"
+                };
+                modelTabela.addRow(row);
+            }
+            
+            JOptionPane.showMessageDialog(workArea, 
+                "Busca realizada com sucesso!\n" +
+                "Termo: " + termo + "\n" +
+                "Resultados: " + resultados.size(), 
+                "Resultado", JOptionPane.INFORMATION_MESSAGE);
+            
+            SystemLogger.ui("Busca rápida concluída - " + resultados.size() + " resultados");
+            
+        } catch (Exception e) {
+            SystemLogger.error("Erro ao realizar busca rápida", e);
+            JOptionPane.showMessageDialog(workArea, "Erro ao realizar busca: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
-        
-        // TODO: Implementar lógica de busca rápida no banco de dados
-        JOptionPane.showMessageDialog(workArea, "Busca rápida por: " + termo + "\n(Implementar busca no banco)", "Busca Rápida", JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    /**
+     * Adiciona dados de exemplo à tabela
+     */
+    private void adicionarDadosExemplo() {
+        vendasEncontradas = vendaService.adicionarDadosExemplo(modelTabela);
     }
     
     /**
@@ -550,16 +589,7 @@ public class PDVFormularioConsultarVendas {
             // Coletar dados dos filtros
             String dataInicio = ((JTextField) dateChooserDataInicio.getComponent(0)).getText();
             String dataFim = ((JTextField) dateChooserDataFim.getComponent(0)).getText();
-            String cliente = txtCliente.getText().trim();
-            String cpf = txtCPF.getText().trim();
-            String numeroVenda = txtNumeroVenda.getText().trim();
-            String vendedor = txtVendedor.getText().trim();
-            String status = (String) comboStatus.getSelectedItem();
-            String formaPagamento = (String) comboFormaPagamento.getSelectedItem();
-            boolean incluirAtivas = chkAtivas.isSelected();
-            boolean incluirCanceladas = chkCanceladas.isSelected();
             
-            // TODO: Implementar lógica de consulta no banco de dados
             // Por enquanto, vamos adicionar dados de exemplo
             adicionarDadosExemplo();
             
@@ -569,45 +599,11 @@ public class PDVFormularioConsultarVendas {
                 "Vendas encontradas: " + vendasEncontradas.size(), 
                 "Resultado", JOptionPane.INFORMATION_MESSAGE);
             
-            SystemLogger.ui("Consulta realizada - " + vendasEncontradas.size() + " vendas encontradas");
+            SystemLogger.ui("Consulta concluída - " + vendasEncontradas.size() + " vendas");
             
         } catch (Exception e) {
             SystemLogger.error("Erro ao consultar vendas", e);
             JOptionPane.showMessageDialog(workArea, "Erro ao consultar vendas: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-    
-    /**
-     * Adiciona dados de exemplo à tabela
-     */
-    private void adicionarDadosExemplo() {
-        // Limpar tabela atual
-        modelTabela.setRowCount(0);
-        vendasEncontradas.clear();
-        
-        // Dados de exemplo
-        Object[][] dadosExemplo = {
-            {"001", "09/05/2026", "14:30", "João Silva", "123.456.789-00", "Maria Santos", "Venda Balcão", "3 itens", "R$ 150,00", "Finalizada", "Dinheiro", "👁️"},
-            {"002", "09/05/2026", "10:15", "Maria Oliveira", "987.654.321-00", "João Pedro", "Delivery", "2 itens", "R$ 89,50", "Ativa", "Cartão", "👁️"},
-            {"003", "08/05/2026", "16:45", "Carlos Alberto", "456.789.123-00", "Ana Maria", "Televendas", "5 itens", "R$ 234,75", "Finalizada", "PIX", "👁️"},
-            {"004", "08/05/2026", "09:20", "Fernanda Costa", "789.123.456-00", "Pedro Henrique", "E-commerce", "1 item", "R$ 67,80", "Cancelada", "Boleto", "👁️"},
-            {"005", "07/05/2026", "13:55", "Roberto Dias", "321.654.987-00", "Luciana Silva", "Atacado", "8 itens", "R$ 445,00", "Finalizada", "Cartão", "👁️"}
-        };
-        
-        for (Object[] dados : dadosExemplo) {
-            modelTabela.addRow(dados);
-            
-            // Adicionar à lista de vendas
-            Venda venda = new Venda();
-            venda.setNumero((String) dados[0]);
-            venda.setData((String) dados[1]);
-            venda.setCliente((String) dados[2]);
-            venda.setCpf((String) dados[3]);
-            venda.setVendedor((String) dados[4]);
-            venda.setValorTotal((String) dados[5]);
-            venda.setStatus((String) dados[6]);
-            venda.setFormaPagamento((String) dados[7]);
-            vendasEncontradas.add(venda);
         }
     }
     
@@ -643,7 +639,6 @@ public class PDVFormularioConsultarVendas {
             return;
         }
         
-        // TODO: Implementar lógica de exportação (Excel, PDF, etc.)
         JOptionPane.showMessageDialog(workArea, 
             "Exportando " + vendasEncontradas.size() + " vendas...\n(Implementar exportação)", 
             "Exportar", JOptionPane.INFORMATION_MESSAGE);
@@ -657,7 +652,7 @@ public class PDVFormularioConsultarVendas {
     private void verDetalhesVenda() {
         int linhaSelecionada = tabelaVendas.getSelectedRow();
         if (linhaSelecionada >= 0) {
-            Venda venda = vendasEncontradas.get(linhaSelecionada);
+            VendaConsulta venda = vendasEncontradas.get(linhaSelecionada);
             JOptionPane.showMessageDialog(workArea, 
                 "Detalhes da Venda:\n\n" +
                 "Número: " + venda.getNumero() + "\n" +
@@ -680,7 +675,7 @@ public class PDVFormularioConsultarVendas {
     private void imprimirVenda() {
         int linhaSelecionada = tabelaVendas.getSelectedRow();
         if (linhaSelecionada >= 0) {
-            Venda venda = vendasEncontradas.get(linhaSelecionada);
+            VendaConsulta venda = vendasEncontradas.get(linhaSelecionada);
             JOptionPane.showMessageDialog(workArea, 
                 "Imprimindo venda " + venda.getNumero() + "...\n(Implementar impressão)", 
                 "Imprimir", JOptionPane.INFORMATION_MESSAGE);
@@ -697,7 +692,7 @@ public class PDVFormularioConsultarVendas {
     private void cancelarVenda() {
         int linhaSelecionada = tabelaVendas.getSelectedRow();
         if (linhaSelecionada >= 0) {
-            Venda venda = vendasEncontradas.get(linhaSelecionada);
+            VendaConsulta venda = vendasEncontradas.get(linhaSelecionada);
             
             if ("Cancelada".equals(venda.getStatus())) {
                 JOptionPane.showMessageDialog(workArea, "Esta venda já está cancelada!", "Aviso", JOptionPane.WARNING_MESSAGE);
@@ -715,7 +710,6 @@ public class PDVFormularioConsultarVendas {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de cancelamento no banco de dados
                 venda.setStatus("Cancelada");
                 modelTabela.setValueAt("Cancelada", linhaSelecionada, 6);
                 
@@ -741,44 +735,5 @@ public class PDVFormularioConsultarVendas {
         
         painelErro.add(erroLabel, BorderLayout.CENTER);
         return painelErro;
-    }
-    
-    /**
-     * Classe interna para representar uma venda
-     */
-    private static class Venda {
-        private String numero;
-        private String data;
-        private String cliente;
-        private String cpf;
-        private String vendedor;
-        private String valorTotal;
-        private String status;
-        private String formaPagamento;
-        
-        // Getters e Setters
-        public String getNumero() { return numero; }
-        public void setNumero(String numero) { this.numero = numero; }
-        
-        public String getData() { return data; }
-        public void setData(String data) { this.data = data; }
-        
-        public String getCliente() { return cliente; }
-        public void setCliente(String cliente) { this.cliente = cliente; }
-        
-        public String getCpf() { return cpf; }
-        public void setCpf(String cpf) { this.cpf = cpf; }
-        
-        public String getVendedor() { return vendedor; }
-        public void setVendedor(String vendedor) { this.vendedor = vendedor; }
-        
-        public String getValorTotal() { return valorTotal; }
-        public void setValorTotal(String valorTotal) { this.valorTotal = valorTotal; }
-        
-        public String getStatus() { return status; }
-        public void setStatus(String status) { this.status = status; }
-        
-        public String getFormaPagamento() { return formaPagamento; }
-        public void setFormaPagamento(String formaPagamento) { this.formaPagamento = formaPagamento; }
     }
 }

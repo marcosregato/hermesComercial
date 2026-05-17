@@ -25,8 +25,8 @@ public class HikariCPManager {
     private static int maxPoolSize = 20;
     private static int minIdle = 5;
     private static long connectionTimeout = 30000; // 30 segundos
-    private static long idleTimeout = 600000; // 10 minutos
-    private static long maxLifetime = 1800000; // 30 minutos
+    // private static long idleTimeout = 600000; // 10 minutos
+    // private static long maxLifetime = 1800000; // 30 minutos
     
     /**
      * Inicializa o pool com configurações otimizadas

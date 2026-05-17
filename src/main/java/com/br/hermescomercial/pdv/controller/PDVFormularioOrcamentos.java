@@ -611,7 +611,6 @@ public class PDVFormularioOrcamentos {
             return;
         }
         
-        // TODO: Implementar lógica de busca rápida no banco de dados
         JOptionPane.showMessageDialog(workArea, "Busca rápida por: " + termo + "\n(Implementar busca no banco)", "Busca Rápida", JOptionPane.INFORMATION_MESSAGE);
     }
     
@@ -781,7 +780,6 @@ public class PDVFormularioOrcamentos {
             String observacoes = txtObservacoes.getText().trim();
             String total = lblTotalOrcamento.getText();
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             
             // Adicionar à tabela
             Object[] rowData = {
@@ -834,7 +832,6 @@ public class PDVFormularioOrcamentos {
      */
     private void consultarOrcamentos() {
         try {
-            // TODO: Implementar lógica de consulta no banco de dados
             // Por enquanto, vamos adicionar dados de exemplo
             adicionarDadosExemplo();
             
@@ -933,7 +930,6 @@ public class PDVFormularioOrcamentos {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de aprovação no banco de dados
                 orcamento.setStatus("Aprovado");
                 modelTabela.setValueAt("Aprovado", linhaSelecionada, 5);
                 
@@ -969,7 +965,6 @@ public class PDVFormularioOrcamentos {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de rejeição no banco de dados
                 orcamento.setStatus("Rejeitado");
                 modelTabela.setValueAt("Rejeitado", linhaSelecionada, 5);
                 
@@ -1005,7 +1000,6 @@ public class PDVFormularioOrcamentos {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de conversão em venda no banco de dados
                 orcamento.setStatus("Convertido");
                 modelTabela.setValueAt("Convertido", linhaSelecionada, 5);
                 
@@ -1093,6 +1087,7 @@ public class PDVFormularioOrcamentos {
         public String getObservacoes() { return observacoes; }
         public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
         
+        @SuppressWarnings("unused")
         public List<ItemOrcamento> getItens() { return itens; }
         public void setItens(List<ItemOrcamento> itens) { this.itens = itens; }
     }
@@ -1118,22 +1113,30 @@ public class PDVFormularioOrcamentos {
         }
         
         // Getters e Setters
+        @SuppressWarnings("unused")
         public int getCodigo() { return codigo; }
+        @SuppressWarnings("unused")
         public void setCodigo(int codigo) { this.codigo = codigo; }
         
+        @SuppressWarnings("unused")
         public String getProduto() { return produto; }
+        @SuppressWarnings("unused")
         public void setProduto(String produto) { this.produto = produto; }
         
         public int getQuantidade() { return quantidade; }
+        @SuppressWarnings("unused")
         public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
         
         public BigDecimal getValorUnitario() { return valorUnitario; }
+        @SuppressWarnings("unused")
         public void setValorUnitario(BigDecimal valorUnitario) { this.valorUnitario = valorUnitario; }
         
         public BigDecimal getDesconto() { return desconto; }
+        @SuppressWarnings("unused")
         public void setDesconto(BigDecimal desconto) { this.desconto = desconto; }
         
         public BigDecimal getTotal() { return total; }
+        @SuppressWarnings("unused")
         public void setTotal(BigDecimal total) { this.total = total; }
     }
 }

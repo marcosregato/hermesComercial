@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
 public class PDVPrincipalSwingController {
     
     private JFrame mainFrame;
-    private JLabel statusLabel;
     
     public PDVPrincipalSwingController() {
         initializeUI();
@@ -30,6 +29,7 @@ public class PDVPrincipalSwingController {
     }
     
     // Métodos de compatibilidade para referências antigas
+    @SuppressWarnings("unused")
     private void abrirSistemaConfig(ActionEvent e) {
         JOptionPane.showMessageDialog(mainFrame, 
             "Funcionalidade de Configurações migrada para o novo sistema!\n" +
@@ -37,6 +37,7 @@ public class PDVPrincipalSwingController {
             "Sistema Atualizado", JOptionPane.INFORMATION_MESSAGE);
     }
     
+    @SuppressWarnings("unused")
     private void abrirFornecedores(ActionEvent e) {
         JOptionPane.showMessageDialog(mainFrame, 
             "Funcionalidade de Fornecedores migrada para o novo sistema!\n" +

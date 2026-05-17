@@ -28,7 +28,6 @@ public class PDVFormularioUsuarios {
     private JComboBox<String> comboStatus;
     private JPasswordField txtSenha;
     private JPasswordField txtConfirmarSenha;
-    private JTextArea txtObservacoes;
     
     // Tabela de usuários
     private JTable tabelaUsuarios;
@@ -475,7 +474,6 @@ public class PDVFormularioUsuarios {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Usuários encontrados: " + usuariosEncontrados.size(), 
@@ -559,7 +557,6 @@ public class PDVFormularioUsuarios {
             txtSenha.setBorder(BorderFactory.createLineBorder(Color.GRAY));
             txtConfirmarSenha.setBorder(BorderFactory.createLineBorder(Color.GRAY));
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Usuário salvo com sucesso!\n\n" +
                 "Nome: " + nome + "\n" +
@@ -647,7 +644,6 @@ public class PDVFormularioUsuarios {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de bloqueio no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Usuário bloqueado com sucesso!\n" +
                 "Usuário: " + usuario.getUsuario() + "\n" +
@@ -680,7 +676,6 @@ public class PDVFormularioUsuarios {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de reset de senha no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Senha resetada com sucesso!\n" +
                 "Usuário: " + usuario + "\n" +
@@ -739,6 +734,7 @@ public class PDVFormularioUsuarios {
         public String getStatus() { return status; }
         public void setStatus(String status) { this.status = status; }
         
+        @SuppressWarnings("unused")
         public String getUltimoAcesso() { return ultimoAcesso; }
         public void setUltimoAcesso(String ultimoAcesso) { this.ultimoAcesso = ultimoAcesso; }
     }

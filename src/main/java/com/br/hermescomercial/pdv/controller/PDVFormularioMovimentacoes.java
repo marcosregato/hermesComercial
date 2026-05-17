@@ -28,7 +28,6 @@ public class PDVFormularioMovimentacoes {
     private JTextField txtDataFim;
     private JComboBox<String> comboOrigem;
     private JComboBox<String> comboDestino;
-    private JTextArea txtObservacoes;
     
     // Tabela de movimentações
     private JTable tabelaMovimentacoes;
@@ -40,7 +39,6 @@ public class PDVFormularioMovimentacoes {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioMovimentacoes(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -398,7 +396,7 @@ public class PDVFormularioMovimentacoes {
         btnDetalhes.addActionListener(e -> verDetalhes());
         
         JButton btnExportar = new JButton("📄 Exportar");
-        btnExportar.setBackground(WARNING_COLOR);
+        btnExportar.setBackground(ACCENT_COLOR);
         btnExportar.setForeground(WHITE);
         btnExportar.setFocusPainted(false);
         btnExportar.setBorderPainted(false);
@@ -464,7 +462,6 @@ public class PDVFormularioMovimentacoes {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Movimentações encontradas: " + movimentacoesEncontradas.size(), 
@@ -478,7 +475,6 @@ public class PDVFormularioMovimentacoes {
      */
     private void filtrarMovimentacoes() {
         try {
-            // TODO: Implementar lógica de filtro no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Filtro aplicado com sucesso!\n" +
                 "Movimentações encontradas: " + movimentacoesEncontradas.size(), 

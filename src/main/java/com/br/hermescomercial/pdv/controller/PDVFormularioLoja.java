@@ -29,7 +29,6 @@ public class PDVFormularioLoja {
     private JTextField txtCidade;
     private JTextField txtEstado;
     private JTextField txtCep;
-    private JTextArea txtObservacoes;
     
     // Tabela de configurações
     private JTable tabelaConfiguracoes;
@@ -41,7 +40,6 @@ public class PDVFormularioLoja {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioLoja(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -504,7 +502,6 @@ public class PDVFormularioLoja {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Configurações encontradas: " + configuracoesEncontradas.size(), 
@@ -537,7 +534,6 @@ public class PDVFormularioLoja {
                 return;
             }
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Configurações da loja salvas com sucesso!\n\n" +
                 "Nome: " + nomeLoja + "\n" +

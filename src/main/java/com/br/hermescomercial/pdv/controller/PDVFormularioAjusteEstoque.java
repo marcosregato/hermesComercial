@@ -115,7 +115,6 @@ public class PDVFormularioAjusteEstoque extends BaseFormulario {
         formularioPanel.setBackground(corPrimaria);
         formularioPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
-        GridBagLayout gbl = new GridBagLayout();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -455,33 +454,43 @@ public class PDVFormularioAjusteEstoque extends BaseFormulario {
         private String status;
         
         // Getters e Setters
+        @SuppressWarnings("unused")
         public String getCodigo() { return codigo; }
         public void setCodigo(String codigo) { this.codigo = codigo; }
         
+        @SuppressWarnings("unused")
         public String getDataHora() { return dataHora; }
         public void setDataHora(String dataHora) { this.dataHora = dataHora; }
         
+        @SuppressWarnings("unused")
         public String getProduto() { return produto; }
         public void setProduto(String produto) { this.produto = produto; }
         
+        @SuppressWarnings("unused")
         public String getTipoAjuste() { return tipoAjuste; }
         public void setTipoAjuste(String tipoAjuste) { this.tipoAjuste = tipoAjuste; }
         
+        @SuppressWarnings("unused")
         public String getQuantidade() { return quantidade; }
         public void setQuantidade(String quantidade) { this.quantidade = quantidade; }
         
+        @SuppressWarnings("unused")
         public String getEstoqueAnterior() { return estoqueAnterior; }
         public void setEstoqueAnterior(String estoqueAnterior) { this.estoqueAnterior = estoqueAnterior; }
         
+        @SuppressWarnings("unused")
         public String getEstoqueAtual() { return estoqueAtual; }
         public void setEstoqueAtual(String estoqueAtual) { this.estoqueAtual = estoqueAtual; }
         
+        @SuppressWarnings("unused")
         public String getMotivo() { return motivo; }
         public void setMotivo(String motivo) { this.motivo = motivo; }
         
+        @SuppressWarnings("unused")
         public String getResponsavel() { return responsavel; }
         public void setResponsavel(String responsavel) { this.responsavel = responsavel; }
         
+        @SuppressWarnings("unused")
         public String getStatus() { return status; }
         public void setStatus(String status) { this.status = status; }
     }

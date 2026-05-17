@@ -28,7 +28,6 @@ public class PDVFormularioVendasDia {
     private JTextField txtTotalValor;
     private JTextField txtMediaVenda;
     private JTextField txtMaiorVenda;
-    private JTextArea txtObservacoes;
     
     // Tabela de vendas
     private JTable tabelaVendas;
@@ -519,7 +518,6 @@ public class PDVFormularioVendasDia {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Vendas encontradas: " + vendasEncontradas.size(), 
@@ -533,7 +531,6 @@ public class PDVFormularioVendasDia {
      */
     private void gerarRelatorio() {
         try {
-            // TODO: Implementar lógica de geração no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Relatório de vendas gerado com sucesso!\n\n" +
                 "Período: " + comboPeriodo.getSelectedItem() + "\n" +

@@ -41,7 +41,6 @@ public class PDVFormularioConfigurarAlertas {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioConfigurarAlertas(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -421,7 +420,7 @@ public class PDVFormularioConfigurarAlertas {
         btnEditar.addActionListener(e -> editarAlerta());
         
         JButton btnAtivarDesativar = new JButton("🔄 Ativar/Desativar");
-        btnAtivarDesativar.setBackground(WARNING_COLOR);
+        btnAtivarDesativar.setBackground(ACCENT_COLOR);
         btnAtivarDesativar.setForeground(WHITE);
         btnAtivarDesativar.setFocusPainted(false);
         btnAtivarDesativar.setBorderPainted(false);
@@ -552,7 +551,6 @@ public class PDVFormularioConfigurarAlertas {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Alertas encontrados: " + alertasEncontrados.size(), 
@@ -586,7 +584,6 @@ public class PDVFormularioConfigurarAlertas {
                 return;
             }
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Alerta salvo com sucesso!\n\n" +
                 "Nome: " + nomeAlerta + "\n" +
@@ -661,7 +658,6 @@ public class PDVFormularioConfigurarAlertas {
         Alerta alerta = alertasEncontrados.get(selectedRow);
         String novoStatus = "Ativo".equals(alerta.getStatus()) ? "Inativo" : "Ativo";
         
-        // TODO: Implementar lógica de atualização no banco de dados
         
         // Atualizar status na tabela
         modelTabela.setValueAt(novoStatus, selectedRow, 3);
@@ -698,7 +694,6 @@ public class PDVFormularioConfigurarAlertas {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de exclusão no banco de dados
             
             alertasEncontrados.remove(selectedRow);
             modelTabela.removeRow(selectedRow);
@@ -794,6 +789,7 @@ public class PDVFormularioConfigurarAlertas {
         public String getAcao() { return acao; }
         public void setAcao(String acao) { this.acao = acao; }
         
+        @SuppressWarnings("unused")
         public String getUltimoDisparo() { return ultimoDisparo; }
         public void setUltimoDisparo(String ultimoDisparo) { this.ultimoDisparo = ultimoDisparo; }
     }

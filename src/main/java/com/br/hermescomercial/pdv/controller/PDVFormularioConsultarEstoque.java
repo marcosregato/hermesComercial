@@ -1,5 +1,7 @@
 package com.br.hermescomercial.pdv.controller;
 
+import com.br.hermescomercial.pdv.model.ProdutoEstoque;
+import com.br.hermescomercial.pdv.service.ProdutoEstoqueService;
 import com.br.hermescomercial.util.SystemLogger;
 
 import javax.swing.*;
@@ -27,19 +29,20 @@ public class PDVFormularioConsultarEstoque {
     private JTextField txtPrecoMin;
     private JTextField txtPrecoMax;
     private JComboBox<String> comboStatus;
-    private JTextArea txtObservacoes;
     
     // Tabela de consulta
     private JTable tabelaConsulta;
     private DefaultTableModel modelTabela;
     private List<ProdutoEstoque> produtosEncontrados;
     
+    // Serviço de consulta de estoque
+    private final ProdutoEstoqueService estoqueService = new ProdutoEstoqueService();
+    
     // Cores
     private static final Color WHITE = Color.WHITE;
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioConsultarEstoque(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -371,7 +374,7 @@ public class PDVFormularioConsultarEstoque {
         btnDetalhes.addActionListener(e -> verDetalhes());
         
         JButton btnRelatorio = new JButton("📊 Relatório");
-        btnRelatorio.setBackground(WARNING_COLOR);
+        btnRelatorio.setBackground(ACCENT_COLOR);
         btnRelatorio.setForeground(WHITE);
         btnRelatorio.setFocusPainted(false);
         btnRelatorio.setBorderPainted(false);
@@ -396,34 +399,7 @@ public class PDVFormularioConsultarEstoque {
      * Adiciona dados de exemplo à tabela
      */
     private void adicionarDadosExemplo() {
-        // Limpar tabela atual
-        modelTabela.setRowCount(0);
-        produtosEncontrados.clear();
-        
-        // Dados de exemplo
-        Object[][] dadosExemplo = {
-            {"PRD-001", "Notebook Dell", "Informática", "Dell", "15", "R$ 3.500,00", "Em Estoque", "A1-B2", "👁️"},
-            {"PRD-002", "Mouse Wireless", "Informática", "HP", "3", "R$ 89,90", "Estoque Baixo", "A1-C3", "👁️"},
-            {"PRD-003", "Monitor 24\"", "Eletrônicos", "Samsung", "0", "R$ 1.200,00", "Sem Estoque", "B2-A1", "👁️"},
-            {"PRD-004", "Cadeira Executiva", "Móveis", "LG", "25", "R$ 450,00", "Em Estoque", "C3-D4", "👁️"},
-            {"PRD-005", "Livro Java", "Livros", "Sony", "12", "R$ 89,00", "Estoque Baixo", "D1-E2", "👁️"}
-        };
-        
-        for (Object[] dados : dadosExemplo) {
-            modelTabela.addRow(dados);
-            
-            // Adicionar à lista de produtos
-            ProdutoEstoque produto = new ProdutoEstoque();
-            produto.setCodigo((String) dados[0]);
-            produto.setProduto((String) dados[1]);
-            produto.setCategoria((String) dados[2]);
-            produto.setFornecedor((String) dados[3]);
-            produto.setQuantidade((String) dados[4]);
-            produto.setPreco((String) dados[5]);
-            produto.setStatus((String) dados[6]);
-            produto.setLocalizacao((String) dados[7]);
-            produtosEncontrados.add(produto);
-        }
+        produtosEncontrados = estoqueService.adicionarDadosExemplo(modelTabela);
     }
     
     /**
@@ -436,7 +412,6 @@ public class PDVFormularioConsultarEstoque {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Produtos encontrados: " + produtosEncontrados.size(), 
@@ -450,7 +425,6 @@ public class PDVFormularioConsultarEstoque {
      */
     private void consultarEstoque() {
         try {
-            // TODO: Implementar lógica de consulta no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Consulta realizada com sucesso!\n" +
                 "Produtos encontrados: " + produtosEncontrados.size(), 
@@ -547,44 +521,5 @@ public class PDVFormularioConsultarEstoque {
         
         painelErro.add(erroLabel, BorderLayout.CENTER);
         return painelErro;
-    }
-    
-    /**
-     * Classe interna para representar um produto de estoque
-     */
-    private static class ProdutoEstoque {
-        private String codigo;
-        private String produto;
-        private String categoria;
-        private String fornecedor;
-        private String quantidade;
-        private String preco;
-        private String status;
-        private String localizacao;
-        
-        // Getters e Setters
-        public String getCodigo() { return codigo; }
-        public void setCodigo(String codigo) { this.codigo = codigo; }
-        
-        public String getProduto() { return produto; }
-        public void setProduto(String produto) { this.produto = produto; }
-        
-        public String getCategoria() { return categoria; }
-        public void setCategoria(String categoria) { this.categoria = categoria; }
-        
-        public String getFornecedor() { return fornecedor; }
-        public void setFornecedor(String fornecedor) { this.fornecedor = fornecedor; }
-        
-        public String getQuantidade() { return quantidade; }
-        public void setQuantidade(String quantidade) { this.quantidade = quantidade; }
-        
-        public String getPreco() { return preco; }
-        public void setPreco(String preco) { this.preco = preco; }
-        
-        public String getStatus() { return status; }
-        public void setStatus(String status) { this.status = status; }
-        
-        public String getLocalizacao() { return localizacao; }
-        public void setLocalizacao(String localizacao) { this.localizacao = localizacao; }
     }
 }

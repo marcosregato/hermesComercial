@@ -1,6 +1,5 @@
 package com.br.hermescomercial.dao;
 
-import com.br.hermescomercial.Repository.RepositoryAtributo;
 import com.br.hermescomercial.model.Atributo;
 import com.br.hermescomercial.connectionBD.ConnectionBD;
 import org.apache.logging.log4j.LogManager;
@@ -11,11 +10,10 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AtributoDao implements RepositoryAtributo {
+public class AtributoDao {
 
     private static final Logger logger = LogManager.getLogger(AtributoDao.class);
 
-    @Override
     public void salvar(Atributo atributo) {
         try {
             String query = "INSERT INTO atributo (nome, descricao, tipo, valor, imposto_federal, imposto_estadual, imposto_municipal) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -37,7 +35,6 @@ public class AtributoDao implements RepositoryAtributo {
         }
     }
 
-    @Override
     public void remove(String nome) {
         try {
             String query = "DELETE FROM atributo WHERE nome = ?";
@@ -51,7 +48,6 @@ public class AtributoDao implements RepositoryAtributo {
         }
     }
 
-    @Override
     public void update(Atributo atributo) {
         try {
             String query = "UPDATE atributo SET descricao = ?, tipo = ?, valor = ?, imposto_federal = ?, imposto_estadual = ?, imposto_municipal = ? WHERE nome = ?";
@@ -73,7 +69,6 @@ public class AtributoDao implements RepositoryAtributo {
         }
     }
 
-    @Override
     public List<Atributo> listar() {
         List<Atributo> lista = new ArrayList<>();
         try {
@@ -102,7 +97,6 @@ public class AtributoDao implements RepositoryAtributo {
         return lista;
     }
 
-    @Override
     public List<Atributo> buscar(String nome) {
         List<Atributo> lista = new ArrayList<>();
         try {

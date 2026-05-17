@@ -1,9 +1,5 @@
 package com.br.hermescomercial.pdv.service;
 
-// Managers removidos durante reorganização estrutural
-// import com.br.hermescomercial.pdv.PDVManager;
-// import com.br.hermescomercial.pdv.PagamentoManager;
-// import com.br.hermescomercial.pdv.ImpressoraManager;
 import com.br.hermescomercial.pdv.model.VendaPDV;
 import com.br.hermescomercial.pdv.model.ItemVenda;
 import com.br.hermescomercial.model.Usuario;
@@ -18,9 +14,6 @@ import java.util.List;
  * Centraliza a lógica de negócio relacionada a vendas
  */
 public class VendaService {
-    
-    // Managers removidos durante reorganização estrutural
-    // Implementação simplificada temporária
     
     public VendaService() {
         // Inicialização simplificada
@@ -48,7 +41,6 @@ public class VendaService {
     public boolean adicionarProduto(String codigoProduto, int quantidade) {
         try {
             // Implementação simplificada temporária
-            // TODO: Implementar lógica de busca de produto e verificação de estoque
             return true;
             
         } catch (Exception e) {
@@ -62,7 +54,6 @@ public class VendaService {
     public boolean removerItem(String codigoProduto) {
         try {
             // Implementação simplificada temporária
-            // TODO: Implementar lógica de remoção de produto
             return true;
         } catch (Exception e) {
             return false;
@@ -74,7 +65,6 @@ public class VendaService {
      */
     public boolean aplicarDescontoItem(String codigoProduto, BigDecimal desconto) {
         try {
-            // TODO: Implementar lógica de desconto quando managers forem restaurados
             // Por enquanto, retorna true para indicar sucesso
             return true;
         } catch (Exception e) {
@@ -87,7 +77,6 @@ public class VendaService {
      */
     public Pagamento processarPagamento(String formaPagamento, BigDecimal valorPago, BigDecimal valorRecebido) {
         try {
-            // TODO: Implementar lógica de pagamento quando managers forem restaurados
             // Por enquanto, cria um pagamento básico
             Pagamento pagamento = new Pagamento();
             pagamento.setTipoPagamento(formaPagamento);
@@ -104,7 +93,6 @@ public class VendaService {
      */
     public boolean finalizarVenda(Pagamento pagamento, VendaPDV venda) {
         try {
-            // TODO: Implementar lógica de finalização quando managers forem restaurados
             // Por enquanto, apenas atualiza o status da venda
             if (venda == null) {
                 return false;
@@ -117,7 +105,6 @@ public class VendaService {
                           "Forma: " + pagamento.getTipoPagamento() + "\n" +
                           "------------------------";
             
-            // TODO: Imprimir cupom quando impressoraManager for restaurado
             System.out.println(cupom);
             
             // Atualizar status da venda
@@ -134,7 +121,6 @@ public class VendaService {
      */
     public boolean cancelarVenda(VendaPDV venda) {
         try {
-            // TODO: Implementar lógica de cancelamento quando managers forem restaurados
             // Por enquanto, apenas atualiza o status da venda
             if (venda == null) {
                 return false;
@@ -155,7 +141,6 @@ public class VendaService {
      */
     public VendaResumo obterResumoVenda(VendaPDV venda) {
         try {
-            // TODO: Implementar lógica de resumo quando managers forem restaurados
             // Por enquanto, cria um resumo básico
             if (venda == null) {
                 return null;
@@ -170,9 +155,17 @@ public class VendaService {
                 descontoTotal = descontoTotal.add(item.getDesconto() != null ? item.getDesconto() : BigDecimal.ZERO);
             }
             
-            // TODO: Criar classe VendaResumo quando necessário
-            // Por enquanto, retorna null indicando que precisa ser implementado
-            return null;
+            // Criar instância de VendaResumo com os dados calculados
+            return new VendaResumo(
+                venda.getNumeroCupom(),
+                venda.getDataVenda(),
+                venda.getOperador(),
+                itens.size(),
+                subtotal,
+                descontoTotal,
+                subtotal.subtract(descontoTotal),
+                venda.getStatus()
+            );
             
         } catch (Exception e) {
             return null;

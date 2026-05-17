@@ -437,7 +437,6 @@ public class PDVFormularioFavoritos {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Favoritos encontrados: " + favoritosEncontrados.size(), 
@@ -452,7 +451,6 @@ public class PDVFormularioFavoritos {
     private void salvarFavorito() {
         try {
             String nomeFavorito = txtNomeFavorito.getText().trim();
-            String descricao = txtDescricao.getText().trim();
             String url = txtUrl.getText().trim();
             
             if (nomeFavorito.isEmpty()) {
@@ -465,7 +463,6 @@ public class PDVFormularioFavoritos {
                 return;
             }
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Favorito salvo com sucesso!\n\n" +
                 "Nome: " + nomeFavorito + "\n" +
@@ -603,7 +600,6 @@ public class PDVFormularioFavoritos {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de exclusão no banco de dados
             
             favoritosEncontrados.remove(selectedRow);
             modelTabela.removeRow(selectedRow);
@@ -659,6 +655,7 @@ public class PDVFormularioFavoritos {
         public String getUrl() { return url; }
         public void setUrl(String url) { this.url = url; }
         
+        @SuppressWarnings("unused")
         public String getDataCriacao() { return dataCriacao; }
         public void setDataCriacao(String dataCriacao) { this.dataCriacao = dataCriacao; }
     }

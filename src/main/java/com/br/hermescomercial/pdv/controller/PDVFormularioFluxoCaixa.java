@@ -1,5 +1,7 @@
 package com.br.hermescomercial.pdv.controller;
 
+import com.br.hermescomercial.pdv.model.FluxoCaixa;
+import com.br.hermescomercial.pdv.service.FluxoCaixaService;
 import com.br.hermescomercial.util.SystemLogger;
 
 import javax.swing.*;
@@ -34,6 +36,9 @@ public class PDVFormularioFluxoCaixa {
     private JTable tabelaFluxo;
     private DefaultTableModel modelTabela;
     private List<FluxoCaixa> fluxosEncontrados;
+    
+    // Serviço de fluxo de caixa
+    private final FluxoCaixaService fluxoService = new FluxoCaixaService();
     
     // Cores
     private static final Color WHITE = Color.WHITE;
@@ -529,7 +534,6 @@ public class PDVFormularioFluxoCaixa {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Registros encontrados: " + fluxosEncontrados.size(), 
@@ -543,7 +547,6 @@ public class PDVFormularioFluxoCaixa {
      */
     private void gerarFluxo() {
         try {
-            // TODO: Implementar lógica de geração no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Fluxo de caixa gerado com sucesso!\n" +
                 "Período: " + comboPeriodo.getSelectedItem() + "\n" +
@@ -644,40 +647,5 @@ public class PDVFormularioFluxoCaixa {
         
         painelErro.add(erroLabel, BorderLayout.CENTER);
         return painelErro;
-    }
-    
-    /**
-     * Classe interna para representar um fluxo de caixa
-     */
-    private static class FluxoCaixa {
-        private String data;
-        private String descricao;
-        private String categoria;
-        private String tipo;
-        private String valor;
-        private String formaPagamento;
-        private String status;
-        
-        // Getters e Setters
-        public String getData() { return data; }
-        public void setData(String data) { this.data = data; }
-        
-        public String getDescricao() { return descricao; }
-        public void setDescricao(String descricao) { this.descricao = descricao; }
-        
-        public String getCategoria() { return categoria; }
-        public void setCategoria(String categoria) { this.categoria = categoria; }
-        
-        public String getTipo() { return tipo; }
-        public void setTipo(String tipo) { this.tipo = tipo; }
-        
-        public String getValor() { return valor; }
-        public void setValor(String valor) { this.valor = valor; }
-        
-        public String getFormaPagamento() { return formaPagamento; }
-        public void setFormaPagamento(String formaPagamento) { this.formaPagamento = formaPagamento; }
-        
-        public String getStatus() { return status; }
-        public void setStatus(String status) { this.status = status; }
     }
 }

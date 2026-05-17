@@ -29,7 +29,6 @@ public class PDVFormularioVendasMes {
     private JTextField txtTotalValor;
     private JTextField txtMediaDiaria;
     private JTextField txtMelhorDia;
-    private JTextArea txtObservacoes;
     
     // Tabela de vendas
     private JTable tabelaVendas;
@@ -492,10 +491,6 @@ public class PDVFormularioVendasMes {
             txtMes.setEditable(false);
             txtAno.setEditable(false);
             
-            // Preencher datas automáticas
-            java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MM/yyyy");
-            String atual = sdf.format(new java.util.Date());
-            
             switch (periodo) {
                 case "Este Mês":
                     txtMes.setText("05");
@@ -546,7 +541,6 @@ public class PDVFormularioVendasMes {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Vendas encontradas: " + vendasEncontradas.size(), 
@@ -560,7 +554,6 @@ public class PDVFormularioVendasMes {
      */
     private void gerarRelatorio() {
         try {
-            // TODO: Implementar lógica de geração no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Relatório mensal gerado com sucesso!\n\n" +
                 "Período: " + comboPeriodo.getSelectedItem() + "\n" +

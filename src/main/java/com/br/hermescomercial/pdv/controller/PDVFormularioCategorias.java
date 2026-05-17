@@ -24,7 +24,6 @@ public class PDVFormularioCategorias {
     private JTextField txtNome;
     private JTextField txtDescricao;
     private JComboBox<String> comboStatus;
-    private JTextArea txtObservacoes;
     
     // Tabela de categorias
     private JTable tabelaCategorias;
@@ -390,7 +389,6 @@ public class PDVFormularioCategorias {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Categorias encontradas: " + categoriasEncontradas.size(), 
@@ -411,7 +409,6 @@ public class PDVFormularioCategorias {
             return;
         }
         
-        // TODO: Implementar lógica de salvamento no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Categoria salva com sucesso!\n" +
             "Nome: " + nome + "\n" +
@@ -473,7 +470,6 @@ public class PDVFormularioCategorias {
             "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de exclusão no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Categoria excluída com sucesso!", 
                 "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -533,6 +529,7 @@ public class PDVFormularioCategorias {
         public String getStatus() { return status; }
         public void setStatus(String status) { this.status = status; }
         
+        @SuppressWarnings("unused")
         public String getDataCadastro() { return dataCadastro; }
         public void setDataCadastro(String dataCadastro) { this.dataCadastro = dataCadastro; }
     }

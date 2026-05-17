@@ -27,7 +27,6 @@ public class PDVFormularioStatusEstoque {
     private JTextField txtQuantidadeAtual;
     private JTextField txtQuantidadeMinima;
     private JTextField txtLocalizacao;
-    private JTextArea txtObservacoes;
     
     // Tabela de estoque
     private JTable tabelaEstoque;
@@ -446,7 +445,6 @@ public class PDVFormularioStatusEstoque {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Itens encontrados: " + itensEncontrados.size(), 
@@ -460,7 +458,6 @@ public class PDVFormularioStatusEstoque {
      */
     private void atualizarEstoque() {
         try {
-            // TODO: Implementar lógica de atualização no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Estoque atualizado com sucesso!\n" +
                 "Itens atualizados: " + itensEncontrados.size(), 
@@ -595,6 +592,7 @@ public class PDVFormularioStatusEstoque {
         public String getLocalizacao() { return localizacao; }
         public void setLocalizacao(String localizacao) { this.localizacao = localizacao; }
         
+        @SuppressWarnings("unused")
         public String getUltimaAtualizacao() { return ultimaAtualizacao; }
         public void setUltimaAtualizacao(String ultimaAtualizacao) { this.ultimaAtualizacao = ultimaAtualizacao; }
     }

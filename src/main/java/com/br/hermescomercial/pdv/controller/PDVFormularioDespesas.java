@@ -48,12 +48,6 @@ public class PDVFormularioDespesas {
     private List<Despesa> despesas;
     private Despesa despesaEditando;
     
-    // Cores
-    private static final Color SUCCESS_COLOR = new Color(76, 175, 80);
-    private static final Color DANGER_COLOR = new Color(244, 67, 54);
-    private static final Color WARNING_COLOR = new Color(255, 193, 7);
-    private static final Color PRIMARY_COLOR = new Color(33, 150, 243);
-    
     public PDVFormularioDespesas(JPanel workArea, String usuario, String nome) {
         this.workArea = workArea;
         this.usuarioAtual = usuario;
@@ -668,6 +662,7 @@ public class PDVFormularioDespesas {
             txtData.setText(date.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
         }
         
+        @SuppressWarnings("unused")
         public String getText() {
             return txtData.getText();
         }

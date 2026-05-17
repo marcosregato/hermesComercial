@@ -1,84 +1,230 @@
 package com.br.hermescomercial.injection;
 
 import com.br.hermescomercial.repository.*;
-import com.br.hermescomercial.dao.*;
-import com.br.hermescomercial.model.*;
+import com.br.hermescomercial.repository.impl.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 
 /**
- * Container simples de injeção de dependências
- * Implementa um contêiner básico para gerenciar dependências
+ * Container de Injeção de Dependências
+ * Implementa injeção com suporte a singleton, scoped e transient
+ * Segue padrões de arquitetura definidos em docs/ARQUITETURA.md
  */
 public class DependencyContainer {
     
     private static final Logger logger = LogManager.getLogger(DependencyContainer.class);
-    private static DependencyContainer instance;
-    private final Map<Class<?>, Object> dependencies = new HashMap<>();
+    private static volatile DependencyContainer instance;
+    private static final Object lock = new Object();
     
+    // Tipos de ciclo de vida
+    public enum Lifetime {
+        SINGLETON,    // Uma instância por container
+        TRANSIENT     // Nova instância a cada requisição
+    }
+    
+    // Registro de dependências
+    private final Map<Class<?>, DependencyDescriptor<?>> dependencies = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Object> singletonInstances = new ConcurrentHashMap<>();
+    
+    // Interface para callbacks
+    public interface DependencyFactory<T> {
+        T create(DependencyContainer container);
+    }
+    
+    // Descriptor de dependência
+    private static class DependencyDescriptor<T> {
+        final Lifetime lifetime;
+        final Class<T> interfaceType;
+        final Class<? extends T> implementationType;
+        final DependencyFactory<T> factory;
+        final Supplier<T> supplier;
+        
+        DependencyDescriptor(Lifetime lifetime, Class<T> interfaceType, 
+                           Class<? extends T> implementationType) {
+            this.lifetime = lifetime;
+            this.interfaceType = interfaceType;
+            this.implementationType = implementationType;
+            this.factory = null;
+            this.supplier = null;
+        }
+        
+        DependencyDescriptor(Lifetime lifetime, Class<T> interfaceType, 
+                           DependencyFactory<T> factory) {
+            this.lifetime = lifetime;
+            this.interfaceType = interfaceType;
+            this.implementationType = null;
+            this.factory = factory;
+            this.supplier = null;
+        }
+        
+        DependencyDescriptor(Lifetime lifetime, Class<T> interfaceType, 
+                           Supplier<T> supplier) {
+            this.lifetime = lifetime;
+            this.interfaceType = interfaceType;
+            this.implementationType = null;
+            this.factory = null;
+            this.supplier = supplier;
+        }
+    }
+    
+    // Construtor privado para Singleton
     private DependencyContainer() {
-        initializeDependencies();
+        configureCoreServices();
     }
     
     /**
-     * Obtém a instância singleton do container
-     * @return Instância do container
+     * Obtém instância singleton do container
      */
-    public static synchronized DependencyContainer getInstance() {
+    public static DependencyContainer getInstance() {
         if (instance == null) {
-            instance = new DependencyContainer();
+            synchronized (lock) {
+                if (instance == null) {
+                    instance = new DependencyContainer();
+                }
+            }
         }
         return instance;
     }
     
     /**
-     * Inicializa as dependências do sistema
+     * Registra uma dependência com ciclo de vida singleton
      */
-    private void initializeDependencies() {
-        logger.info("Inicializando container de dependências");
-        
-        // Registrando implementações dos repositories
-        ClienteRepository clienteRepository = new ClienteRepositoryImpl();
-        ProdutoRepository produtoRepository = new ProdutoRepositoryImpl();
-        UsuarioRepository usuarioRepository = new UsuarioRepositoryImpl();
-        
-        dependencies.put(ClienteRepository.class, clienteRepository);
-        dependencies.put(ProdutoRepository.class, produtoRepository);
-        dependencies.put(UsuarioRepository.class, usuarioRepository);
-        
-        logger.info("Dependências inicializadas com sucesso");
+    public <T> void registerSingleton(Class<T> interfaceType, Class<? extends T> implementationType) {
+        dependencies.put(interfaceType, new DependencyDescriptor<>(Lifetime.SINGLETON, interfaceType, implementationType));
+        logger.debug("Registrado singleton: {} -> {}", interfaceType.getSimpleName(), implementationType.getSimpleName());
     }
     
     /**
-     * Obtém uma dependência pelo tipo
-     * @param <T> Tipo da dependência
-     * @param type Classe da dependência
-     * @return Instância da dependência
-     * @throws IllegalArgumentException Se a dependência não for encontrada
+     * Registra uma dependência com ciclo de vida transient
+     */
+    public <T> void registerTransient(Class<T> interfaceType, Class<? extends T> implementationType) {
+        dependencies.put(interfaceType, new DependencyDescriptor<>(Lifetime.TRANSIENT, interfaceType, implementationType));
+        logger.debug("Registrado transient: {} -> {}", interfaceType.getSimpleName(), implementationType.getSimpleName());
+    }
+    
+    /**
+     * Registra uma dependência com factory personalizado
+     */
+    public <T> void registerFactory(Class<T> interfaceType, DependencyFactory<T> factory, Lifetime lifetime) {
+        dependencies.put(interfaceType, new DependencyDescriptor<>(lifetime, interfaceType, factory));
+        logger.debug("Registrado factory: {} (lifetime: {})", interfaceType.getSimpleName(), lifetime);
+    }
+    
+    /**
+     * Registra uma dependência com supplier personalizado
+     */
+    public <T> void registerSupplier(Class<T> interfaceType, Supplier<T> supplier, Lifetime lifetime) {
+        dependencies.put(interfaceType, new DependencyDescriptor<>(lifetime, interfaceType, supplier));
+        logger.debug("Registrado supplier: {} (lifetime: {})", interfaceType.getSimpleName(), lifetime);
+    }
+    
+    /**
+     * Resolve uma dependência
      */
     @SuppressWarnings("unchecked")
     public <T> T get(Class<T> type) {
-        Object dependency = dependencies.get(type);
-        if (dependency == null) {
-            throw new IllegalArgumentException("Dependência não encontrada: " + type.getName());
+        DependencyDescriptor<T> descriptor = (DependencyDescriptor<T>) dependencies.get(type);
+        
+        if (descriptor == null) {
+            throw new DependencyNotFoundException("Dependência não registrada: " + type.getName());
         }
-        return (T) dependency;
+        
+        return createInstance(descriptor);
     }
     
     /**
-     * Registra uma dependência manualmente
-     * @param <T> Tipo da dependência
-     * @param type Classe da dependência
-     * @param implementation Implementação da dependência
+     * Resolve uma dependência opcional
      */
-    public <T> void register(Class<T> type, T implementation) {
-        logger.debug("Registrando dependência: {}", type.getName());
-        dependencies.put(type, implementation);
+    public <T> java.util.Optional<T> getOptional(Class<T> type) {
+        try {
+            return java.util.Optional.of(get(type));
+        } catch (DependencyNotFoundException e) {
+            return java.util.Optional.empty();
+        }
+    }
+    
+    /**
+     * Cria instância baseada no descriptor
+     */
+    @SuppressWarnings("unchecked")
+    private <T> T createInstance(DependencyDescriptor<T> descriptor) {
+        switch (descriptor.lifetime) {
+            case SINGLETON:
+                return (T) singletonInstances.computeIfAbsent(descriptor.interfaceType, k -> {
+                    return createNewInstance(descriptor);
+                });
+            case TRANSIENT:
+                return createNewInstance(descriptor);
+            default:
+                throw new IllegalStateException("Lifetime não suportado: " + descriptor.lifetime);
+        }
+    }
+    
+    /**
+     * Cria nova instância da dependência
+     */
+    private <T> T createNewInstance(DependencyDescriptor<T> descriptor) {
+        try {
+            if (descriptor.supplier != null) {
+                return (T) descriptor.supplier.get();
+            }
+            
+            if (descriptor.factory != null) {
+                return (T) descriptor.factory.create(this);
+            }
+            
+            if (descriptor.implementationType != null) {
+                return createInstanceWithInjection(descriptor.implementationType);
+            }
+            
+            throw new DependencyCreationException("Não foi possível criar instância para: " + descriptor.interfaceType.getName());
+        } catch (Exception e) {
+            throw new DependencyCreationException("Erro ao criar dependência: " + descriptor.interfaceType.getName(), e);
+        }
+    }
+    
+    /**
+     * Cria instância com injeção de construtor
+     */
+    private <T> T createInstanceWithInjection(Class<? extends T> type) {
+        try {
+            // Busca construtor sem parâmetros
+            return type.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new DependencyCreationException("Falha na criação de instância para: " + type.getName(), e);
+        }
+    }
+    
+    /**
+     * Configura serviços core do sistema
+     */
+    private void configureCoreServices() {
+        logger.info("Configurando serviços core do container");
+        
+        // Repositories Singleton - implementações movidas para repository/impl/
+        registerSingleton(ClienteRepository.class, ClienteRepositoryImpl.class);
+        registerSingleton(ProdutoRepository.class, ProdutoRepositoryImpl.class);
+        registerSingleton(UsuarioRepository.class, UsuarioRepositoryImpl.class);
+        
+        logger.info("Serviços core configurados com sucesso");
+    }
+    
+    /**
+     * Verifica se uma dependência está registrada
+     */
+    public boolean isRegistered(Class<?> type) {
+        return dependencies.containsKey(type);
+    }
+    
+    /**
+     * Lista todas as dependências registradas
+     */
+    public java.util.Set<Class<?>> getRegisteredDependencies() {
+        return new java.util.HashSet<>(dependencies.keySet());
     }
     
     /**
@@ -87,389 +233,23 @@ public class DependencyContainer {
     public void clear() {
         logger.warn("Limpando todas as dependências do container");
         dependencies.clear();
+        singletonInstances.clear();
     }
-}
-
-/**
- * Implementação do ClienteRepository usando ClienteDao existente
- */
-class ClienteRepositoryImpl implements ClienteRepository {
     
-    private final ClienteDao clienteDao = new ClienteDao();
-    
-    @Override
-    public boolean salvar(Cliente cliente) {
-        try {
-            return clienteDao.salvar(cliente);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao salvar cliente", e);
+    // Exceções personalizadas
+    public static class DependencyNotFoundException extends RuntimeException {
+        public DependencyNotFoundException(String message) {
+            super(message);
         }
     }
     
-    @Override
-    public boolean atualizar(Cliente cliente) {
-        try {
-            return clienteDao.update(cliente);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar cliente", e);
+    public static class DependencyCreationException extends RuntimeException {
+        public DependencyCreationException(String message) {
+            super(message);
         }
-    }
-    
-    @Override
-    public boolean excluir(Long id) {
-        try {
-            // ClienteDao não tem método excluir por ID, implementar workaround
-            Cliente cliente = clienteDao.buscarPorId(id);
-            if (cliente != null) {
-                return clienteDao.remove(cliente.getNome());
-            }
-            return false;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao excluir cliente", e);
-        }
-    }
-    
-    @Override
-    public Cliente buscarPorId(Long id) {
-        try {
-            return clienteDao.buscarPorId(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar cliente por ID", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Cliente> listar() {
-        try {
-            return clienteDao.listar();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao listar clientes", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Cliente> buscarComFiltros(String nome, boolean ativos, boolean inativos, boolean ordenarPorNome) {
-        try {
-            return clienteDao.buscarComFiltros(nome, ativos, inativos, ordenarPorNome);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar clientes com filtros", e);
-        }
-    }
-}
-
-/**
- * Implementação do ProdutoRepository usando ProdutoDao existente
- */
-class ProdutoRepositoryImpl implements ProdutoRepository {
-    
-    private final ProdutoDao produtoDao = new ProdutoDao();
-    
-    @Override
-    public boolean salvar(Produto produto) {
-        try {
-            return produtoDao.salvar(produto);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao salvar produto", e);
-        }
-    }
-    
-    @Override
-    public boolean atualizar(Produto produto) {
-        try {
-            return produtoDao.update(produto);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar produto", e);
-        }
-    }
-    
-    @Override
-    public boolean remover(Long id) {
-        try {
-            // ProdutoDao não tem método excluir por ID, implementar workaround
-            List<Produto> produtos = produtoDao.listar();
-            for (Produto produto : produtos) {
-                if (produto.getId().equals(id)) {
-                    return produtoDao.remove(produto.getNome());
-                }
-            }
-            return false;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao remover produto", e);
-        }
-    }
-    
-    @Override
-    public boolean excluir(String nome) {
-        try {
-            return produtoDao.remove(nome);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao excluir produto", e);
-        }
-    }
-    
-    @Override
-    public java.util.Optional<Produto> buscarPorId(Long id) {
-        try {
-            // ProdutoDao não tem método buscarPorId, implementar workaround
-            List<Produto> produtos = produtoDao.listar();
-            for (Produto produto : produtos) {
-                if (produto.getId().equals(id)) {
-                    return java.util.Optional.of(produto);
-                }
-            }
-            return java.util.Optional.empty();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar produto por ID", e);
-        }
-    }
-    
-    @Override
-    public Produto buscarPorCodigoBarras(String codigoBarras) {
-        try {
-            return produtoDao.buscarPorCodigoBarras(codigoBarras);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar produto por código de barras", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Produto> buscarTodos() {
-        try {
-            return produtoDao.listar();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao listar produtos", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Produto> listar() {
-        try {
-            return produtoDao.listar();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao listar produtos", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Produto> buscarComFiltros(String nome, String categoria, String subCategoria, 
-                                                   String codigoBarras, java.math.BigDecimal precoMin, java.math.BigDecimal precoMax, 
-                                                   Integer estoqueMin, boolean ativos, boolean inativos) {
-        try {
-            return produtoDao.buscarComFiltros(nome, categoria, subCategoria, codigoBarras, 
-                                              precoMin, precoMax, estoqueMin, ativos, inativos);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar produtos com filtros", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Produto> buscarPorNome(String nome) {
-        try {
-            List<Produto> todos = produtoDao.listar();
-            List<Produto> filtrados = new ArrayList<>();
-            for (Produto produto : todos) {
-                if (produto.getNome() != null && produto.getNome().toLowerCase().contains(nome.toLowerCase())) {
-                    filtrados.add(produto);
-                }
-            }
-            return filtrados;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar produtos por nome", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Produto> buscarPorCategoria(String categoria) {
-        try {
-            List<Produto> todos = produtoDao.listar();
-            List<Produto> filtrados = new ArrayList<>();
-            for (Produto produto : todos) {
-                if (produto.getCategoria() != null && produto.getCategoria().equalsIgnoreCase(categoria)) {
-                    filtrados.add(produto);
-                }
-            }
-            return filtrados;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar produtos por categoria", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Produto> buscarEstoqueBaixo() {
-        try {
-            List<Produto> todos = produtoDao.listar();
-            List<Produto> filtrados = new ArrayList<>();
-            for (Produto produto : todos) {
-                // getEstoque() e getEstoqueMinimo() retornam int, não podem ser null
-                if (produto.getEstoque() <= produto.getEstoqueMinimo()) {
-                    filtrados.add(produto);
-                }
-            }
-            return filtrados;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar produtos com estoque baixo", e);
-        }
-    }
-    
-    @Override
-    public boolean atualizarEstoque(Long id, int novaQuantidade) {
-        try {
-            List<Produto> produtos = produtoDao.listar();
-            for (Produto produto : produtos) {
-                if (produto.getId().equals(id)) {
-                    produto.setEstoque(novaQuantidade);
-                    return produtoDao.update(produto);
-                }
-            }
-            return false;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao atualizar estoque do produto", e);
-        }
-    }
-
-    @Override
-    public java.util.List<Produto> buscarPorFaixaPreco(java.math.BigDecimal precoMin, java.math.BigDecimal precoMax) {
-        try {
-            List<Produto> todos = produtoDao.listar();
-            List<Produto> filtrados = new ArrayList<>();
-            for (Produto produto : todos) {
-                if (produto.getPrecoVenda() != null && 
-                    produto.getPrecoVenda().compareTo(precoMin) >= 0 && 
-                    produto.getPrecoVenda().compareTo(precoMax) <= 0) {
-                    filtrados.add(produto);
-                }
-            }
-            return filtrados;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar produtos por faixa de preço", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Produto> buscarComEstoqueBaixo(int limite) {
-        try {
-            List<Produto> todos = produtoDao.listar();
-            List<Produto> filtrados = new ArrayList<>();
-            for (Produto produto : todos) {
-                if (produto.getEstoque() < limite) {
-                    filtrados.add(produto);
-                }
-            }
-            return filtrados;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar produtos com estoque baixo", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Produto> buscarPorCodigo(String codigo) {
-        try {
-            List<Produto> todos = produtoDao.listar();
-            List<Produto> filtrados = new ArrayList<>();
-            for (Produto produto : todos) {
-                if (produto.getCodigoBarras() != null && 
-                    produto.getCodigoBarras().equals(codigo)) {
-                    filtrados.add(produto);
-                }
-            }
-            return filtrados;
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar produtos por código", e);
-        }
-    }
-}
-
-/**
- * Implementação do UsuarioRepository usando UsuarioDao existente
- */
-class UsuarioRepositoryImpl implements UsuarioRepository {
-    
-    private final UsuarioDao usuarioDao = new UsuarioDao();
-    
-    @Override
-    public void salvar(Usuario usuario) {
-        try {
-            usuarioDao.salvar(usuario);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao salvar usuário", e);
-        }
-    }
-    
-    @Override
-    public void remove(String nome) {
-        try {
-            usuarioDao.remove(nome);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao remover usuário", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Usuario> listar() {
-        try {
-            return usuarioDao.listar();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao listar usuários", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Usuario> buscarPorNome(String nome) {
-        try {
-            // UsuarioDao não tem método buscarPorNome genérico, usar buscarTodos e filtrar
-            return usuarioDao.buscarTodos().stream()
-                .filter(u -> u.getNome() != null && u.getNome().toLowerCase().contains(nome.toLowerCase()))
-                .collect(java.util.stream.Collectors.toList());
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar usuários por nome", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Usuario> buscarPorCpfCnpj(String textoBusca) {
-        try {
-            // UsuarioDao não tem método buscarPorCpfCnpj genérico, usar buscarTodos e filtrar
-            return usuarioDao.buscarTodos().stream()
-                .filter(u -> u.getNumeroDocumeto() != null && u.getNumeroDocumeto().contains(textoBusca))
-                .collect(java.util.stream.Collectors.toList());
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar usuários por CPF/CNPJ", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Usuario> buscarClientePorNome(String nome) {
-        try {
-            return usuarioDao.buscarClientePorNome(nome);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar clientes por nome", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Usuario> buscarClientePorCpfCnpj(String textoBusca) {
-        try {
-            return usuarioDao.buscarClientePorCpfCnpj(textoBusca);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar clientes por CPF/CNPJ", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Usuario> buscarClientePorNomeCpfCnpj(String textoBusca) {
-        try {
-            return usuarioDao.buscarClientePorNomeCpfCnpj(textoBusca);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar clientes por Nome/CPF/CNPJ", e);
-        }
-    }
-    
-    @Override
-    public java.util.List<Usuario> buscarTodos() {
-        try {
-            return usuarioDao.buscarTodos();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao buscar todos os usuários", e);
+        
+        public DependencyCreationException(String message, Throwable cause) {
+            super(message, cause);
         }
     }
 }

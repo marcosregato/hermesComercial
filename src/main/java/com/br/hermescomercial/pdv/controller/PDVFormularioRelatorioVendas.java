@@ -5,7 +5,6 @@ import com.br.hermescomercial.util.SystemLogger;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +21,6 @@ public class PDVFormularioRelatorioVendas {
     
     // Componentes do formulário
     private JTextField txtBusca;
-    private JComboBox<String> comboTipoRelatorio;
     private JTextField txtDataInicio;
     private JTextField txtDataFim;
     private JTextField txtProduto;
@@ -47,9 +45,6 @@ public class PDVFormularioRelatorioVendas {
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
     private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
-    
-    // Formatação
-    private DecimalFormat currencyFormat = new DecimalFormat("R$ #,##0.00");
     
     public PDVFormularioRelatorioVendas(JPanel workArea, String usuarioAtual, String nomeUsuario) {
         this.workArea = workArea;
@@ -696,7 +691,6 @@ public class PDVFormularioRelatorioVendas {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Vendas encontradas: " + vendasEncontradas.size(), 
@@ -715,7 +709,6 @@ public class PDVFormularioRelatorioVendas {
         String vendedor = (String) comboVendedor.getSelectedItem();
         String formaPagamento = (String) comboFormaPagamento.getSelectedItem();
         
-        // TODO: Implementar lógica de filtragem no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Filtros aplicados para " + tipo + ":\n" +
             "Período: " + dataInicio + " até " + dataFim + "\n" +
@@ -845,7 +838,6 @@ public class PDVFormularioRelatorioVendas {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de cancelamento no banco de dados
             
             // Atualizar status na tabela
             modelTabela.setValueAt("Cancelada", selectedRow, 8);
@@ -904,12 +896,14 @@ public class PDVFormularioRelatorioVendas {
         public String getProduto() { return produto; }
         public void setProduto(String produto) { this.produto = produto; }
         
+        @SuppressWarnings("unused")
         public String getCodigo() { return codigo; }
         public void setCodigo(String codigo) { this.codigo = codigo; }
         
         public String getQuantidade() { return quantidade; }
         public void setQuantidade(String quantidade) { this.quantidade = quantidade; }
         
+        @SuppressWarnings("unused")
         public String getValorUnitario() { return valorUnitario; }
         public void setValorUnitario(String valorUnitario) { this.valorUnitario = valorUnitario; }
         

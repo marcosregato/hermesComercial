@@ -37,7 +37,6 @@ public class PDVFormularioHistoricoBuscas {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioHistoricoBuscas(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -355,15 +354,15 @@ public class PDVFormularioHistoricoBuscas {
         JPanel botoesTabelaPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         botoesTabelaPanel.setBackground(WHITE);
         
-        JButton btnRepetir = new JButton("🔄 Repetir Busca");
-        btnRepetir.setBackground(SUCCESS_COLOR);
-        btnRepetir.setForeground(WHITE);
-        btnRepetir.setFocusPainted(false);
-        btnRepetir.setBorderPainted(false);
-        btnRepetir.setFont(new Font("Segoe UI", Font.BOLD, 12));
-        btnRepetir.addActionListener(e -> repetirBusca());
+        JButton btnRelatorio = new JButton("");
+        btnRelatorio.setBackground(ACCENT_COLOR);
+        btnRelatorio.setForeground(WHITE);
+        btnRelatorio.setFocusPainted(false);
+        btnRelatorio.setBorderPainted(false);
+        btnRelatorio.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        btnRelatorio.addActionListener(e -> repetirBusca());
         
-        JButton btnDetalhes = new JButton("📋 Ver Detalhes");
+        JButton btnDetalhes = new JButton("");
         btnDetalhes.setBackground(ACCENT_COLOR);
         btnDetalhes.setForeground(WHITE);
         btnDetalhes.setFocusPainted(false);
@@ -379,7 +378,7 @@ public class PDVFormularioHistoricoBuscas {
         btnExcluir.setFont(new Font("Segoe UI", Font.BOLD, 12));
         btnExcluir.addActionListener(e -> excluirBusca());
         
-        botoesTabelaPanel.add(btnRepetir);
+        botoesTabelaPanel.add(btnRelatorio);
         botoesTabelaPanel.add(Box.createHorizontalStrut(10));
         botoesTabelaPanel.add(btnDetalhes);
         botoesTabelaPanel.add(Box.createHorizontalStrut(10));
@@ -458,7 +457,6 @@ public class PDVFormularioHistoricoBuscas {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Buscas encontradas: " + buscasEncontrados.size(), 
@@ -478,7 +476,6 @@ public class PDVFormularioHistoricoBuscas {
         String dataInicio = txtDataInicio.getText().trim();
         String dataFim = txtDataFim.getText().trim();
         
-        // TODO: Implementar lógica de filtragem no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Filtros aplicados:\n" +
             "Termo: " + termo + "\n" +
@@ -530,7 +527,6 @@ public class PDVFormularioHistoricoBuscas {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de limpeza no banco de dados
             
             modelTabela.setRowCount(0);
             buscasEncontrados.clear();
@@ -618,7 +614,6 @@ public class PDVFormularioHistoricoBuscas {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de exclusão no banco de dados
             
             buscasEncontrados.remove(selectedRow);
             modelTabela.removeRow(selectedRow);

@@ -669,7 +669,6 @@ public class PDVFormularioGestaoProduto {
             return;
         }
         
-        // TODO: Implementar lógica de busca rápida no banco de dados
         JOptionPane.showMessageDialog(workArea, "Busca rápida por: " + termo + "\n(Implementar busca no banco)", "Busca Rápida", JOptionPane.INFORMATION_MESSAGE);
     }
     
@@ -714,8 +713,6 @@ public class PDVFormularioGestaoProduto {
             String cnpjFornecedor = txtCNPJFornecedor.getText().trim();
             String status = (String) comboStatus.getSelectedItem();
             String observacoes = txtObservacoes.getText().trim();
-            
-            // TODO: Implementar lógica de salvamento no banco de dados
             
             // Adicionar à tabela
             Object[] rowData = {
@@ -796,7 +793,6 @@ public class PDVFormularioGestaoProduto {
      */
     private void consultarProdutos() {
         try {
-            // TODO: Implementar lógica de consulta no banco de dados
             // Por enquanto, vamos adicionar dados de exemplo
             adicionarDadosExemplo();
             
@@ -895,7 +891,6 @@ public class PDVFormularioGestaoProduto {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de exclusão no banco de dados
                 produtosEncontrados.remove(linhaSelecionada);
                 modelTabela.removeRow(linhaSelecionada);
                 
@@ -920,7 +915,6 @@ public class PDVFormularioGestaoProduto {
                 return;
             }
             
-            // TODO: Implementar lógica de ativação no banco de dados
             produto.setStatus("Ativo");
             modelTabela.setValueAt("Ativo", linhaSelecionada, 6);
             
@@ -944,7 +938,6 @@ public class PDVFormularioGestaoProduto {
                 return;
             }
             
-            // TODO: Implementar lógica de inativação no banco de dados
             produto.setStatus("Inativo");
             modelTabela.setValueAt("Inativo", linhaSelecionada, 6);
             

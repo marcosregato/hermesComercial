@@ -52,8 +52,8 @@ public class BatchProcessor {
                 
                 // Execute remaining batch
                 if (batchCount % batchSize != 0) {
-                    int[] results = pstmt.executeBatch();
-                    totalProcessed += batchSize;
+                    pstmt.executeBatch();
+                    totalProcessed += batchCount % batchSize;
                     conn.commit();
                 }
                 
@@ -99,7 +99,7 @@ public class BatchProcessor {
                 }
                 
                 // Execute remaining batch
-                int[] results = pstmt.executeBatch();
+                pstmt.executeBatch();
                 conn.commit();
                 conn.setAutoCommit(true);
                 
@@ -141,7 +141,7 @@ public class BatchProcessor {
                 }
                 
                 // Execute remaining batch
-                int[] results = pstmt.executeBatch();
+                pstmt.executeBatch();
                 conn.commit();
                 conn.setAutoCommit(true);
                 
@@ -166,17 +166,17 @@ public class BatchProcessor {
         private Connection connection;
         private String operation;
         private List<Object[]> batchData = new ArrayList<>();
-        private int batchSize = DEFAULT_BATCH_SIZE;
         
         public BatchBuilder(Connection conn, String operation) {
             this.connection = conn;
             this.operation = operation;
         }
         
-        public BatchBuilder batchSize(int size) {
-            this.batchSize = size;
-            return this;
-        }
+        // @SuppressWarnings("unused")
+        // public BatchBuilder batchSize(int size) {
+        //     this.batchSize = size;
+        //     return this;
+        // }
         
         public BatchBuilder addData(Object... params) {
             batchData.add(params);

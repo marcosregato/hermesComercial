@@ -6,7 +6,7 @@
 
     <groupId>com.br</groupId>
     <artifactId>hermesComercial</artifactId>
-<version>3.1.0</version>
+    <version>3.2.0</version>
     <name>hermesComercial</name>
 
     <properties>
@@ -14,6 +14,9 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <junit.version>5.10.0</junit.version>
+        <jacoco.version>0.8.11</jacoco.version>
+        <checkstyle.version>10.12.5</checkstyle.version>
+        <spotbugs.version>4.8.3</spotbugs.version>
     </properties>
 
     <dependencies>
@@ -204,6 +207,113 @@
                                                     </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            
+            <!-- JaCoCo Plugin para cobertura de testes -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/model/**</exclude>
+                        <exclude>**/dto/**</exclude>
+                        <exclude>**/config/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            
+            <!-- Checkstyle Plugin para análise de código -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.3.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.puppycrawl.tools</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${checkstyle.version}</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <configLocation>checkstyle.xml</configLocation>
+                    <consoleOutput>true</consoleOutput>
+                    <failsOnError>false</failsOnError>
+                    <violationSeverity>warning</violationSeverity>
+                </configuration>
+             </plugin>
+            
+            <!-- SpotBugs Plugin para detecção de bugs -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${spotbugs.version}</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <xmlOutput>true</xmlOutput>
+                    <excludeFilterFile>spotbugs-exclude.xml</excludeFilterFile>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs</artifactId>
+                        <version>${spotbugs.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>spotbugs-check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- SonarQube Plugin para análise de qualidade -->
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.11.0.3922</version>
+            </plugin>
+            
+            <!-- jpackage Plugin para criar instaladores nativos -->
+            <plugin>
+                <groupId>org.panteleyev</groupId>
+                <artifactId>jpackage-maven-plugin</artifactId>
+                <version>1.6.0</version>
+                <configuration>
+                    <name>Hermes PDV</name>
+                    <appVersion>${project.version}</appVersion>
+                    <vendor>Hermes Comercial</vendor>
+                    <destination>target/dist</destination>
+                    <module>hermespdv.standalone/com.br.hermescomercial.MainApplication</module>
+                    <runtimeImage>target/jre</runtimeImage>
+                    <javaOptions>
+                        <option>-Xmx1024m</option>
+                        <option>-Xms512m</option>
+                    </javaOptions>
+                    <winMenu>true</winMenu>
+                    <winDirChooser>true</winDirChooser>
+                    <winShortcut>true</winShortcut>
+                    <winPerUserInstall>false</winPerUserInstall>
+                </configuration>
             </plugin>
                                 </plugins>
     </build>

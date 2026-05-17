@@ -25,7 +25,6 @@ public class PDVFormularioPermissoes {
     private JComboBox<String> comboCargo;
     private JComboBox<String> comboModulo;
     private JComboBox<String> comboStatus;
-    private JTextArea txtObservacoes;
     
     // Checkboxes de permissões
     private JCheckBox chkVisualizar;
@@ -45,7 +44,6 @@ public class PDVFormularioPermissoes {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioPermissoes(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -541,7 +539,6 @@ public class PDVFormularioPermissoes {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Permissões encontradas: " + permissoesEncontrados.size(), 
@@ -569,7 +566,6 @@ public class PDVFormularioPermissoes {
                 return;
             }
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Permissão salva com sucesso!\n\n" +
                 "Nome: " + nomePermissao + "\n" +

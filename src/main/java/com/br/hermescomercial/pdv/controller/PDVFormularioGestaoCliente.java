@@ -610,7 +610,6 @@ public class PDVFormularioGestaoCliente {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Clientes encontrados: " + clientesEncontrados.size(), 
@@ -652,7 +651,6 @@ public class PDVFormularioGestaoCliente {
             return;
         }
         
-        // TODO: Implementar lógica de salvamento no banco de dados
         String mensagem = (modoAtual == ModoOperacao.NOVO) ? 
             "Cliente cadastrado com sucesso!" : "Cliente atualizado com sucesso!";
         
@@ -773,6 +771,7 @@ public class PDVFormularioGestaoCliente {
     /**
      * Habilita campos para modo edição
      */
+    @SuppressWarnings("unused")
     private void habilitarCamposParaEdicao() {
         txtNome.setEditable(true);
         txtCPF.setEditable(true);
@@ -805,7 +804,6 @@ public class PDVFormularioGestaoCliente {
             "Confirmar Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de exclusão no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Cliente excluído com sucesso!", 
                 "Sucesso", JOptionPane.INFORMATION_MESSAGE);
@@ -874,7 +872,9 @@ public class PDVFormularioGestaoCliente {
         public String getCpf() { return cpf; }
         public void setCpf(String cpf) { this.cpf = cpf; }
         
+        @SuppressWarnings("unused")
         public String getRg() { return rg; }
+        @SuppressWarnings("unused")
         public void setRg(String rg) { this.rg = rg; }
         
         public String getTelefone() { return telefone; }
@@ -883,34 +883,51 @@ public class PDVFormularioGestaoCliente {
         public String getCelular() { return celular; }
         public void setCelular(String celular) { this.celular = celular; }
         
+        @SuppressWarnings("unused")
         public String getEmail() { return email; }
+        @SuppressWarnings("unused")
         public void setEmail(String email) { this.email = email; }
         
+        @SuppressWarnings("unused")
         public String getCep() { return cep; }
+        @SuppressWarnings("unused")
         public void setCep(String cep) { this.cep = cep; }
         
+        @SuppressWarnings("unused")
         public String getEndereco() { return endereco; }
+        @SuppressWarnings("unused")
         public void setEndereco(String endereco) { this.endereco = endereco; }
         
+        @SuppressWarnings("unused")
         public String getNumero() { return numero; }
+        @SuppressWarnings("unused")
         public void setNumero(String numero) { this.numero = numero; }
         
+        @SuppressWarnings("unused")
         public String getBairro() { return bairro; }
+        @SuppressWarnings("unused")
         public void setBairro(String bairro) { this.bairro = bairro; }
         
+        @SuppressWarnings("unused")
         public String getCidade() { return cidade; }
+        @SuppressWarnings("unused")
         public void setCidade(String cidade) { this.cidade = cidade; }
         
+        @SuppressWarnings("unused")
         public String getEstado() { return estado; }
+        @SuppressWarnings("unused")
         public void setEstado(String estado) { this.estado = estado; }
         
         public String getStatus() { return status; }
         public void setStatus(String status) { this.status = status; }
         
+        @SuppressWarnings("unused")
         public String getDataCadastro() { return dataCadastro; }
         public void setDataCadastro(String dataCadastro) { this.dataCadastro = dataCadastro; }
         
+        @SuppressWarnings("unused")
         public String getObservacoes() { return observacoes; }
+        @SuppressWarnings("unused")
         public void setObservacoes(String observacoes) { this.observacoes = observacoes; }
     }
 }

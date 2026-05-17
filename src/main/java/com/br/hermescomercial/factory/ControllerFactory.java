@@ -2,6 +2,8 @@ package com.br.hermescomercial.factory;
 
 import com.br.hermescomercial.pdv.controller.*;
 import com.br.hermescomercial.erp.controller.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Factory Pattern para criação de controllers
@@ -10,6 +12,7 @@ import com.br.hermescomercial.erp.controller.*;
  */
 public class ControllerFactory {
     
+    private static final Logger logger = LogManager.getLogger(ControllerFactory.class);
     private static ControllerFactory instance;
     
     // Singleton da Factory
@@ -225,11 +228,11 @@ public class ControllerFactory {
                 // case "SistemaConfigSwingController":
                 //     return (T) createSistemaConfigController();
                 default:
-                    System.err.println("Controller não encontrado: " + className);
+                    logger.error("Controller não encontrado: {}", className);
                     return null;
             }
         } catch (Exception e) {
-            System.err.println("Erro ao criar controller " + controllerType.getSimpleName() + ": " + e.getMessage());
+            logger.error("Erro ao criar controller {}: {}", controllerType.getSimpleName(), e.getMessage(), e);
             return null;
         }
     }

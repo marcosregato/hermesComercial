@@ -46,7 +46,6 @@ public class PDVFormularioNovaVenda {
     private static final Color WHITE = Color.WHITE;
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
     private static final Color GRAY = new Color(149, 165, 166);
     
@@ -641,7 +640,6 @@ public class PDVFormularioNovaVenda {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, "Busca por: " + termo + "\n(Implementar busca no banco)", "Busca", JOptionPane.INFORMATION_MESSAGE);
     }
     
@@ -653,10 +651,7 @@ public class PDVFormularioNovaVenda {
             String formaPagamento = (String) cbFormaPagamento.getSelectedItem();
             if ("Dinheiro".equals(formaPagamento)) {
                 // Se for dinheiro, calcula troco baseado no total
-                String totalText = lblTotal.getText().replace("R$ ", "").replace(",", ".");
                 try {
-                    BigDecimal total = new BigDecimal(totalText);
-                    // TODO: Implementar lógica para calcular troco baseado no valor pago
                     lblTroco.setText("R$ 0,00");
                 } catch (Exception e) {
                     lblTroco.setText("R$ 0,00");
@@ -697,8 +692,6 @@ public class PDVFormularioNovaVenda {
         
         // Resetar bordas dos campos válidos
         txtCliente.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        
-                BigDecimal total = new BigDecimal(lblTotal.getText().replace("R$ ", "").replace(",", "."));
         
         int resultado = JOptionPane.showConfirmDialog(
             workArea,

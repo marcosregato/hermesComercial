@@ -22,7 +22,6 @@ public class PDVFormularioExportImport {
     
     private JPanel workArea;
     private String usuarioAtual;
-    private String nomeUsuario;
     
     // Componentes da interface
     private JTabbedPane tabbedPane;
@@ -42,7 +41,6 @@ public class PDVFormularioExportImport {
     public PDVFormularioExportImport(JPanel workArea, String usuario, String nome) {
         this.workArea = workArea;
         this.usuarioAtual = usuario;
-        this.nomeUsuario = nome;
         this.historicoOperacoes = new ArrayList<>();
         
         SystemLogger.ui("Inicializando PDVFormularioExportImport para usuário: " + usuario);

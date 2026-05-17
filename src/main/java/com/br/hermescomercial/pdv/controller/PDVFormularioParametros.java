@@ -26,7 +26,6 @@ public class PDVFormularioParametros {
     private JComboBox<String> comboCategoria;
     private JComboBox<String> comboTipoDado;
     private JComboBox<String> comboStatus;
-    private JTextArea txtObservacoes;
     
     // Tabela de parâmetros
     private JTable tabelaParametros;
@@ -490,7 +489,6 @@ public class PDVFormularioParametros {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Parâmetros encontrados: " + parametrosEncontrados.size(), 
@@ -525,7 +523,6 @@ public class PDVFormularioParametros {
                 return;
             }
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Parâmetro salvo com sucesso!\n\n" +
                 "Nome: " + nomeParametro + "\n" +
@@ -662,7 +659,6 @@ public class PDVFormularioParametros {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de restauração no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Valor padrão restaurado com sucesso!\n" +
                 "Parâmetro: " + nomeParametro + "\n" +
@@ -744,6 +740,7 @@ public class PDVFormularioParametros {
         public String getStatus() { return status; }
         public void setStatus(String status) { this.status = status; }
         
+        @SuppressWarnings("unused")
         public String getUltimaAlteracao() { return ultimaAlteracao; }
         public void setUltimaAlteracao(String ultimaAlteracao) { this.ultimaAlteracao = ultimaAlteracao; }
     }

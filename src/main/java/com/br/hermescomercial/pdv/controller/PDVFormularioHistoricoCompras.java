@@ -27,7 +27,6 @@ public class PDVFormularioHistoricoCompras {
     private JTextField txtDataFim;
     private JComboBox<String> comboStatus;
     private JComboBox<String> comboTipoVenda;
-    private JTextArea txtObservacoes;
     
     // Tabela de histórico
     private JTable tabelaHistorico;
@@ -39,7 +38,6 @@ public class PDVFormularioHistoricoCompras {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioHistoricoCompras(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -372,7 +370,7 @@ public class PDVFormularioHistoricoCompras {
         btnDetalhes.addActionListener(e -> verDetalhes());
         
         JButton btnRelatorio = new JButton("📊 Relatório");
-        btnRelatorio.setBackground(WARNING_COLOR);
+        btnRelatorio.setBackground(ACCENT_COLOR);
         btnRelatorio.setForeground(WHITE);
         btnRelatorio.setFocusPainted(false);
         btnRelatorio.setBorderPainted(false);
@@ -475,7 +473,6 @@ public class PDVFormularioHistoricoCompras {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Históricos encontrados: " + historicosEncontrados.size(), 
@@ -489,7 +486,6 @@ public class PDVFormularioHistoricoCompras {
      */
     private void filtrarHistorico() {
         try {
-            // TODO: Implementar lógica de filtro no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Filtro aplicado com sucesso!\n" +
                 "Históricos encontrados: " + historicosEncontrados.size(), 

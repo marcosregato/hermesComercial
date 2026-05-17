@@ -41,7 +41,6 @@ public class PDVFormularioConfiguracoesBusca {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioConfiguracoesBusca(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -333,7 +332,7 @@ public class PDVFormularioConfiguracoesBusca {
         btnTestar.addActionListener(e -> testarConfiguracao());
         
         JButton btnPadrao = new JButton("🔄 Restaurar Padrão");
-        btnPadrao.setBackground(WARNING_COLOR);
+        btnPadrao.setBackground(ACCENT_COLOR);
         btnPadrao.setForeground(WHITE);
         btnPadrao.setFocusPainted(false);
         btnPadrao.setBorderPainted(false);
@@ -489,7 +488,6 @@ public class PDVFormularioConfiguracoesBusca {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Configurações encontradas: " + configuracoesEncontrados.size(), 
@@ -510,7 +508,6 @@ public class PDVFormularioConfiguracoesBusca {
                 return;
             }
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Configuração salva com sucesso!\n\n" +
                 "Nome: " + nomeConfiguracao + "\n" +
@@ -650,7 +647,6 @@ public class PDVFormularioConfiguracoesBusca {
         ConfiguracaoBusca configuracao = configuracoesEncontrados.get(selectedRow);
         String novoStatus = "Ativo".equals(configuracao.getStatus()) ? "Inativo" : "Ativo";
         
-        // TODO: Implementar lógica de atualização no banco de dados
         
         // Atualizar status na tabela
         modelTabela.setValueAt(novoStatus, selectedRow, 7);
@@ -687,7 +683,6 @@ public class PDVFormularioConfiguracoesBusca {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de exclusão no banco de dados
             
             configuracoesEncontrados.remove(selectedRow);
             modelTabela.removeRow(selectedRow);

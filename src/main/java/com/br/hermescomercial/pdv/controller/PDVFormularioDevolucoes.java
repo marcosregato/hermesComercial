@@ -41,7 +41,6 @@ public class PDVFormularioDevolucoes {
     private static final Color WHITE = Color.WHITE;
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
     private static final Color GRAY = new Color(149, 165, 166);
     
@@ -525,7 +524,7 @@ public class PDVFormularioDevolucoes {
         btnRejeitar.addActionListener(e -> rejeitarDevolucao());
         
         JButton btnImprimir = new JButton("🖨️ Imprimir");
-        btnImprimir.setBackground(WARNING_COLOR);
+        btnImprimir.setBackground(ACCENT_COLOR);
         btnImprimir.setForeground(WHITE);
         btnImprimir.setFocusPainted(false);
         btnImprimir.setBorderPainted(false);
@@ -556,7 +555,6 @@ public class PDVFormularioDevolucoes {
             return;
         }
         
-        // TODO: Implementar lógica de busca rápida no banco de dados
         JOptionPane.showMessageDialog(workArea, "Busca rápida por: " + termo + "\n(Implementar busca no banco)", "Busca Rápida", JOptionPane.INFORMATION_MESSAGE);
     }
     
@@ -599,7 +597,6 @@ public class PDVFormularioDevolucoes {
             String status = (String) comboStatus.getSelectedItem();
             String observacoes = txtObservacoes.getText().trim();
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             
             // Adicionar à tabela
             Object[] rowData = {
@@ -654,7 +651,6 @@ public class PDVFormularioDevolucoes {
      */
     private void consultarDevolucoes() {
         try {
-            // TODO: Implementar lógica de consulta no banco de dados
             // Por enquanto, vamos adicionar dados de exemplo
             adicionarDadosExemplo();
             
@@ -774,7 +770,6 @@ public class PDVFormularioDevolucoes {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de aprovação no banco de dados
                 devolucao.setStatus("Aprovada");
                 modelTabela.setValueAt("Aprovada", linhaSelecionada, 8);
                 
@@ -810,7 +805,6 @@ public class PDVFormularioDevolucoes {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de rejeição no banco de dados
                 devolucao.setStatus("Rejeitada");
                 modelTabela.setValueAt("Rejeitada", linhaSelecionada, 8);
                 

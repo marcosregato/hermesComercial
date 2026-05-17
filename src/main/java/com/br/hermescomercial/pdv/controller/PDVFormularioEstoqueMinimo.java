@@ -27,7 +27,6 @@ public class PDVFormularioEstoqueMinimo {
     private JTextField txtEstoqueAtual;
     private JTextField txtPontoReposicao;
     private JComboBox<String> comboStatus;
-    private JTextArea txtObservacoes;
     
     // Tabela de estoque mínimo
     private JTable tabelaEstoqueMinimo;
@@ -447,7 +446,6 @@ public class PDVFormularioEstoqueMinimo {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Itens encontrados: " + itensEncontrados.size(), 
@@ -474,7 +472,6 @@ public class PDVFormularioEstoqueMinimo {
             return;
         }
         
-        // TODO: Implementar lógica de salvamento no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Configuração salva com sucesso!\n" +
             "Produto: " + produto + "\n" +
@@ -612,6 +609,7 @@ public class PDVFormularioEstoqueMinimo {
         public String getPontoReposicao() { return pontoReposicao; }
         public void setPontoReposicao(String pontoReposicao) { this.pontoReposicao = pontoReposicao; }
         
+        @SuppressWarnings("unused")
         public String getUltimaVerificacao() { return ultimaVerificacao; }
         public void setUltimaVerificacao(String ultimaVerificacao) { this.ultimaVerificacao = ultimaVerificacao; }
     }

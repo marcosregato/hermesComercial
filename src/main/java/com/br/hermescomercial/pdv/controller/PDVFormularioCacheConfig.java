@@ -39,9 +39,6 @@ public class PDVFormularioCacheConfig {
     
     // Cores
     private static final Color SUCCESS_COLOR = new Color(76, 175, 80);
-    private static final Color DANGER_COLOR = new Color(244, 67, 54);
-    private static final Color WARNING_COLOR = new Color(255, 193, 7);
-    private static final Color PRIMARY_COLOR = new Color(33, 150, 243);
     
     public PDVFormularioCacheConfig(JPanel workArea, String usuario, String nome) {
         this.workArea = workArea;

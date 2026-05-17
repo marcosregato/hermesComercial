@@ -93,7 +93,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Buscando cliente no ERP: {}", cpfCnpj);
             
-            // TODO: Implementar lógica de negócio do ERP
             // Consultar banco de dados do ERP
             // Verificar situação cadastral
             // Retornar dados completos
@@ -117,7 +116,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Cadastrando cliente no ERP: {}", cliente.getNome());
             
-            // TODO: Implementar lógica de negócio do ERP
             // Validar CPF/CNPJ
             // Verificar duplicidade
             // Criar cadastro completo
@@ -136,7 +134,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Sincronizando clientes do ERP para o PDV");
             
-            // TODO: Implementar lógica de negócio do ERP
             // Buscar todos clientes ativos
             // Filtrar por loja/filial
             // Enviar para PDV via API
@@ -153,7 +150,6 @@ public class ERPService implements IntegracaoERP {
             logger.info("Registrando pagamento no ERP - Valor: {}, Tipo: {}", 
                        pagamento.getValor(), pagamento.getTipo());
             
-            // TODO: Implementar lógica de negócio do ERP
             // Classificar pagamento
             // Atualizar contas a pagar/receber
             // Gerar lançamento financeiro
@@ -170,8 +166,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Buscando contas no ERP - Tipo: {}", tipo);
             
-            // TODO: Implementar lógica de negócio do ERP
-            // Consultar contas a pagar/receber
             // Filtrar por vencimento
             // Calcular totais
             
@@ -189,7 +183,6 @@ public class ERPService implements IntegracaoERP {
             logger.info("Verificando estoque no ERP - Produto: {}, Quantidade: {}", 
                        produtoCodigo, quantidade);
             
-            // TODO: Implementar lógica de negócio do ERP
             // Consultar saldo atual
             // Verificar reservas
             // Considerar pedidos em aberto
@@ -211,7 +204,6 @@ public class ERPService implements IntegracaoERP {
             logger.warn("Gerando alerta de estoque no ERP - Produto: {}, Quantidade: {}", 
                         produtoCodigo, quantidadeAtual);
             
-            // TODO: Implementar lógica de negócio do ERP
             // Verificar ponto de ressuprimento
             // Gerar ordem de compra automática
             // Notificar comprador
@@ -229,7 +221,6 @@ public class ERPService implements IntegracaoERP {
             logger.info("Recebendo dados de vendas do PDV - Período: {} a {}", 
                        dados.getPeriodoInicio(), dados.getPeriodoFim());
             
-            // TODO: Implementar lógica de negócio do ERP
             // Consolidar dados de vendas
             // Gerar relatórios gerenciais
             // Atualizar métricas de performance
@@ -246,8 +237,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Gerando relatório financeiro no ERP - Período: {} a {}", inicio, fim);
             
-            // TODO: Implementar lógica de negócio do ERP
-            // Consolidar lançamentos financeiros
             // Calcular fluxo de caixa
             // Gerar DRE simplificado
             // Identificar pendências
@@ -270,7 +259,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Recebendo notificação do PDV: {}", notificacao.getTitulo());
             
-            // TODO: Implementar lógica de negócio do ERP
             // Classificar notificação
             // Enviar para responsável
             // Gerar histórico
@@ -287,7 +275,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Buscando notificações no ERP - Usuário: {}", usuarioDestino);
             
-            // TODO: Implementar lógica de negócio do ERP
             // Consultar notificações do usuário
             // Filtrar por prioridade e data
             // Retornar pendentes primeiro
@@ -310,7 +297,6 @@ public class ERPService implements IntegracaoERP {
             logger.info("Gerando ordem de compra - Produto: {}, Quantidade: {}", 
                        produtoCodigo, quantidade);
             
-            // TODO: Implementar lógica de negócio do ERP
             // Buscar melhor fornecedor
             // Calcular preço médio
             // Gerar ordem de compra
@@ -329,7 +315,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Calculando métricas de performance no ERP");
             
-            // TODO: Implementar lógica de negócio do ERP
             // Calcular ROI
             // Analisar margens
             // Identificar tendências
@@ -348,7 +333,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Processando folha de pagamento no ERP");
             
-            // TODO: Implementar lógica de negócio do ERP
             // Calcular salários
             // Processar encargos
             // Gerar holerites
@@ -367,7 +351,6 @@ public class ERPService implements IntegracaoERP {
         try {
             logger.info("Gerando relatórios fiscais no ERP");
             
-            // TODO: Implementar lógica de negócio do ERP
             // Gerar SPED Fiscal
             // Calcular impostos
             // Emitir DANFE

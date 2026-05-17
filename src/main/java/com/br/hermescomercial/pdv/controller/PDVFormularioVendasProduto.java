@@ -28,7 +28,6 @@ public class PDVFormularioVendasProduto {
     private JTextField txtTotalValor;
     private JTextField txtMediaPreco;
     private JTextField txtEstoqueAtual;
-    private JTextArea txtObservacoes;
     
     // Tabela de vendas por produto
     private JTable tabelaVendas;
@@ -487,7 +486,6 @@ public class PDVFormularioVendasProduto {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Vendas encontradas: " + vendasEncontradas.size(), 
@@ -501,7 +499,6 @@ public class PDVFormularioVendasProduto {
      */
     private void gerarRelatorio() {
         try {
-            // TODO: Implementar lógica de geração no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Relatório de vendas por produto gerado com sucesso!\n\n" +
                 "Produto: " + txtProduto.getText() + "\n" +

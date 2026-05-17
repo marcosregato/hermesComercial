@@ -1,6 +1,8 @@
 package com.br.hermescomercial.command;
 
 import com.br.hermescomercial.event.EventSystem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Stack;
 import java.util.HashMap;
@@ -16,6 +18,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class CommandSystem {
     
+    private static final Logger logger = LogManager.getLogger(CommandSystem.class);
     private static volatile CommandSystem instance;
     private static final Object lock = new Object();
     
@@ -59,7 +62,7 @@ public class CommandSystem {
     public boolean executeCommand(String commandName, Map<String, Object> parameters) {
         CommandFactory factory = commandFactories.get(commandName);
         if (factory == null) {
-            System.err.println("❌ CommandSystem: Comando não encontrado: " + commandName);
+            logger.error("Comando não encontrado: {}", commandName);
             return false;
         }
         
@@ -88,7 +91,7 @@ public class CommandSystem {
             return resultado;
             
         } catch (Exception e) {
-            System.err.println("❌ CommandSystem: Erro ao executar comando: " + commandName + " - " + e.getMessage());
+            logger.error("Erro ao executar comando {}: {}", commandName, e.getMessage(), e);
             return false;
         }
     }
@@ -125,7 +128,7 @@ public class CommandSystem {
             return resultado;
             
         } catch (Exception e) {
-            System.err.println("❌ CommandSystem: Erro ao desfazer comando: " + e.getMessage());
+            logger.error("Erro ao desfazer comando: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -162,7 +165,7 @@ public class CommandSystem {
             return resultado;
             
         } catch (Exception e) {
-            System.err.println("❌ CommandSystem: Erro ao refazer comando: " + e.getMessage());
+            logger.error("Erro ao refazer comando: {}", e.getMessage(), e);
             return false;
         }
     }
@@ -203,7 +206,6 @@ public class CommandSystem {
      * Registra comandos padrão do sistema
      */
     private void registerDefaultCommands() {
-        // TODO: Implementar comandos específicos quando necessário
         System.out.println("📝 CommandSystem: Sistema de comandos inicializado");
     }
     

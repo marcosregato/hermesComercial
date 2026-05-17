@@ -23,7 +23,6 @@ public class SystemLogger {
     // Componentes para logging assíncrono
     private static final BlockingQueue<LogEntry> logQueue = new LinkedBlockingQueue<>();
     private static final ExecutorService logExecutor = Executors.newSingleThreadExecutor();
-    private static final BufferedWriter[] fileBuffers = new BufferedWriter[8]; // Cache de buffers
     
     // Classe para entrada de log
     private static class LogEntry {
@@ -284,6 +283,7 @@ public class SystemLogger {
         }
     }
     
+    @SuppressWarnings("unused")
     private static void writeToFile(String fileName, String message) {
         try {
             File file = new File(fileName);
@@ -330,6 +330,7 @@ public class SystemLogger {
         }
     }
     
+    @SuppressWarnings("unused")
     private static void writeStackTraceToFile(String fileName, Throwable throwable) {
         try {
             File file = new File(fileName);

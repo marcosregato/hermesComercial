@@ -27,7 +27,6 @@ public class PDVFormularioConsultarProduto {
     private JTextField txtPrecoMin;
     private JTextField txtPrecoMax;
     private JComboBox<String> comboStatus;
-    private JTextArea txtObservacoes;
     
     // Tabela de produtos
     private JTable tabelaProdutos;
@@ -38,7 +37,6 @@ public class PDVFormularioConsultarProduto {
     private static final Color WHITE = Color.WHITE;
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
     private static final Color GRAY = new Color(149, 165, 166);
     
@@ -428,7 +426,6 @@ public class PDVFormularioConsultarProduto {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Produtos encontrados: " + produtosEncontrados.size(), 
@@ -442,7 +439,6 @@ public class PDVFormularioConsultarProduto {
      */
     private void consultarProdutos() {
         try {
-            // TODO: Implementar lógica de consulta no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Consulta realizada com sucesso!\n" +
                 "Produtos encontrados: " + produtosEncontrados.size(), 

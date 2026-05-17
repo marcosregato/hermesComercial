@@ -28,7 +28,6 @@ public class PDVFormularioRelatorioFinanceiro {
     private JTextField txtTotalDespesas;
     private JTextField txtSaldoLiquido;
     private JTextField txtMargemLucro;
-    private JTextArea txtObservacoes;
     
     // Tabela de relatório financeiro
     private JTable tabelaRelatorio;
@@ -532,7 +531,6 @@ public class PDVFormularioRelatorioFinanceiro {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Itens encontrados: " + itensRelatorio.size(), 
@@ -546,7 +544,6 @@ public class PDVFormularioRelatorioFinanceiro {
      */
     private void gerarRelatorio() {
         try {
-            // TODO: Implementar lógica de geração no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Relatório financeiro gerado com sucesso!\n\n" +
                 "Período: " + comboPeriodo.getSelectedItem() + "\n" +

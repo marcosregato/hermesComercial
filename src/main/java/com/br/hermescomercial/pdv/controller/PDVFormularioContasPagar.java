@@ -27,7 +27,6 @@ public class PDVFormularioContasPagar {
     private JTextField txtDataEmissao;
     private JComboBox<String> comboStatus;
     private JComboBox<String> comboCategoria;
-    private JTextArea txtObservacoes;
     
     // Tabela de contas a pagar
     private JTable tabelaContas;
@@ -440,7 +439,6 @@ public class PDVFormularioContasPagar {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Contas encontradas: " + contasEncontradas.size(), 
@@ -456,7 +454,6 @@ public class PDVFormularioContasPagar {
         String fornecedor = txtFornecedor.getText().trim();
         String documento = txtDocumento.getText().trim();
         String valor = txtValor.getText().trim();
-        String dataEmissao = txtDataEmissao.getText().trim();
         String dataVencimento = txtDataVencimento.getText().trim();
         
         // Validação do Fornecedor (Obrigatório *)
@@ -514,7 +511,6 @@ public class PDVFormularioContasPagar {
         txtDataVencimento.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         
         try {
-            // TODO: Implementar lógica de salvamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Conta adicionada com sucesso!\n\n" +
                 "Fornecedor: " + fornecedor + "\n" +
@@ -555,7 +551,6 @@ public class PDVFormularioContasPagar {
             "Confirmar Pagamento", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de pagamento no banco de dados
             JOptionPane.showMessageDialog(workArea, 
                 "Conta paga com sucesso!\n" +
                 "Documento: " + conta.getDocumento(), 

@@ -449,7 +449,6 @@ public class PDVFormularioTodasNotificacoes {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Notificações encontradas: " + notificacoesEncontradas.size(), 
@@ -468,7 +467,6 @@ public class PDVFormularioTodasNotificacoes {
         String dataInicio = txtDataInicio.getText().trim();
         String dataFim = txtDataFim.getText().trim();
         
-        // TODO: Implementar lógica de filtragem no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Filtros aplicados:\n" +
             "Tipo: " + tipo + "\n" +
@@ -523,7 +521,6 @@ public class PDVFormularioTodasNotificacoes {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de arquivamento no banco de dados
             
             JOptionPane.showMessageDialog(workArea, 
                 selectedRows.length + " notificação(ões) arquivada(s) com sucesso!", 
@@ -576,7 +573,6 @@ public class PDVFormularioTodasNotificacoes {
             return;
         }
         
-        // TODO: Implementar lógica de atualização no banco de dados
         
         // Atualizar status na tabela
         modelTabela.setValueAt("Lida", selectedRow, 3);
@@ -612,7 +608,6 @@ public class PDVFormularioTodasNotificacoes {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de exclusão no banco de dados
             
             notificacoesEncontradas.remove(selectedRow);
             modelTabela.removeRow(selectedRow);

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FindBugsFilter>
+    <!-- Excluir classes geradas automaticamente -->
+    <Match>
+        <Class name="~.*\.R\$.*"/>
+    </Match>
+    
+    <!-- Excluir classes de modelo/DTO que podem ter padrões específicos -->
+    <Match>
+        <Class name="~.*\.model\..*"/>
+    </Match>
+    
+    <!-- Excluir classes de configuração -->
+    <Match>
+        <Class name="~.*\.config\..*"/>
+    </Match>
+    
+    <!-- Excluir avisos de serialização em classes de teste -->
+    <Match>
+        <Class name="~.*Test"/>
+    </Match>
+    
+    <!-- Excluir avisos de equals/hashCode em entidades JPA -->
+    <Match>
+        <Class name="~.*\.entity\..*"/>
+        <Bug pattern="EQ_DOESNT_OVERRIDE_EQUALS"/>
+    </Match>
+    
+    <!-- Excluir avisos de métodos não utilizados em controllers Swing -->
+    <Match>
+        <Class name="~.*\.controller\..*"/>
+        <Bug pattern="UPM_UNCALLED_PRIVATE_METHOD"/>
+    </Match>
+</FindBugsFilter>

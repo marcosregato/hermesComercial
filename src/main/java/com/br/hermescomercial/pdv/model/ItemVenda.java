@@ -3,7 +3,6 @@ package com.br.hermescomercial.pdv.model;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 /**
  * Classe que representa um item de venda

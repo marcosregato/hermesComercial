@@ -1,6 +1,5 @@
 package com.br.hermescomercial.pdv.controller;
 
-import com.br.hermescomercial.service.DashboardService;
 import com.br.hermescomercial.util.SystemLogger;
 import javax.swing.*;
 import java.awt.*;
@@ -41,9 +40,6 @@ public class PDVFormularioDashboard extends BaseFormulario {
     private JComboBox<String> cbPeriodo;
     private JComboBox<String> cbAno;
     
-    // Dashboard Service
-    private DashboardService dashboardService;
-    
     // Datas para filtros
     private LocalDate dataInicio;
     private LocalDate dataFim;
@@ -52,7 +48,6 @@ public class PDVFormularioDashboard extends BaseFormulario {
         super(workArea, usuario, nome);
         SystemLogger.ui("[DASHBOARD] Construtor chamado - workArea: " + (workArea != null ? "OK" : "NULO") + 
             ", usuario: " + usuario + ", nome: " + nome);
-        this.dashboardService = new DashboardService();
         // Inicializar datas para evitar NullPointerException
         this.dataInicio = LocalDate.now().minusMonths(1);
         this.dataFim = LocalDate.now();

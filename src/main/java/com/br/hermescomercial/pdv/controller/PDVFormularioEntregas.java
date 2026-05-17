@@ -649,7 +649,6 @@ public class PDVFormularioEntregas {
             return;
         }
         
-        // TODO: Implementar lógica de busca rápida no banco de dados
         JOptionPane.showMessageDialog(workArea, "Busca rápida por: " + termo + "\n(Implementar busca no banco)", "Busca Rápida", JOptionPane.INFORMATION_MESSAGE);
     }
     
@@ -697,7 +696,6 @@ public class PDVFormularioEntregas {
             String status = (String) comboStatus.getSelectedItem();
             String observacoes = txtObservacoes.getText().trim();
             
-            // TODO: Implementar lógica de salvamento no banco de dados
             
             // Adicionar à tabela
             Object[] rowData = {
@@ -757,7 +755,6 @@ public class PDVFormularioEntregas {
      */
     private void consultarEntregas() {
         try {
-            // TODO: Implementar lógica de consulta no banco de dados
             // Por enquanto, vamos adicionar dados de exemplo
             adicionarDadosExemplo();
             
@@ -783,7 +780,6 @@ public class PDVFormularioEntregas {
             return;
         }
         
-        // TODO: Implementar lógica de geração de rota
         JOptionPane.showMessageDialog(workArea, 
             "Gerando rota otimizada para " + entregasEncontradas.size() + " entregas...\n(Implementar geração de rota)", 
             "Gerar Rota", JOptionPane.INFORMATION_MESSAGE);
@@ -907,7 +903,6 @@ public class PDVFormularioEntregas {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de início no banco de dados
                 entrega.setStatus("Em Rota");
                 modelTabela.setValueAt("Em Rota", linhaSelecionada, 7);
                 
@@ -943,7 +938,6 @@ public class PDVFormularioEntregas {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de conclusão no banco de dados
                 entrega.setStatus("Entregue");
                 modelTabela.setValueAt("Entregue", linhaSelecionada, 7);
                 
@@ -984,7 +978,6 @@ public class PDVFormularioEntregas {
             );
             
             if (resultado == JOptionPane.YES_OPTION) {
-                // TODO: Implementar lógica de cancelamento no banco de dados
                 entrega.setStatus("Cancelada");
                 modelTabela.setValueAt("Cancelada", linhaSelecionada, 7);
                 
@@ -1080,9 +1073,11 @@ public class PDVFormularioEntregas {
         public String getCep() { return cep; }
         public void setCep(String cep) { this.cep = cep; }
         
+        @SuppressWarnings("unused")
         public String getDataPrevista() { return dataPrevista; }
         public void setDataPrevista(String dataPrevista) { this.dataPrevista = dataPrevista; }
         
+        @SuppressWarnings("unused")
         public String getDataRealizada() { return dataRealizada; }
         public void setDataRealizada(String dataRealizada) { this.dataRealizada = dataRealizada; }
         

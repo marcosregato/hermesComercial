@@ -16,7 +16,6 @@ public class PDVMenuRenderer {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color PRIMARY_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color MEDIUM_GRAY = new Color(149, 165, 166);
     
     /**

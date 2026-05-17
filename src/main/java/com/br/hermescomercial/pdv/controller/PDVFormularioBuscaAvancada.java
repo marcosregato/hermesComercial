@@ -36,7 +36,6 @@ public class PDVFormularioBuscaAvancada {
     // Cores
     private static final Color SUCCESS_COLOR = new Color(76, 175, 80);
     private static final Color DANGER_COLOR = new Color(244, 67, 54);
-    private static final Color WARNING_COLOR = new Color(255, 193, 7);
     private static final Color PRIMARY_COLOR = new Color(33, 150, 243);
     
     public PDVFormularioBuscaAvancada(JPanel workArea, String usuario, String nome) {
@@ -163,7 +162,7 @@ public class PDVFormularioBuscaAvancada {
         botoesPanel.setBackground(Color.WHITE);
         
         JButton btnBuscar = criarBotao("🔍 Buscar", PRIMARY_COLOR);
-        JButton btnLimpar = criarBotao("🔄 Limpar", WARNING_COLOR);
+        JButton btnLimpar = criarBotao("🔄 Limpar", PRIMARY_COLOR);
         
         btnBuscar.addActionListener(e -> realizarBusca());
         btnLimpar.addActionListener(e -> limparBusca());
@@ -206,7 +205,7 @@ public class PDVFormularioBuscaAvancada {
         acoesPanel.setBackground(Color.WHITE);
         
         JButton btnAbrir = criarBotao("👁️ Abrir", SUCCESS_COLOR);
-        JButton btnFavoritar = criarBotao("⭐ Favoritar", WARNING_COLOR);
+        JButton btnFavoritar = criarBotao("⭐ Favoritar", PRIMARY_COLOR);
         
         btnAbrir.addActionListener(e -> abrirResultadoSelecionado());
         btnFavoritar.addActionListener(e -> adicionarAosFavoritos());
@@ -378,7 +377,7 @@ public class PDVFormularioBuscaAvancada {
         buttonPanel.setBackground(Color.WHITE);
         
         JButton btnSalvarConfig = criarBotao("💾 Salvar Configurações", SUCCESS_COLOR);
-        JButton btnRestaurar = criarBotao("🔄 Restaurar Padrão", WARNING_COLOR);
+        JButton btnRestaurar = criarBotao("🔄 Restaurar Padrão", DANGER_COLOR);
         
         btnSalvarConfig.addActionListener(e -> salvarConfiguracoes());
         btnRestaurar.addActionListener(e -> restaurarConfiguracoes());

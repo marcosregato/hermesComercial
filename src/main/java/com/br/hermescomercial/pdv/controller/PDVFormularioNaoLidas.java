@@ -34,7 +34,6 @@ public class PDVFormularioNaoLidas {
     private static final Color ACCENT_COLOR = new Color(52, 152, 219);
     private static final Color SUCCESS_COLOR = new Color(39, 174, 96);
     private static final Color DANGER_COLOR = new Color(231, 76, 60);
-    private static final Color WARNING_COLOR = new Color(241, 196, 15);
     private static final Color GRAY = new Color(149, 165, 166);
     
     public PDVFormularioNaoLidas(JPanel workArea, String usuarioAtual, String nomeUsuario) {
@@ -389,7 +388,6 @@ public class PDVFormularioNaoLidas {
             return;
         }
         
-        // TODO: Implementar lógica de busca no banco de dados
         JOptionPane.showMessageDialog(workArea, 
             "Busca realizada para: " + termo + "\n" +
             "Notificações encontradas: " + notificacoesEncontradas.size(), 
@@ -417,7 +415,6 @@ public class PDVFormularioNaoLidas {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de atualização no banco de dados
             
             // Remover linhas selecionadas da tabela
             for (int i = selectedRows.length - 1; i >= 0; i--) {
@@ -505,7 +502,6 @@ public class PDVFormularioNaoLidas {
         );
         
         if (confirmacao == JOptionPane.YES_OPTION) {
-            // TODO: Implementar lógica de exclusão no banco de dados
             
             notificacoesEncontradas.remove(selectedRow);
             modelTabela.removeRow(selectedRow);

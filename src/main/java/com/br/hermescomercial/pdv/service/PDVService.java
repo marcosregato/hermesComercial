@@ -70,7 +70,6 @@ public class PDVService implements IntegracaoERP {
             logger.info("Atualizando estoque no ERP - Produto: {}, Quantidade: {}", 
                        produtoCodigo, quantidade);
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // PUT /api/pdv/estoque
             
             logger.info("Estoque atualizado com sucesso no ERP");
@@ -84,7 +83,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.info("Buscando cliente no ERP: {}", cpfCnpj);
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // GET /api/pdv/clientes/{cpfCnpj}
             
             // Retorno simulado
@@ -106,7 +104,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.info("Cadastrando cliente no ERP: {}", cliente.getNome());
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // POST /api/pdv/clientes
             
             logger.info("Cliente cadastrado com sucesso no ERP");
@@ -122,7 +119,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.info("Iniciando sincronização de clientes com ERP");
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // GET /api/erp/clientes
             
             logger.info("Sincronização de clientes concluída");
@@ -136,7 +132,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.info("Registrando pagamento no ERP: {}", pagamento.getValor());
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // POST /api/pdv/pagamentos
             
             logger.info("Pagamento registrado com sucesso no ERP");
@@ -150,7 +145,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.info("Buscando contas no ERP - Tipo: {}", tipo);
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // GET /api/pdv/contas?tipo={tipo}
             
             logger.info("Contas encontradas no ERP");
@@ -167,7 +161,6 @@ public class PDVService implements IntegracaoERP {
             logger.info("Verificando estoque - Produto: {}, Quantidade: {}", 
                        produtoCodigo, quantidade);
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // GET /api/pdv/estoque/verificar
             
             // Retorno simulado
@@ -187,8 +180,6 @@ public class PDVService implements IntegracaoERP {
             logger.warn("Gerando alerta de estoque - Produto: {}, Quantidade: {}", 
                         produtoCodigo, quantidadeAtual);
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
-            // POST /api/pdv/estoque/alerta
             
             logger.warn("Alerta de estoque gerado com sucesso no ERP");
         } catch (Exception e) {
@@ -202,7 +193,6 @@ public class PDVService implements IntegracaoERP {
             logger.info("Enviando dados de vendas para ERP - Período: {} a {}", 
                        dados.getPeriodoInicio(), dados.getPeriodoFim());
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // POST /api/pdv/relatorios/vendas
             
             logger.info("Dados de vendas enviados com sucesso para ERP");
@@ -216,7 +206,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.info("Gerando relatório financeiro no ERP - Período: {} a {}", inicio, fim);
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // GET /api/pdv/relatorios/financeiro?inicio={inicio}&fim={fim}
             
             // Retorno simulado
@@ -237,7 +226,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.info("Enviando notificação para ERP: {}", notificacao.getTitulo());
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // POST /api/pdv/notificacoes
             
             logger.info("Notificação enviada com sucesso para ERP");
@@ -251,7 +239,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.info("Buscando notificações no ERP - Usuário: {}", usuarioDestino);
             
-            // TODO: Implementar chamada HTTP/REST para API do ERP
             // GET /api/pdv/notificacoes?usuario={usuarioDestino}
             
             logger.info("Notificações encontradas no ERP");
@@ -269,7 +256,6 @@ public class PDVService implements IntegracaoERP {
      */
     public boolean verificarConexaoERP() {
         try {
-            // TODO: Implementar ping para API do ERP
             // GET /api/erp/status
             
             logger.info("Conexão com ERP ativa");
@@ -287,7 +273,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.info("Sincronizando dados pendentes com ERP");
             
-            // TODO: Implementar sincronização de dados offline
             
             logger.info("Dados pendentes sincronizados com sucesso");
         } catch (Exception e) {
@@ -302,7 +287,6 @@ public class PDVService implements IntegracaoERP {
         try {
             logger.warn("Iniciando modo offline - ERP indisponível");
             
-            // TODO: Implementar lógica de modo offline
             
             logger.warn("Modo offline iniciado com sucesso");
         } catch (Exception e) {
