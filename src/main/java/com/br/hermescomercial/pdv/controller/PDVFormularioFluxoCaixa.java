@@ -1,7 +1,6 @@
 package com.br.hermescomercial.pdv.controller;
 
 import com.br.hermescomercial.pdv.model.FluxoCaixa;
-import com.br.hermescomercial.pdv.service.FluxoCaixaService;
 import com.br.hermescomercial.util.SystemLogger;
 
 import javax.swing.*;
@@ -30,15 +29,11 @@ public class PDVFormularioFluxoCaixa {
     private JTextField txtTotalEntradas;
     private JTextField txtTotalSaidas;
     private JTextField txtSaldoFinal;
-    private JTextArea txtObservacoes;
     
     // Tabela de fluxo de caixa
     private JTable tabelaFluxo;
     private DefaultTableModel modelTabela;
     private List<FluxoCaixa> fluxosEncontrados;
-    
-    // Serviço de fluxo de caixa
-    private final FluxoCaixaService fluxoService = new FluxoCaixaService();
     
     // Cores
     private static final Color WHITE = Color.WHITE;
