@@ -23,11 +23,11 @@ public class VendaConsultaService {
         
         // Dados de exemplo
         Object[][] dadosExemplo = {
-            {"001", "09/05/2026", "14:30", "João Silva", "123.456.789-00", "Maria Santos", "Balcão", "3 itens", "R$ 150,00", "Ativa", "Dinheiro", "👁️"},
-            {"002", "09/05/2026", "10:15", "Maria Oliveira", "987.654.321-00", "João Pedro", "Delivery", "2 itens", "R$ 89,50", "Ativa", "Cartão", "👁️"},
-            {"003", "08/05/2026", "16:45", "Carlos Alberto", "456.789.123-00", "Ana Maria", "Televendas", "5 itens", "R$ 234,75", "Finalizada", "PIX", "👁️"},
-            {"004", "08/05/2026", "09:20", "Fernanda Costa", "789.123.456-00", "Pedro Henrique", "E-commerce", "1 item", "R$ 67,80", "Cancelada", "Boleto", "👁️"},
-            {"005", "07/05/2026", "13:55", "Roberto Dias", "321.654.987-00", "Luciana Silva", "Atacado", "8 itens", "R$ 445,00", "Finalizada", "Cartão", "👁️"}
+            {"001", "09/05/2026", "João Silva", "123.456.789-00", "Maria Santos", "Balcão", "3 itens", "R$ 150,00", "Ativa", "Dinheiro", "👁️"},
+            {"002", "09/05/2026", "Maria Oliveira", "987.654.321-00", "João Pedro", "Delivery", "2 itens", "R$ 89,50", "Ativa", "Cartão", "👁️"},
+            {"003", "08/05/2026", "Carlos Alberto", "456.789.123-00", "Ana Maria", "Televendas", "5 itens", "R$ 234,75", "Finalizada", "PIX", "👁️"},
+            {"004", "08/05/2026", "Fernanda Costa", "789.123.456-00", "Pedro Henrique", "E-commerce", "1 item", "R$ 67,80", "Cancelada", "Boleto", "👁️"},
+            {"005", "07/05/2026", "Roberto Dias", "321.654.987-00", "Luciana Silva", "Atacado", "8 itens", "R$ 445,00", "Finalizada", "Cartão", "👁️"}
         };
         
         for (Object[] dados : dadosExemplo) {

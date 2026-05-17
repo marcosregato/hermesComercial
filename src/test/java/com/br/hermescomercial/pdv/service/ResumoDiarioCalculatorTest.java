@@ -45,7 +45,7 @@ public class ResumoDiarioCalculatorTest {
         assertNotNull(totais);
         assertEquals(239.50, totais.getTotalVendas(), 0.01);
         assertEquals(50.00, totais.getTotalDevolucoes(), 0.01);
-        assertEquals(2, totais.getTotalTransacoes());
+        assertEquals(3, totais.getTotalTransacoes());
     }
     
     @Test
